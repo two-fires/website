@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="World-class marketing. Supercharged with AI. Thirty years of brand work at McDonald's, Mars, Unilever and Burger King, applied to your business and multiplied by AI.">
+  <meta property="og:title" content="Two Fires · World-class marketing. Supercharged with AI.">
+  <meta property="og:description" content="A senior marketing firm built around your growth. Brand discipline forged at the world's biggest names. AI execution built from the inside out.">
+  <meta property="og:type" content="website">
+  <title>Two Fires · World-class marketing. Supercharged with AI.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Neon-leaning purple palette */
+      --bg: #050508;
+      --bg-soft: #0B0B14;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --surface-card: #14091E;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #FBFAFE;
+      --text-muted: #9F9AB0;
+      --text-faint: #5E5868;
+      --text-on-light: #0A0612;
+      --text-muted-on-light: #5B5267;
+      --light-surface: #F7F4FC;
+
+      --purple-deep: #6B21A8;
+      --purple: #A855F7;
+      --purple-bright: #C4A8FF;
+      --purple-glow: rgba(168, 85, 247, 0.55);
+      --purple-glow-soft: rgba(168, 85, 247, 0.25);
+      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Manrope', system-ui, sans-serif;
+      --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+
+      --max-w: 1140px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Background atmosphere with neon glow */
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.25), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 90%, rgba(168, 85, 247, 0.15), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 0% 70%, rgba(168, 85, 247, 0.08), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: ""; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 18px 0;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(5, 5, 8, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); cursor: pointer; }
+    .brand-mark { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+    .brand-mark svg { width: 100%; height: 100%; filter: drop-shadow(0 0 8px var(--purple-glow)); }
+    .brand-name {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .nav { display: flex; gap: 28px; align-items: center; }
+    .nav a {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; cursor: pointer; transition: color 0.25s ease;
+    }
+    .nav a:hover { color: var(--text); }
+    .nav-cta {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 10px 20px; border-radius: 999px; border: 1px solid var(--purple);
+      color: var(--purple-bright); cursor: pointer;
+      background: var(--purple-soft-fill);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .nav-cta:hover {
+      background: var(--purple); color: white;
+      box-shadow: 0 0 24px var(--purple-glow);
+    }
+
+    main { padding-top: 80px; position: relative; z-index: 2; }
+
+    /* Flame */
+    .flame-hero {
+      width: 88px; height: 88px; margin: 0 auto 32px; position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+    .flame-hero::before {
+      content: ""; position: absolute; inset: -50px;
+      background: radial-gradient(circle, var(--purple-glow) 0%, transparent 60%);
+      filter: blur(28px); animation: pulse 4s ease-in-out infinite;
+    }
+    .flame-hero svg {
+      position: relative; width: 100%; height: 100%;
+      filter: drop-shadow(0 0 30px var(--purple-glow)) drop-shadow(0 0 60px var(--purple-glow-soft));
+    }
+    .flame-back  { animation: flicker 3.2s ease-in-out infinite; transform-origin: bottom center; }
+    .flame-front { animation: flicker 2.8s ease-in-out infinite 0.4s; transform-origin: bottom center; }
+    @keyframes flicker {
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      30% { transform: scaleY(1.04) scaleX(0.98); }
+      55% { transform: scaleY(0.97) scaleX(1.02); }
+      80% { transform: scaleY(1.02) scaleX(0.99); }
+    }
+    @keyframes pulse { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ============================ HERO ============================ */
+    .hero {
+      text-align: center; padding: 64px 0 96px;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.1s forwards;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: 1.0;
+      letter-spacing: -0.025em; margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+    }
+
+    .hero-lede {
+      color: var(--text-muted); max-width: 56ch;
+      margin: 0 auto 44px; font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+      line-height: 1.6;
+      opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .hero-actions {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+
+    /* Pill buttons */
+    .pill {
+      font-family: var(--font-body); font-size: 15px; font-weight: 500;
+      letter-spacing: 0.01em;
+      padding: 17px 34px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--border-strong); background: var(--surface);
+      color: var(--text);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative; overflow: hidden;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .pill::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--purple-soft-fill) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .pill::after {
+      content: ""; position: absolute; top: 50%; left: 50%;
+      width: 0; height: 0; border-radius: 50%;
+      background: radial-gradient(circle, var(--purple-glow-soft) 0%, transparent 60%);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+    .pill:hover {
+      border-color: var(--purple); transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--purple-glow);
+    }
+    .pill:hover::before { opacity: 1; }
+    .pill:hover::after { width: 300px; height: 300px; }
+    .pill span { position: relative; z-index: 1; }
+
+    .pill-primary {
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      border-color: transparent;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 6px 28px var(--purple-glow);
+      font-weight: 600;
+    }
+    .pill-primary:hover {
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 10px 40px var(--purple-glow);
+      transform: translateY(-2px);
+    }
+
+    .pill-quiet {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-muted); padding: 16px 28px;
+    }
+    .pill-quiet:hover { color: var(--text); border-color: var(--border-strong); }
+
+    /* ============================ PROOF BAND ============================ */
+    .proof {
+      padding: 36px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-soft);
+    }
+    .proof-inner {
+      display: flex; flex-wrap: wrap;
+      gap: 32px 56px; align-items: center; justify-content: center;
+      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
+    }
+    .proof-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .proof-brands {
+      display: flex; gap: 36px; flex-wrap: wrap;
+      align-items: center; justify-content: center;
+    }
+    .proof-brand {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 1.5rem; color: var(--text);
+      letter-spacing: 0.01em;
+      opacity: 0.85;
+    }
+
+    /* ============================ SECTIONS ============================ */
+    .section { padding: 96px 0; position: relative; z-index: 2; }
+    .section-light {
+      background: var(--light-surface);
+      color: var(--text-on-light);
+    }
+
+    .section-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 28px;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .section-label::before {
+      content: ""; width: 24px; height: 1px; background: var(--purple);
+    }
+    .section-light .section-label { color: var(--purple-deep); }
+    .section-light .section-label::before { background: var(--purple-deep); }
+
+    .section h2 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.05;
+      letter-spacing: -0.02em; margin-bottom: 32px;
+    }
+    .section h2 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 30px var(--purple-glow-soft);
+    }
+    .section-light h2 em {
+      color: var(--purple-deep);
+      text-shadow: none;
+    }
+
+    /* ============================ PROBLEM ============================ */
+    .problem-body {
+      font-size: 1.1rem; line-height: 1.65;
+      max-width: 60ch; color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    .pullquote {
+      background: var(--surface-card);
+      border-left: 3px solid var(--purple);
+      padding: 28px 32px;
+      border-radius: 4px;
+      max-width: 80ch;
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.08);
+    }
+    .pullquote .quote {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+      line-height: 1.45; color: var(--text);
+      margin-bottom: 14px;
+    }
+    .pullquote .citation {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+    }
+
+    /* ============================ TWO FIRES ============================ */
+    .fires-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      margin-top: 8px;
+    }
+    @media (max-width: 800px) { .fires-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+    .fire {
+      padding-top: 8px;
+    }
+    .fire-rule {
+      width: 40px; height: 2px;
+      background: var(--purple);
+      box-shadow: 0 0 12px var(--purple-glow);
+      margin-bottom: 16px;
+    }
+    .fire-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .fire-name {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(2rem, 3.5vw, 2.6rem);
+      margin-bottom: 20px; line-height: 1;
+    }
+    .fire-desc {
+      font-size: 1.02rem; line-height: 1.6; color: var(--text);
+      margin-bottom: 0;
+    }
+
+    /* ============================ PRINCIPALS ============================ */
+    .principals-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-top: 16px;
+    }
+    @media (max-width: 800px) { .principals-grid { grid-template-columns: 1fr; } }
+
+    .principal {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--purple);
+      padding: 32px 28px;
+      border-radius: 6px;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.04);
+    }
+    .principal-row {
+      display: flex; align-items: baseline; gap: 18px;
+      margin-bottom: 16px;
+    }
+    .principal-initials {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 2.4rem; line-height: 1;
+      color: var(--purple-bright);
+      text-shadow: 0 0 20px var(--purple-glow-soft);
+    }
+    .principal-name {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 1.5rem; line-height: 1;
+    }
+    .principal-role {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .principal-bio {
+      font-size: 0.95rem; line-height: 1.6;
+      color: var(--text-muted);
+    }
+    .principal-bio em { color: var(--text); font-style: italic; }
+
+    /* ============================ NOT FOR EVERYONE ============================ */
+    .filter-strip {
+      text-align: center;
+    }
+    .filter-strip h2 {
+      margin: 0 auto 24px;
+    }
+    .filter-strip-lede {
+      font-size: 1.05rem; color: var(--text-muted);
+      max-width: 56ch; margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .filter-tags {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; max-width: 760px; margin: 0 auto 36px;
+    }
+    .filter-tag {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 9px 16px; border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      color: var(--purple-bright); font-weight: 600;
+      background: var(--surface-card);
+    }
+    .filter-closer {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+      color: var(--purple-bright);
+      text-shadow: 0 0 24px var(--purple-glow-soft);
+    }
+
+    /* ============================ LADDER ============================ */
+    .ladder-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-top: 8px;
+    }
+    @media (max-width: 900px) { .ladder-grid { grid-template-columns: 1fr; } }
+
+    .ladder-card {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 28px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative; overflow: hidden;
+      text-decoration: none; color: inherit;
+      display: block;
+    }
+    .ladder-card::before {
+      content: ""; position: absolute;
+      top: 0; left: 0; width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .ladder-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-3px);
+      background: var(--surface-strong);
+      box-shadow: 0 12px 40px var(--purple-glow-soft);
+    }
+    .ladder-card:hover::before { opacity: 1; }
+
+    .ladder-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .ladder-title {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 1.5rem; margin-bottom: 12px; line-height: 1.2;
+    }
+    .ladder-desc {
+      color: var(--text-muted); font-size: 0.95rem; line-height: 1.55;
+      margin-bottom: 22px;
+    }
+    .ladder-arrow {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text); font-weight: 600;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: gap 0.3s ease;
+    }
+    .ladder-card:hover .ladder-arrow {
+      gap: 14px; color: var(--purple-bright);
+    }
+
+    /* ============================ FINAL CTA ============================ */
+    .final-cta {
+      text-align: center;
+      padding: 96px 0 64px;
+    }
+    .final-cta h2 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(2.4rem, 6vw, 4.6rem);
+      line-height: 1.0; letter-spacing: -0.025em;
+      margin: 0 auto 28px;
+    }
+    .final-cta h2 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+    }
+    .risk-reversal {
+      max-width: 64ch; margin: 0 auto 40px;
+      font-size: 1.05rem; line-height: 1.65;
+      color: var(--text);
+    }
+    .risk-reversal em { color: var(--purple-bright); font-style: normal; font-weight: 500; }
+
+    /* ============================ CONTACT MODAL / SECTION ============================ */
+    .contact-section {
+      background: var(--bg-soft);
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px;
+      align-items: start;
+    }
+    @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+    .contact-side h3 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: -0.01em; line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .contact-side h3 em { color: var(--purple-bright); font-style: italic; }
+    .contact-side p { color: var(--text-muted); margin-bottom: 28px; line-height: 1.65; }
+
+    .contact-direct {
+      padding: 22px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+    }
+    .contact-direct .label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 8px;
+    }
+    .contact-direct .email {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 1.4rem; color: var(--purple-bright);
+      text-decoration: none; display: inline-block;
+      text-shadow: 0 0 16px var(--purple-glow-soft);
+    }
+    .contact-direct .email:hover { color: white; }
+
+    .contact-form {
+      background: var(--surface-card);
+      border: 1px solid var(--border-strong);
+      border-radius: 16px; padding: 32px 28px;
+      position: relative; overflow: hidden;
+    }
+    .contact-form::before {
+      content: ""; position: absolute;
+      top: -1px; left: -1px; right: -1px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
+    }
+    .field { margin-bottom: 20px; }
+    .field label {
+      display: block; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 8px;
+    }
+    .field input, .field textarea {
+      width: 100%; background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 13px 14px;
+      font-family: var(--font-body); font-size: 14px; color: var(--text);
+      transition: all 0.3s ease;
+    }
+    .field input:focus, .field textarea:focus {
+      outline: none; border-color: var(--purple);
+      background: rgba(0,0,0,0.5);
+      box-shadow: 0 0 0 3px var(--purple-soft-fill);
+    }
+    .field textarea { resize: vertical; min-height: 100px; font-family: var(--font-body); }
+    .submit-btn {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      color: white; border: none; border-radius: 8px;
+      font-family: var(--font-body); font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 4px 24px var(--purple-glow-soft);
+    }
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px var(--purple-glow);
+    }
+
+    .form-success { display: none; text-align: center; padding: 28px 16px; }
+    .form-success.active { display: block; animation: fadeUp 0.5s ease; }
+    .form-success h4 {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 1.5rem; color: var(--purple-bright); margin-bottom: 12px;
+    }
+    .form-success p { color: var(--text-muted); }
+
+    /* ============================ FOOTER ============================ */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 44px 0 28px;
+      position: relative; z-index: 2;
+      background: var(--bg);
+    }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
+      display: flex; flex-wrap: wrap; gap: 24px;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 12px; }
+    .footer-mark { width: 20px; height: 20px; }
+    .footer-text {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer-links a {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ============================ LEGAL PAGES (modal-style hidden by default) ============================ */
+    .legal-page {
+      display: none;
+      padding: 80px 0;
+    }
+    .legal-page.active { display: block; }
+    .legal-page h1 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      letter-spacing: -0.02em; margin-bottom: 32px;
+    }
+    .legal-page h1 em { font-style: italic; color: var(--purple-bright); }
+    .legal-content { max-width: 700px; }
+    .legal-content p {
+      color: var(--text); margin-bottom: 18px;
+      font-size: 1rem; line-height: 1.65;
+    }
+    .legal-content p.muted { color: var(--text-muted); }
+    .legal-content h3 {
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--purple-bright); margin: 32px 0 12px;
+    }
+    .legal-content a {
+      color: var(--purple-bright); text-decoration: none;
+      border-bottom: 1px solid rgba(196, 168, 255, 0.3);
+    }
+
+    /* Page state */
+    .main-content { display: block; }
+    .main-content.hidden { display: none; }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      .nav { gap: 12px; }
+      .nav a:not(.nav-cta) { display: none; }
+      .header-inner { padding: 0 20px; }
+      .container { padding: 0 20px; }
+      .flame-hero { width: 76px; height: 76px; }
+      .hero-actions { flex-direction: column; padding: 0 24px; }
+      .pill { width: 100%; }
+      .section { padding: 64px 0; }
+      .footer-inner { padding: 0 20px; flex-direction: column; text-align: center; }
+      .proof-inner { gap: 20px 32px; padding: 0 20px; }
+      .proof-brands { gap: 24px; }
+      .proof-brand { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Flame SVG defs -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#6B21A8"/>
+        <stop offset="55%" stop-color="#A855F7"/>
+        <stop offset="100%" stop-color="#C4A8FF"/>
+      </linearGradient>
+      <linearGradient id="flameFront" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#4C1078"/>
+        <stop offset="55%" stop-color="#6B21A8"/>
+        <stop offset="100%" stop-color="#A855F7"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <template id="flame-template">
+    <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+      <path class="flame-back"
+        d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z"
+        fill="url(#flameBack)" opacity="0.85"/>
+      <path class="flame-front"
+        d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z"
+        fill="url(#flameFront)"/>
+    </svg>
+  </template>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" onclick="goHome()">
+        <span class="brand-mark"></span>
+        <span class="brand-name">Two Fires</span>
+      </a>
+      <nav class="nav">
+        <a onclick="scrollTo('what')">What we do</a>
+        <a onclick="scrollTo('principals')">Who we are</a>
+        <a class="nav-cta" onclick="scrollTo('contact')">Light the fuse</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============================ MAIN CONTENT ============================ -->
+    <div class="main-content" id="main-content">
+
+      <!-- HERO -->
+      <section class="hero container">
+        <div class="flame-hero" data-flame></div>
+        <div class="hero-eyebrow">A senior marketing firm · Sydney</div>
+        <h1>World-class marketing.<br><em>Supercharged with AI.</em></h1>
+        <p class="hero-lede">A firm built around your growth. Brand discipline forged at the world's most competitive companies. AI execution we live in every day.</p>
+        <div class="hero-actions">
+          <a class="pill pill-primary" onclick="scrollTo('contact')"><span>Book the conversation →</span></a>
+          <a class="pill pill-quiet" onclick="scrollTo('what')"><span>How we work</span></a>
+        </div>
+      </section>
+
+      <!-- PROOF BAND -->
+      <section class="proof">
+        <div class="proof-inner">
+          <div class="proof-label">Thirty years of brand work at</div>
+          <div class="proof-brands">
+            <span class="proof-brand">McDonald's</span>
+            <span class="proof-brand">Mars</span>
+            <span class="proof-brand">Unilever</span>
+            <span class="proof-brand">Burger King</span>
+            <span class="proof-brand">Primo Foods</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROBLEM -->
+      <section class="section" id="problem">
+        <div class="container">
+          <div class="section-label">The problem we solve</div>
+          <h2>Most marketing isn't working<br><em>because the foundation is weak.</em></h2>
+          <p class="problem-body">Great businesses don't hit growth ceilings because their product isn't good enough. They hit them because they've never had the calibre of marketing required at this altitude. Agencies that execute tactics without strategic depth. Marketers still developing fundamentals. AI tools that generate output without the foundation to make it meaningful.</p>
+
+          <div class="pullquote">
+            <div class="quote">"If your foundation is weak, AI will amplify that weakness at scale. If your foundation is strong, AI becomes the most powerful multiplier you've ever encountered."</div>
+            <div class="citation">Paul Tredinnick · Marketing Executive's AI Authority</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TWO FIRES -->
+      <section class="section" id="what">
+        <div class="container">
+          <div class="section-label">What we bring</div>
+          <h2>Two fires.<br><em>One outcome.</em></h2>
+
+          <div class="fires-grid">
+            <div class="fire">
+              <div class="fire-rule"></div>
+              <div class="fire-label">Fire One · Brand</div>
+              <div class="fire-name">Brand.</div>
+              <p class="fire-desc">Thirty years of global brand work at the world's most competitive companies. Sharp positioning, deep customer insight, distinctive assets. Every framework tested against real consumer behaviour. Every dollar measured against commercial outcome.</p>
+            </div>
+
+            <div class="fire">
+              <div class="fire-rule"></div>
+              <div class="fire-label">Fire Two · Engine</div>
+              <div class="fire-name">Engine.</div>
+              <p class="fire-desc">An AI agent stack we operate every day inside our own firm. Agents handle the production work: research, drafting, distribution, reporting. We handle judgment, strategy, the calls that matter. Built from craft, not from gimmick.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRINCIPALS -->
+      <section class="section" id="principals">
+        <div class="container">
+          <div class="section-label">Who we are</div>
+          <h2>Two principals. Both fires.<br><em>Same firm.</em></h2>
+
+          <div class="principals-grid">
+            <div class="principal">
+              <div class="principal-row">
+                <div class="principal-initials">PT</div>
+                <div class="principal-name">Paul Tredinnick</div>
+              </div>
+              <div class="principal-role">Brand Fire</div>
+              <p class="principal-bio">Thirty years of marketing leadership at McDonald's, Mars, Unilever, Burger King and Primo Foods. Brand strategy, positioning, customer insight and integrated marketing across the world's most competitive categories. Author of <em>Marketing Executive's AI Authority</em>.</p>
+            </div>
+            <div class="principal">
+              <div class="principal-row">
+                <div class="principal-initials">JW</div>
+                <div class="principal-name">James Whitehill</div>
+              </div>
+              <div class="principal-role">Engine Fire</div>
+              <p class="principal-bio">Fifteen years in advertising production for international multi-million-dollar businesses. Four years deploying AI tools and execution systems across SMEs in operation, and now leading our agent architecture. Moved from traditional to digital advertising before the market caught up. Same instinct, applied to the AI shift.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NOT FOR EVERYONE -->
+      <section class="section">
+        <div class="container">
+          <div class="filter-strip">
+            <div class="section-label" style="margin: 0 auto 28px; justify-content: center;">A note on fit</div>
+            <h2>We're not for everyone.<br><em>And that's on purpose.</em></h2>
+            <p class="filter-strip-lede">We work with no more than six client engagements at any time. Some businesses are an automatic no for us, no matter the fee. Easier for everyone to know up front.</p>
+            <div class="filter-tags">
+              <span class="filter-tag">No gambling</span>
+              <span class="filter-tag">No adult content</span>
+              <span class="filter-tag">No predatory lending</span>
+              <span class="filter-tag">No MLM or pyramid</span>
+              <span class="filter-tag">No "wealth coaching"</span>
+              <span class="filter-tag">No speculative crypto</span>
+              <span class="filter-tag">No tobacco or vape</span>
+            </div>
+            <div class="filter-closer">Everyone else, we're listening.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LADDER -->
+      <section class="section">
+        <div class="container">
+          <div class="section-label">Ways in</div>
+          <h2>Three doors.<br><em>Pick whichever fits.</em></h2>
+
+          <div class="ladder-grid">
+            <a class="ladder-card" onclick="scrollTo('contact')">
+              <div class="ladder-label">The Conversation</div>
+              <div class="ladder-title">A 45-minute call</div>
+              <div class="ladder-desc">One conversation with both of us. No deck. No pitch. No obligation. You leave with a clearer view of what's actually broken, whether you work with us or not.</div>
+              <div class="ladder-arrow">Book it →</div>
+            </a>
+            <a class="ladder-card" href="mailto:lightmyfuse@two-fires.com?subject=Curious">
+              <div class="ladder-label">A Direct Line</div>
+              <div class="ladder-title">Write to us</div>
+              <div class="ladder-desc">Faster than a form. One of us reads every message. If your situation needs a human reply, that's where it starts. lightmyfuse@two-fires.com.</div>
+              <div class="ladder-arrow">Send a note →</div>
+            </a>
+            <a class="ladder-card" onclick="scrollTo('what')">
+              <div class="ladder-label">Read First</div>
+              <div class="ladder-title">Browse and decide</div>
+              <div class="ladder-desc">Not ready to talk yet? Look at how we work, who we are, who we're not for. The rest of this page exists to help you decide on your terms.</div>
+              <div class="ladder-arrow">Keep reading →</div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL CTA -->
+      <section class="final-cta container">
+        <h2>Two fires.<br><em>Your business.</em><br>Let's begin.</h2>
+        <p class="risk-reversal">Every engagement starts with one conversation. <em>Forty-five minutes of your time, a full day of ours in preparation.</em> You leave with a clearer view of what's actually broken, whether you work with us or not.</p>
+        <a class="pill pill-primary" onclick="scrollTo('contact')"><span>Bring us your hardest growth problem →</span></a>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="contact-section" id="contact">
+        <div class="container">
+          <div class="contact-grid">
+            <div class="contact-side">
+              <h3>Light the <em>fuse.</em></h3>
+              <p>Tell us what's not working. A sentence or two is enough. We read every message and reply within two business days.</p>
+
+              <div class="contact-direct">
+                <div class="label">Direct line</div>
+                <a class="email" href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>
+              </div>
+            </div>
+
+            <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)">
+              <div class="field">
+                <label for="name">Your name</label>
+                <input type="text" id="name" required autocomplete="name">
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" required autocomplete="email">
+              </div>
+              <div class="field">
+                <label for="company">Company</label>
+                <input type="text" id="company" autocomplete="organization">
+              </div>
+              <div class="field">
+                <label for="message">What's not working?</label>
+                <textarea id="message" required placeholder="A sentence or two is enough."></textarea>
+              </div>
+              <button type="submit" class="submit-btn">Send →</button>
+
+              <div class="form-success" id="form-success">
+                <h4>We've got it.</h4>
+                <p>One of us will be in touch within two business days. In the meantime, breathe out.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- LEGAL PAGES (inline, toggled) -->
+    <div class="legal-page" id="privacy-page">
+      <div class="container">
+        <h1>Privacy <em>Policy.</em></h1>
+        <div class="legal-content">
+          <p class="muted">Last updated: May 2026.</p>
+          <p>Two Fires (the "firm," "we," or "us") respects your privacy. This page explains what we collect, why, and how we treat it. We've kept it short on purpose. If anything isn't clear, write to us at <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
+          <h3>What we collect</h3>
+          <p>When you submit our contact form or email us directly, we collect your name, email address, company name (if provided), and the message you send. That's it. We do not use third-party tracking pixels or sell data to anyone.</p>
+          <h3>How we use it</h3>
+          <p>We use this information solely to respond to your enquiry and continue any conversation you start with us. If we work together, we'll keep your contact details on file for the duration of our engagement and a reasonable period afterwards.</p>
+          <h3>Analytics and cookies</h3>
+          <p>This website uses minimal first-party analytics to understand which pages are read. No personal data is shared with third parties. We do not use advertising cookies or cross-site tracking.</p>
+          <h3>Your rights</h3>
+          <p>You can ask us at any time what we hold about you, request a copy, or ask us to delete it. Email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a> and we'll act within 30 days.</p>
+          <h3>Changes to this policy</h3>
+          <p>If we update this policy, the change will appear here with a new "last updated" date. Material changes will be communicated to active clients directly.</p>
+          <p style="margin-top: 40px;"><a onclick="goHome()" style="cursor: pointer;">← Back to home</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-page" id="terms-page">
+      <div class="container">
+        <h1>Terms of <em>use.</em></h1>
+        <div class="legal-content">
+          <p class="muted">Last updated: May 2026.</p>
+          <p>These terms govern your use of the Two Fires website. By visiting two-fires.com, you accept them. They are deliberately brief.</p>
+          <h3>Information on this site</h3>
+          <p>Content on this website is provided for general information about Two Fires. It is not professional advice. Specific marketing, brand, or commercial recommendations are made under engagement agreements, not via website content.</p>
+          <h3>Intellectual property</h3>
+          <p>The Two Fires brand, name, mark, and original content are the property of Two Fires Pty Ltd. You may quote short passages with attribution. You may not reproduce, modify, or commercially redistribute substantial portions without written permission.</p>
+          <h3>Limitation of liability</h3>
+          <p>Use of this website is at your own risk. To the extent permitted by Australian law, Two Fires excludes liability for any loss arising from the use of the site or reliance on its content.</p>
+          <h3>Governing law</h3>
+          <p>These terms are governed by the laws of New South Wales, Australia.</p>
+          <h3>Contact</h3>
+          <p>Questions? <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></p>
+          <p style="margin-top: 40px;"><a onclick="goHome()" style="cursor: pointer;">← Back to home</a></p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-mark" data-flame></span>
+        <span class="footer-text">Two Fires · Sydney · 2026</span>
+      </div>
+      <div class="footer-links">
+        <a onclick="goHome()">Home</a>
+        <a onclick="scrollTo('contact')">Contact</a>
+        <a onclick="showLegal('privacy')">Privacy</a>
+        <a onclick="showLegal('terms')">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Inject flame SVGs
+    document.querySelectorAll('[data-flame], .brand-mark').forEach(el => {
+      const tmpl = document.getElementById('flame-template');
+      el.appendChild(tmpl.content.cloneNode(true));
+    });
+
+    function scrollTo(id) {
+      goHome();
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+
+    function showLegal(name) {
+      document.getElementById('main-content').classList.add('hidden');
+      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
+      document.getElementById(name + '-page').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function goHome() {
+      document.getElementById('main-content').classList.remove('hidden');
+      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.querySelectorAll('#contact-form .field, #contact-form .submit-btn').forEach(el => el.style.display = 'none');
+      document.getElementById('form-success').classList.add('active');
+      return false;
+    }
+  </script>
+
+</body>
+</html>
