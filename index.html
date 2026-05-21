@@ -704,14 +704,14 @@
   <!-- Header -->
   <header class="header">
     <div class="header-inner">
-      <a class="brand" onclick="goHome()">
+      <a class="brand" href="#" onclick="event.preventDefault(); goHome()">
         <span class="brand-mark"></span>
         <span class="brand-name">Two Fires</span>
       </a>
       <nav class="nav">
-        <a onclick="scrollTo('what')">What we do</a>
-        <a onclick="scrollTo('principals')">Who we are</a>
-        <a class="nav-cta" onclick="scrollTo('contact')">Light the fuse</a>
+        <a href="#what" onclick="event.preventDefault(); scrollTo('what')">What we do</a>
+        <a href="#principals" onclick="event.preventDefault(); scrollTo('principals')">Who we are</a>
+        <a class="nav-cta" href="#contact" onclick="event.preventDefault(); scrollTo('contact')">Light the fuse</a>
       </nav>
     </div>
   </header>
@@ -727,8 +727,8 @@
         <h1>World-class marketing.<br><em>Supercharged with AI.</em></h1>
         <p class="hero-lede">A firm built around your growth. Brand discipline forged at the world's most competitive companies. AI execution we live in every day.</p>
         <div class="hero-actions">
-          <a class="pill pill-primary" onclick="scrollTo('contact')"><span>Book the conversation →</span></a>
-          <a class="pill pill-quiet" onclick="scrollTo('what')"><span>How we work</span></a>
+          <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollTo('contact')"><span>Book the conversation →</span></a>
+          <a class="pill pill-quiet" href="#what" onclick="event.preventDefault(); scrollTo('what')"><span>How we work</span></a>
         </div>
       </section>
 
@@ -839,7 +839,7 @@
           <h2>Three doors.<br><em>Pick whichever fits.</em></h2>
 
           <div class="ladder-grid">
-            <a class="ladder-card" onclick="scrollTo('contact')">
+            <a class="ladder-card" href="#contact" onclick="event.preventDefault(); scrollTo('contact')">
               <div class="ladder-label">The Conversation</div>
               <div class="ladder-title">A 45-minute call</div>
               <div class="ladder-desc">One conversation with both of us. No deck. No pitch. No obligation. You leave with a clearer view of what's actually broken, whether you work with us or not.</div>
@@ -851,7 +851,7 @@
               <div class="ladder-desc">Faster than a form. One of us reads every message. If your situation needs a human reply, that's where it starts. lightmyfuse@two-fires.com.</div>
               <div class="ladder-arrow">Send a note →</div>
             </a>
-            <a class="ladder-card" onclick="scrollTo('what')">
+            <a class="ladder-card" href="#what" onclick="event.preventDefault(); scrollTo('what')">
               <div class="ladder-label">Read First</div>
               <div class="ladder-title">Browse and decide</div>
               <div class="ladder-desc">Not ready to talk yet? Look at how we work, who we are, who we're not for. The rest of this page exists to help you decide on your terms.</div>
@@ -865,7 +865,7 @@
       <section class="final-cta container">
         <h2>Two fires.<br><em>Your business.</em><br>Let's begin.</h2>
         <p class="risk-reversal">Every engagement starts with one conversation. <em>Forty-five minutes of your time, a full day of ours in preparation.</em> You leave with a clearer view of what's actually broken, whether you work with us or not.</p>
-        <a class="pill pill-primary" onclick="scrollTo('contact')"><span>Bring us your hardest growth problem →</span></a>
+        <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollTo('contact')"><span>Bring us your hardest growth problem →</span></a>
       </section>
 
       <!-- CONTACT -->
@@ -902,8 +902,9 @@
               <button type="submit" class="submit-btn">Send →</button>
 
               <div class="form-success" id="form-success">
-                <h4>We've got it.</h4>
-                <p>One of us will be in touch within two business days. In the meantime, breathe out.</p>
+                <h4>Almost there.</h4>
+                <p>Your email client should have opened with the message ready to send. Hit Send and we'll be in touch within two business days.</p>
+                <p style="margin-top: 16px; font-size: 0.88rem;">If nothing opened, email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color: var(--purple-bright);">lightmyfuse@two-fires.com</a>.</p>
               </div>
             </form>
           </div>
@@ -929,7 +930,7 @@
           <p>You can ask us at any time what we hold about you, request a copy, or ask us to delete it. Email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a> and we'll act within 30 days.</p>
           <h3>Changes to this policy</h3>
           <p>If we update this policy, the change will appear here with a new "last updated" date. Material changes will be communicated to active clients directly.</p>
-          <p style="margin-top: 40px;"><a onclick="goHome()" style="cursor: pointer;">← Back to home</a></p>
+          <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()" style="cursor: pointer;">← Back to home</a></p>
         </div>
       </div>
     </div>
@@ -950,7 +951,7 @@
           <p>These terms are governed by the laws of New South Wales, Australia.</p>
           <h3>Contact</h3>
           <p>Questions? <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></p>
-          <p style="margin-top: 40px;"><a onclick="goHome()" style="cursor: pointer;">← Back to home</a></p>
+          <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()" style="cursor: pointer;">← Back to home</a></p>
         </div>
       </div>
     </div>
@@ -965,10 +966,10 @@
         <span class="footer-text">Two Fires · Sydney · 2026</span>
       </div>
       <div class="footer-links">
-        <a onclick="goHome()">Home</a>
-        <a onclick="scrollTo('contact')">Contact</a>
-        <a onclick="showLegal('privacy')">Privacy</a>
-        <a onclick="showLegal('terms')">Terms</a>
+        <a href="#" onclick="event.preventDefault(); goHome()">Home</a>
+        <a href="#contact" onclick="event.preventDefault(); scrollTo('contact')">Contact</a>
+        <a href="#" onclick="event.preventDefault(); showLegal('privacy')">Privacy</a>
+        <a href="#" onclick="event.preventDefault(); showLegal('terms')">Terms</a>
       </div>
     </div>
   </footer>
@@ -1002,8 +1003,32 @@
 
     function handleSubmit(e) {
       e.preventDefault();
-      document.querySelectorAll('#contact-form .field, #contact-form .submit-btn').forEach(el => el.style.display = 'none');
-      document.getElementById('form-success').classList.add('active');
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      const subject = encodeURIComponent('Two Fires enquiry — ' + (name || 'no name'));
+      const bodyLines = [
+        'Name: ' + name,
+        'Email: ' + email,
+        'Company: ' + (company || '(not provided)'),
+        '',
+        'What\'s not working:',
+        message,
+        '',
+        '— Sent from the contact form on two-fires.com'
+      ];
+      const body = encodeURIComponent(bodyLines.join('\n'));
+
+      window.location.href = 'mailto:lightmyfuse@two-fires.com?subject=' + subject + '&body=' + body;
+
+      setTimeout(() => {
+        document.querySelectorAll('#contact-form .field, #contact-form .submit-btn').forEach(el => el.style.display = 'none');
+        document.getElementById('form-success').classList.add('active');
+      }, 500);
+
       return false;
     }
   </script>
