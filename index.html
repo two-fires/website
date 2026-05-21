@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="description" content="World-class marketing. Supercharged with AI. Thirty years of brand work at McDonald's, Mars, Unilever and Burger King, applied to your business and multiplied by AI.">
   <meta property="og:title" content="Two Fires · World-class marketing. Supercharged with AI.">
   <meta property="og:description" content="World-class brand craft. AI execution. Two Fires is the marketing firm for businesses whose growth has plateaued.">
@@ -709,9 +710,9 @@
         <span class="brand-name">Two Fires</span>
       </a>
       <nav class="nav">
-        <a href="#what" onclick="event.preventDefault(); scrollTo('what')">What we do</a>
-        <a href="#principals" onclick="event.preventDefault(); scrollTo('principals')">Who we are</a>
-        <a class="nav-cta" href="#contact" onclick="event.preventDefault(); scrollTo('contact')">Light the fuse</a>
+        <a href="#what" onclick="event.preventDefault(); scrollToSection('what')">What we do</a>
+        <a href="#principals" onclick="event.preventDefault(); scrollToSection('principals')">Who we are</a>
+        <a class="nav-cta" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Light the fuse</a>
       </nav>
     </div>
   </header>
@@ -727,8 +728,8 @@
         <h1>World-class marketing.<br><em>Supercharged with AI.</em></h1>
         <p class="hero-lede">A firm built around your growth. Brand discipline forged at the world's most competitive companies. AI execution we live in every day.</p>
         <div class="hero-actions">
-          <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollTo('contact')"><span>Book the conversation →</span></a>
-          <a class="pill pill-quiet" href="#what" onclick="event.preventDefault(); scrollTo('what')"><span>How we work</span></a>
+          <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')"><span>Book the conversation →</span></a>
+          <a class="pill pill-quiet" href="#what" onclick="event.preventDefault(); scrollToSection('what')"><span>How we work</span></a>
         </div>
       </section>
 
@@ -839,7 +840,7 @@
           <h2>Three doors.<br><em>Pick whichever fits.</em></h2>
 
           <div class="ladder-grid">
-            <a class="ladder-card" href="#contact" onclick="event.preventDefault(); scrollTo('contact')">
+            <a class="ladder-card" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">
               <div class="ladder-label">The Conversation</div>
               <div class="ladder-title">A 45-minute call</div>
               <div class="ladder-desc">One conversation with both of us. No deck. No pitch. No obligation. You leave with a clearer view of what's actually broken, whether you work with us or not.</div>
@@ -851,7 +852,7 @@
               <div class="ladder-desc">Faster than a form. One of us reads every message. If your situation needs a human reply, that's where it starts. lightmyfuse@two-fires.com.</div>
               <div class="ladder-arrow">Send a note →</div>
             </a>
-            <a class="ladder-card" href="#what" onclick="event.preventDefault(); scrollTo('what')">
+            <a class="ladder-card" href="#what" onclick="event.preventDefault(); scrollToSection('what')">
               <div class="ladder-label">Read First</div>
               <div class="ladder-title">Browse and decide</div>
               <div class="ladder-desc">Not ready to talk yet? Look at how we work, who we are, who we're not for. The rest of this page exists to help you decide on your terms.</div>
@@ -865,7 +866,7 @@
       <section class="final-cta container">
         <h2>Two fires.<br><em>Your business.</em><br>Let's begin.</h2>
         <p class="risk-reversal">Every engagement starts with one conversation. <em>Forty-five minutes of your time, a full day of ours in preparation.</em> You leave with a clearer view of what's actually broken, whether you work with us or not.</p>
-        <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollTo('contact')"><span>Bring us your hardest growth problem →</span></a>
+        <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')"><span>Bring us your hardest growth problem →</span></a>
       </section>
 
       <!-- CONTACT -->
@@ -967,7 +968,7 @@
       </div>
       <div class="footer-links">
         <a href="#" onclick="event.preventDefault(); goHome()">Home</a>
-        <a href="#contact" onclick="event.preventDefault(); scrollTo('contact')">Contact</a>
+        <a href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Contact</a>
         <a href="#" onclick="event.preventDefault(); showLegal('privacy')">Privacy</a>
         <a href="#" onclick="event.preventDefault(); showLegal('terms')">Terms</a>
       </div>
@@ -981,7 +982,7 @@
       el.appendChild(tmpl.content.cloneNode(true));
     });
 
-    function scrollTo(id) {
+    function scrollToSection(id) {
       goHome();
       setTimeout(() => {
         const el = document.getElementById(id);
