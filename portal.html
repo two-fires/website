@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires — Client Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --charcoal: #05050A;
+  --purple: #A855F7;
+  --purple-bright: #C4A8FF;
+  --purple-deep: #6B21A8;
+  --purple-glow: rgba(168,85,247,0.15);
+  --purple-border: rgba(168,85,247,0.25);
+  --white: #ffffff;
+  --white-60: rgba(255,255,255,0.6);
+  --white-20: rgba(255,255,255,0.2);
+  --white-08: rgba(255,255,255,0.08);
+  --white-04: rgba(255,255,255,0.04);
+  --error: #f87171;
+}
+
+html, body {
+  height: 100%;
+  background: var(--charcoal);
+  color: var(--white);
+  font-family: 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ── AMBIENT GLOW ── */
+.ambient {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-1 {
+  width: 600px; height: 600px;
+  background: rgba(107,33,168,0.2);
+  top: -200px; right: -100px;
+}
+
+.ambient-2 {
+  width: 400px; height: 400px;
+  background: rgba(168,85,247,0.1);
+  bottom: -100px; left: -80px;
+}
+
+/* ══════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════ */
+#login-screen {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--white-04);
+  border: 0.5px solid var(--white-20);
+  border-radius: 20px;
+  padding: 2.5rem 2.5rem 2rem;
+  backdrop-filter: blur(12px);
+  animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.flame-svg { width: 36px; height: 36px; }
+
+.login-logo-text h1 {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.login-logo-text span {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  color: var(--purple-bright);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.login-heading {
+  margin-bottom: 0.4rem;
+}
+
+.login-heading h2 {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.login-heading h2 span { color: var(--purple-bright); }
+
+.login-sub {
+  font-size: 13px;
+  color: var(--white-60);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  margin-bottom: 8px;
+}
+
+.field input {
+  width: 100%;
+  height: 48px;
+  background: var(--white-08);
+  border: 0.5px solid var(--white-20);
+  border-radius: 10px;
+  padding: 0 16px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: var(--white);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.field input::placeholder { color: rgba(255,255,255,0.25); }
+
+.field input:focus {
+  border-color: var(--purple-border);
+  background: rgba(168,85,247,0.06);
+}
+
+.field input.error { border-color: var(--error); }
+
+.error-msg {
+  font-size: 12px;
+  color: var(--error);
+  margin-top: 6px;
+  display: none;
+  font-family: 'Geist Mono', monospace;
+}
+
+.error-msg.visible { display: block; }
+
+.login-btn {
+  width: 100%;
+  height: 48px;
+  margin-top: 1.5rem;
+  background: var(--purple);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: 0.02em;
+}
+
+.login-btn:hover { opacity: 0.88; }
+.login-btn:active { transform: scale(0.98); }
+.login-btn:disabled { opacity: 0.4; cursor: default; }
+
+.login-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 0.5px solid var(--white-08);
+  text-align: center;
+}
+
+.login-footer nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.login-footer nav a {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.login-footer nav a:hover { color: var(--purple-bright); }
+.login-footer nav a.current { color: var(--purple-bright); }
+
+/* ══════════════════════════════
+   PORTAL / DASHBOARD SCREEN
+══════════════════════════════ */
+#portal-screen {
+  display: none;
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#portal-screen.active {
+  display: flex;
+}
+
+/* Top nav */
+.portal-nav {
+  height: 64px;
+  border-bottom: 0.5px solid var(--white-08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: rgba(5,5,10,0.7);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.portal-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.portal-nav-logo span {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--white);
+}
+
+.portal-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.portal-user {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  color: var(--white-60);
+  letter-spacing: 0.06em;
+}
+
+.logout-btn {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  background: var(--white-08);
+  border: 0.5px solid var(--white-20);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.logout-btn:hover { color: var(--white); border-color: var(--white-20); }
+
+/* Portal body */
+.portal-body {
+  flex: 1;
+  padding: 3rem 2rem;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.portal-welcome {
+  margin-bottom: 3rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+.portal-welcome p {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--purple-bright);
+  margin-bottom: 0.5rem;
+}
+
+.portal-welcome h2 {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.portal-welcome h2 span { color: var(--purple-bright); }
+
+.portal-welcome .sub {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: var(--white-60);
+  margin-top: 0.75rem;
+  line-height: 1.6;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Tool grid */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+
+.tool-card {
+  background: var(--white-04);
+  border: 0.5px solid var(--white-20);
+  border-radius: 16px;
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--purple-glow);
+  opacity: 0;
+  transition: opacity 0.25s;
+  border-radius: 16px;
+}
+
+.tool-card:hover { border-color: var(--purple-border); transform: translateY(-2px); }
+.tool-card:hover::before { opacity: 1; }
+
+.tool-card.coming-soon { cursor: default; }
+.tool-card.coming-soon:hover { transform: none; border-color: var(--white-20); }
+.tool-card.coming-soon:hover::before { opacity: 0; }
+
+.tool-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--purple-glow);
+  border: 0.5px solid var(--purple-border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  font-size: 18px;
+}
+
+.tool-card h3 {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.tool-card p {
+  font-size: 13px;
+  color: var(--white-60);
+  line-height: 1.6;
+}
+
+.tool-badge {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.badge-ready {
+  background: rgba(168,85,247,0.15);
+  color: var(--purple-bright);
+  border: 0.5px solid var(--purple-border);
+}
+
+.badge-soon {
+  background: var(--white-08);
+  color: var(--white-60);
+  border: 0.5px solid var(--white-20);
+}
+
+/* Portal footer */
+.portal-footer {
+  padding: 2rem;
+  border-top: 0.5px solid var(--white-08);
+  text-align: center;
+  margin-top: auto;
+}
+
+.portal-footer nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.portal-footer nav a {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.portal-footer nav a:hover { color: var(--purple-bright); }
+</style>
+</head>
+<body>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="login-screen">
+  <div class="login-card">
+
+    <div class="login-logo">
+      <svg class="flame-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 32C11 32 6.5 25 9 18C11.5 11 16 9 16 9C16 9 13.5 15 17 18C17 18 15.5 12 20 9C24.5 6 27 2 27 2C27 2 29.5 9 25 15C25 15 28.5 11.5 30 15C31.5 18.5 29 23 25.5 25.5C25.5 25.5 28 22 25.5 21C23 20 20.5 22.5 20.5 26C20.5 29.5 23 32 23 32H11Z" fill="url(#lg1)"/>
+        <defs>
+          <linearGradient id="lg1" x1="18" y1="2" x2="18" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#C4A8FF"/>
+            <stop offset="100%" stop-color="#6B21A8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="login-logo-text">
+        <h1>Two Fires</h1>
+        <span>Client Portal</span>
+      </div>
+    </div>
+
+    <div class="login-heading">
+      <h2>Welcome<span>.</span></h2>
+    </div>
+    <p class="login-sub">Sign in to access your marketing intelligence tools.</p>
+
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter username" autocomplete="username" autocapitalize="none">
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+      <div class="error-msg" id="error-msg">Incorrect username or password.</div>
+    </div>
+
+    <button class="login-btn" id="login-btn" onclick="handleLogin()">Sign in</button>
+
+    <div class="login-footer">
+      <nav>
+        <a href="https://two-fires.com">Home</a>
+        <a href="mailto:lightmyfuse@two-fires.com">Contact</a>
+        <a href="https://two-fires.com#privacy">Privacy</a>
+        <a href="https://two-fires.com#terms">Terms</a>
+        <a href="#" class="current">Portal login</a>
+      </nav>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ PORTAL SCREEN ══ -->
+<div id="portal-screen">
+
+  <nav class="portal-nav">
+    <div class="portal-nav-logo">
+      <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 32C11 32 6.5 25 9 18C11.5 11 16 9 16 9C16 9 13.5 15 17 18C17 18 15.5 12 20 9C24.5 6 27 2 27 2C27 2 29.5 9 25 15C25 15 28.5 11.5 30 15C31.5 18.5 29 23 25.5 25.5C25.5 25.5 28 22 25.5 21C23 20 20.5 22.5 20.5 26C20.5 29.5 23 32 23 32H11Z" fill="url(#lg2)"/>
+        <defs>
+          <linearGradient id="lg2" x1="18" y1="2" x2="18" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#C4A8FF"/>
+            <stop offset="100%" stop-color="#6B21A8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>Two Fires</span>
+    </div>
+    <div class="portal-nav-right">
+      <span class="portal-user" id="portal-user-label"></span>
+      <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="portal-body">
+
+    <div class="portal-welcome">
+      <p>Two Fires — Intelligence Suite</p>
+      <h2>Your marketing.<br><span>Supercharged.</span></h2>
+      <p class="sub">Select a tool below to get started. More capabilities are being added regularly.</p>
+    </div>
+
+    <div class="tool-grid">
+
+      <div class="tool-card" onclick="alert('Customer Intelligence Agent — coming soon.')">
+        <div class="tool-icon">🔍</div>
+        <h3>Customer Intelligence Agent</h3>
+        <p>Answer a few questions about your business. Our agent scouts Reddit, X, Facebook groups and forums to build a precise profile of your customer — their pains, desires, language and channels.</p>
+        <span class="tool-badge badge-ready">Ready soon</span>
+      </div>
+
+      <div class="tool-card coming-soon">
+        <div class="tool-icon">🎯</div>
+        <h3>Brand Positioning Report</h3>
+        <p>Thirty years of brand strategy applied to your business. Get a clear picture of where you sit in the market and the single most powerful thing you can say to your ideal customer.</p>
+        <span class="tool-badge badge-soon">Coming soon</span>
+      </div>
+
+      <div class="tool-card coming-soon">
+        <div class="tool-icon">📣</div>
+        <h3>Campaign Messaging Builder</h3>
+        <p>Turn your customer intelligence into ready-to-use messaging — ads, emails, landing page copy — all grounded in real language from your audience, not marketing jargon.</p>
+        <span class="tool-badge badge-soon">Coming soon</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="portal-footer">
+    <nav>
+      <a href="https://two-fires.com">Home</a>
+      <a href="mailto:lightmyfuse@two-fires.com">Contact</a>
+      <a href="https://two-fires.com#privacy">Privacy</a>
+      <a href="https://two-fires.com#terms">Terms</a>
+      <a href="#" onclick="handleLogout(); return false;">Sign out</a>
+    </nav>
+  </footer>
+
+</div>
+
+<script>
+const CREDENTIALS = { username: 'twofires', password: 'TwoFires1!' };
+
+function handleLogin() {
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+  const errMsg = document.getElementById('error-msg');
+  const uInput = document.getElementById('username');
+  const pInput = document.getElementById('password');
+  const btn = document.getElementById('login-btn');
+
+  errMsg.classList.remove('visible');
+  uInput.classList.remove('error');
+  pInput.classList.remove('error');
+
+  if (!u || !p) {
+    errMsg.textContent = 'Please enter your username and password.';
+    errMsg.classList.add('visible');
+    if (!u) uInput.classList.add('error');
+    if (!p) pInput.classList.add('error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in…';
+
+  setTimeout(() => {
+    if (u === CREDENTIALS.username && p === CREDENTIALS.password) {
+      sessionStorage.setItem('tf_auth', 'true');
+      sessionStorage.setItem('tf_user', u);
+      showPortal(u);
+    } else {
+      errMsg.textContent = 'Incorrect username or password.';
+      errMsg.classList.add('visible');
+      uInput.classList.add('error');
+      pInput.classList.add('error');
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
+      pInput.value = '';
+      pInput.focus();
+    }
+  }, 600);
+}
+
+function showPortal(username) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('portal-screen').classList.add('active');
+  document.getElementById('portal-user-label').textContent = username;
+}
+
+function handleLogout() {
+  sessionStorage.removeItem('tf_auth');
+  sessionStorage.removeItem('tf_user');
+  document.getElementById('portal-screen').classList.remove('active');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('error-msg').classList.remove('visible');
+  document.getElementById('username').classList.remove('error');
+  document.getElementById('password').classList.remove('error');
+  document.getElementById('login-btn').disabled = false;
+  document.getElementById('login-btn').textContent = 'Sign in';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
+    handleLogin();
+  }
+});
+
+if (sessionStorage.getItem('tf_auth') === 'true') {
+  showPortal(sessionStorage.getItem('tf_user') || 'twofires');
+}
+</script>
+</body>
+</html>
