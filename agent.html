@@ -1032,8 +1032,9 @@ function startLoadingAnimation(prefix, messages) {
   // Force reflow so the reset applies before transitioning.
   void fill.offsetWidth;
 
-  fill.style.transition = 'width 8s linear';
-  fill.style.width = '100%';
+  // Animate to 90% over 6s and hold there until the API call resolves.
+  fill.style.transition = 'width 6s cubic-bezier(0.16,1,0.3,1)';
+  fill.style.width = '90%';
 
   let idx = 0;
   const cycle = setInterval(() => {
@@ -1045,7 +1046,33 @@ function startLoadingAnimation(prefix, messages) {
     }, 250);
   }, 2000);
 
-  return () => clearInterval(cycle);
+  return {
+    finish() {
+      clearInterval(cycle);
+      fill.style.transition = 'width 0.3s ease-out';
+      fill.style.width = '100%';
+    },
+    cancel() {
+      clearInterval(cycle);
+    }
+  };
+}
+
+function showAgentError(prefix, message, retryFn) {
+  const errBox = document.getElementById(`error-${prefix}`);
+  errBox.innerHTML = '';
+  errBox.style.display = 'block';
+
+  const msgEl = document.createElement('div');
+  msgEl.textContent = message;
+  errBox.appendChild(msgEl);
+
+  const retryBtn = document.createElement('button');
+  retryBtn.className = 'btn-secondary';
+  retryBtn.style.marginTop = '1rem';
+  retryBtn.textContent = 'Retry';
+  retryBtn.onclick = retryFn;
+  errBox.appendChild(retryBtn);
 }
 
 /* ────────────────────────────────────────────
@@ -1070,7 +1097,7 @@ async function runPhase1() {
   showSection('section-loading-1');
   document.getElementById('error-1').style.display = 'none';
 
-  const stopAnim = startLoadingAnimation('loading-1', PHASE1_STATUS);
+  const anim = startLoadingAnimation('loading-1', PHASE1_STATUS);
 
   const body = {
     system: "You are a senior brand strategist with 30 years of experience at McDonald's, Mars, Unilever and Burger King. A business owner has just answered 10 questions about their customer. Your job is to synthesise their answers into a precise, insightful Customer Profile Report. Write like a senior strategist — direct, warm, confident. No jargon. No bullet-point padding. Each section should contain a genuine insight, not just a restatement of what they told you. Use plain English that a business owner will immediately understand and find useful. Format your response as JSON with these exact keys: who_they_are, what_triggers_them, what_they_really_want, the_language_they_use, what_stops_them_buying, where_to_find_them, strategic_recommendation. Each value is a string of 2-4 sentences.",
@@ -1082,26 +1109,19 @@ async function runPhase1() {
   };
 
   try {
-    const data = await callAgent(body);
-    state.phase1 = parseJsonReport(data);
+    const response = await callAgent(body);
+    if (!response || response.success === false) {
+      anim.cancel();
+      showAgentError('1', 'Something went wrong building your profile. Please try again.', runPhase1);
+      return;
+    }
+    state.phase1 = response.data || {};
+    anim.finish();
     renderPhase1Report();
     showSection('section-report-1');
   } catch (err) {
-    const errBox = document.getElementById('error-1');
-    errBox.style.display = 'block';
-    errBox.textContent = `Something went wrong: ${err.message}. Please try again.`;
-    setTimeout(() => {
-      // allow retry
-      const retryBtn = document.createElement('button');
-      retryBtn.className = 'btn-secondary';
-      retryBtn.style.marginTop = '1rem';
-      retryBtn.textContent = 'Retry';
-      retryBtn.onclick = () => runPhase1();
-      errBox.appendChild(document.createElement('br'));
-      errBox.appendChild(retryBtn);
-    }, 0);
-  } finally {
-    stopAnim();
+    anim.cancel();
+    showAgentError('1', 'Something went wrong building your profile. Please try again.', runPhase1);
   }
 }
 
@@ -1143,7 +1163,7 @@ async function startScout() {
   showSection('section-loading-2');
   document.getElementById('error-2').style.display = 'none';
 
-  const stopAnim = startLoadingAnimation('loading-2', PHASE2_STATUS);
+  const anim = startLoadingAnimation('loading-2', PHASE2_STATUS);
 
   const body = {
     system: "You are a customer intelligence researcher. You must use web search to find real, current data — not assumptions or generalisations. Every insight must come from an actual source you have searched and found. You are looking for:\n\n1. Real Google search queries people are actually typing related to this customer's problem — find actual search data, autocomplete patterns, and People Also Ask results\n2. Real Reddit threads, Facebook groups, forums, or community posts where this customer type is asking questions or venting frustrations — quote actual posts where possible and cite the source URL or community name\n3. Real demographic data on who is asking these questions — age, business type, location, experience level\n4. Real language — actual phrases and sentences lifted from real posts, reviews, or forum threads, with the source named\n\nDo not invent quotes. Do not generalise. If you cannot find a real source for a claim, do not make the claim. Cite every source.\n\nFormat your response as JSON with these exact keys:\n- real_searches: string — actual Google queries people are typing, with search volume context where available. 2-4 sentences with specific examples.\n- who_is_asking: string — real demographic breakdown of who searches these terms, based on research. 2-4 sentences with sources named.\n- real_pain_points: string — actual complaints and frustrations lifted from real Reddit posts, forums, reviews. Include community names and quote real language where found.\n- their_exact_words: string — verbatim quotes or near-verbatim phrases from real sources, each with the source named (e.g. 'r/smallbusiness', Google review, Trustpilot). This is the most important section.\n- who_they_trust: string — real influencers, brands, publications or communities this customer type follows, based on research.\n- strategic_insight: string — one sharp, research-backed recommendation for how to reach and speak to this customer, grounded in what you found.\n\nReturn only valid JSON. No markdown fences.",
@@ -1155,23 +1175,19 @@ async function startScout() {
   };
 
   try {
-    const data = await callAgent(body);
-    state.phase2 = parseJsonReport(data);
+    const response = await callAgent(body);
+    if (!response || response.success === false) {
+      anim.cancel();
+      showAgentError('2', 'Something went wrong scouting the web. Please try again.', startScout);
+      return;
+    }
+    state.phase2 = response.data || {};
+    anim.finish();
     renderPhase2Report();
     showSection('section-report-2');
   } catch (err) {
-    const errBox = document.getElementById('error-2');
-    errBox.style.display = 'block';
-    errBox.textContent = `Something went wrong: ${err.message}. Please try again.`;
-    const retryBtn = document.createElement('button');
-    retryBtn.className = 'btn-secondary';
-    retryBtn.style.marginTop = '1rem';
-    retryBtn.textContent = 'Retry';
-    retryBtn.onclick = () => startScout();
-    errBox.appendChild(document.createElement('br'));
-    errBox.appendChild(retryBtn);
-  } finally {
-    stopAnim();
+    anim.cancel();
+    showAgentError('2', 'Something went wrong scouting the web. Please try again.', startScout);
   }
 }
 
@@ -1268,41 +1284,6 @@ async function callAgent(body) {
     throw new Error(`Agent returned ${res.status}`);
   }
   return await res.json();
-}
-
-function parseJsonReport(data) {
-  // The agent endpoint may return either a parsed object, or wrap Claude's
-  // text response. Handle both shapes defensively.
-  let raw = data;
-
-  if (typeof data === 'string') {
-    raw = data;
-  } else if (data && typeof data === 'object') {
-    if (typeof data.content === 'string') raw = data.content;
-    else if (Array.isArray(data.content) && data.content[0] && data.content[0].text) {
-      raw = data.content[0].text;
-    } else if (data.output) raw = data.output;
-    else if (data.completion) raw = data.completion;
-    else if (data.message && data.message.content) raw = data.message.content;
-    else return data; // already shaped as the report object
-  }
-
-  if (typeof raw === 'string') {
-    const trimmed = raw.trim();
-    // Strip ```json fences if present
-    const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
-    const jsonText = fenced ? fenced[1] : trimmed;
-    try {
-      return JSON.parse(jsonText);
-    } catch (e) {
-      // Try to find the first {...} block
-      const match = jsonText.match(/\{[\s\S]*\}/);
-      if (match) return JSON.parse(match[0]);
-      throw new Error('Could not parse agent response as JSON');
-    }
-  }
-
-  return raw;
 }
 
 function setText(id, val) {
