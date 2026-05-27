@@ -355,7 +355,7 @@ body::before {
 .btn-back:hover { color: var(--purple-bright); }
 .btn-back:disabled { opacity: 0.3; cursor: default; }
 
-/* ── LOADING / SCANNING ── */
+/* ── LOADING ── */
 .scan-card {
   background: var(--white-04);
   border: 0.5px solid var(--white-20);
@@ -365,114 +365,45 @@ body::before {
 }
 .scan-head {
   text-align: center;
-  margin-bottom: 2.5rem;
-}
-.scan-head .eyebrow {
-  font-family: 'Geist Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--purple-bright);
-  margin-bottom: 0.75rem;
+  margin-bottom: 2rem;
 }
 .scan-head h2 {
   font-family: 'Instrument Serif', serif;
   font-style: italic;
-  font-size: 32px;
+  font-size: 28px;
+  font-weight: 400;
   color: var(--white);
   line-height: 1.2;
-  margin-bottom: 0.5rem;
-}
-.scan-head p {
-  color: var(--white-60);
-  font-size: 13px;
 }
 
-.source-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-}
-
-.source-card {
-  background: var(--white-08);
-  border: 0.5px solid var(--white-20);
-  border-radius: 14px;
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.4s, background 0.4s;
-}
-
-.source-card.active {
-  border-color: var(--purple-border);
-  background: rgba(168,85,247,0.08);
-}
-
-.source-card.done {
-  border-color: rgba(45,212,191,0.4);
-  background: rgba(45,212,191,0.05);
-}
-
-.source-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
+.scan-progress-bar {
   width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.scan-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(196,168,255,0.15), transparent);
-  transition: left 0.6s;
+  width: 0;
+  background: #A855F7;
+  border-radius: 2px;
 }
-.source-card.active::after { animation: shimmer 1.4s linear infinite; }
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-.source-name {
+.scan-status {
   font-family: 'Geist Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--white-60);
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin-top: 1.5rem;
+  min-height: 1.4em;
+  transition: opacity 0.25s ease;
 }
-.source-card.active .source-name { color: var(--purple-bright); }
-.source-card.done .source-name { color: var(--teal); }
-
-.source-count {
-  font-family: 'Instrument Serif', serif;
-  font-style: italic;
-  font-size: 26px;
-  color: var(--white);
-  line-height: 1;
-}
-.source-status {
-  font-family: 'Geist Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--white-40);
-  margin-top: 6px;
-}
-.source-card.active .source-status { color: var(--purple-bright); }
-.source-card.done .source-status { color: var(--teal); }
-
-.scan-pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--purple-bright);
-  animation: pulse 1s ease-in-out infinite;
-  display: inline-block;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(0.6); }
+.scan-note {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  margin-top: 0.6rem;
 }
 
 /* ── REPORTS ── */
@@ -730,11 +661,13 @@ a.source-citation:hover {
   <section class="section" id="section-loading-1">
     <div class="scan-card">
       <div class="scan-head">
-        <div class="eyebrow">Phase 1 — AI Analysis</div>
         <h2>Building your customer profile…</h2>
-        <p>Ember is synthesising your answers into a strategic customer profile.</p>
       </div>
-      <div class="source-grid" id="loading-1-grid"></div>
+      <div class="scan-progress-bar">
+        <div class="scan-progress-fill" id="loading-1-fill"></div>
+      </div>
+      <div class="scan-status" id="loading-1-status">Reading your answers…</div>
+      <div class="scan-note">This takes 20–30 seconds — we're finding real data.</div>
       <div class="error-card" id="error-1" style="display:none;"></div>
     </div>
   </section>
@@ -785,11 +718,13 @@ a.source-citation:hover {
   <section class="section" id="section-loading-2">
     <div class="scan-card">
       <div class="scan-head">
-        <div class="eyebrow">Phase 2 — Web Scout</div>
         <h2>Scouting the web…</h2>
-        <p>Searching real conversations across Reddit, X, Google, forums, LinkedIn and YouTube.</p>
       </div>
-      <div class="source-grid" id="loading-2-grid"></div>
+      <div class="scan-progress-bar">
+        <div class="scan-progress-fill" id="loading-2-fill"></div>
+      </div>
+      <div class="scan-status" id="loading-2-status">Searching Reddit and community forums…</div>
+      <div class="scan-note">This takes 20–30 seconds — we're finding real data.</div>
       <div class="error-card" id="error-2" style="display:none;"></div>
     </div>
   </section>
@@ -1069,66 +1004,48 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* ────────────────────────────────────────────
-   SCANNING ANIMATION
+   LOADING ANIMATION
    ──────────────────────────────────────────── */
-const SOURCES = [
-  { name: 'Reddit',   max: 1240 },
-  { name: 'X',        max: 870  },
-  { name: 'Google',   max: 2150 },
-  { name: 'Forums',   max: 540  },
-  { name: 'LinkedIn', max: 690  },
-  { name: 'YouTube',  max: 1380 }
+const PHASE1_STATUS = [
+  'Reading your answers…',
+  'Identifying customer patterns…',
+  'Connecting the insights…',
+  'Writing your report…'
+];
+const PHASE2_STATUS = [
+  'Searching Reddit and community forums…',
+  'Scanning Google search patterns…',
+  'Reading real customer conversations…',
+  'Analysing pain points and language…',
+  'Building your intelligence report…'
 ];
 
-function buildSourceGrid(containerId) {
-  const wrap = document.getElementById(containerId);
-  wrap.innerHTML = '';
-  SOURCES.forEach((s, i) => {
-    const card = document.createElement('div');
-    card.className = 'source-card';
-    card.dataset.idx = i;
-    card.innerHTML = `
-      <div class="source-name">${s.name}</div>
-      <div class="source-count" data-target="${s.max}">0</div>
-      <div class="source-status">Queued</div>
-    `;
-    wrap.appendChild(card);
-  });
-}
+function startLoadingAnimation(prefix, messages) {
+  const fill = document.getElementById(`${prefix}-fill`);
+  const status = document.getElementById(`${prefix}-status`);
 
-function animateScan(containerId, totalMs) {
-  return new Promise(resolve => {
-    const cards = document.querySelectorAll(`#${containerId} .source-card`);
-    const perCard = totalMs / cards.length;
-    let done = 0;
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+  status.style.opacity = '1';
+  status.textContent = messages[0];
 
-    cards.forEach((card, idx) => {
-      setTimeout(() => {
-        card.classList.add('active');
-        card.querySelector('.source-status').innerHTML = '<span class="scan-pulse"></span> Scanning';
+  // Force reflow so the reset applies before transitioning.
+  void fill.offsetWidth;
 
-        const countEl = card.querySelector('.source-count');
-        const target = parseInt(countEl.dataset.target, 10);
-        const startTs = performance.now();
-        const dur = perCard * 0.9;
+  fill.style.transition = 'width 8s linear';
+  fill.style.width = '100%';
 
-        const step = (ts) => {
-          const t = Math.min((ts - startTs) / dur, 1);
-          const eased = 1 - Math.pow(1 - t, 3);
-          countEl.textContent = Math.round(target * eased).toLocaleString();
-          if (t < 1) requestAnimationFrame(step);
-          else {
-            card.classList.remove('active');
-            card.classList.add('done');
-            card.querySelector('.source-status').textContent = 'Complete';
-            done++;
-            if (done === cards.length) resolve();
-          }
-        };
-        requestAnimationFrame(step);
-      }, idx * perCard);
-    });
-  });
+  let idx = 0;
+  const cycle = setInterval(() => {
+    idx = (idx + 1) % messages.length;
+    status.style.opacity = '0';
+    setTimeout(() => {
+      status.textContent = messages[idx];
+      status.style.opacity = '1';
+    }, 250);
+  }, 2000);
+
+  return () => clearInterval(cycle);
 }
 
 /* ────────────────────────────────────────────
@@ -1151,10 +1068,9 @@ function buildPhase1UserMessage() {
 
 async function runPhase1() {
   showSection('section-loading-1');
-  buildSourceGrid('loading-1-grid');
   document.getElementById('error-1').style.display = 'none';
 
-  const scanPromise = animateScan('loading-1-grid', 4000);
+  const stopAnim = startLoadingAnimation('loading-1', PHASE1_STATUS);
 
   const body = {
     system: "You are a senior brand strategist with 30 years of experience at McDonald's, Mars, Unilever and Burger King. A business owner has just answered 10 questions about their customer. Your job is to synthesise their answers into a precise, insightful Customer Profile Report. Write like a senior strategist — direct, warm, confident. No jargon. No bullet-point padding. Each section should contain a genuine insight, not just a restatement of what they told you. Use plain English that a business owner will immediately understand and find useful. Format your response as JSON with these exact keys: who_they_are, what_triggers_them, what_they_really_want, the_language_they_use, what_stops_them_buying, where_to_find_them, strategic_recommendation. Each value is a string of 2-4 sentences.",
@@ -1166,10 +1082,7 @@ async function runPhase1() {
   };
 
   try {
-    const [_, data] = await Promise.all([
-      scanPromise,
-      callAgent(body)
-    ]);
+    const data = await callAgent(body);
     state.phase1 = parseJsonReport(data);
     renderPhase1Report();
     showSection('section-report-1');
@@ -1187,6 +1100,8 @@ async function runPhase1() {
       errBox.appendChild(document.createElement('br'));
       errBox.appendChild(retryBtn);
     }, 0);
+  } finally {
+    stopAnim();
   }
 }
 
@@ -1226,10 +1141,9 @@ Only report what you actually find. Cite sources throughout.`;
 
 async function startScout() {
   showSection('section-loading-2');
-  buildSourceGrid('loading-2-grid');
   document.getElementById('error-2').style.display = 'none';
 
-  const scanPromise = animateScan('loading-2-grid', 4000);
+  const stopAnim = startLoadingAnimation('loading-2', PHASE2_STATUS);
 
   const body = {
     system: "You are a customer intelligence researcher. You must use web search to find real, current data — not assumptions or generalisations. Every insight must come from an actual source you have searched and found. You are looking for:\n\n1. Real Google search queries people are actually typing related to this customer's problem — find actual search data, autocomplete patterns, and People Also Ask results\n2. Real Reddit threads, Facebook groups, forums, or community posts where this customer type is asking questions or venting frustrations — quote actual posts where possible and cite the source URL or community name\n3. Real demographic data on who is asking these questions — age, business type, location, experience level\n4. Real language — actual phrases and sentences lifted from real posts, reviews, or forum threads, with the source named\n\nDo not invent quotes. Do not generalise. If you cannot find a real source for a claim, do not make the claim. Cite every source.\n\nFormat your response as JSON with these exact keys:\n- real_searches: string — actual Google queries people are typing, with search volume context where available. 2-4 sentences with specific examples.\n- who_is_asking: string — real demographic breakdown of who searches these terms, based on research. 2-4 sentences with sources named.\n- real_pain_points: string — actual complaints and frustrations lifted from real Reddit posts, forums, reviews. Include community names and quote real language where found.\n- their_exact_words: string — verbatim quotes or near-verbatim phrases from real sources, each with the source named (e.g. 'r/smallbusiness', Google review, Trustpilot). This is the most important section.\n- who_they_trust: string — real influencers, brands, publications or communities this customer type follows, based on research.\n- strategic_insight: string — one sharp, research-backed recommendation for how to reach and speak to this customer, grounded in what you found.\n\nReturn only valid JSON. No markdown fences.",
@@ -1241,10 +1155,7 @@ async function startScout() {
   };
 
   try {
-    const [_, data] = await Promise.all([
-      scanPromise,
-      callAgent(body)
-    ]);
+    const data = await callAgent(body);
     state.phase2 = parseJsonReport(data);
     renderPhase2Report();
     showSection('section-report-2');
@@ -1259,6 +1170,8 @@ async function startScout() {
     retryBtn.onclick = () => startScout();
     errBox.appendChild(document.createElement('br'));
     errBox.appendChild(retryBtn);
+  } finally {
+    stopAnim();
   }
 }
 
