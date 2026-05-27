@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires — Customer Intelligence Agent</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --charcoal: #05050A;
+  --purple: #A855F7;
+  --purple-bright: #C4A8FF;
+  --purple-deep: #6B21A8;
+  --purple-glow: rgba(168,85,247,0.15);
+  --purple-border: rgba(168,85,247,0.25);
+  --white: #ffffff;
+  --white-60: rgba(255,255,255,0.6);
+  --white-40: rgba(255,255,255,0.4);
+  --white-20: rgba(255,255,255,0.2);
+  --white-12: rgba(255,255,255,0.12);
+  --white-08: rgba(255,255,255,0.08);
+  --white-04: rgba(255,255,255,0.04);
+  --amber: #FBBF24;
+  --teal: #2DD4BF;
+  --green: #34D399;
+  --coral: #F87171;
+  --blue: #60A5FA;
+}
+
+html, body {
+  height: 100%;
+  background: var(--charcoal);
+  color: var(--white);
+  font-family: 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.ambient {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.ambient-1 { width: 600px; height: 600px; background: rgba(107,33,168,0.2); top: -200px; right: -100px; }
+.ambient-2 { width: 400px; height: 400px; background: rgba(168,85,247,0.1); bottom: -100px; left: -80px; }
+
+/* ── NAV ── */
+.nav {
+  height: 64px;
+  border-bottom: 0.5px solid var(--white-08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: rgba(5,5,10,0.7);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo span {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--white);
+}
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+.nav-user {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  color: var(--white-60);
+  letter-spacing: 0.06em;
+}
+.nav-back {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  background: var(--white-08);
+  border: 0.5px solid var(--white-20);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-back:hover { color: var(--white); border-color: var(--purple-border); }
+
+/* ── LAYOUT ── */
+.shell {
+  position: relative;
+  z-index: 10;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+}
+
+.section { display: none; animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+.section.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── INTRO ── */
+.intro {
+  background: var(--white-04);
+  border: 0.5px solid var(--white-20);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+.intro .eyebrow {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--purple-bright);
+  margin-bottom: 1rem;
+}
+.intro h1 {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 44px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.intro h1 span { color: var(--purple-bright); }
+.intro p {
+  color: var(--white-60);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--purple);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary.full { width: 100%; }
+.btn-primary.large { padding: 16px 32px; font-size: 15px; }
+
+.btn-secondary {
+  display: inline-block;
+  background: var(--white-08);
+  color: var(--white);
+  border: 0.5px solid var(--white-20);
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.btn-secondary:hover { border-color: var(--purple-border); color: var(--purple-bright); }
+
+/* ── INTERVIEW ── */
+.progress-wrap { margin-bottom: 2rem; }
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  margin-bottom: 0.7rem;
+}
+.progress-meta .agent-tag { color: var(--purple-bright); }
+.progress-bar {
+  height: 3px;
+  background: var(--white-08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple) 0%, var(--purple-bright) 100%);
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.16,1,0.3,1);
+  width: 10%;
+}
+
+.qa-card {
+  background: var(--white-04);
+  border: 0.5px solid var(--white-20);
+  border-radius: 20px;
+  padding: 2.5rem 2.5rem 2rem;
+  backdrop-filter: blur(12px);
+}
+
+.ember-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.ember-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--purple-bright) 0%, var(--purple) 60%, var(--purple-deep) 100%);
+  box-shadow: 0 0 16px rgba(168,85,247,0.5);
+  flex-shrink: 0;
+}
+.ember-name {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--purple-bright);
+}
+
+.q-text {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 30px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+}
+.q-sub {
+  font-size: 13px;
+  color: var(--white-60);
+  line-height: 1.55;
+  margin-bottom: 1.5rem;
+}
+
+.ack {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--purple-bright);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.4s, max-height 0.4s, margin-bottom 0.4s;
+}
+.ack.visible { opacity: 1; max-height: 200px; }
+
+.example-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+.chip {
+  background: var(--white-08);
+  border: 0.5px solid var(--white-20);
+  border-radius: 24px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--white-60);
+  font-family: 'Manrope', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.chip:hover {
+  background: var(--purple-glow);
+  border-color: var(--purple-border);
+  color: var(--white);
+}
+
+.answer-area textarea {
+  width: 100%;
+  min-height: 120px;
+  background: var(--white-08);
+  border: 0.5px solid var(--white-20);
+  border-radius: 12px;
+  padding: 16px;
+  color: var(--white);
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.answer-area textarea::placeholder { color: rgba(255,255,255,0.25); }
+.answer-area textarea:focus {
+  border-color: var(--purple-border);
+  background: rgba(168,85,247,0.06);
+}
+
+.deeper-prompt {
+  font-size: 12px;
+  color: var(--amber);
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.04em;
+  margin-top: 0.6rem;
+  display: none;
+}
+.deeper-prompt.visible { display: block; }
+
+.qa-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+.btn-back {
+  background: transparent;
+  color: var(--white-60);
+  border: none;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+.btn-back:hover { color: var(--purple-bright); }
+.btn-back:disabled { opacity: 0.3; cursor: default; }
+
+/* ── LOADING / SCANNING ── */
+.scan-card {
+  background: var(--white-04);
+  border: 0.5px solid var(--white-20);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  backdrop-filter: blur(12px);
+}
+.scan-head {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.scan-head .eyebrow {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--purple-bright);
+  margin-bottom: 0.75rem;
+}
+.scan-head h2 {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+.scan-head p {
+  color: var(--white-60);
+  font-size: 13px;
+}
+
+.source-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.source-card {
+  background: var(--white-08);
+  border: 0.5px solid var(--white-20);
+  border-radius: 14px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s, background 0.4s;
+}
+
+.source-card.active {
+  border-color: var(--purple-border);
+  background: rgba(168,85,247,0.08);
+}
+
+.source-card.done {
+  border-color: rgba(45,212,191,0.4);
+  background: rgba(45,212,191,0.05);
+}
+
+.source-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(196,168,255,0.15), transparent);
+  transition: left 0.6s;
+}
+.source-card.active::after { animation: shimmer 1.4s linear infinite; }
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.source-name {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.source-card.active .source-name { color: var(--purple-bright); }
+.source-card.done .source-name { color: var(--teal); }
+
+.source-count {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 26px;
+  color: var(--white);
+  line-height: 1;
+}
+.source-status {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white-40);
+  margin-top: 6px;
+}
+.source-card.active .source-status { color: var(--purple-bright); }
+.source-card.done .source-status { color: var(--teal); }
+
+.scan-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--purple-bright);
+  animation: pulse 1s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.6); }
+}
+
+/* ── REPORTS ── */
+.report-header {
+  background: #05050A;
+  border: 0.5px solid var(--white-20);
+  border-radius: 20px 20px 0 0;
+  padding: 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.report-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(168,85,247,0.15), transparent 70%);
+  pointer-events: none;
+}
+.report-header .eyebrow {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--purple-bright);
+  margin-bottom: 0.7rem;
+  position: relative;
+}
+.report-header h2 {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.15;
+  position: relative;
+}
+
+.report-body {
+  background: var(--white-04);
+  border: 0.5px solid var(--white-20);
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  padding: 2rem 2.5rem 2.5rem;
+  backdrop-filter: blur(12px);
+}
+
+.report-section {
+  padding: 1.5rem 0;
+  border-bottom: 0.5px solid var(--white-08);
+}
+.report-section:last-of-type { border-bottom: none; }
+
+.report-pill {
+  display: inline-block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 0.85rem;
+}
+.pill-purple { background: rgba(168,85,247,0.15); color: var(--purple-bright); border: 0.5px solid rgba(168,85,247,0.3); }
+.pill-amber  { background: rgba(251,191,36,0.12); color: var(--amber); border: 0.5px solid rgba(251,191,36,0.3); }
+.pill-teal   { background: rgba(45,212,191,0.12); color: var(--teal); border: 0.5px solid rgba(45,212,191,0.3); }
+.pill-green  { background: rgba(52,211,153,0.12); color: var(--green); border: 0.5px solid rgba(52,211,153,0.3); }
+.pill-coral  { background: rgba(248,113,113,0.12); color: var(--coral); border: 0.5px solid rgba(248,113,113,0.3); }
+.pill-blue   { background: rgba(96,165,250,0.12); color: var(--blue); border: 0.5px solid rgba(96,165,250,0.3); }
+
+.report-body-text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--white);
+}
+.report-body-text.muted { color: rgba(255,255,255,0.85); }
+
+.report-section.hero {
+  margin-top: 0.5rem;
+  padding: 1.75rem;
+  background: var(--purple-glow);
+  border: 0.5px solid var(--purple-border);
+  border-radius: 16px;
+  border-bottom: 0.5px solid var(--purple-border);
+}
+.report-section.hero .report-body-text {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.report-section.gold {
+  margin-top: 0.5rem;
+  padding: 1.75rem;
+  background: rgba(52,211,153,0.06);
+  border: 0.5px solid rgba(52,211,153,0.3);
+  border-radius: 16px;
+  border-bottom: 0.5px solid rgba(52,211,153,0.3);
+}
+.report-section.gold .report-body-text {
+  font-style: italic;
+  font-family: 'Instrument Serif', serif;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--white);
+}
+
+.report-cta {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.report-cta .secondary-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* ── ERROR ── */
+.error-card {
+  background: rgba(248,113,113,0.06);
+  border: 0.5px solid rgba(248,113,113,0.3);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: var(--coral);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .shell { padding: 2rem 1.25rem 3rem; }
+  .nav { padding: 0 1.25rem; }
+  .qa-card, .report-body, .intro, .scan-card { padding: 2rem 1.5rem; }
+  .report-header { padding: 2rem 1.5rem; }
+  .q-text { font-size: 24px; }
+  .intro h1 { font-size: 34px; }
+  .report-header h2 { font-size: 30px; }
+}
+
+/* ── PRINT ── */
+@media print {
+  .ambient, body::before, .nav, .report-cta, .btn-primary, .btn-secondary { display: none !important; }
+  body { background: #fff; color: #000; }
+  .section { display: block !important; }
+  .section:not(.active) { display: none !important; }
+  .report-header { background: #f5f5f5; color: #000; border: 1px solid #ddd; }
+  .report-header h2, .report-header .eyebrow { color: #000 !important; }
+  .report-body { background: #fff; border: 1px solid #ddd; }
+  .report-body-text, .report-body-text.muted { color: #000; }
+  .report-section.hero, .report-section.gold { background: #fafafa; border: 1px solid #ddd; }
+  .report-pill { color: #333 !important; background: #eee !important; border: 1px solid #ddd !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<nav class="nav">
+  <a class="nav-logo" href="portal.html">
+    <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M11 32C11 32 6.5 25 9 18C11.5 11 16 9 16 9C16 9 13.5 15 17 18C17 18 15.5 12 20 9C24.5 6 27 2 27 2C27 2 29.5 9 25 15C25 15 28.5 11.5 30 15C31.5 18.5 29 23 25.5 25.5C25.5 25.5 28 22 25.5 21C23 20 20.5 22.5 20.5 26C20.5 29.5 23 32 23 32H11Z" fill="url(#lg2)"/>
+      <defs>
+        <linearGradient id="lg2" x1="18" y1="2" x2="18" y2="32" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#C4A8FF"/>
+          <stop offset="100%" stop-color="#6B21A8"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span>Two Fires</span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-user" id="nav-user-label"></span>
+    <a href="portal.html" class="nav-back">← Portal</a>
+  </div>
+</nav>
+
+<main class="shell">
+
+  <!-- INTRO -->
+  <section class="section active" id="section-intro">
+    <div class="intro">
+      <div class="eyebrow">Customer Intelligence Agent</div>
+      <h1>Meet <span>Ember.</span></h1>
+      <p>Ember is going to ask you ten short questions about your business and your customer. Answer like you're chatting to a colleague over coffee. It takes about five minutes — and at the end, you'll get a customer profile that's sharper than most agencies produce after weeks of work.</p>
+      <button class="btn-primary large" onclick="startInterview()">Begin the interview</button>
+    </div>
+  </section>
+
+  <!-- INTERVIEW -->
+  <section class="section" id="section-interview">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="agent-tag">Ember</span>
+        <span id="progress-text">Question 1 of 10</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div class="qa-card">
+      <div class="ember-line">
+        <div class="ember-dot"></div>
+        <span class="ember-name">Ember</span>
+      </div>
+
+      <div class="ack" id="ack"></div>
+
+      <div class="q-text" id="q-text"></div>
+      <div class="q-sub" id="q-sub"></div>
+
+      <div class="example-chips" id="example-chips"></div>
+
+      <div class="answer-area">
+        <textarea id="answer-input" placeholder="Type your answer here…"></textarea>
+        <div class="deeper-prompt" id="deeper-prompt">Could you go a little deeper? A sentence or two more would really help.</div>
+      </div>
+
+      <div class="qa-controls">
+        <button class="btn-back" id="btn-back" onclick="goBack()">← Previous question</button>
+        <button class="btn-primary" id="btn-next" onclick="goNext()">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOADING PHASE 1 -->
+  <section class="section" id="section-loading-1">
+    <div class="scan-card">
+      <div class="scan-head">
+        <div class="eyebrow">Phase 1 — AI Analysis</div>
+        <h2>Building your customer profile…</h2>
+        <p>Ember is synthesising your answers into a strategic customer profile.</p>
+      </div>
+      <div class="source-grid" id="loading-1-grid"></div>
+      <div class="error-card" id="error-1" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- PHASE 1 REPORT -->
+  <section class="section" id="section-report-1">
+    <div class="report-header">
+      <div class="eyebrow">Phase 1 — AI Analysis</div>
+      <h2>Your Customer Profile</h2>
+    </div>
+    <div class="report-body" id="report-1-body">
+      <div class="report-section">
+        <span class="report-pill pill-purple">Who they are</span>
+        <p class="report-body-text" id="r1-who"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-amber">What triggers them</span>
+        <p class="report-body-text" id="r1-triggers"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-teal">What they really want</span>
+        <p class="report-body-text" id="r1-want"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-green">The language they use</span>
+        <p class="report-body-text" id="r1-language"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-coral">What stops them buying</span>
+        <p class="report-body-text" id="r1-stops"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-blue">Where to find them</span>
+        <p class="report-body-text" id="r1-where"></p>
+      </div>
+      <div class="report-section hero">
+        <span class="report-pill pill-purple">Strategic recommendation</span>
+        <p class="report-body-text" id="r1-strategic"></p>
+      </div>
+
+      <div class="report-cta">
+        <button class="btn-primary full large" onclick="startScout()">Go Deeper — Scout the Web</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOADING PHASE 2 -->
+  <section class="section" id="section-loading-2">
+    <div class="scan-card">
+      <div class="scan-head">
+        <div class="eyebrow">Phase 2 — Web Scout</div>
+        <h2>Scouting the web…</h2>
+        <p>Searching real conversations across Reddit, X, Google, forums, LinkedIn and YouTube.</p>
+      </div>
+      <div class="source-grid" id="loading-2-grid"></div>
+      <div class="error-card" id="error-2" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- PHASE 2 REPORT -->
+  <section class="section" id="section-report-2">
+    <div class="report-header">
+      <div class="eyebrow">Phase 2 — Web Scout</div>
+      <h2>Customer Intelligence Report</h2>
+    </div>
+    <div class="report-body">
+      <div class="report-section">
+        <span class="report-pill pill-blue">Where they congregate</span>
+        <p class="report-body-text" id="r2-where"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-coral">Their pain points</span>
+        <p class="report-body-text" id="r2-pains"></p>
+      </div>
+      <div class="report-section gold">
+        <span class="report-pill pill-green">Their exact words</span>
+        <p class="report-body-text" id="r2-words"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-amber">Who they trust</span>
+        <p class="report-body-text" id="r2-trust"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-purple">What they say vs what they need</span>
+        <p class="report-body-text" id="r2-stated"></p>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-teal">Trends worth knowing</span>
+        <p class="report-body-text" id="r2-trends"></p>
+      </div>
+
+      <div class="report-cta">
+        <button class="btn-primary full large" onclick="approveAndContinue()">Approved — Help Me Build My Messaging</button>
+        <div class="secondary-row">
+          <button class="btn-secondary" onclick="window.print()">Download Report</button>
+          <button class="btn-secondary" onclick="restart()">Start Over</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ────────────────────────────────────────────
+   AUTH GATE
+   ──────────────────────────────────────────── */
+if (sessionStorage.getItem('tf_auth') !== 'true') {
+  window.location.href = 'portal.html';
+}
+
+document.getElementById('nav-user-label').textContent =
+  sessionStorage.getItem('tf_user') || '';
+
+/* ────────────────────────────────────────────
+   QUESTIONS
+   ──────────────────────────────────────────── */
+const QUESTIONS = [
+  {
+    key: 'business',
+    label: 'Business',
+    text: 'What does your business do?',
+    sub: '',
+    examples: ['We fix bathrooms', 'We sell handmade candles', 'We do bookkeeping for small businesses']
+  },
+  {
+    key: 'ideal_customer',
+    label: 'Ideal customer',
+    text: 'Who is the kind of person you most love working with?',
+    sub: '',
+    examples: ['Busy mums who want their home beautiful', 'Small business owners who hate doing their accounts', 'Couples planning their first renovation']
+  },
+  {
+    key: 'location',
+    label: 'Location',
+    text: 'Where do these people live?',
+    sub: '',
+    examples: ['Sydney', 'All over Australia', "Anywhere — we're fully online"]
+  },
+  {
+    key: 'trigger',
+    label: 'Trigger moment',
+    text: "What's usually going on in their life right before they come looking for you?",
+    sub: '',
+    examples: ['They just moved into a new house', 'Their old supplier let them down', "They've got a big event coming up and they're stressed"]
+  },
+  {
+    key: 'transformation',
+    label: 'Transformation',
+    text: "Once you've helped them — what does their life look like? What's better?",
+    sub: '',
+    examples: ['They finally have a home they\'re proud of', 'Their business runs without them doing everything', 'They stopped losing sleep over their finances']
+  },
+  {
+    key: 'language',
+    label: 'Their language',
+    text: 'When customers talk about their problem — what do they actually say?',
+    sub: 'Think about the last time a customer explained why they needed you. What words did they use?',
+    examples: ['"I just don\'t know where to start"', '"I\'ve wasted so much money already"', '"I need someone I can actually trust"']
+  },
+  {
+    key: 'alternatives',
+    label: 'Alternatives',
+    text: "When someone's deciding whether to use you — what else are they looking at?",
+    sub: '',
+    examples: ['Getting three quotes from competitors', 'Thinking about doing it themselves', 'Looking at a big national company']
+  },
+  {
+    key: 'faqs',
+    label: 'FAQs and objections',
+    text: 'What are the questions they always ask before they say yes?',
+    sub: '',
+    examples: ['How much does it cost?', 'How long will it take?', 'Have you done this before?']
+  },
+  {
+    key: 'why_chosen',
+    label: 'Why they choose you',
+    text: 'What do you think is the number one thing that makes them choose you over someone else?',
+    sub: "Don't overthink this — what do your best customers usually say when you ask them why they came to you?",
+    examples: ['Our reputation and word of mouth', "We're faster than everyone else", 'They trust us with their home']
+  },
+  {
+    key: 'extra',
+    label: 'Additional context',
+    text: 'Is there anything else about your customers we should know?',
+    sub: 'Anything at all — the more specific the better.',
+    examples: ['They\'re usually in a hurry', "They've been burned by someone before", "They're spending their own money, not a company budget"]
+  }
+];
+
+const ACKS = [
+  "Got it — that's a great start.",
+  "Beautiful. That tells me a lot.",
+  "Perfect, helpful to know.",
+  "Mm — interesting. That's a real signal.",
+  "I love that. Genuine transformations are gold.",
+  "Their actual words always reveal more than they realise.",
+  "Useful. Knowing what you're up against changes the message.",
+  "Right — those questions usually hide the real objections.",
+  "That's powerful. Customers see things owners often miss.",
+  "Wonderful — thanks for sharing all of that."
+];
+
+/* ────────────────────────────────────────────
+   STATE
+   ──────────────────────────────────────────── */
+const state = {
+  currentQ: 0,
+  answers: Array(QUESTIONS.length).fill(''),
+  hasNudged: false,
+  phase1: null,
+  phase2: null
+};
+
+/* ────────────────────────────────────────────
+   FLOW
+   ──────────────────────────────────────────── */
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startInterview() {
+  state.currentQ = 0;
+  state.answers = Array(QUESTIONS.length).fill('');
+  showSection('section-interview');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.currentQ];
+  document.getElementById('progress-text').textContent =
+    `Question ${state.currentQ + 1} of ${QUESTIONS.length}`;
+  document.getElementById('progress-fill').style.width =
+    `${((state.currentQ + 1) / QUESTIONS.length) * 100}%`;
+
+  document.getElementById('q-text').textContent = q.text;
+  const sub = document.getElementById('q-sub');
+  if (q.sub) { sub.textContent = q.sub; sub.style.display = 'block'; }
+  else { sub.style.display = 'none'; }
+
+  // ack from previous question (skip on Q1)
+  const ack = document.getElementById('ack');
+  if (state.currentQ > 0 && state.answers[state.currentQ - 1]) {
+    ack.textContent = ACKS[state.currentQ - 1];
+    requestAnimationFrame(() => ack.classList.add('visible'));
+  } else {
+    ack.classList.remove('visible');
+    ack.textContent = '';
+  }
+
+  // chips
+  const chipsWrap = document.getElementById('example-chips');
+  chipsWrap.innerHTML = '';
+  q.examples.forEach(ex => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.type = 'button';
+    btn.textContent = ex;
+    btn.onclick = () => {
+      document.getElementById('answer-input').value = ex.replace(/^"|"$/g, '');
+      document.getElementById('answer-input').focus();
+    };
+    chipsWrap.appendChild(btn);
+  });
+
+  // restore prior answer
+  document.getElementById('answer-input').value = state.answers[state.currentQ] || '';
+  document.getElementById('deeper-prompt').classList.remove('visible');
+  state.hasNudged = false;
+
+  // back button
+  document.getElementById('btn-back').disabled = state.currentQ === 0;
+
+  // next button label
+  document.getElementById('btn-next').textContent =
+    state.currentQ === QUESTIONS.length - 1 ? 'Finish →' : 'Next →';
+
+  document.getElementById('answer-input').focus();
+}
+
+function wordCount(str) {
+  return str.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function goNext() {
+  const val = document.getElementById('answer-input').value.trim();
+  if (!val) {
+    document.getElementById('answer-input').focus();
+    return;
+  }
+
+  // nudge once for short/vague answers
+  if (wordCount(val) < 8 && !state.hasNudged) {
+    document.getElementById('deeper-prompt').classList.add('visible');
+    state.hasNudged = true;
+    document.getElementById('answer-input').focus();
+    return;
+  }
+
+  state.answers[state.currentQ] = val;
+
+  if (state.currentQ < QUESTIONS.length - 1) {
+    state.currentQ++;
+    renderQuestion();
+  } else {
+    runPhase1();
+  }
+}
+
+function goBack() {
+  if (state.currentQ === 0) return;
+  state.answers[state.currentQ] = document.getElementById('answer-input').value.trim();
+  state.currentQ--;
+  renderQuestion();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('section-interview').classList.contains('active')) {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      goNext();
+    }
+  }
+});
+
+/* ────────────────────────────────────────────
+   SCANNING ANIMATION
+   ──────────────────────────────────────────── */
+const SOURCES = [
+  { name: 'Reddit',   max: 1240 },
+  { name: 'X',        max: 870  },
+  { name: 'Google',   max: 2150 },
+  { name: 'Forums',   max: 540  },
+  { name: 'LinkedIn', max: 690  },
+  { name: 'YouTube',  max: 1380 }
+];
+
+function buildSourceGrid(containerId) {
+  const wrap = document.getElementById(containerId);
+  wrap.innerHTML = '';
+  SOURCES.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'source-card';
+    card.dataset.idx = i;
+    card.innerHTML = `
+      <div class="source-name">${s.name}</div>
+      <div class="source-count" data-target="${s.max}">0</div>
+      <div class="source-status">Queued</div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+function animateScan(containerId, totalMs) {
+  return new Promise(resolve => {
+    const cards = document.querySelectorAll(`#${containerId} .source-card`);
+    const perCard = totalMs / cards.length;
+    let done = 0;
+
+    cards.forEach((card, idx) => {
+      setTimeout(() => {
+        card.classList.add('active');
+        card.querySelector('.source-status').innerHTML = '<span class="scan-pulse"></span> Scanning';
+
+        const countEl = card.querySelector('.source-count');
+        const target = parseInt(countEl.dataset.target, 10);
+        const startTs = performance.now();
+        const dur = perCard * 0.9;
+
+        const step = (ts) => {
+          const t = Math.min((ts - startTs) / dur, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          countEl.textContent = Math.round(target * eased).toLocaleString();
+          if (t < 1) requestAnimationFrame(step);
+          else {
+            card.classList.remove('active');
+            card.classList.add('done');
+            card.querySelector('.source-status').textContent = 'Complete';
+            done++;
+            if (done === cards.length) resolve();
+          }
+        };
+        requestAnimationFrame(step);
+      }, idx * perCard);
+    });
+  });
+}
+
+/* ────────────────────────────────────────────
+   PHASE 1 — AI ANALYSIS
+   ──────────────────────────────────────────── */
+function buildPhase1UserMessage() {
+  return [
+    `Business: ${state.answers[0]}`,
+    `Ideal customer: ${state.answers[1]}`,
+    `Location: ${state.answers[2]}`,
+    `Trigger moment: ${state.answers[3]}`,
+    `Transformation: ${state.answers[4]}`,
+    `Their language: ${state.answers[5]}`,
+    `Alternatives: ${state.answers[6]}`,
+    `FAQs and objections: ${state.answers[7]}`,
+    `Why they choose you: ${state.answers[8]}`,
+    `Additional context: ${state.answers[9]}`
+  ].join('\n');
+}
+
+async function runPhase1() {
+  showSection('section-loading-1');
+  buildSourceGrid('loading-1-grid');
+  document.getElementById('error-1').style.display = 'none';
+
+  const scanPromise = animateScan('loading-1-grid', 4000);
+
+  const body = {
+    system: "You are a senior brand strategist with 30 years of experience at McDonald's, Mars, Unilever and Burger King. A business owner has just answered 10 questions about their customer. Your job is to synthesise their answers into a precise, insightful Customer Profile Report. Write like a senior strategist — direct, warm, confident. No jargon. No bullet-point padding. Each section should contain a genuine insight, not just a restatement of what they told you. Use plain English that a business owner will immediately understand and find useful. Format your response as JSON with these exact keys: who_they_are, what_triggers_them, what_they_really_want, the_language_they_use, what_stops_them_buying, where_to_find_them, strategic_recommendation. Each value is a string of 2-4 sentences.",
+    messages: [
+      { role: 'user', content: buildPhase1UserMessage() }
+    ],
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1000
+  };
+
+  try {
+    const [_, data] = await Promise.all([
+      scanPromise,
+      callAgent(body)
+    ]);
+    state.phase1 = parseJsonReport(data);
+    renderPhase1Report();
+    showSection('section-report-1');
+  } catch (err) {
+    const errBox = document.getElementById('error-1');
+    errBox.style.display = 'block';
+    errBox.textContent = `Something went wrong: ${err.message}. Please try again.`;
+    setTimeout(() => {
+      // allow retry
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'btn-secondary';
+      retryBtn.style.marginTop = '1rem';
+      retryBtn.textContent = 'Retry';
+      retryBtn.onclick = () => runPhase1();
+      errBox.appendChild(document.createElement('br'));
+      errBox.appendChild(retryBtn);
+    }, 0);
+  }
+}
+
+function renderPhase1Report() {
+  const r = state.phase1 || {};
+  setText('r1-who', r.who_they_are);
+  setText('r1-triggers', r.what_triggers_them);
+  setText('r1-want', r.what_they_really_want);
+  setText('r1-language', r.the_language_they_use);
+  setText('r1-stops', r.what_stops_them_buying);
+  setText('r1-where', r.where_to_find_them);
+  setText('r1-strategic', r.strategic_recommendation);
+}
+
+/* ────────────────────────────────────────────
+   PHASE 2 — WEB SCOUT
+   ──────────────────────────────────────────── */
+function buildPhase2UserMessage() {
+  const base = buildPhase1UserMessage();
+  const strat = (state.phase1 && state.phase1.strategic_recommendation) || '';
+  return `${base}
+
+Phase 1 strategic recommendation: ${strat}
+
+Now go out and research this customer type across Reddit, X, Google, Facebook groups, forums and YouTube comments. Surface what they are actually saying, feeling, and doing online right now. Give specific examples of language, communities, and behaviours.`;
+}
+
+async function startScout() {
+  showSection('section-loading-2');
+  buildSourceGrid('loading-2-grid');
+  document.getElementById('error-2').style.display = 'none';
+
+  const scanPromise = animateScan('loading-2-grid', 4000);
+
+  const body = {
+    system: "You are a customer intelligence researcher. Based on a business owner's description of their ideal customer, your job is to surface what that customer type is actually saying, feeling, and doing online — right now. Write like a researcher delivering a briefing. Direct, specific, no padding. Avoid generalisations. Where possible, give specific examples of language, communities, or behaviours. Format your response as JSON with these exact keys: where_they_congregate, pain_points, their_exact_words, who_they_trust, stated_vs_real_needs, trends_worth_knowing. Each value is a string of 2-4 sentences.",
+    messages: [
+      { role: 'user', content: buildPhase2UserMessage() }
+    ],
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1000
+  };
+
+  try {
+    const [_, data] = await Promise.all([
+      scanPromise,
+      callAgent(body)
+    ]);
+    state.phase2 = parseJsonReport(data);
+    renderPhase2Report();
+    showSection('section-report-2');
+  } catch (err) {
+    const errBox = document.getElementById('error-2');
+    errBox.style.display = 'block';
+    errBox.textContent = `Something went wrong: ${err.message}. Please try again.`;
+    const retryBtn = document.createElement('button');
+    retryBtn.className = 'btn-secondary';
+    retryBtn.style.marginTop = '1rem';
+    retryBtn.textContent = 'Retry';
+    retryBtn.onclick = () => startScout();
+    errBox.appendChild(document.createElement('br'));
+    errBox.appendChild(retryBtn);
+  }
+}
+
+function renderPhase2Report() {
+  const r = state.phase2 || {};
+  setText('r2-where', r.where_they_congregate);
+  setText('r2-pains', r.pain_points);
+  setText('r2-words', r.their_exact_words);
+  setText('r2-trust', r.who_they_trust);
+  setText('r2-stated', r.stated_vs_real_needs);
+  setText('r2-trends', r.trends_worth_knowing);
+}
+
+/* ────────────────────────────────────────────
+   API
+   ──────────────────────────────────────────── */
+async function callAgent(body) {
+  const res = await fetch('https://agent.two-fires.com/agent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    throw new Error(`Agent returned ${res.status}`);
+  }
+  return await res.json();
+}
+
+function parseJsonReport(data) {
+  // The agent endpoint may return either a parsed object, or wrap Claude's
+  // text response. Handle both shapes defensively.
+  let raw = data;
+
+  if (typeof data === 'string') {
+    raw = data;
+  } else if (data && typeof data === 'object') {
+    if (typeof data.content === 'string') raw = data.content;
+    else if (Array.isArray(data.content) && data.content[0] && data.content[0].text) {
+      raw = data.content[0].text;
+    } else if (data.output) raw = data.output;
+    else if (data.completion) raw = data.completion;
+    else if (data.message && data.message.content) raw = data.message.content;
+    else return data; // already shaped as the report object
+  }
+
+  if (typeof raw === 'string') {
+    const trimmed = raw.trim();
+    // Strip ```json fences if present
+    const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
+    const jsonText = fenced ? fenced[1] : trimmed;
+    try {
+      return JSON.parse(jsonText);
+    } catch (e) {
+      // Try to find the first {...} block
+      const match = jsonText.match(/\{[\s\S]*\}/);
+      if (match) return JSON.parse(match[0]);
+      throw new Error('Could not parse agent response as JSON');
+    }
+  }
+
+  return raw;
+}
+
+function setText(id, val) {
+  document.getElementById(id).textContent = val || '—';
+}
+
+/* ────────────────────────────────────────────
+   FINAL ACTIONS
+   ──────────────────────────────────────────── */
+function approveAndContinue() {
+  // Placeholder for the messaging-builder tool. Store everything for handoff.
+  try {
+    sessionStorage.setItem('tf_customer_answers', JSON.stringify(state.answers));
+    sessionStorage.setItem('tf_phase1', JSON.stringify(state.phase1));
+    sessionStorage.setItem('tf_phase2', JSON.stringify(state.phase2));
+  } catch (_) {}
+  alert("Brilliant. The Campaign Messaging Builder will pick up from here — it's launching soon.");
+}
+
+function restart() {
+  if (!confirm('Start the interview over? Your current report will be lost.')) return;
+  state.currentQ = 0;
+  state.answers = Array(QUESTIONS.length).fill('');
+  state.phase1 = null;
+  state.phase2 = null;
+  showSection('section-intro');
+}
+</script>
+
+</body>
+</html>
