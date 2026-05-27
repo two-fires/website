@@ -579,6 +579,32 @@ body::before {
   color: var(--white);
 }
 
+.source-citations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.source-citation {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.08);
+  border: 0.5px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 3px 8px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+a.source-citation:hover {
+  color: rgba(255,255,255,0.7);
+  border-color: rgba(255,255,255,0.35);
+}
+
 .report-cta {
   margin-top: 2rem;
   display: flex;
@@ -776,28 +802,34 @@ body::before {
     </div>
     <div class="report-body">
       <div class="report-section">
-        <span class="report-pill pill-blue">Where they congregate</span>
-        <p class="report-body-text" id="r2-where"></p>
+        <span class="report-pill pill-blue">Real searches</span>
+        <p class="report-body-text" id="r2-searches"></p>
+        <div class="source-citations" id="r2-searches-sources"></div>
       </div>
       <div class="report-section">
-        <span class="report-pill pill-coral">Their pain points</span>
+        <span class="report-pill pill-amber">Who's asking</span>
+        <p class="report-body-text" id="r2-asking"></p>
+        <div class="source-citations" id="r2-asking-sources"></div>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-coral">Real pain points</span>
         <p class="report-body-text" id="r2-pains"></p>
+        <div class="source-citations" id="r2-pains-sources"></div>
       </div>
       <div class="report-section gold">
         <span class="report-pill pill-green">Their exact words</span>
         <p class="report-body-text" id="r2-words"></p>
+        <div class="source-citations" id="r2-words-sources"></div>
       </div>
       <div class="report-section">
-        <span class="report-pill pill-amber">Who they trust</span>
+        <span class="report-pill pill-purple">Who they trust</span>
         <p class="report-body-text" id="r2-trust"></p>
+        <div class="source-citations" id="r2-trust-sources"></div>
       </div>
-      <div class="report-section">
-        <span class="report-pill pill-purple">What they say vs what they need</span>
-        <p class="report-body-text" id="r2-stated"></p>
-      </div>
-      <div class="report-section">
-        <span class="report-pill pill-teal">Trends worth knowing</span>
-        <p class="report-body-text" id="r2-trends"></p>
+      <div class="report-section hero">
+        <span class="report-pill pill-purple">Strategic insight</span>
+        <p class="report-body-text" id="r2-insight"></p>
+        <div class="source-citations" id="r2-insight-sources"></div>
       </div>
 
       <div class="report-cta">
@@ -1175,11 +1207,21 @@ function renderPhase1Report() {
 function buildPhase2UserMessage() {
   const base = buildPhase1UserMessage();
   const strat = (state.phase1 && state.phase1.strategic_recommendation) || '';
+  const businessType = state.answers[0];
+  const customerType = state.answers[1];
+  const customerProblem = state.answers[5];
+
   return `${base}
 
 Phase 1 strategic recommendation: ${strat}
 
-Now go out and research this customer type across Reddit, X, Google, Facebook groups, forums and YouTube comments. Surface what they are actually saying, feeling, and doing online right now. Give specific examples of language, communities, and behaviours.`;
+Before writing your response, search the web for:
+1. The top Google searches related to ${businessType} and ${customerProblem} — look for autocomplete, People Also Ask, and search volume data
+2. Reddit communities, Facebook groups, or forums where ${customerType} discusses ${customerProblem}
+3. Real reviews on Google, Trustpilot, or product hunt where ${customerType} describes this problem in their own words
+4. Any published research, surveys or reports on ${customerType}
+
+Only report what you actually find. Cite sources throughout.`;
 }
 
 async function startScout() {
@@ -1190,12 +1232,12 @@ async function startScout() {
   const scanPromise = animateScan('loading-2-grid', 4000);
 
   const body = {
-    system: "You are a customer intelligence researcher. Based on a business owner's description of their ideal customer, your job is to surface what that customer type is actually saying, feeling, and doing online — right now. Write like a researcher delivering a briefing. Direct, specific, no padding. Avoid generalisations. Where possible, give specific examples of language, communities, or behaviours. Format your response as JSON with these exact keys: where_they_congregate, pain_points, their_exact_words, who_they_trust, stated_vs_real_needs, trends_worth_knowing. Each value is a string of 2-4 sentences.",
+    system: "You are a customer intelligence researcher. You must use web search to find real, current data — not assumptions or generalisations. Every insight must come from an actual source you have searched and found. You are looking for:\n\n1. Real Google search queries people are actually typing related to this customer's problem — find actual search data, autocomplete patterns, and People Also Ask results\n2. Real Reddit threads, Facebook groups, forums, or community posts where this customer type is asking questions or venting frustrations — quote actual posts where possible and cite the source URL or community name\n3. Real demographic data on who is asking these questions — age, business type, location, experience level\n4. Real language — actual phrases and sentences lifted from real posts, reviews, or forum threads, with the source named\n\nDo not invent quotes. Do not generalise. If you cannot find a real source for a claim, do not make the claim. Cite every source.\n\nFormat your response as JSON with these exact keys:\n- real_searches: string — actual Google queries people are typing, with search volume context where available. 2-4 sentences with specific examples.\n- who_is_asking: string — real demographic breakdown of who searches these terms, based on research. 2-4 sentences with sources named.\n- real_pain_points: string — actual complaints and frustrations lifted from real Reddit posts, forums, reviews. Include community names and quote real language where found.\n- their_exact_words: string — verbatim quotes or near-verbatim phrases from real sources, each with the source named (e.g. 'r/smallbusiness', Google review, Trustpilot). This is the most important section.\n- who_they_trust: string — real influencers, brands, publications or communities this customer type follows, based on research.\n- strategic_insight: string — one sharp, research-backed recommendation for how to reach and speak to this customer, grounded in what you found.\n\nReturn only valid JSON. No markdown fences.",
     messages: [
       { role: 'user', content: buildPhase2UserMessage() }
     ],
     model: 'claude-sonnet-4-20250514',
-    max_tokens: 1000
+    max_tokens: 1500
   };
 
   try {
@@ -1222,12 +1264,82 @@ async function startScout() {
 
 function renderPhase2Report() {
   const r = state.phase2 || {};
-  setText('r2-where', r.where_they_congregate);
-  setText('r2-pains', r.pain_points);
-  setText('r2-words', r.their_exact_words);
-  setText('r2-trust', r.who_they_trust);
-  setText('r2-stated', r.stated_vs_real_needs);
-  setText('r2-trends', r.trends_worth_knowing);
+  setSectionWithSources('r2-searches', r.real_searches);
+  setSectionWithSources('r2-asking', r.who_is_asking);
+  setSectionWithSources('r2-pains', r.real_pain_points);
+  setSectionWithSources('r2-words', r.their_exact_words);
+  setSectionWithSources('r2-trust', r.who_they_trust);
+  setSectionWithSources('r2-insight', r.strategic_insight);
+}
+
+function setSectionWithSources(id, val) {
+  document.getElementById(id).textContent = val || '—';
+  const sourcesEl = document.getElementById(`${id}-sources`);
+  if (!sourcesEl) return;
+  sourcesEl.innerHTML = '';
+  if (!val) return;
+  extractSources(val).forEach(src => {
+    const el = src.url
+      ? Object.assign(document.createElement('a'), {
+          href: src.url, target: '_blank', rel: 'noopener noreferrer'
+        })
+      : document.createElement('span');
+    el.className = 'source-citation';
+    el.textContent = src.label;
+    sourcesEl.appendChild(el);
+  });
+}
+
+function extractSources(text) {
+  const sources = [];
+  const seen = new Set();
+  const add = (key, label, url) => {
+    const k = key.toLowerCase();
+    if (seen.has(k)) return;
+    seen.add(k);
+    sources.push({ label, url });
+  };
+
+  // Markdown links [text](url)
+  const mdRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+  let m;
+  while ((m = mdRegex.exec(text)) !== null) {
+    add(m[2], m[1], m[2]);
+  }
+
+  // Bare URLs
+  const urlRegex = /https?:\/\/[^\s)\]]+/g;
+  while ((m = urlRegex.exec(text)) !== null) {
+    const url = m[0].replace(/[.,;:)\]]+$/, '');
+    let label = url;
+    try {
+      const u = new URL(url);
+      label = u.hostname.replace(/^www\./, '');
+    } catch (_) {}
+    add(url, label, url);
+  }
+
+  // Reddit subs (r/name)
+  const redditRegex = /\br\/[A-Za-z0-9_]+/g;
+  while ((m = redditRegex.exec(text)) !== null) {
+    add(m[0], m[0], null);
+  }
+
+  // Common citation sources
+  const known = [
+    'Trustpilot', 'Product Hunt', 'Google Reviews', 'Google Review',
+    'Glassdoor', 'Yelp', 'Capterra', 'G2', 'Quora',
+    'Indie Hackers', 'Hacker News', 'YouTube', 'TikTok',
+    'LinkedIn', 'Facebook Groups', 'People Also Ask',
+    'Google Trends', 'SEMrush', 'Ahrefs', 'Statista',
+    'Forbes', 'TechCrunch', 'BBC', 'The Guardian'
+  ];
+  known.forEach(name => {
+    const re = new RegExp(`\\b${name.replace(/ /g, '\\s+')}\\b`, 'i');
+    if (re.test(text)) add(name, name, null);
+  });
+
+  return sources;
 }
 
 /* ────────────────────────────────────────────
