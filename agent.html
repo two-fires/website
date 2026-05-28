@@ -687,6 +687,8 @@ a.source-citation:hover {
   .report-pill { color: #333 !important; background: #eee !important; border: 1px solid #ddd !important; }
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -867,7 +869,7 @@ a.source-citation:hover {
       <div class="report-cta">
         <button class="btn-primary full large" onclick="approveAndContinue()">Approved — Help Me Build My Messaging</button>
         <div class="secondary-row">
-          <button class="btn-secondary" onclick="window.print()">Download Report</button>
+          <button class="btn-secondary" id="download-btn" onclick="downloadReport()">Download Report</button>
           <button class="btn-secondary" onclick="restart()">Start Over</button>
         </div>
       </div>
@@ -1221,15 +1223,22 @@ async function runPhase1() {
   }
 }
 
+function stripCites(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/<cite[^>]*>(.*?)<\/cite>/gi, '$1')
+    .replace(/<\/?cite[^>]*>/gi, '');
+}
+
 function renderPhase1Report() {
   const r = state.phase1 || {};
-  setText('r1-who', r.who_they_are);
-  setText('r1-triggers', r.what_triggers_them);
-  setText('r1-want', r.what_they_really_want);
-  setText('r1-language', r.the_language_they_use);
-  setText('r1-stops', r.what_stops_them_buying);
-  setText('r1-where', r.where_to_find_them);
-  setText('r1-strategic', r.strategic_recommendation);
+  setText('r1-who', stripCites(r.who_they_are));
+  setText('r1-triggers', stripCites(r.what_triggers_them));
+  setText('r1-want', stripCites(r.what_they_really_want));
+  setText('r1-language', stripCites(r.the_language_they_use));
+  setText('r1-stops', stripCites(r.what_stops_them_buying));
+  setText('r1-where', stripCites(r.where_to_find_them));
+  setText('r1-strategic', stripCites(r.strategic_recommendation));
 }
 
 /* ────────────────────────────────────────────
@@ -1331,11 +1340,11 @@ function renderPhase2Report() {
     const el = document.getElementById(id);
     if (el) el.textContent = (typeof val === 'string' && val.trim()) ? val : '—';
   };
-  set('r2-pain-matrix', r.pain_point_matrix);
-  set('r2-quotes', r.verbatim_quotes);
-  set('r2-questions', r.customer_questions);
-  set('r2-content', r.content_opportunities);
-  set('r2-strategic', r.strategic_recommendations);
+  set('r2-pain-matrix', stripCites(r.pain_point_matrix));
+  set('r2-quotes', stripCites(r.verbatim_quotes));
+  set('r2-questions', stripCites(r.customer_questions));
+  set('r2-content', stripCites(r.content_opportunities));
+  set('r2-strategic', stripCites(r.strategic_recommendations));
 }
 
 function setSectionWithSources(id, val) {
@@ -1432,6 +1441,61 @@ async function callAgent(body) {
 
 function setText(id, val) {
   document.getElementById(id).textContent = val || '—';
+}
+
+async function downloadReport() {
+  const btn = document.getElementById('download-btn');
+  btn.textContent = 'Generating PDF...';
+  btn.disabled = true;
+
+  // Sections use `display:none` until `.active` is added. html2canvas
+  // can't capture display:none elements, so we force both report
+  // sections active for the duration of the capture, then restore.
+  const sections = ['section-report-1', 'section-report-2']
+    .map(id => document.getElementById(id));
+  const wasActive = sections.map(el => el && el.classList.contains('active'));
+  sections.forEach(el => el && el.classList.add('active'));
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const elements = sections.filter(Boolean);
+
+    for (let i = 0; i < elements.length; i++) {
+      const canvas = await html2canvas(elements[i], {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#05050A'
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      if (i > 0) pdf.addPage();
+
+      let yPos = 0;
+      while (yPos < imgHeight) {
+        if (yPos > 0) pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, -yPos, imgWidth, imgHeight);
+        yPos += pageHeight;
+      }
+    }
+
+    pdf.save('Two-Fires-Customer-Intelligence-Report.pdf');
+  } catch (err) {
+    console.error('PDF error:', err);
+    alert('PDF generation failed — please try printing from your browser.');
+  } finally {
+    sections.forEach((el, i) => {
+      if (el && !wasActive[i]) el.classList.remove('active');
+    });
+    btn.textContent = 'Download Report';
+    btn.disabled = false;
+  }
 }
 
 /* ────────────────────────────────────────────
