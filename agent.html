@@ -1445,32 +1445,44 @@ function setText(id, val) {
 
 async function downloadReport() {
   const btn = document.getElementById('download-btn');
-  btn.textContent = 'Generating PDF...';
+
+  const p1 = document.getElementById('section-report-1');
+  const p2 = document.getElementById('section-report-2');
+
+  // Detect whether Phase 2 has rendered real content. textContent reads
+  // the DOM regardless of layout/visibility, so this works even though
+  // section-report-2 is currently display:none.
+  const p2ContentEl = document.getElementById('r2-pain-matrix');
+  const hasP2Content = p2ContentEl &&
+    p2ContentEl.textContent.trim() !== '—' &&
+    p2ContentEl.textContent.trim() !== '';
+
+  btn.textContent = hasP2Content
+    ? 'Generating Full Report PDF...'
+    : 'Generating Customer Profile PDF...';
   btn.disabled = true;
 
-  // Force both report sections visible via inline display so html2canvas
+  // Force required sections visible via inline display so html2canvas
   // can compute layout. We restore the original inline display state in
   // finally — letting the existing .section / .section.active CSS take
   // back over once we're done.
-  const p1 = document.getElementById('section-report-1');
-  const p2 = document.getElementById('section-report-2');
   const p1Display = p1 ? p1.style.display : '';
   const p2Display = p2 ? p2.style.display : '';
   if (p1) p1.style.display = 'block';
-  if (p2) p2.style.display = 'block';
+  if (hasP2Content && p2) p2.style.display = 'block';
 
   try {
     // Give the browser a beat to lay out and load fonts before the
-    // screenshot fires — without this, the second capture often grabs
-    // a partially-rendered Phase 2 section.
-    await new Promise(r => setTimeout(r, 200));
+    // screenshot fires — 500 ms is enough for fonts to swap in and
+    // dynamic content to paint after display:block.
+    await new Promise(r => setTimeout(r, 500));
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
-    const elements = [p1, p2].filter(Boolean);
+    const elements = (hasP2Content ? [p1, p2] : [p1]).filter(Boolean);
 
     for (let i = 0; i < elements.length; i++) {
       const canvas = await html2canvas(elements[i], {
@@ -1493,7 +1505,9 @@ async function downloadReport() {
       }
     }
 
-    pdf.save('Two-Fires-Customer-Intelligence-Report.pdf');
+    pdf.save(hasP2Content
+      ? 'Two-Fires-Customer-Intelligence-Report.pdf'
+      : 'Two-Fires-Customer-Profile.pdf');
   } catch (err) {
     console.error('PDF error:', err);
     alert('PDF generation failed — please try printing from your browser.');
