@@ -1448,30 +1448,38 @@ async function downloadReport() {
   btn.textContent = 'Generating PDF...';
   btn.disabled = true;
 
-  // Sections use `display:none` until `.active` is added. html2canvas
-  // can't capture display:none elements, so we force both report
-  // sections active for the duration of the capture, then restore.
-  const sections = ['section-report-1', 'section-report-2']
-    .map(id => document.getElementById(id));
-  const wasActive = sections.map(el => el && el.classList.contains('active'));
-  sections.forEach(el => el && el.classList.add('active'));
+  // Force both report sections visible via inline display so html2canvas
+  // can compute layout. We restore the original inline display state in
+  // finally — letting the existing .section / .section.active CSS take
+  // back over once we're done.
+  const p1 = document.getElementById('section-report-1');
+  const p2 = document.getElementById('section-report-2');
+  const p1Display = p1 ? p1.style.display : '';
+  const p2Display = p2 ? p2.style.display : '';
+  if (p1) p1.style.display = 'block';
+  if (p2) p2.style.display = 'block';
 
   try {
+    // Give the browser a beat to lay out and load fonts before the
+    // screenshot fires — without this, the second capture often grabs
+    // a partially-rendered Phase 2 section.
+    await new Promise(r => setTimeout(r, 200));
+
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
-    const elements = sections.filter(Boolean);
+    const elements = [p1, p2].filter(Boolean);
 
     for (let i = 0; i < elements.length; i++) {
       const canvas = await html2canvas(elements[i], {
-        scale: 2,
+        scale: 1.5,
         useCORS: true,
         backgroundColor: '#05050A'
       });
 
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/jpeg', 0.85);
       const imgWidth = pageWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
@@ -1480,7 +1488,7 @@ async function downloadReport() {
       let yPos = 0;
       while (yPos < imgHeight) {
         if (yPos > 0) pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, -yPos, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'JPEG', 0, -yPos, imgWidth, imgHeight);
         yPos += pageHeight;
       }
     }
@@ -1490,9 +1498,8 @@ async function downloadReport() {
     console.error('PDF error:', err);
     alert('PDF generation failed — please try printing from your browser.');
   } finally {
-    sections.forEach((el, i) => {
-      if (el && !wasActive[i]) el.classList.remove('active');
-    });
+    if (p1) p1.style.display = p1Display;
+    if (p2) p2.style.display = p2Display;
     btn.textContent = 'Download Report';
     btn.disabled = false;
   }
