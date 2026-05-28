@@ -1449,13 +1449,12 @@ async function downloadReport() {
   const p1 = document.getElementById('section-report-1');
   const p2 = document.getElementById('section-report-2');
 
-  // Detect whether Phase 2 has rendered real content. textContent reads
-  // the DOM regardless of layout/visibility, so this works even though
-  // section-report-2 is currently display:none.
-  const p2ContentEl = document.getElementById('r2-pain-matrix');
-  const hasP2Content = p2ContentEl &&
-    p2ContentEl.textContent.trim() !== '—' &&
-    p2ContentEl.textContent.trim() !== '';
+  // Detect whether Phase 2 has real data by checking state directly —
+  // no DOM read, no textContent ambiguity. If the API returned a real
+  // string longer than 20 chars for pain_point_matrix, Phase 2 is real.
+  const hasP2Content = state.phase2 &&
+    typeof state.phase2.pain_point_matrix === 'string' &&
+    state.phase2.pain_point_matrix.length > 20;
 
   btn.textContent = hasP2Content
     ? 'Generating Full Report PDF...'
