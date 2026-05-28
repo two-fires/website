@@ -536,6 +536,108 @@ a.source-citation:hover {
   border-color: rgba(255,255,255,0.35);
 }
 
+.quality-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.65rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+}
+.quality-checklist .qdot { margin-right: 4px; }
+.quality-checklist .qdot.ok { color: var(--green); }
+.quality-checklist .qdot.bad { color: var(--coral); }
+
+.pain-matrix-wrap {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--white);
+  white-space: pre-wrap;
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.pain-matrix-wrap .pm-head {
+  display: block;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+
+.quote-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quote-cards .qcard {
+  border-left: 2px solid #A855F7;
+  padding: 12px 16px;
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--white);
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+.quote-cards .qcard .qsrc {
+  display: block;
+  margin-top: 6px;
+  font-family: 'Geist Mono', monospace;
+  font-style: normal;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+
+.question-groups {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: var(--white);
+  white-space: pre-wrap;
+  line-height: 1.65;
+}
+.question-groups .qg-heading {
+  display: block;
+  font-family: 'Geist Mono', monospace;
+  text-transform: uppercase;
+  color: var(--purple);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  margin: 1rem 0 0.5rem;
+}
+.question-groups .qg-heading:first-child { margin-top: 0; }
+
+.content-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.content-cards .ccard {
+  border: 0.5px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  white-space: pre-wrap;
+  color: var(--white);
+  line-height: 1.6;
+}
+.content-cards .ccard .chook {
+  display: block;
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
 .report-cta {
   margin-top: 2rem;
   display: flex;
@@ -732,39 +834,34 @@ a.source-citation:hover {
   <!-- PHASE 2 REPORT -->
   <section class="section" id="section-report-2">
     <div class="report-header">
-      <div class="eyebrow">Phase 2 — Web Scout</div>
+      <div class="eyebrow">Phase 2 — Customer Intelligence</div>
       <h2>Customer Intelligence Report</h2>
+      <div class="quality-checklist" id="r2-quality">
+        <span><span class="qdot ok">●</span> 3+ channels</span>
+        <span><span class="qdot ok">●</span> 15+ quotes</span>
+        <span><span class="qdot ok">●</span> Sources cited</span>
+      </div>
     </div>
     <div class="report-body">
       <div class="report-section">
-        <span class="report-pill pill-blue">Real searches</span>
-        <p class="report-body-text" id="r2-searches"></p>
-        <div class="source-citations" id="r2-searches-sources"></div>
-      </div>
-      <div class="report-section">
-        <span class="report-pill pill-amber">Who's asking</span>
-        <p class="report-body-text" id="r2-asking"></p>
-        <div class="source-citations" id="r2-asking-sources"></div>
-      </div>
-      <div class="report-section">
-        <span class="report-pill pill-coral">Real pain points</span>
-        <p class="report-body-text" id="r2-pains"></p>
-        <div class="source-citations" id="r2-pains-sources"></div>
+        <span class="report-pill pill-coral">Pain point matrix</span>
+        <div class="pain-matrix-wrap" id="r2-pain-matrix"></div>
       </div>
       <div class="report-section gold">
-        <span class="report-pill pill-green">Their exact words</span>
-        <p class="report-body-text" id="r2-words"></p>
-        <div class="source-citations" id="r2-words-sources"></div>
+        <span class="report-pill pill-green">Verbatim quotes</span>
+        <div class="quote-cards" id="r2-quotes"></div>
       </div>
       <div class="report-section">
-        <span class="report-pill pill-purple">Who they trust</span>
-        <p class="report-body-text" id="r2-trust"></p>
-        <div class="source-citations" id="r2-trust-sources"></div>
+        <span class="report-pill pill-blue">Customer questions</span>
+        <div class="question-groups" id="r2-questions"></div>
+      </div>
+      <div class="report-section">
+        <span class="report-pill pill-amber">Content opportunities</span>
+        <div class="content-cards" id="r2-content"></div>
       </div>
       <div class="report-section hero">
-        <span class="report-pill pill-purple">Strategic insight</span>
-        <p class="report-body-text" id="r2-insight"></p>
-        <div class="source-citations" id="r2-insight-sources"></div>
+        <span class="report-pill pill-purple">Strategic recommendations</span>
+        <p class="report-body-text" id="r2-strategic"></p>
       </div>
 
       <div class="report-cta">
@@ -1142,21 +1239,15 @@ function renderPhase1Report() {
 function buildPhase2UserMessage() {
   const base = buildPhase1UserMessage();
   const strat = (state.phase1 && state.phase1.strategic_recommendation) || '';
-  const businessType = state.answers[0];
-  const customerType = state.answers[1];
-  const customerProblem = state.answers[5];
 
-  return `${base}
+  return `Here are the business owner's answers to the 10 Ember interview questions:
 
-Phase 1 strategic recommendation: ${strat}
+${base}
 
-Before writing your response, search the web for:
-1. The top Google searches related to ${businessType} and ${customerProblem} — look for autocomplete, People Also Ask, and search volume data
-2. Reddit communities, Facebook groups, or forums where ${customerType} discusses ${customerProblem}
-3. Real reviews on Google, Trustpilot, or product hunt where ${customerType} describes this problem in their own words
-4. Any published research, surveys or reports on ${customerType}
+Phase 1 strategic recommendation:
+${strat}
 
-Only report what you actually find. Cite sources throughout.`;
+Now conduct the five-channel research methodology described in your instructions — Reddit, YouTube, Google PAA, Reviews, and Quora — before writing the response. Use web search throughout. Cite every source with platform name and URL. Return only the JSON object specified.`;
 }
 
 async function startScout() {
@@ -1166,12 +1257,56 @@ async function startScout() {
   const anim = startLoadingAnimation('loading-2', PHASE2_STATUS);
 
   const body = {
-    system: "You are a customer intelligence researcher. You must use web search to find real, current data — not assumptions or generalisations. Every insight must come from an actual source you have searched and found. You are looking for:\n\n1. Real Google search queries people are actually typing related to this customer's problem — find actual search data, autocomplete patterns, and People Also Ask results\n2. Real Reddit threads, Facebook groups, forums, or community posts where this customer type is asking questions or venting frustrations — quote actual posts where possible and cite the source URL or community name\n3. Real demographic data on who is asking these questions — age, business type, location, experience level\n4. Real language — actual phrases and sentences lifted from real posts, reviews, or forum threads, with the source named\n\nDo not invent quotes. Do not generalise. If you cannot find a real source for a claim, do not make the claim. Cite every source.\n\nFormat your response as JSON with these exact keys:\n- real_searches: string — actual Google queries people are typing, with search volume context where available. 2-4 sentences with specific examples.\n- who_is_asking: string — real demographic breakdown of who searches these terms, based on research. 2-4 sentences with sources named.\n- real_pain_points: string — actual complaints and frustrations lifted from real Reddit posts, forums, reviews. Include community names and quote real language where found.\n- their_exact_words: string — verbatim quotes or near-verbatim phrases from real sources, each with the source named (e.g. 'r/smallbusiness', Google review, Trustpilot). This is the most important section.\n- who_they_trust: string — real influencers, brands, publications or communities this customer type follows, based on research.\n- strategic_insight: string — one sharp, research-backed recommendation for how to reach and speak to this customer, grounded in what you found.\n\nReturn only valid JSON. No markdown fences.",
+    system: `You are an expert market researcher specialising in customer pain point discovery. Your task is to conduct deep qualitative research using free, public channels to uncover customer pain points, questions, and content opportunities.
+
+RESEARCH METHODOLOGY:
+
+Step 1 - Reddit Research (Primary Channel)
+Search: site:reddit.com "[industry]" combined with "I wish" or "frustrated with" or "hate" or "I'm tired of"
+Sort by Top (Past Year) and Controversial
+Target relevant subreddits for the industry and adjacent topics
+Capture verbatim quotes with URLs, upvote counts, emotional intensity
+
+Step 2 - YouTube Research
+Search competitor reviews, product tutorials, "Why I stopped using [X]"
+Analyse top comments per video
+Capture "I love it but..." statements, specific complaints, emotional language
+
+Step 3 - Google People Also Ask
+Search main keywords, capture PAA questions by funnel stage:
+Awareness, Consideration, Decision
+
+Step 4 - Review Mining
+Platforms: Trustpilot, Google Reviews, G2, Capterra, Amazon
+Filter 2-4 star reviews for most actionable feedback
+Capture usability issues, pricing complaints, missing features
+
+Step 5 - Quora Research
+Search: site:quora.com "how do I [job to be done]" or "is [X] worth it"
+Capture exact question phrasing and emotional context
+
+PAIN POINT SCORING:
+Score each pain point on:
+- Frequency (1-5): How often mentioned across channels
+- Intensity (1-5): Emotional charge (mild annoyance=1, dealbreaker=5)
+- Commercial Relevance (1-5): How well the client's solution addresses this
+- Priority Score = (Frequency + Intensity) × Commercial Relevance
+
+You must use web search to find real data. Every quote must be verbatim with its source named. Do not invent quotes or generalise.
+
+Return ONLY a valid JSON object with these exact keys — no markdown fences, no preamble:
+{
+  "pain_point_matrix": "Top 5-7 pain points as a formatted list, each with: rank, pain point description, category, frequency score, intensity score, priority score, and one verbatim quote from a real source with URL",
+  "verbatim_quotes": "Minimum 10 verbatim quotes, each with source platform, approximate date if available, and URL where found",
+  "customer_questions": "10-15 real questions grouped under three headings: AWARENESS, CONSIDERATION, DECISION",
+  "content_opportunities": "5 content ideas, each with: the pain point it addresses, the exact customer wording to use, the funnel stage, recommended format (blog/ad/email/video), the hook or promise, and the CTA",
+  "strategic_recommendations": "3-5 high-level strategic recommendations for positioning and content strategy based on the research findings"
+}`,
     messages: [
       { role: 'user', content: buildPhase2UserMessage() }
     ],
     model: 'claude-sonnet-4-20250514',
-    max_tokens: 1500
+    max_tokens: 6000
   };
 
   try {
@@ -1193,12 +1328,15 @@ async function startScout() {
 
 function renderPhase2Report() {
   const r = state.phase2 || {};
-  setSectionWithSources('r2-searches', r.real_searches);
-  setSectionWithSources('r2-asking', r.who_is_asking);
-  setSectionWithSources('r2-pains', r.real_pain_points);
-  setSectionWithSources('r2-words', r.their_exact_words);
-  setSectionWithSources('r2-trust', r.who_they_trust);
-  setSectionWithSources('r2-insight', r.strategic_insight);
+  const set = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = (typeof val === 'string' && val.trim()) ? val : '—';
+  };
+  set('r2-pain-matrix', r.pain_point_matrix);
+  set('r2-quotes', r.verbatim_quotes);
+  set('r2-questions', r.customer_questions);
+  set('r2-content', r.content_opportunities);
+  set('r2-strategic', r.strategic_recommendations);
 }
 
 function setSectionWithSources(id, val) {
