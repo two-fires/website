@@ -1526,6 +1526,25 @@ function restart() {
   state.phase2 = null;
   showSection('section-intro');
 }
+
+// Developer shortcut: ?demo=true skips the interview with pre-filled
+// answers and jumps straight to Phase 1. state.answers is indexed
+// by integer elsewhere, so the demo set is an array in q1→q10 order.
+if (new URLSearchParams(window.location.search).get('demo') === 'true') {
+  state.answers = [
+    "We do home renovations — kitchens, bathrooms, extensions",
+    "Sydney homeowners, typically 35-55, dual income, own their home",
+    "Sydney — Inner West, Northern Beaches, Eastern Suburbs",
+    "They just bought a place that needs work, or finally have the budget saved up",
+    "A home they're proud of, finished on time, no nasty surprises",
+    "I just need someone reliable who won't rip me off",
+    "Getting three quotes, considering DIY for smaller jobs",
+    "How much will it actually cost? How long will it take? Are you licensed?",
+    "We finish on time and we communicate every step of the way",
+    "They're living in the house during the reno — disruption is a big deal"
+  ];
+  runPhase1();
+}
 </script>
 
 </body>
