@@ -1335,6 +1335,7 @@ Return ONLY a valid JSON object with these exact keys — no markdown fences, no
 }
 
 function renderPhase2Report() {
+  console.log('[STATE CHECK]', JSON.stringify(state.phase2).substring(0,200));
   const r = state.phase2 || {};
   const set = (id, val) => {
     const el = document.getElementById(id);
@@ -1444,6 +1445,12 @@ function setText(id, val) {
 }
 
 async function downloadReport() {
+  console.log('[DOWNLOAD CHECK] state.phase2:', state.phase2);
+  console.log('[DOWNLOAD CHECK] hasP2Content will be:',
+    !!(state.phase2 &&
+    typeof state.phase2.pain_point_matrix === 'string' &&
+    state.phase2.pain_point_matrix.length > 20));
+
   const btn = document.getElementById('download-btn');
 
   const p1 = document.getElementById('section-report-1');
