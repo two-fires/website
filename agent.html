@@ -826,7 +826,7 @@ a.source-citation:hover {
         <div class="scan-progress-fill" id="loading-2-fill"></div>
       </div>
       <div class="scan-status" id="loading-2-status">Searching Reddit and community forums…</div>
-      <div class="scan-note">This takes 20–30 seconds — we're finding real data.</div>
+      <div class="scan-note">This takes 60–90 seconds — we're finding real data with sources.</div>
       <div class="error-card" id="error-2" style="display:none;"></div>
     </div>
   </section>
@@ -1110,11 +1110,10 @@ const PHASE1_STATUS = [
   'Writing your report…'
 ];
 const PHASE2_STATUS = [
-  'Searching Reddit and community forums…',
-  'Scanning Google search patterns…',
-  'Reading real customer conversations…',
-  'Analysing pain points and language…',
-  'Building your intelligence report…'
+  'Real research takes a moment — finding actual sources...',
+  'Scanning Reddit threads and reviews...',
+  'Cross-referencing multiple channels...',
+  'Almost there — compiling your report...'
 ];
 
 function startLoadingAnimation(prefix, messages) {
@@ -1413,15 +1412,22 @@ function extractSources(text) {
    API
    ──────────────────────────────────────────── */
 async function callAgent(body) {
-  const res = await fetch('https://agent.two-fires.com/agent', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) {
-    throw new Error(`Agent returned ${res.status}`);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 120000);
+  try {
+    const res = await fetch('https://agent.two-fires.com/agent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+    if (!res.ok) {
+      throw new Error(`Agent returned ${res.status}`);
+    }
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
   }
-  return await res.json();
 }
 
 function setText(id, val) {
