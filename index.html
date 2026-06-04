@@ -12,7 +12,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -38,8 +38,8 @@
       --purple-glow-soft: rgba(168, 85, 247, 0.25);
       --purple-soft-fill: rgba(168, 85, 247, 0.1);
 
-      --font-display: 'Instrument Serif', Georgia, serif;
-      --font-body: 'Manrope', system-ui, sans-serif;
+      --font-display: 'DM Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
       --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
 
       --max-w: 1140px;
@@ -162,14 +162,15 @@
     }
 
     .hero h1 {
-      font-family: var(--font-display); font-weight: 400;
-      font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: 1.0;
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.4rem, 6vw, 4.8rem); line-height: 1.0;
       letter-spacing: -0.025em; margin-bottom: 28px;
       opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
     }
     .hero h1 em {
       font-style: italic; color: var(--purple-bright);
       text-shadow: 0 0 40px var(--purple-glow);
+      letter-spacing: -0.01em;
     }
 
     .hero-lede {
@@ -281,7 +282,7 @@
     .section-light .section-label::before { background: var(--purple-deep); }
 
     .section h2 {
-      font-family: var(--font-display); font-weight: 400;
+      font-family: var(--font-display); font-weight: 500;
       font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.05;
       letter-spacing: -0.02em; margin-bottom: 32px;
     }
@@ -489,7 +490,7 @@
       padding: 96px 0 64px;
     }
     .final-cta h2 {
-      font-family: var(--font-display); font-weight: 400;
+      font-family: var(--font-display); font-weight: 500;
       font-size: clamp(2.4rem, 6vw, 4.6rem);
       line-height: 1.0; letter-spacing: -0.025em;
       margin: 0 auto 28px;
@@ -518,7 +519,7 @@
     @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; gap: 36px; } }
 
     .contact-side h3 {
-      font-family: var(--font-display); font-weight: 400;
+      font-family: var(--font-display); font-weight: 500;
       font-size: clamp(1.6rem, 3vw, 2.2rem);
       letter-spacing: -0.01em; line-height: 1.15;
       margin-bottom: 20px;
@@ -631,7 +632,7 @@
     }
     .legal-page.active { display: block; }
     .legal-page h1 {
-      font-family: var(--font-display); font-weight: 400;
+      font-family: var(--font-display); font-weight: 500;
       font-size: clamp(2.2rem, 4.5vw, 3.4rem);
       letter-spacing: -0.02em; margin-bottom: 32px;
     }
