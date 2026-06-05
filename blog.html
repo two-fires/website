@@ -453,9 +453,9 @@
         <div class="eyebrow">Powered by AI research</div>
         <h2>New posts every week — grounded in real customer data.</h2>
         <p>Our blog is generated from live customer intelligence research. Every post answers a question your ideal customer is already asking online.</p>
-        <form class="notify-form" onsubmit="handleNotify(event)">
-          <input type="email" placeholder="your@email.com" required aria-label="Email address">
-          <button type="submit" class="notify-btn">Notify me</button>
+        <form class="notify-form" onsubmit="return false;">
+          <input type="email" id="email-blog" placeholder="your@email.com" required aria-label="Email address">
+          <button type="button" id="btn-blog" class="notify-btn" onclick="subscribeEmail('blog')">Notify me</button>
         </form>
       </div>
     </section>
@@ -503,14 +503,42 @@
       });
     });
 
-    function handleNotify(e) {
-      e.preventDefault();
-      const input = e.target.querySelector('input');
-      const btn = e.target.querySelector('.notify-btn');
-      input.value = '';
-      input.placeholder = "You're on the list — talk soon.";
-      btn.textContent = 'Done ✓';
-      return false;
+    async function subscribeEmail(source) {
+      const input = document.getElementById('email-' + source);
+      const email = input.value.trim();
+      if (!email || !email.includes('@')) {
+        input.style.borderColor = '#f87171';
+        return;
+      }
+      const btn = document.getElementById('btn-' + source);
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(
+          'https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_email_subscribers',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ email, source })
+          }
+        );
+        if (res.ok || res.status === 409) {
+          btn.textContent = "You're on the list ✓";
+          input.value = '';
+          input.style.borderColor = '';
+        } else {
+          throw new Error('Failed');
+        }
+      } catch {
+        btn.textContent = 'Try again';
+        btn.disabled = false;
+      }
     }
   </script>
 
