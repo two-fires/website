@@ -490,7 +490,7 @@
             body: JSON.stringify({ email, source })
           }
         );
-        if (res.ok || res.status === 409) {
+        if (res.ok) {
           btn.textContent = "You're on the list ✓";
           input.value = '';
           input.style.borderColor = '';
