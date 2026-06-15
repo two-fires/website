@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="/images/flame-favicon.jpg">
+  <meta name="description" content="Paste your customer reviews, testimonials, or sales notes. The Two Fires Customer Insight tool finds the patterns you are missing. Free.">
+  <meta property="og:title" content="Two Fires · Customer Insight Tool">
+  <meta property="og:description" content="What are your customers really saying? Paste your evidence. Our AI finds the patterns.">
+  <meta property="og:type" content="website">
+  <title>Two Fires · What are your customers really saying?</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-soft: #0B0B14;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --surface-card: #14091E;
+      --card: #0A0A0F;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #FBFAFE;
+      --text-muted: #A0A0A0;
+      --text-faint: #666666;
+
+      --purple-deep: #6B21A8;
+      --purple: #A855F7;
+      --purple-bright: #C4A8FF;
+      --purple-glow: rgba(168, 85, 247, 0.55);
+      --purple-glow-soft: rgba(168, 85, 247, 0.25);
+      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+
+      --green: #34D399;
+      --amber: #FBBF24;
+      --red: #F87171;
+      --grey: #8B8B95;
+
+      --font-display: 'DM Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+
+      --max-w: 1000px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 90%, rgba(168, 85, 247, 0.12), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 0% 70%, rgba(168, 85, 247, 0.07), transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.4; mix-blend-mode: overlay; pointer-events: none; z-index: 1;
+    }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(5, 5, 8, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--text); }
+    .brand-mark { width: 26px; height: 26px; display: flex; }
+    .brand-mark svg { width: 100%; height: 100%; filter: drop-shadow(0 0 8px var(--purple-glow)); }
+    .brand-name {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .nav-back {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s ease;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    main { padding-top: 80px; padding-bottom: 96px; position: relative; z-index: 2; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+    .stage { display: none; animation: fadeUp 0.6s ease forwards; }
+    .stage.active { display: block; }
+
+    /* Shared bits */
+    .eyebrow {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 22px;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--purple); }
+
+    .display-h1 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.1rem, 5.5vw, 3.6rem); line-height: 1.04;
+      letter-spacing: -0.025em; margin-bottom: 20px;
+    }
+    .display-h1 em {
+      font-style: italic; color: var(--purple);
+      text-shadow: 0 0 40px var(--purple-glow);
+    }
+    .lede {
+      color: var(--text-muted); max-width: 54ch;
+      font-size: clamp(1.02rem, 1.4vw, 1.15rem); line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    /* ============ STATE 1 — GATE ============ */
+    .gate-wrap { max-width: 560px; }
+    .gate-form { display: flex; flex-direction: column; gap: 16px; }
+    .field label {
+      display: block; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .field input, .evidence-input {
+      width: 100%; font-family: var(--font-body); font-size: 15px;
+      color: var(--text); background: var(--surface);
+      border: 1px solid var(--border-strong); border-radius: 12px;
+      padding: 15px 16px; transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .field input::placeholder, .evidence-input::placeholder { color: var(--text-faint); }
+    .field input:focus, .evidence-input:focus {
+      outline: none; border-color: var(--purple);
+      box-shadow: 0 0 0 3px var(--purple-soft-fill), 0 0 24px var(--purple-glow-soft);
+    }
+
+    .btn {
+      font-family: var(--font-body); font-size: 15px; font-weight: 600;
+      letter-spacing: 0.01em; padding: 16px 30px; border-radius: 999px; cursor: pointer;
+      border: 1px solid transparent; color: white;
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset, 0 6px 28px var(--purple-glow);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 10px 40px var(--purple-glow); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-block { width: 100%; }
+
+    .btn-ghost {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-muted); box-shadow: none; font-weight: 500;
+    }
+    .btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--border-strong); box-shadow: none; transform: translateY(-1px); }
+
+    .fineprint {
+      font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
+      margin-top: 18px; letter-spacing: 0.04em;
+    }
+    .form-error {
+      font-family: var(--font-mono); font-size: 12px; color: var(--red);
+      margin-top: 6px; min-height: 16px; letter-spacing: 0.02em;
+    }
+
+    .spinner {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.35); border-top-color: white;
+      animation: spin 0.7s linear infinite; display: inline-block;
+    }
+
+    /* ============ STATE 2 — EVIDENCE ============ */
+    .welcome-back {
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em;
+      color: var(--purple-bright); margin-bottom: 18px;
+      padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
+      background: var(--purple-soft-fill); display: inline-block;
+    }
+    .evidence-input { min-height: 320px; resize: vertical; line-height: 1.6; font-size: 14.5px; }
+    .counter-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 10px; margin-bottom: 24px;
+      font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
+      letter-spacing: 0.04em;
+    }
+    .counter-row .count-ok { color: var(--text-muted); }
+    .counter-row .count-bad { color: var(--amber); }
+
+    /* Processing */
+    .processing {
+      display: none; margin-top: 28px;
+      padding: 28px; border: 1px solid var(--border); border-radius: 16px;
+      background: var(--surface);
+    }
+    .processing.active { display: block; }
+    .processing-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .processing-head .spinner { width: 20px; height: 20px; border-width: 2px; }
+    .processing-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 500; }
+    .processing-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.04em; }
+    .stream-preview {
+      margin-top: 16px; max-height: 160px; overflow: hidden;
+      font-family: var(--font-mono); font-size: 11px; line-height: 1.5;
+      color: var(--text-faint); white-space: pre-wrap; word-break: break-word;
+      mask-image: linear-gradient(180deg, transparent, #000 18%, #000 70%, transparent);
+      -webkit-mask-image: linear-gradient(180deg, transparent, #000 18%, #000 70%, transparent);
+    }
+
+    /* ============ STATE 3 — RESULTS ============ */
+    .results-head { margin-bottom: 44px; }
+    .result-section { margin-bottom: 56px; }
+    .result-section > h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem); letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .result-section > h2 em { font-style: italic; color: var(--purple-bright); }
+    .section-intro { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 26px; max-width: 60ch; }
+
+    .sub-label {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--purple-bright);
+      margin: 32px 0 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .sub-label::before { content: ""; width: 18px; height: 1px; background: var(--purple); }
+    .sub-label:first-child { margin-top: 0; }
+
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) { .card-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .card:hover { border-color: var(--purple); box-shadow: 0 8px 40px rgba(168,85,247,0.12); transform: translateY(-2px); }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .card-title { font-family: var(--font-display); font-weight: 500; font-size: 1.02rem; line-height: 1.35; color: var(--text); }
+
+    .badge {
+      font-family: var(--font-mono); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 4px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0;
+      border: 1px solid currentColor;
+    }
+    .badge-high { color: var(--green); background: rgba(52,211,153,0.1); }
+    .badge-medium { color: var(--amber); background: rgba(251,191,36,0.1); }
+    .badge-low { color: var(--red); background: rgba(248,113,113,0.1); }
+    .badge-insufficient { color: var(--grey); background: rgba(139,139,149,0.08); }
+
+    .evidence-list { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .evidence-list li {
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;
+      padding-left: 14px; border-left: 2px solid var(--purple-deep); font-style: italic;
+    }
+    .source-types { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .source-chip {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-faint); border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px;
+    }
+
+    /* Language bank */
+    .phrase-group { margin-bottom: 24px; }
+    .phrase-list { display: flex; flex-wrap: wrap; gap: 9px; }
+    .phrase {
+      font-size: 0.88rem; color: var(--text); line-height: 1.4;
+      background: var(--surface-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 13px;
+    }
+    .phrase.charged { border-color: rgba(168,85,247,0.4); color: var(--purple-bright); }
+
+    /* Key insights */
+    .insights-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .insights-list li {
+      position: relative; padding: 18px 20px 18px 52px;
+      background: var(--surface-card); border: 1px solid var(--border);
+      border-radius: 12px; font-size: 1.0rem; line-height: 1.55; color: var(--text);
+      box-shadow: 0 0 50px rgba(168,85,247,0.05);
+    }
+    .insights-list li::before {
+      content: counter(ins); counter-increment: ins;
+      position: absolute; left: 18px; top: 18px;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--purple);
+      width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--purple);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .insights-wrap { counter-reset: ins; }
+
+    /* Evidence quality */
+    .quality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    @media (max-width: 640px) { .quality-grid { grid-template-columns: 1fr; } }
+    .quality-stat {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+    }
+    .quality-stat .k { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+    .quality-stat .v { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; color: var(--text); }
+    .gaps-box { margin-top: 4px; }
+    .gaps-box .sub-label { margin-bottom: 12px; }
+    .gaps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .gaps-list li { font-size: 0.9rem; color: var(--text-muted); padding-left: 16px; position: relative; }
+    .gaps-list li::before { content: "—"; position: absolute; left: 0; color: var(--purple-deep); }
+
+    .empty-note { font-size: 0.9rem; color: var(--text-faint); font-style: italic; }
+
+    /* CTA */
+    .cta-block {
+      margin-top: 64px; padding: 40px 36px; border-radius: 20px;
+      border: 1px solid var(--purple-deep);
+      background: linear-gradient(135deg, rgba(107,33,168,0.18) 0%, rgba(168,85,247,0.06) 100%);
+      box-shadow: 0 0 80px rgba(168,85,247,0.12);
+      text-align: center;
+    }
+    .cta-block h3 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .cta-block h3 em { font-style: italic; color: var(--purple-bright); }
+    .cta-block p { color: var(--text-muted); max-width: 48ch; margin: 0 auto 26px; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .runs-note { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); margin-top: 22px; letter-spacing: 0.04em; }
+
+    /* Global error banner */
+    .banner-error {
+      display: none; margin-top: 20px; padding: 14px 18px; border-radius: 12px;
+      border: 1px solid var(--red); background: rgba(248,113,113,0.08);
+      color: var(--red); font-size: 0.9rem;
+    }
+    .banner-error.active { display: block; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
+            <defs>
+              <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#6B21A8"/><stop offset="55%" stop-color="#A855F7"/><stop offset="100%" stop-color="#C4A8FF"/>
+              </linearGradient>
+              <linearGradient id="flameFront" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#4C1078"/><stop offset="55%" stop-color="#6B21A8"/><stop offset="100%" stop-color="#A855F7"/>
+              </linearGradient>
+            </defs>
+            <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="url(#flameBack)" opacity="0.85"/>
+            <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="url(#flameFront)"/>
+          </svg>
+        </span>
+        <span class="brand-name">Two Fires</span>
+      </a>
+      <a class="nav-back" href="/">← Back to site</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ============ STATE 1 — GATE ============ -->
+    <section class="stage active" id="stage-gate">
+      <div class="gate-wrap">
+        <span class="eyebrow">Customer Insight Tool</span>
+        <h1 class="display-h1">What are your customers <em>really saying?</em></h1>
+        <p class="lede">Paste your reviews, testimonials, or sales notes. Our AI will find the patterns you're missing.</p>
+
+        <form class="gate-form" id="gateForm" novalidate>
+          <div class="field">
+            <label for="g-name">Name</label>
+            <input id="g-name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label for="g-email">Email</label>
+            <input id="g-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+          </div>
+          <div class="field">
+            <label for="g-company">Company</label>
+            <input id="g-company" name="company" type="text" autocomplete="organization" placeholder="Your company" required>
+          </div>
+          <button class="btn btn-block" type="submit" id="gateBtn">Analyse My Evidence</button>
+          <p class="form-error" id="gateError"></p>
+        </form>
+        <p class="fineprint">Free. 3 analyses per email. No credit card.</p>
+      </div>
+    </section>
+
+    <!-- ============ STATE 2 — EVIDENCE ============ -->
+    <section class="stage" id="stage-evidence">
+      <span class="eyebrow">Your Evidence</span>
+      <div id="welcomeBack" class="welcome-back" style="display:none;"></div>
+      <h1 class="display-h1">Paste your <em>customer evidence</em></h1>
+      <p class="lede">The more evidence you give us, the sharper the analysis. Reviews, testimonials, sales notes, survey responses, support messages, social comments. All of it.</p>
+
+      <textarea class="evidence-input" id="evidenceInput"
+        placeholder="Paste your customer evidence here — reviews, testimonials, sales notes, survey responses, support messages, social comments. The more evidence, the better the analysis."></textarea>
+      <div class="counter-row">
+        <span id="counter" class="count-bad">0 characters. Minimum 200.</span>
+        <span>Max 50,000</span>
+      </div>
+
+      <button class="btn" type="button" id="runBtn">Run Analysis</button>
+      <div class="banner-error" id="evidenceError"></div>
+
+      <div class="processing" id="processing">
+        <div class="processing-head">
+          <span class="spinner"></span>
+          <span class="processing-title">Analysing your customer evidence...</span>
+        </div>
+        <p class="processing-sub" id="processingSub">Reading the evidence and finding the patterns.</p>
+        <div class="stream-preview" id="streamPreview"></div>
+      </div>
+    </section>
+
+    <!-- ============ STATE 3 — RESULTS ============ -->
+    <section class="stage" id="stage-results">
+      <div class="results-head">
+        <span class="eyebrow">Your Customer Insight Map</span>
+        <h1 class="display-h1">Here's what your customers <em>are telling you</em></h1>
+        <p class="lede">Built only from the evidence you provided. Every finding carries a confidence level so you know how hard to lean on it.</p>
+      </div>
+
+      <div class="result-section insights-wrap" id="insightsSection">
+        <h2>Key Insight <em>Summary</em></h2>
+        <p class="section-intro">The most important findings, first.</p>
+        <ul class="insights-list" id="insightsList"></ul>
+      </div>
+
+      <div class="result-section" id="painSection">
+        <h2>Customer Pain-Point <em>Map</em></h2>
+        <p class="section-intro">What customers struggle with, what they want, what holds them back, and what moves them to act.</p>
+        <div id="painContent"></div>
+      </div>
+
+      <div class="result-section" id="languageSection">
+        <h2>Customer Language <em>Bank</em></h2>
+        <p class="section-intro">The exact words your customers use. This is the raw material for messaging that sounds like them, not you.</p>
+        <div id="languageContent"></div>
+      </div>
+
+      <div class="result-section" id="qualitySection">
+        <h2>Evidence <em>Quality</em></h2>
+        <p class="section-intro">How solid is this read, and what would make it sharper.</p>
+        <div id="qualityContent"></div>
+      </div>
+
+      <div class="cta-block">
+        <h3>This is just the <em>first layer.</em></h3>
+        <p>The full Marketing Diagnosis goes deeper. Positioning, messaging, and a plan built on this evidence.</p>
+        <div class="cta-actions">
+          <a class="btn" href="mailto:lightmyfuse@two-fires.com?subject=Full%20Marketing%20Diagnosis&body=I%20used%20the%20Customer%20Insight%20tool%20and%20want%20to%20learn%20more%20about%20a%20full%20diagnosis.">Book Your Diagnosis Call</a>
+          <button class="btn btn-ghost" type="button" id="againBtn"></button>
+        </div>
+        <p class="runs-note" id="runsNote"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const MIN_CHARS = 200;
+    const MAX_CHARS = 50000;
+
+    const state = { leadId: null, runsRemaining: 0, name: '' };
+
+    // Restore session if the user already registered this browser session.
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('tf_insight') || 'null');
+      if (saved && saved.leadId) {
+        state.leadId = saved.leadId;
+        state.runsRemaining = saved.runsRemaining;
+        state.name = saved.name || '';
+      }
+    } catch (e) { /* ignore */ }
+
+    function persist() {
+      sessionStorage.setItem('tf_insight', JSON.stringify({
+        leadId: state.leadId, runsRemaining: state.runsRemaining, name: state.name,
+      }));
+    }
+
+    function showStage(id) {
+      document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const esc = (s) => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    function badge(conf) {
+      const c = String(conf || '').toLowerCase();
+      let cls = 'badge-insufficient', label = conf || 'Insufficient';
+      if (c.startsWith('high')) cls = 'badge-high';
+      else if (c.startsWith('med')) cls = 'badge-medium';
+      else if (c.startsWith('low')) cls = 'badge-low';
+      return `<span class="badge ${cls}">${esc(label)}</span>`;
+    }
+
+    // ---------- STATE 1: gate ----------
+    const gateForm = document.getElementById('gateForm');
+    const gateBtn = document.getElementById('gateBtn');
+    const gateError = document.getElementById('gateError');
+
+    gateForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      gateError.textContent = '';
+      const name = document.getElementById('g-name').value.trim();
+      const email = document.getElementById('g-email').value.trim();
+      const company = document.getElementById('g-company').value.trim();
+
+      if (!name || !email || !company) { gateError.textContent = 'Please fill in all three fields.'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { gateError.textContent = 'Please enter a valid email address.'; return; }
+
+      gateBtn.disabled = true;
+      const original = gateBtn.innerHTML;
+      gateBtn.innerHTML = '<span class="spinner"></span> Checking...';
+
+      try {
+        const res = await fetch('/api/insight-register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, company }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Registration failed.');
+
+        state.leadId = data.leadId;
+        state.runsRemaining = data.runsRemaining;
+        state.name = name;
+        persist();
+        enterEvidenceOrLimit();
+      } catch (err) {
+        gateError.textContent = err.message || 'Something went wrong. Please try again.';
+      } finally {
+        gateBtn.disabled = false;
+        gateBtn.innerHTML = original;
+      }
+    });
+
+    function enterEvidenceOrLimit() {
+      if (state.runsRemaining <= 0) {
+        // No runs left: skip straight to results view showing only the CTA.
+        renderEmptyResultsLimit();
+        showStage('stage-results');
+        return;
+      }
+      const wb = document.getElementById('welcomeBack');
+      if (state.name) {
+        wb.style.display = 'inline-block';
+        wb.textContent = `Welcome back, ${state.name}. ${state.runsRemaining} ${state.runsRemaining === 1 ? 'analysis' : 'analyses'} remaining.`;
+      } else {
+        wb.style.display = 'none';
+      }
+      showStage('stage-evidence');
+    }
+
+    // ---------- STATE 2: evidence ----------
+    const evidenceInput = document.getElementById('evidenceInput');
+    const counter = document.getElementById('counter');
+    const runBtn = document.getElementById('runBtn');
+    const processing = document.getElementById('processing');
+    const processingSub = document.getElementById('processingSub');
+    const streamPreview = document.getElementById('streamPreview');
+    const evidenceError = document.getElementById('evidenceError');
+
+    evidenceInput.addEventListener('input', updateCounter);
+    function updateCounter() {
+      const n = evidenceInput.value.length;
+      if (n < MIN_CHARS) {
+        counter.className = 'count-bad';
+        counter.textContent = `${n.toLocaleString()} characters. Minimum ${MIN_CHARS}.`;
+      } else if (n > MAX_CHARS) {
+        counter.className = 'count-bad';
+        counter.textContent = `${n.toLocaleString()} characters. Over the ${MAX_CHARS.toLocaleString()} limit.`;
+      } else {
+        counter.className = 'count-ok';
+        counter.textContent = `${n.toLocaleString()} characters.`;
+      }
+    }
+
+    runBtn.addEventListener('click', runAnalysis);
+
+    async function runAnalysis() {
+      evidenceError.classList.remove('active');
+      const evidence = evidenceInput.value;
+      if (evidence.length < MIN_CHARS) { showEvidenceError(`Please paste at least ${MIN_CHARS} characters.`); return; }
+      if (evidence.length > MAX_CHARS) { showEvidenceError(`That is over the ${MAX_CHARS.toLocaleString()} character limit. Please trim it down.`); return; }
+
+      runBtn.disabled = true;
+      runBtn.innerHTML = '<span class="spinner"></span> Analysing your customer evidence...';
+      processing.classList.add('active');
+      streamPreview.textContent = '';
+      processingSub.textContent = 'Reading the evidence and finding the patterns.';
+
+      let fullText = '';
+      try {
+        const res = await fetch('/api/insight', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ leadId: state.leadId, evidence }),
+        });
+
+        if (!res.ok) {
+          let msg = 'The analysis could not be completed. Please try again.';
+          try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
+          throw new Error(msg);
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let received = 0;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          fullText += chunk;
+          received += chunk.length;
+          streamPreview.textContent = fullText.slice(-1200);
+          processingSub.textContent = `Building your insight map. ${received.toLocaleString()} characters analysed.`;
+        }
+
+        if (fullText.includes('__INSIGHT_ERROR__')) {
+          throw new Error('The analysis was interrupted. Please try again.');
+        }
+
+        const parsed = parseResult(fullText);
+        if (!parsed) throw new Error('We could not read the analysis. Please try again.');
+
+        // Success: decrement remaining runs locally and render.
+        state.runsRemaining = Math.max(0, state.runsRemaining - 1);
+        persist();
+        renderResults(parsed);
+        showStage('stage-results');
+      } catch (err) {
+        showEvidenceError(err.message || 'Something went wrong. Please try again.');
+      } finally {
+        processing.classList.remove('active');
+        runBtn.disabled = false;
+        runBtn.innerHTML = 'Run Analysis';
+      }
+    }
+
+    function showEvidenceError(msg) {
+      evidenceError.textContent = msg;
+      evidenceError.classList.add('active');
+    }
+
+    function parseResult(text) {
+      const trimmed = String(text || '').trim();
+      try { return JSON.parse(trimmed); } catch (e) {}
+      // Fallback: extract the first balanced-looking JSON object.
+      const start = trimmed.indexOf('{');
+      const end = trimmed.lastIndexOf('}');
+      if (start !== -1 && end > start) {
+        try { return JSON.parse(trimmed.slice(start, end + 1)); } catch (e) {}
+      }
+      return null;
+    }
+
+    // ---------- STATE 3: results ----------
+    function arr(x) { return Array.isArray(x) ? x : []; }
+
+    function renderResults(d) {
+      d = d || {};
+      renderInsights(arr(d.key_insights));
+      renderPain(d.pain_point_map || {});
+      renderLanguage(d.language_bank || {});
+      renderQuality(d.evidence_quality || {});
+      renderRunsFooter();
+    }
+
+    function renderInsights(items) {
+      const el = document.getElementById('insightsList');
+      if (!items.length) { el.innerHTML = `<li><span class="empty-note">No summary insights could be drawn from this evidence.</span></li>`; return; }
+      el.innerHTML = items.map(i => `<li>${esc(i)}</li>`).join('');
+    }
+
+    function evidenceListHTML(ev) {
+      const items = arr(ev).filter(Boolean);
+      if (!items.length) return '';
+      return `<ul class="evidence-list">${items.map(e => `<li>${esc(e)}</li>`).join('')}</ul>`;
+    }
+    function sourceTypesHTML(st) {
+      const items = arr(st).filter(Boolean);
+      if (!items.length) return '';
+      return `<div class="source-types">${items.map(s => `<span class="source-chip">${esc(s)}</span>`).join('')}</div>`;
+    }
+
+    function painCard(title, ev, conf, sources) {
+      return `<div class="card">
+        <div class="card-top">
+          <div class="card-title">${esc(title)}</div>
+          ${badge(conf)}
+        </div>
+        ${evidenceListHTML(ev)}
+        ${sourceTypesHTML(sources)}
+      </div>`;
+    }
+
+    function painGroup(label, items, titleKey, sourceKey) {
+      const list = arr(items);
+      if (!list.length) return `<div class="sub-label">${esc(label)}</div><p class="empty-note">Nothing conclusive in the evidence for this.</p>`;
+      const cards = list.map(it => painCard(it[titleKey], it.evidence, it.confidence, sourceKey ? it[sourceKey] : null)).join('');
+      return `<div class="sub-label">${esc(label)}</div><div class="card-grid">${cards}</div>`;
+    }
+
+    function renderPain(p) {
+      const html = [
+        painGroup('Top Pains', p.top_pains, 'pain', 'source_types'),
+        painGroup('Desired Outcomes', p.desired_outcomes, 'outcome'),
+        painGroup('Objections', p.objections, 'objection'),
+        painGroup('Buying Triggers', p.buying_triggers, 'trigger'),
+        painGroup('Emotional Themes', p.emotional_themes, 'theme'),
+      ].join('');
+      document.getElementById('painContent').innerHTML = html;
+    }
+
+    function phraseGroup(label, items, charged) {
+      const list = arr(items).filter(Boolean);
+      if (!list.length) return `<div class="phrase-group"><div class="sub-label">${esc(label)}</div><p class="empty-note">No clear phrases captured.</p></div>`;
+      const chips = list.map(p => `<span class="phrase${charged ? ' charged' : ''}">${esc(p)}</span>`).join('');
+      return `<div class="phrase-group"><div class="sub-label">${esc(label)}</div><div class="phrase-list">${chips}</div></div>`;
+    }
+
+    function renderLanguage(l) {
+      const html = [
+        phraseGroup('Problem Language', l.problem_language),
+        phraseGroup('Desired Result Language', l.desired_result_language),
+        phraseGroup('Objection Language', l.objection_language),
+        phraseGroup('Emotionally Charged', l.emotionally_charged, true),
+        phraseGroup('Phrases Worth Reusing', l.reusable_phrases, true),
+      ].join('');
+      document.getElementById('languageContent').innerHTML = html;
+    }
+
+    function renderQuality(q) {
+      const sources = arr(q.source_types_found).filter(Boolean);
+      const gaps = arr(q.gaps).filter(Boolean);
+      const total = (q.total_sources_detected != null && q.total_sources_detected !== '') ? q.total_sources_detected : '—';
+      let html = `<div class="quality-grid">
+        <div class="quality-stat"><div class="k">Sources Detected</div><div class="v">${esc(total)}</div></div>
+        <div class="quality-stat"><div class="k">Overall Confidence</div><div class="v">${badge(q.overall_confidence)}</div></div>
+        <div class="quality-stat"><div class="k">Source Types</div><div class="v" style="font-size:0.95rem; line-height:1.4;">${sources.length ? esc(sources.join(', ')) : '—'}</div></div>
+      </div>`;
+      if (gaps.length) {
+        html += `<div class="gaps-box"><div class="sub-label">What Would Strengthen This</div><ul class="gaps-list">${gaps.map(g => `<li>${esc(g)}</li>`).join('')}</ul></div>`;
+      }
+      document.getElementById('qualityContent').innerHTML = html;
+    }
+
+    function renderRunsFooter() {
+      const againBtn = document.getElementById('againBtn');
+      const runsNote = document.getElementById('runsNote');
+      if (state.runsRemaining > 0) {
+        againBtn.style.display = 'inline-flex';
+        againBtn.textContent = 'Run another analysis';
+        runsNote.textContent = `${state.runsRemaining} free ${state.runsRemaining === 1 ? 'analysis' : 'analyses'} remaining.`;
+      } else {
+        againBtn.style.display = 'none';
+        runsNote.textContent = "You've used all 3 free analyses. Talk to us about the full system.";
+      }
+    }
+
+    // Results view used when a returning visitor has 0 runs left (no analysis to show).
+    function renderEmptyResultsLimit() {
+      ['insightsSection','painSection','languageSection','qualitySection'].forEach(id => {
+        document.getElementById(id).style.display = 'none';
+      });
+      document.querySelector('.results-head').innerHTML = `
+        <span class="eyebrow">Customer Insight Tool</span>
+        <h1 class="display-h1">You've used all <em>3 free analyses.</em></h1>
+        <p class="lede">That's the free layer. The full Marketing Diagnosis goes deeper, built on the evidence you've gathered. Talk to us about the full system.</p>`;
+      document.getElementById('againBtn').style.display = 'none';
+      document.getElementById('runsNote').textContent = "You've used all 3 free analyses. Talk to us about the full system.";
+    }
+
+    document.getElementById('againBtn').addEventListener('click', () => {
+      if (state.runsRemaining <= 0) return;
+      evidenceInput.value = '';
+      updateCounter();
+      // Re-show the section displays in case they were hidden.
+      ['insightsSection','painSection','languageSection','qualitySection'].forEach(id => {
+        document.getElementById(id).style.display = '';
+      });
+      enterEvidenceOrLimit();
+    });
+
+    // ---------- boot ----------
+    updateCounter();
+    if (state.leadId) {
+      // Returning within the same browser session: skip the gate.
+      enterEvidenceOrLimit();
+    }
+  </script>
+</body>
+</html>

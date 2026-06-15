@@ -1,0 +1,11 @@
+{
+  "name": "two-fires",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Two Fires marketing site and serverless functions.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.1",
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}
