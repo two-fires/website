@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/jpeg" href="/images/flame-favicon.jpg">
-  <meta name="description" content="Paste your customer reviews, testimonials, or sales notes. The Two Fires Customer Insight tool finds the patterns you are missing. Free.">
-  <meta property="og:title" content="Two Fires · Customer Insight Tool">
-  <meta property="og:description" content="What are your customers really saying? Paste your evidence. Our AI finds the patterns.">
+  <meta name="description" content="Give us a simple business brief. The Two Fires Customer Insight Agent goes and finds real customer evidence from public sources, then maps the pains, questions and language. Free.">
+  <meta property="og:title" content="Two Fires · Customer Insight Agent">
+  <meta property="og:description" content="Tell us about your business. Our research agent finds what your market is really saying.">
   <meta property="og:type" content="website">
-  <title>Two Fires · What are your customers really saying?</title>
+  <title>Two Fires · What is your market really saying?</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,8 +106,9 @@
     main { padding-top: 80px; padding-bottom: 96px; position: relative; z-index: 2; }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes pulseDot { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
 
     .stage { display: none; animation: fadeUp 0.6s ease forwards; }
     .stage.active { display: block; }
@@ -131,30 +132,45 @@
       text-shadow: 0 0 40px var(--purple-glow);
     }
     .lede {
-      color: var(--text-muted); max-width: 54ch;
+      color: var(--text-muted); max-width: 56ch;
       font-size: clamp(1.02rem, 1.4vw, 1.15rem); line-height: 1.6;
       margin-bottom: 36px;
     }
 
-    /* ============ STATE 1 — GATE ============ */
-    .gate-wrap { max-width: 560px; }
-    .gate-form { display: flex; flex-direction: column; gap: 16px; }
+    /* ============ FORMS (gate + intake) ============ */
+    .form-wrap { max-width: 600px; }
+    .stack { display: flex; flex-direction: column; gap: 16px; }
     .field label {
       display: block; font-family: var(--font-mono); font-size: 10px;
       letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted);
       margin-bottom: 8px;
     }
-    .field input, .evidence-input {
+    .field .hint { text-transform: none; letter-spacing: 0.02em; color: var(--text-faint); font-size: 11px; }
+    .field input, .field textarea {
       width: 100%; font-family: var(--font-body); font-size: 15px;
       color: var(--text); background: var(--surface);
       border: 1px solid var(--border-strong); border-radius: 12px;
       padding: 15px 16px; transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      line-height: 1.5;
     }
-    .field input::placeholder, .evidence-input::placeholder { color: var(--text-faint); }
-    .field input:focus, .evidence-input:focus {
+    .field textarea { resize: vertical; min-height: 84px; }
+    .field input::placeholder, .field textarea::placeholder { color: var(--text-faint); }
+    .field input:focus, .field textarea:focus {
       outline: none; border-color: var(--purple);
       box-shadow: 0 0 0 3px var(--purple-soft-fill), 0 0 24px var(--purple-glow-soft);
     }
+
+    .optional-toggle {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+      color: var(--purple-bright); background: none; border: none; cursor: pointer;
+      padding: 4px 0; display: inline-flex; align-items: center; gap: 8px; margin-top: 2px;
+      transition: color 0.2s ease;
+    }
+    .optional-toggle:hover { color: var(--purple); }
+    .optional-toggle .chev { transition: transform 0.25s ease; display: inline-block; }
+    .optional-toggle.open .chev { transform: rotate(90deg); }
+    .optional-fields { display: none; flex-direction: column; gap: 16px; margin-top: 4px; }
+    .optional-fields.open { display: flex; animation: fadeIn 0.35s ease; }
 
     .btn {
       font-family: var(--font-body); font-size: 15px; font-weight: 600;
@@ -164,6 +180,7 @@
       box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset, 0 6px 28px var(--purple-glow);
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      text-decoration: none;
     }
     .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 10px 40px var(--purple-glow); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -190,43 +207,39 @@
       animation: spin 0.7s linear infinite; display: inline-block;
     }
 
-    /* ============ STATE 2 — EVIDENCE ============ */
     .welcome-back {
       font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em;
       color: var(--purple-bright); margin-bottom: 18px;
       padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
       background: var(--purple-soft-fill); display: inline-block;
     }
-    .evidence-input { min-height: 320px; resize: vertical; line-height: 1.6; font-size: 14.5px; }
-    .counter-row {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 10px; margin-bottom: 24px;
-      font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
-      letter-spacing: 0.04em;
-    }
-    .counter-row .count-ok { color: var(--text-muted); }
-    .counter-row .count-bad { color: var(--amber); }
 
-    /* Processing */
-    .processing {
-      display: none; margin-top: 28px;
-      padding: 28px; border: 1px solid var(--border); border-radius: 16px;
-      background: var(--surface);
+    /* ============ STATE — PROCESSING (live research feed) ============ */
+    .feed-wrap { max-width: 640px; }
+    .feed-head { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .feed-dot {
+      width: 12px; height: 12px; border-radius: 50%; background: var(--purple);
+      box-shadow: 0 0 16px var(--purple-glow); animation: pulseDot 1.2s ease-in-out infinite; flex-shrink: 0;
     }
-    .processing.active { display: block; }
-    .processing-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-    .processing-head .spinner { width: 20px; height: 20px; border-width: 2px; }
-    .processing-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 500; }
-    .processing-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.04em; }
-    .stream-preview {
-      margin-top: 16px; max-height: 160px; overflow: hidden;
-      font-family: var(--font-mono); font-size: 11px; line-height: 1.5;
-      color: var(--text-faint); white-space: pre-wrap; word-break: break-word;
-      mask-image: linear-gradient(180deg, transparent, #000 18%, #000 70%, transparent);
-      -webkit-mask-image: linear-gradient(180deg, transparent, #000 18%, #000 70%, transparent);
+    .feed-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.04em; margin-bottom: 28px; }
+    .status-feed {
+      display: flex; flex-direction: column; gap: 12px;
+      border-left: 1px solid var(--border); padding-left: 22px;
     }
+    .status-item {
+      position: relative; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;
+      animation: fadeIn 0.4s ease;
+    }
+    .status-item::before {
+      content: ""; position: absolute; left: -27px; top: 8px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--purple-deep);
+      border: 1px solid var(--purple);
+    }
+    .status-item.current { color: var(--text); }
+    .status-item.current::before { background: var(--purple); box-shadow: 0 0 12px var(--purple-glow); animation: pulseDot 1.2s ease-in-out infinite; }
+    .status-item .q { color: var(--purple-bright); font-style: italic; }
 
-    /* ============ STATE 3 — RESULTS ============ */
+    /* ============ RESULTS ============ */
     .results-head { margin-bottom: 44px; }
     .result-section { margin-bottom: 56px; }
     .result-section > h2 {
@@ -235,7 +248,7 @@
       margin-bottom: 8px;
     }
     .result-section > h2 em { font-style: italic; color: var(--purple-bright); }
-    .section-intro { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 26px; max-width: 60ch; }
+    .section-intro { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 26px; max-width: 62ch; }
 
     .sub-label {
       font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
@@ -266,6 +279,7 @@
     .badge-medium { color: var(--amber); background: rgba(251,191,36,0.1); }
     .badge-low { color: var(--red); background: rgba(248,113,113,0.1); }
     .badge-insufficient { color: var(--grey); background: rgba(139,139,149,0.08); }
+    .badge-freq { color: var(--purple-bright); background: rgba(168,85,247,0.1); border-color: var(--purple-deep); }
 
     .evidence-list { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
     .evidence-list li {
@@ -277,6 +291,10 @@
       font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--text-faint); border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px;
     }
+
+    /* Question map */
+    .q-card .card-title { font-size: 0.98rem; }
+    .q-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; align-items: center; }
 
     /* Language bank */
     .phrase-group { margin-bottom: 24px; }
@@ -318,6 +336,8 @@
     .gaps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
     .gaps-list li { font-size: 0.9rem; color: var(--text-muted); padding-left: 16px; position: relative; }
     .gaps-list li::before { content: "—"; position: absolute; left: 0; color: var(--purple-deep); }
+    .flag-list li::before { content: "⚑"; color: var(--amber); }
+    .flag-box { margin-top: 24px; padding: 16px 18px; border: 1px solid rgba(251,191,36,0.35); border-radius: 12px; background: rgba(251,191,36,0.05); }
 
     .empty-note { font-size: 0.9rem; color: var(--text-faint); font-style: italic; }
 
@@ -334,7 +354,7 @@
       font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -0.02em; margin-bottom: 12px;
     }
     .cta-block h3 em { font-style: italic; color: var(--purple-bright); }
-    .cta-block p { color: var(--text-muted); max-width: 48ch; margin: 0 auto 26px; }
+    .cta-block p { color: var(--text-muted); max-width: 52ch; margin: 0 auto 26px; }
     .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
     .runs-note { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); margin-top: 22px; letter-spacing: 0.04em; }
 
@@ -373,14 +393,14 @@
 
   <main class="container">
 
-    <!-- ============ STATE 1 — GATE ============ -->
+    <!-- ============ STATE 1 — GATE (register) ============ -->
     <section class="stage active" id="stage-gate">
-      <div class="gate-wrap">
-        <span class="eyebrow">Customer Insight Tool</span>
-        <h1 class="display-h1">What are your customers <em>really saying?</em></h1>
-        <p class="lede">Paste your reviews, testimonials, or sales notes. Our AI will find the patterns you're missing.</p>
+      <div class="form-wrap">
+        <span class="eyebrow">Customer Insight Agent</span>
+        <h1 class="display-h1">What is your market <em>really saying?</em></h1>
+        <p class="lede">Give us a simple brief. Our research agent goes and finds real customer evidence from public sources, then maps the pains, questions, and language for you.</p>
 
-        <form class="gate-form" id="gateForm" novalidate>
+        <form class="stack" id="gateForm" novalidate>
           <div class="field">
             <label for="g-name">Name</label>
             <input id="g-name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
@@ -393,37 +413,76 @@
             <label for="g-company">Company</label>
             <input id="g-company" name="company" type="text" autocomplete="organization" placeholder="Your company" required>
           </div>
-          <button class="btn btn-block" type="submit" id="gateBtn">Analyse My Evidence</button>
+          <button class="btn btn-block" type="submit" id="gateBtn">Start</button>
           <p class="form-error" id="gateError"></p>
         </form>
-        <p class="fineprint">Free. 3 analyses per email. No credit card.</p>
+        <p class="fineprint">Free. One market analysis per email. No credit card.</p>
       </div>
     </section>
 
-    <!-- ============ STATE 2 — EVIDENCE ============ -->
-    <section class="stage" id="stage-evidence">
-      <span class="eyebrow">Your Evidence</span>
-      <div id="welcomeBack" class="welcome-back" style="display:none;"></div>
-      <h1 class="display-h1">Paste your <em>customer evidence</em></h1>
-      <p class="lede">The more evidence you give us, the sharper the analysis. Reviews, testimonials, sales notes, survey responses, support messages, social comments. All of it.</p>
+    <!-- ============ STATE 2 — BRIEF (intake form) ============ -->
+    <section class="stage" id="stage-brief">
+      <div class="form-wrap">
+        <span class="eyebrow">Your Brief</span>
+        <div id="welcomeBack" class="welcome-back" style="display:none;"></div>
+        <h1 class="display-h1">Tell us about <em>your business</em></h1>
+        <p class="lede">Keep it simple. We only need the basics. The agent will go and find the customer evidence itself.</p>
 
-      <textarea class="evidence-input" id="evidenceInput"
-        placeholder="Paste your customer evidence here — reviews, testimonials, sales notes, survey responses, support messages, social comments. The more evidence, the better the analysis."></textarea>
-      <div class="counter-row">
-        <span id="counter" class="count-bad">0 characters. Minimum 200.</span>
-        <span>Max 50,000</span>
+        <form class="stack" id="briefForm" novalidate>
+          <div class="field">
+            <label for="b-product">Product or Service</label>
+            <input id="b-product" type="text" placeholder="What do you sell or deliver?" required>
+          </div>
+          <div class="field">
+            <label for="b-market">Market / Category</label>
+            <input id="b-market" type="text" placeholder="What market or category are you in?" required>
+          </div>
+          <div class="field">
+            <label for="b-region">Region</label>
+            <input id="b-region" type="text" placeholder="Where do you operate? (e.g. Sydney, Australia-wide, US East Coast)" required>
+          </div>
+          <div class="field">
+            <label for="b-customer">Target Customer</label>
+            <textarea id="b-customer" rows="3" placeholder="Describe who you think your ideal customer is." required></textarea>
+          </div>
+
+          <button type="button" class="optional-toggle" id="optToggle"><span class="chev">›</span> Add more context (optional)</button>
+          <div class="optional-fields" id="optFields">
+            <div class="field">
+              <label for="b-website">Website URL <span class="hint">(optional)</span></label>
+              <input id="b-website" type="text" placeholder="https://yourcompany.com">
+            </div>
+            <div class="field">
+              <label for="b-competitors">Competitors <span class="hint">(optional)</span></label>
+              <input id="b-competitors" type="text" placeholder="Name any competitors you know of">
+            </div>
+            <div class="field">
+              <label for="b-testimonials">Existing Testimonials <span class="hint">(optional)</span></label>
+              <textarea id="b-testimonials" rows="3" placeholder="Paste any customer feedback you already have"></textarea>
+            </div>
+            <div class="field">
+              <label for="b-offer">Offer Description <span class="hint">(optional)</span></label>
+              <textarea id="b-offer" rows="2" placeholder="Briefly describe your main offer"></textarea>
+            </div>
+          </div>
+
+          <button class="btn btn-block" type="submit" id="briefBtn">Research My Market</button>
+          <p class="form-error" id="briefError"></p>
+        </form>
+        <p class="fineprint">Free. One market analysis per email. No credit card.</p>
       </div>
+    </section>
 
-      <button class="btn" type="button" id="runBtn">Run Analysis</button>
-      <div class="banner-error" id="evidenceError"></div>
-
-      <div class="processing" id="processing">
-        <div class="processing-head">
-          <span class="spinner"></span>
-          <span class="processing-title">Analysing your customer evidence...</span>
+    <!-- ============ STATE 2b — PROCESSING (live research feed) ============ -->
+    <section class="stage" id="stage-processing">
+      <div class="feed-wrap">
+        <span class="eyebrow">Research In Progress</span>
+        <div class="feed-head">
+          <span class="feed-dot"></span>
+          <h1 class="display-h1" style="margin-bottom:0; font-size:clamp(1.8rem,4.5vw,2.8rem);">Researching your <em>market</em>...</h1>
         </div>
-        <p class="processing-sub" id="processingSub">Reading the evidence and finding the patterns.</p>
-        <div class="stream-preview" id="streamPreview"></div>
+        <p class="feed-sub">This usually takes 30 to 60 seconds. We are searching real sources.</p>
+        <div class="status-feed" id="statusFeed"></div>
       </div>
     </section>
 
@@ -431,8 +490,8 @@
     <section class="stage" id="stage-results">
       <div class="results-head">
         <span class="eyebrow">Your Customer Insight Map</span>
-        <h1 class="display-h1">Here's what your customers <em>are telling you</em></h1>
-        <p class="lede">Built only from the evidence you provided. Every finding carries a confidence level so you know how hard to lean on it.</p>
+        <h1 class="display-h1">Here's what your market <em>is telling you</em></h1>
+        <p class="lede">Built from public customer evidence our agent found. Every finding carries a confidence level so you know how hard to lean on it.</p>
       </div>
 
       <div class="result-section insights-wrap" id="insightsSection">
@@ -443,38 +502,53 @@
 
       <div class="result-section" id="painSection">
         <h2>Customer Pain-Point <em>Map</em></h2>
-        <p class="section-intro">What customers struggle with, what they want, what holds them back, and what moves them to act.</p>
+        <p class="section-intro">What the market struggles with, what they want, what holds them back, and what moves them to act.</p>
         <div id="painContent"></div>
+      </div>
+
+      <div class="result-section" id="questionSection">
+        <h2>Customer Question <em>Map</em></h2>
+        <p class="section-intro">The questions customers ask at each stage, from first research to final decision. Answer these and you remove friction from the buy.</p>
+        <div id="questionContent"></div>
       </div>
 
       <div class="result-section" id="languageSection">
         <h2>Customer Language <em>Bank</em></h2>
-        <p class="section-intro">The exact words your customers use. This is the raw material for messaging that sounds like them, not you.</p>
+        <p class="section-intro">The exact words your market uses. This is the raw material for messaging that sounds like them, not you.</p>
         <div id="languageContent"></div>
       </div>
 
       <div class="result-section" id="qualitySection">
         <h2>Evidence <em>Quality</em></h2>
-        <p class="section-intro">How solid is this read, and what would make it sharper.</p>
+        <p class="section-intro">How much we found, how solid the read is, and what would make it sharper.</p>
         <div id="qualityContent"></div>
       </div>
 
       <div class="cta-block">
         <h3>This is just the <em>first layer.</em></h3>
-        <p>The full Marketing Diagnosis goes deeper. Positioning, messaging, and a plan built on this evidence.</p>
+        <p>The full Marketing Diagnosis goes deeper into your messaging, competitors, and growth bottlenecks.</p>
         <div class="cta-actions">
           <a class="btn" href="mailto:lightmyfuse@two-fires.com?subject=Full%20Marketing%20Diagnosis&body=I%20used%20the%20Customer%20Insight%20tool%20and%20want%20to%20learn%20more%20about%20a%20full%20diagnosis.">Book Your Diagnosis Call</a>
-          <button class="btn btn-ghost" type="button" id="againBtn"></button>
         </div>
         <p class="runs-note" id="runsNote"></p>
+      </div>
+    </section>
+
+    <!-- ============ STATE 1b — DAILY CAP REACHED ============ -->
+    <section class="stage" id="stage-cap">
+      <div class="form-wrap">
+        <span class="eyebrow">Customer Insight Agent</span>
+        <h1 class="display-h1">We've reached today's <em>research limit.</em></h1>
+        <p class="lede">Our free research tool runs on a daily budget. Come back tomorrow, or book a call to get your full Marketing Diagnosis now.</p>
+        <a class="btn" href="mailto:lightmyfuse@two-fires.com?subject=Full%20Marketing%20Diagnosis">Book Your Diagnosis Call</a>
       </div>
     </section>
 
   </main>
 
   <script>
-    const MIN_CHARS = 200;
-    const MAX_CHARS = 50000;
+    const API_BASE = 'https://insight.two-fires.com';
+    const MIN_FIELD_CHARS = 10;
 
     const state = { leadId: null, runsRemaining: 0, name: '' };
 
@@ -513,7 +587,9 @@
       return `<span class="badge ${cls}">${esc(label)}</span>`;
     }
 
-    // ---------- STATE 1: gate ----------
+    function arr(x) { return Array.isArray(x) ? x : []; }
+
+    // ---------- STATE 1: gate (register) ----------
     const gateForm = document.getElementById('gateForm');
     const gateBtn = document.getElementById('gateBtn');
     const gateError = document.getElementById('gateError');
@@ -533,7 +609,7 @@
       gateBtn.innerHTML = '<span class="spinner"></span> Checking...';
 
       try {
-        const res = await fetch('/api/insight-register', {
+        const res = await fetch(API_BASE + '/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, company }),
@@ -545,7 +621,7 @@
         state.runsRemaining = data.runsRemaining;
         state.name = name;
         persist();
-        enterEvidenceOrLimit();
+        enterBriefOrLimit();
       } catch (err) {
         gateError.textContent = err.message || 'Something went wrong. Please try again.';
       } finally {
@@ -554,133 +630,199 @@
       }
     });
 
-    function enterEvidenceOrLimit() {
+    function enterBriefOrLimit() {
       if (state.runsRemaining <= 0) {
-        // No runs left: skip straight to results view showing only the CTA.
-        renderEmptyResultsLimit();
+        renderUsedUp();
         showStage('stage-results');
         return;
       }
       const wb = document.getElementById('welcomeBack');
       if (state.name) {
         wb.style.display = 'inline-block';
-        wb.textContent = `Welcome back, ${state.name}. ${state.runsRemaining} ${state.runsRemaining === 1 ? 'analysis' : 'analyses'} remaining.`;
+        wb.textContent = `Welcome back, ${state.name}. You have your free market analysis ready to run.`;
       } else {
         wb.style.display = 'none';
       }
-      showStage('stage-evidence');
+      showStage('stage-brief');
     }
 
-    // ---------- STATE 2: evidence ----------
-    const evidenceInput = document.getElementById('evidenceInput');
-    const counter = document.getElementById('counter');
-    const runBtn = document.getElementById('runBtn');
-    const processing = document.getElementById('processing');
-    const processingSub = document.getElementById('processingSub');
-    const streamPreview = document.getElementById('streamPreview');
-    const evidenceError = document.getElementById('evidenceError');
+    // ---------- STATE 2: brief intake ----------
+    const optToggle = document.getElementById('optToggle');
+    const optFields = document.getElementById('optFields');
+    optToggle.addEventListener('click', () => {
+      const open = optFields.classList.toggle('open');
+      optToggle.classList.toggle('open', open);
+    });
 
-    evidenceInput.addEventListener('input', updateCounter);
-    function updateCounter() {
-      const n = evidenceInput.value.length;
-      if (n < MIN_CHARS) {
-        counter.className = 'count-bad';
-        counter.textContent = `${n.toLocaleString()} characters. Minimum ${MIN_CHARS}.`;
-      } else if (n > MAX_CHARS) {
-        counter.className = 'count-bad';
-        counter.textContent = `${n.toLocaleString()} characters. Over the ${MAX_CHARS.toLocaleString()} limit.`;
-      } else {
-        counter.className = 'count-ok';
-        counter.textContent = `${n.toLocaleString()} characters.`;
+    const briefForm = document.getElementById('briefForm');
+    const briefBtn = document.getElementById('briefBtn');
+    const briefError = document.getElementById('briefError');
+
+    function readBrief() {
+      const val = id => document.getElementById(id).value.trim();
+      return {
+        product_service: val('b-product'),
+        market_category: val('b-market'),
+        region: val('b-region'),
+        customer_description: val('b-customer'),
+        website_url: val('b-website'),
+        competitors: val('b-competitors'),
+        existing_testimonials: val('b-testimonials'),
+        offer_description: val('b-offer'),
+      };
+    }
+
+    briefForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      briefError.textContent = '';
+      const brief = readBrief();
+
+      const required = [
+        ['product_service', 'Product or Service'],
+        ['market_category', 'Market / Category'],
+        ['region', 'Region'],
+        ['customer_description', 'Target Customer'],
+      ];
+      for (const [key, label] of required) {
+        if (brief[key].length < MIN_FIELD_CHARS) {
+          briefError.textContent = `Please give a little more detail in "${label}" (at least ${MIN_FIELD_CHARS} characters).`;
+          return;
+        }
       }
+      runAnalysis(brief);
+    });
+
+    // ---------- STATE 2b: processing + SSE ----------
+    const statusFeed = document.getElementById('statusFeed');
+
+    function pushStatus(message, isQuery) {
+      // Demote the previous "current" item.
+      const prev = statusFeed.querySelector('.status-item.current');
+      if (prev) prev.classList.remove('current');
+      const item = document.createElement('div');
+      item.className = 'status-item current';
+      item.innerHTML = isQuery ? `<span class="q">${esc(message)}</span>` : esc(message);
+      statusFeed.appendChild(item);
     }
 
-    runBtn.addEventListener('click', runAnalysis);
+    async function runAnalysis(brief) {
+      briefBtn.disabled = true;
+      statusFeed.innerHTML = '';
+      showStage('stage-processing');
+      pushStatus('Connecting to the research engine...');
 
-    async function runAnalysis() {
-      evidenceError.classList.remove('active');
-      const evidence = evidenceInput.value;
-      if (evidence.length < MIN_CHARS) { showEvidenceError(`Please paste at least ${MIN_CHARS} characters.`); return; }
-      if (evidence.length > MAX_CHARS) { showEvidenceError(`That is over the ${MAX_CHARS.toLocaleString()} character limit. Please trim it down.`); return; }
+      let result = null;
+      let streamError = null;
 
-      runBtn.disabled = true;
-      runBtn.innerHTML = '<span class="spinner"></span> Analysing your customer evidence...';
-      processing.classList.add('active');
-      streamPreview.textContent = '';
-      processingSub.textContent = 'Reading the evidence and finding the patterns.';
-
-      let fullText = '';
       try {
-        const res = await fetch('/api/insight', {
+        const res = await fetch(API_BASE + '/analyse', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ leadId: state.leadId, evidence }),
+          body: JSON.stringify({ leadId: state.leadId, brief }),
         });
 
-        if (!res.ok) {
+        // Daily spend cap — graceful exit.
+        if (res.status === 503) {
+          let j = {};
+          try { j = await res.json(); } catch (e) {}
+          showCapState(j);
+          return;
+        }
+        // Free analysis already used.
+        if (res.status === 403) {
+          state.runsRemaining = 0;
+          persist();
+          renderUsedUp();
+          showStage('stage-results');
+          return;
+        }
+        if (!res.ok || !res.body) {
           let msg = 'The analysis could not be completed. Please try again.';
           try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
           throw new Error(msg);
         }
 
+        // Consume the SSE stream.
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
-        let received = 0;
+        let buffer = '';
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          fullText += chunk;
-          received += chunk.length;
-          streamPreview.textContent = fullText.slice(-1200);
-          processingSub.textContent = `Building your insight map. ${received.toLocaleString()} characters analysed.`;
+          buffer += decoder.decode(value, { stream: true });
+
+          let sep;
+          while ((sep = buffer.indexOf('\n\n')) !== -1) {
+            const rawEvent = buffer.slice(0, sep);
+            buffer = buffer.slice(sep + 2);
+            const evt = parseSSE(rawEvent);
+            if (!evt) continue;
+
+            if (evt.event === 'status') {
+              const m = evt.data && evt.data.message;
+              if (m) pushStatus(m, /^searching for/i.test(m));
+            } else if (evt.event === 'done') {
+              result = evt.data && evt.data.result;
+            } else if (evt.event === 'error') {
+              streamError = (evt.data && evt.data.message) || 'The analysis could not be completed.';
+            }
+            // 'delta' events are received to keep the stream flowing; not displayed.
+          }
         }
 
-        if (fullText.includes('__INSIGHT_ERROR__')) {
-          throw new Error('The analysis was interrupted. Please try again.');
-        }
+        if (streamError) throw new Error(streamError);
+        if (!result) throw new Error('We could not read the analysis. Please try again.');
 
-        const parsed = parseResult(fullText);
-        if (!parsed) throw new Error('We could not read the analysis. Please try again.');
-
-        // Success: decrement remaining runs locally and render.
-        state.runsRemaining = Math.max(0, state.runsRemaining - 1);
+        // Success: this consumed the free run.
+        state.runsRemaining = 0;
         persist();
-        renderResults(parsed);
+        renderResults(result);
         showStage('stage-results');
       } catch (err) {
-        showEvidenceError(err.message || 'Something went wrong. Please try again.');
+        showProcessingError(err.message || 'Something went wrong. Please try again.');
       } finally {
-        processing.classList.remove('active');
-        runBtn.disabled = false;
-        runBtn.innerHTML = 'Run Analysis';
+        briefBtn.disabled = false;
       }
     }
 
-    function showEvidenceError(msg) {
-      evidenceError.textContent = msg;
-      evidenceError.classList.add('active');
+    // Parse a single SSE event block ("event: x\ndata: {...}").
+    function parseSSE(raw) {
+      const lines = String(raw || '').split('\n');
+      let event = 'message';
+      let dataStr = '';
+      for (const line of lines) {
+        if (line.startsWith(':')) continue; // comment / heartbeat
+        if (line.startsWith('event:')) event = line.slice(6).trim();
+        else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+      }
+      if (!dataStr) return { event, data: null };
+      let data = null;
+      try { data = JSON.parse(dataStr); } catch (e) { data = null; }
+      return { event, data };
     }
 
-    function parseResult(text) {
-      const trimmed = String(text || '').trim();
-      try { return JSON.parse(trimmed); } catch (e) {}
-      // Fallback: extract the first balanced-looking JSON object.
-      const start = trimmed.indexOf('{');
-      const end = trimmed.lastIndexOf('}');
-      if (start !== -1 && end > start) {
-        try { return JSON.parse(trimmed.slice(start, end + 1)); } catch (e) {}
-      }
-      return null;
+    function showProcessingError(msg) {
+      const item = document.createElement('div');
+      item.className = 'status-item';
+      item.style.color = 'var(--red)';
+      item.innerHTML = `${esc(msg)} <a href="#" id="retryLink" style="color:var(--purple-bright);">Try again</a>`;
+      statusFeed.appendChild(item);
+      const retry = document.getElementById('retryLink');
+      if (retry) retry.addEventListener('click', (e) => { e.preventDefault(); showStage('stage-brief'); });
+    }
+
+    function showCapState(j) {
+      // j may carry a custom message; the static copy already covers it.
+      showStage('stage-cap');
     }
 
     // ---------- STATE 3: results ----------
-    function arr(x) { return Array.isArray(x) ? x : []; }
-
     function renderResults(d) {
       d = d || {};
       renderInsights(arr(d.key_insights));
       renderPain(d.pain_point_map || {});
+      renderQuestions(d.question_map || {});
       renderLanguage(d.language_bank || {});
       renderQuality(d.evidence_quality || {});
       renderRunsFooter();
@@ -688,7 +830,7 @@
 
     function renderInsights(items) {
       const el = document.getElementById('insightsList');
-      if (!items.length) { el.innerHTML = `<li><span class="empty-note">No summary insights could be drawn from this evidence.</span></li>`; return; }
+      if (!items.length) { el.innerHTML = `<li><span class="empty-note">No summary insights could be drawn from the evidence found.</span></li>`; return; }
       el.innerHTML = items.map(i => `<li>${esc(i)}</li>`).join('');
     }
 
@@ -732,6 +874,39 @@
       document.getElementById('painContent').innerHTML = html;
     }
 
+    // Question map
+    function questionCard(it) {
+      const q = it.question || it.concern || '';
+      const freq = it.frequency
+        ? `<span class="badge badge-freq">${esc(it.frequency)}</span>`
+        : (it.confidence ? badge(it.confidence) : '');
+      return `<div class="card q-card">
+        <div class="card-top">
+          <div class="card-title">${esc(q)}</div>
+          ${freq}
+        </div>
+        ${sourceTypesHTML(it.evidence)}
+      </div>`;
+    }
+
+    function questionGroup(label, items) {
+      const list = arr(items);
+      if (!list.length) return `<div class="sub-label">${esc(label)}</div><p class="empty-note">No clear questions surfaced for this stage.</p>`;
+      const cards = list.map(questionCard).join('');
+      return `<div class="sub-label">${esc(label)}</div><div class="card-grid">${cards}</div>`;
+    }
+
+    function renderQuestions(q) {
+      const html = [
+        questionGroup('Early Research', q.early_research),
+        questionGroup('Evaluation', q.evaluation),
+        questionGroup('Purchase Decision', q.purchase_decision),
+        questionGroup('Comparison Questions', q.comparison_questions),
+        questionGroup('Recurring Concerns', q.recurring_concerns),
+      ].join('');
+      document.getElementById('questionContent').innerHTML = html;
+    }
+
     function phraseGroup(label, items, charged) {
       const list = arr(items).filter(Boolean);
       if (!list.length) return `<div class="phrase-group"><div class="sub-label">${esc(label)}</div><p class="empty-note">No clear phrases captured.</p></div>`;
@@ -745,6 +920,7 @@
         phraseGroup('Desired Result Language', l.desired_result_language),
         phraseGroup('Objection Language', l.objection_language),
         phraseGroup('Emotionally Charged', l.emotionally_charged, true),
+        phraseGroup('Useful Question Wording', l.question_wording),
         phraseGroup('Phrases Worth Reusing', l.reusable_phrases, true),
       ].join('');
       document.getElementById('languageContent').innerHTML = html;
@@ -753,60 +929,48 @@
     function renderQuality(q) {
       const sources = arr(q.source_types_found).filter(Boolean);
       const gaps = arr(q.gaps).filter(Boolean);
-      const total = (q.total_sources_detected != null && q.total_sources_detected !== '') ? q.total_sources_detected : '—';
+      const flags = arr(q.escalation_flags).filter(Boolean);
+      const searched = (q.sources_searched != null && q.sources_searched !== '') ? q.sources_searched : '—';
+      const useful = (q.useful_sources_found != null && q.useful_sources_found !== '') ? q.useful_sources_found : '—';
+
       let html = `<div class="quality-grid">
-        <div class="quality-stat"><div class="k">Sources Detected</div><div class="v">${esc(total)}</div></div>
+        <div class="quality-stat"><div class="k">Sources Searched</div><div class="v">${esc(searched)}</div></div>
+        <div class="quality-stat"><div class="k">Useful Sources Found</div><div class="v">${esc(useful)}</div></div>
         <div class="quality-stat"><div class="k">Overall Confidence</div><div class="v">${badge(q.overall_confidence)}</div></div>
-        <div class="quality-stat"><div class="k">Source Types</div><div class="v" style="font-size:0.95rem; line-height:1.4;">${sources.length ? esc(sources.join(', ')) : '—'}</div></div>
       </div>`;
+      if (sources.length) {
+        html += `<div class="source-types" style="margin-bottom:20px;">${sources.map(s => `<span class="source-chip">${esc(s)}</span>`).join('')}</div>`;
+      }
       if (gaps.length) {
         html += `<div class="gaps-box"><div class="sub-label">What Would Strengthen This</div><ul class="gaps-list">${gaps.map(g => `<li>${esc(g)}</li>`).join('')}</ul></div>`;
+      }
+      if (flags.length) {
+        html += `<div class="flag-box"><div class="sub-label" style="margin-top:0;">Flagged For Human Review</div><ul class="gaps-list flag-list">${flags.map(f => `<li>${esc(f)}</li>`).join('')}</ul></div>`;
       }
       document.getElementById('qualityContent').innerHTML = html;
     }
 
     function renderRunsFooter() {
-      const againBtn = document.getElementById('againBtn');
-      const runsNote = document.getElementById('runsNote');
-      if (state.runsRemaining > 0) {
-        againBtn.style.display = 'inline-flex';
-        againBtn.textContent = 'Run another analysis';
-        runsNote.textContent = `${state.runsRemaining} free ${state.runsRemaining === 1 ? 'analysis' : 'analyses'} remaining.`;
-      } else {
-        againBtn.style.display = 'none';
-        runsNote.textContent = "You've used all 3 free analyses. Talk to us about the full system.";
-      }
+      document.getElementById('runsNote').textContent = "You've used your free analysis. Talk to us about the full system.";
     }
 
-    // Results view used when a returning visitor has 0 runs left (no analysis to show).
-    function renderEmptyResultsLimit() {
-      ['insightsSection','painSection','languageSection','qualitySection'].forEach(id => {
-        document.getElementById(id).style.display = 'none';
+    // Results view shown when a visitor has already used their free analysis.
+    function renderUsedUp() {
+      ['insightsSection','painSection','questionSection','languageSection','qualitySection'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
       });
       document.querySelector('.results-head').innerHTML = `
-        <span class="eyebrow">Customer Insight Tool</span>
-        <h1 class="display-h1">You've used all <em>3 free analyses.</em></h1>
-        <p class="lede">That's the free layer. The full Marketing Diagnosis goes deeper, built on the evidence you've gathered. Talk to us about the full system.</p>`;
-      document.getElementById('againBtn').style.display = 'none';
-      document.getElementById('runsNote').textContent = "You've used all 3 free analyses. Talk to us about the full system.";
+        <span class="eyebrow">Customer Insight Agent</span>
+        <h1 class="display-h1">You've used your <em>free analysis.</em></h1>
+        <p class="lede">That's the free layer. The full Marketing Diagnosis goes deeper, built on the evidence we gather. Talk to us about the full system.</p>`;
+      document.getElementById('runsNote').textContent = "You've used your free analysis. Talk to us about the full system.";
     }
 
-    document.getElementById('againBtn').addEventListener('click', () => {
-      if (state.runsRemaining <= 0) return;
-      evidenceInput.value = '';
-      updateCounter();
-      // Re-show the section displays in case they were hidden.
-      ['insightsSection','painSection','languageSection','qualitySection'].forEach(id => {
-        document.getElementById(id).style.display = '';
-      });
-      enterEvidenceOrLimit();
-    });
-
     // ---------- boot ----------
-    updateCounter();
     if (state.leadId) {
       // Returning within the same browser session: skip the gate.
-      enterEvidenceOrLimit();
+      enterBriefOrLimit();
     }
   </script>
 </body>
