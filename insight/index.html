@@ -103,7 +103,15 @@
     }
     .nav-back:hover { color: var(--text); }
 
-    main { padding-top: 80px; padding-bottom: 96px; position: relative; z-index: 2; }
+    main {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: safe center;
+      padding-top: 150px;
+      padding-bottom: 96px;
+      position: relative; z-index: 2;
+    }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
