@@ -489,7 +489,7 @@
           <span class="feed-dot"></span>
           <h1 class="display-h1" style="margin-bottom:0; font-size:clamp(1.8rem,4.5vw,2.8rem);">Researching your <em>market</em>...</h1>
         </div>
-        <p class="feed-sub">This usually takes 30 to 60 seconds. We are searching real sources.</p>
+        <p class="feed-sub">This usually takes one to two minutes. We are searching real sources.</p>
         <div class="status-feed" id="statusFeed"></div>
       </div>
     </section>
@@ -556,7 +556,8 @@
 
   <script>
     const API_BASE = 'https://insight.two-fires.com';
-    const MIN_FIELD_CHARS = 10;
+    const MIN_FIELD_CHARS = 10;   // descriptive fields
+    const MIN_REGION_CHARS = 2;   // region can be short ("UK", "USA", "Sydney")
 
     const state = { leadId: null, runsRemaining: 0, name: '' };
 
@@ -686,14 +687,14 @@
       const brief = readBrief();
 
       const required = [
-        ['product_service', 'Product or Service'],
-        ['market_category', 'Market / Category'],
-        ['region', 'Region'],
-        ['customer_description', 'Target Customer'],
+        ['product_service', 'Product or Service', MIN_FIELD_CHARS],
+        ['market_category', 'Market / Category', MIN_FIELD_CHARS],
+        ['region', 'Region', MIN_REGION_CHARS],
+        ['customer_description', 'Target Customer', MIN_FIELD_CHARS],
       ];
-      for (const [key, label] of required) {
-        if (brief[key].length < MIN_FIELD_CHARS) {
-          briefError.textContent = `Please give a little more detail in "${label}" (at least ${MIN_FIELD_CHARS} characters).`;
+      for (const [key, label, min] of required) {
+        if (brief[key].length < min) {
+          briefError.textContent = `Please give a little more detail in "${label}" (at least ${min} characters).`;
           return;
         }
       }
