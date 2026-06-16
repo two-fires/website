@@ -14,6 +14,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+
   <style>
     :root {
       --bg: #050508;
@@ -250,6 +252,59 @@
     /* ============ RESULTS ============ */
     .results-head { margin-bottom: 44px; }
     .result-section { margin-bottom: 56px; }
+
+    /* Section divider between major blocks */
+    .section-divider {
+      height: 1px; border: none; margin: 0 0 56px;
+      background: linear-gradient(90deg, transparent, var(--purple-glow-soft) 50%, transparent);
+    }
+
+    /* Executive Summary */
+    .exec-headline {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(1.4rem, 3.6vw, 2.05rem); line-height: 1.25; letter-spacing: -0.02em;
+      color: var(--text); margin: 4px 0 24px; max-width: 30ch;
+    }
+    .result-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+    .btn-pdf { font-size: 14px; padding: 13px 22px; }
+    .exec-block { margin-bottom: 24px; }
+    .callout {
+      background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--purple);
+      border-radius: 12px; padding: 18px 20px; color: var(--text-muted);
+      font-size: 0.98rem; line-height: 1.6;
+    }
+    .pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .pattern-grid { grid-template-columns: 1fr; } }
+    .pattern-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+    .pattern-card .k {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 10px;
+    }
+    .pattern-card .v { color: var(--text); font-size: 0.94rem; line-height: 1.55; }
+    .confidence-notes {
+      font-family: var(--font-mono); font-size: 12px; color: #888;
+      line-height: 1.6; margin-top: 20px; letter-spacing: 0.02em;
+    }
+
+    /* Summary Tables */
+    .summary-table-wrap {
+      overflow-x: auto; margin-bottom: 28px;
+      border: 1px solid var(--border); border-radius: 12px; -webkit-overflow-scrolling: touch;
+    }
+    .summary-table { width: 100%; border-collapse: collapse; min-width: 540px; background: var(--card); }
+    .summary-table th {
+      background: var(--purple-soft-fill); color: var(--purple-bright);
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border);
+      font-weight: 500; white-space: nowrap;
+    }
+    .summary-table td {
+      padding: 13px 14px; font-size: 0.9rem; color: var(--text); line-height: 1.5;
+      border-bottom: 1px solid var(--border); vertical-align: top;
+    }
+    .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table td.muted { color: var(--text-muted); }
+    .summary-table td.nowrap { white-space: nowrap; }
     .result-section > h2 {
       font-family: var(--font-display); font-weight: 500;
       font-size: clamp(1.5rem, 3.2vw, 2.1rem); letter-spacing: -0.02em;
@@ -502,11 +557,30 @@
         <p class="lede">Built from public customer evidence our agent found. Every finding carries a confidence level so you know how hard to lean on it.</p>
       </div>
 
-      <div class="result-section insights-wrap" id="insightsSection">
-        <h2>Key Insight <em>Summary</em></h2>
-        <p class="section-intro">The most important findings, first.</p>
-        <ul class="insights-list" id="insightsList"></ul>
+      <!-- NEW: Executive Summary (decision-maker layer, renders first) -->
+      <div class="result-section" id="execSummarySection">
+        <h2>Executive <em>Summary</em></h2>
+        <div class="exec-headline" id="execHeadline"></div>
+        <div class="result-actions">
+          <button class="btn btn-pdf" id="pdfBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF Report
+          </button>
+          <button class="btn btn-ghost" id="copyResultsBtn" type="button">Copy Full Results</button>
+        </div>
+        <div id="execContent"></div>
       </div>
+
+      <hr class="section-divider">
+
+      <!-- NEW: Summary Tables (decision-maker layer) -->
+      <div class="result-section" id="summaryTablesSection">
+        <h2>Summary <em>Tables</em></h2>
+        <p class="section-intro">The top findings, hand-picked for commercial significance. The full research sits below.</p>
+        <div id="summaryTablesContent"></div>
+      </div>
+
+      <hr class="section-divider">
 
       <div class="result-section" id="painSection">
         <h2>Customer Pain-Point <em>Map</em></h2>
@@ -514,17 +588,31 @@
         <div id="painContent"></div>
       </div>
 
+      <hr class="section-divider">
+
       <div class="result-section" id="questionSection">
         <h2>Customer Question <em>Map</em></h2>
         <p class="section-intro">The questions customers ask at each stage, from first research to final decision. Answer these and you remove friction from the buy.</p>
         <div id="questionContent"></div>
       </div>
 
+      <hr class="section-divider">
+
       <div class="result-section" id="languageSection">
         <h2>Customer Language <em>Bank</em></h2>
         <p class="section-intro">The exact words your market uses. This is the raw material for messaging that sounds like them, not you.</p>
         <div id="languageContent"></div>
       </div>
+
+      <hr class="section-divider">
+
+      <div class="result-section insights-wrap" id="insightsSection">
+        <h2>Key Insight <em>Summary</em></h2>
+        <p class="section-intro">The most important findings, first.</p>
+        <ul class="insights-list" id="insightsList"></ul>
+      </div>
+
+      <hr class="section-divider">
 
       <div class="result-section" id="qualitySection">
         <h2>Evidence <em>Quality</em></h2>
@@ -554,12 +642,16 @@
 
   </main>
 
+  <!-- Hidden render target for the PDF report (white theme, built on demand). -->
+  <div id="pdfRoot" aria-hidden="true" style="position:absolute; left:-99999px; top:0; width:794px;"></div>
+
   <script>
     const API_BASE = 'https://insight.two-fires.com';
     const MIN_FIELD_CHARS = 10;   // descriptive fields
     const MIN_REGION_CHARS = 2;   // region can be short ("UK", "USA", "Sydney")
 
-    const state = { leadId: null, runsRemaining: 0, name: '' };
+    const state = { leadId: null, runsRemaining: 0, name: '', company: '' };
+    let currentResult = null; // the most recent parsed analysis, for PDF + copy
 
     // Restore session if the user already registered this browser session.
     try {
@@ -568,12 +660,13 @@
         state.leadId = saved.leadId;
         state.runsRemaining = saved.runsRemaining;
         state.name = saved.name || '';
+        state.company = saved.company || '';
       }
     } catch (e) { /* ignore */ }
 
     function persist() {
       sessionStorage.setItem('tf_insight', JSON.stringify({
-        leadId: state.leadId, runsRemaining: state.runsRemaining, name: state.name,
+        leadId: state.leadId, runsRemaining: state.runsRemaining, name: state.name, company: state.company,
       }));
     }
 
@@ -629,6 +722,7 @@
         state.leadId = data.leadId;
         state.runsRemaining = data.runsRemaining;
         state.name = name;
+        state.company = company;
         persist();
         enterBriefOrLimit();
       } catch (err) {
@@ -829,12 +923,91 @@
     // ---------- STATE 3: results ----------
     function renderResults(d) {
       d = d || {};
+      currentResult = d;
+      // Decision-maker layer (new).
+      renderExecutiveSummary(d.executive_summary || {});
+      renderSummaryTables(d.summary_tables || {});
+      // Evidence layer (existing, unchanged).
       renderInsights(arr(d.key_insights));
       renderPain(d.pain_point_map || {});
       renderQuestions(d.question_map || {});
       renderLanguage(d.language_bank || {});
       renderQuality(d.evidence_quality || {});
       renderRunsFooter();
+    }
+
+    // ---------- Executive Summary (new) ----------
+    function renderExecutiveSummary(ex) {
+      document.getElementById('execHeadline').textContent = ex.headline || 'Your customer research is ready.';
+
+      const findings = arr(ex.top_findings).filter(Boolean);
+      let html = '';
+      if (findings.length) {
+        html += `<div class="exec-block insights-wrap"><div class="sub-label">Top Findings</div>
+          <ul class="insights-list">${findings.map(f => `<li>${esc(f)}</li>`).join('')}</ul></div>`;
+      }
+      if (ex.commercial_implications) {
+        html += `<div class="exec-block"><div class="sub-label">Commercial Implications</div>
+          <div class="callout">${esc(ex.commercial_implications)}</div></div>`;
+      }
+      const pp = ex.clearest_pain_pattern, qp = ex.clearest_question_pattern;
+      if (pp || qp) {
+        html += `<div class="exec-block"><div class="pattern-grid">
+          ${pp ? `<div class="pattern-card"><div class="k">Clearest Pain Pattern</div><div class="v">${esc(pp)}</div></div>` : ''}
+          ${qp ? `<div class="pattern-card"><div class="k">Clearest Question Pattern</div><div class="v">${esc(qp)}</div></div>` : ''}
+        </div></div>`;
+      }
+      if (ex.confidence_notes) {
+        html += `<div class="confidence-notes">${esc(ex.confidence_notes)}</div>`;
+      }
+      document.getElementById('execContent').innerHTML = html || '<p class="empty-note">No executive summary was returned.</p>';
+    }
+
+    // ---------- Summary Tables (new) ----------
+    function tableHTML(title, headers, rows) {
+      if (!rows.length) return `<div class="sub-label">${esc(title)}</div><p class="empty-note">Nothing strong enough to summarise here.</p>`;
+      const head = headers.map(h => `<th>${esc(h.label)}</th>`).join('');
+      const body = rows.map(r => `<tr>${headers.map(h => {
+        if (h.key === '__confidence') return `<td class="nowrap">${badge(r.confidence)}</td>`;
+        const cls = h.muted ? ' class="muted"' : '';
+        return `<td${cls}>${esc(r[h.key] || '')}</td>`;
+      }).join('')}</tr>`).join('');
+      return `<div class="sub-label">${esc(title)}</div>
+        <div class="summary-table-wrap"><table class="summary-table">
+          <thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+    }
+
+    function renderSummaryTables(t) {
+      const html = [
+        tableHTML('Top Pain Points', [
+          { label: 'Pain Point', key: 'pain_point' },
+          { label: 'What It Means', key: 'what_it_means', muted: true },
+          { label: 'Confidence', key: '__confidence' },
+          { label: 'Example Evidence', key: 'example_evidence', muted: true },
+        ], arr(t.top_pain_points)),
+        tableHTML('Top Customer Questions', [
+          { label: 'Question', key: 'question' },
+          { label: 'Buying Stage', key: 'buying_stage', muted: true },
+          { label: 'Why It Matters', key: 'why_it_matters', muted: true },
+          { label: 'Confidence', key: '__confidence' },
+        ], arr(t.top_customer_questions)),
+        tableHTML('Top Desired Outcomes', [
+          { label: 'Desired Outcome', key: 'desired_outcome' },
+          { label: 'Why It Matters', key: 'why_it_matters', muted: true },
+          { label: 'Confidence', key: '__confidence' },
+        ], arr(t.top_desired_outcomes)),
+        tableHTML('Top Objections', [
+          { label: 'Objection', key: 'objection' },
+          { label: 'Why It Matters', key: 'why_it_matters', muted: true },
+          { label: 'Confidence', key: '__confidence' },
+        ], arr(t.top_objections)),
+        tableHTML('Most Useful Customer Language', [
+          { label: 'Phrase', key: 'phrase' },
+          { label: 'Category', key: 'category', muted: true },
+          { label: 'Suggested Use', key: 'suggested_use', muted: true },
+        ], arr(t.most_useful_language)),
+      ].join('');
+      document.getElementById('summaryTablesContent').innerHTML = html;
     }
 
     function renderInsights(items) {
@@ -965,16 +1138,182 @@
 
     // Results view shown when a visitor has already used their free analysis.
     function renderUsedUp() {
-      ['insightsSection','painSection','questionSection','languageSection','qualitySection'].forEach(id => {
+      ['execSummarySection','summaryTablesSection','insightsSection','painSection','questionSection','languageSection','qualitySection'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
       });
+      document.querySelectorAll('#stage-results .section-divider').forEach(el => { el.style.display = 'none'; });
       document.querySelector('.results-head').innerHTML = `
         <span class="eyebrow">Customer Insight Agent</span>
         <h1 class="display-h1">You've used your <em>free analysis.</em></h1>
         <p class="lede">That's the free layer. The full Marketing Diagnosis goes deeper, built on the evidence we gather. Talk to us about the full system.</p>`;
       document.getElementById('runsNote').textContent = "You've used your free analysis. Talk to us about the full system.";
     }
+
+    // ---------- Copy Full Results ----------
+    document.getElementById('copyResultsBtn').addEventListener('click', () => {
+      if (!currentResult) return;
+      const btn = document.getElementById('copyResultsBtn');
+      const original = btn.textContent;
+      navigator.clipboard.writeText(JSON.stringify(currentResult, null, 2)).then(() => {
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = original; }, 2000);
+      }).catch(() => {
+        btn.textContent = 'Copy failed';
+        setTimeout(() => { btn.textContent = original; }, 2000);
+      });
+    });
+
+    // ---------- PDF Export ----------
+    function dateStamp() {
+      const d = new Date();
+      const p = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+    }
+    function readableDate() {
+      try { return new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }); }
+      catch (e) { return dateStamp(); }
+    }
+    function slug(s) {
+      return String(s || 'Report').trim().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'Report';
+    }
+
+    // Confidence as coloured inline text for the white-theme PDF.
+    function pdfConf(c) {
+      const k = String(c || '').toLowerCase();
+      let col = '#6B7280';
+      if (k.startsWith('high')) col = '#15803D';
+      else if (k.startsWith('med')) col = '#B45309';
+      else if (k.startsWith('low')) col = '#B91C1C';
+      return `<span style="color:${col};font-weight:600;font-size:11px;">${esc(c || '—')}</span>`;
+    }
+
+    function pdfTable(title, headers, rows) {
+      if (!rows.length) return '';
+      const ths = headers.map(h => `<th style="text-align:left;padding:7px 9px;background:#F3EEFB;color:#6B21A8;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;border:1px solid #E6DDF5;">${esc(h.label)}</th>`).join('');
+      const trs = rows.map(r => `<tr>${headers.map(h => {
+        const val = h.key === '__confidence' ? pdfConf(r.confidence) : esc(r[h.key] || '');
+        return `<td style="padding:7px 9px;font-size:11px;color:#1F2937;border:1px solid #E6DDF5;vertical-align:top;line-height:1.45;">${val}</td>`;
+      }).join('')}</tr>`).join('');
+      return `<div style="margin:0 0 18px;">
+        <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:0 0 8px;">${esc(title)}</div>
+        <table style="width:100%;border-collapse:collapse;">${`<thead><tr>${ths}</tr></thead>`}<tbody>${trs}</tbody></table>
+      </div>`;
+    }
+
+    function buildPdfHTML(d) {
+      const ex = d.executive_summary || {};
+      const t = d.summary_tables || {};
+      const q = d.evidence_quality || {};
+      const insights = arr(d.key_insights).filter(Boolean);
+      const findings = arr(ex.top_findings).filter(Boolean);
+
+      const flame = `<svg width="26" height="26" viewBox="0 0 240 240" aria-hidden="true">
+        <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="#A855F7" opacity="0.85"/>
+        <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="#6B21A8"/></svg>`;
+
+      const sub = (s) => `<div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:22px 0 8px;">${esc(s)}</div>`;
+
+      let html = `<div style="font-family:'DM Sans',Arial,sans-serif;color:#1F2937;background:#ffffff;padding:4px 6px;">`;
+      // Header
+      html += `<div style="display:flex;align-items:center;gap:10px;border-bottom:2px solid #A855F7;padding-bottom:14px;margin-bottom:18px;">
+        ${flame}
+        <div>
+          <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6B21A8;font-weight:700;">Two Fires</div>
+          <div style="font-size:18px;font-weight:700;color:#111827;">Customer Insight Report</div>
+        </div></div>`;
+      html += `<div style="font-size:11px;color:#6B7280;margin-bottom:20px;">
+        ${state.company ? '<b style="color:#374151;">' + esc(state.company) + '</b> &nbsp;·&nbsp; ' : ''}
+        ${state.name ? esc(state.name) + ' &nbsp;·&nbsp; ' : ''}${esc(readableDate())}</div>`;
+
+      // Executive summary
+      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:0 0 4px;">Executive Summary</div>`;
+      if (ex.headline) html += `<div style="font-size:14px;font-weight:600;color:#A855F7;line-height:1.4;margin:6px 0 14px;">${esc(ex.headline)}</div>`;
+      if (findings.length) {
+        html += sub('Top Findings') + '<ol style="margin:0 0 8px 18px;padding:0;">' +
+          findings.map(f => `<li style="font-size:12px;line-height:1.5;color:#1F2937;margin-bottom:6px;">${esc(f)}</li>`).join('') + '</ol>';
+      }
+      if (ex.commercial_implications) {
+        html += sub('Commercial Implications') + `<div style="font-size:12px;line-height:1.55;color:#374151;border-left:3px solid #A855F7;padding:4px 0 4px 12px;">${esc(ex.commercial_implications)}</div>`;
+      }
+      if (ex.clearest_pain_pattern) html += sub('Clearest Pain Pattern') + `<div style="font-size:12px;line-height:1.55;color:#374151;">${esc(ex.clearest_pain_pattern)}</div>`;
+      if (ex.clearest_question_pattern) html += sub('Clearest Question Pattern') + `<div style="font-size:12px;line-height:1.55;color:#374151;">${esc(ex.clearest_question_pattern)}</div>`;
+      if (ex.confidence_notes) html += `<div style="font-size:10.5px;color:#6B7280;margin-top:14px;line-height:1.5;">${esc(ex.confidence_notes)}</div>`;
+
+      // Summary tables
+      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:26px 0 12px;border-top:1px solid #E6DDF5;padding-top:18px;">Summary Tables</div>`;
+      html += pdfTable('Top Pain Points', [
+        { label: 'Pain Point', key: 'pain_point' }, { label: 'What It Means', key: 'what_it_means' },
+        { label: 'Confidence', key: '__confidence' }, { label: 'Example Evidence', key: 'example_evidence' },
+      ], arr(t.top_pain_points));
+      html += pdfTable('Top Customer Questions', [
+        { label: 'Question', key: 'question' }, { label: 'Buying Stage', key: 'buying_stage' },
+        { label: 'Why It Matters', key: 'why_it_matters' }, { label: 'Confidence', key: '__confidence' },
+      ], arr(t.top_customer_questions));
+      html += pdfTable('Top Desired Outcomes', [
+        { label: 'Desired Outcome', key: 'desired_outcome' }, { label: 'Why It Matters', key: 'why_it_matters' },
+        { label: 'Confidence', key: '__confidence' },
+      ], arr(t.top_desired_outcomes));
+      html += pdfTable('Top Objections', [
+        { label: 'Objection', key: 'objection' }, { label: 'Why It Matters', key: 'why_it_matters' },
+        { label: 'Confidence', key: '__confidence' },
+      ], arr(t.top_objections));
+      html += pdfTable('Most Useful Customer Language', [
+        { label: 'Phrase', key: 'phrase' }, { label: 'Category', key: 'category' }, { label: 'Suggested Use', key: 'suggested_use' },
+      ], arr(t.most_useful_language));
+
+      // Key insights
+      if (insights.length) {
+        html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 10px;border-top:1px solid #E6DDF5;padding-top:18px;">Key Insights</div>`;
+        html += '<ol style="margin:0 0 4px 18px;padding:0;">' + insights.map(i => `<li style="font-size:12px;line-height:1.5;color:#1F2937;margin-bottom:6px;">${esc(i)}</li>`).join('') + '</ol>';
+      }
+
+      // Evidence quality
+      const sources = arr(q.source_types_found).filter(Boolean);
+      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 10px;border-top:1px solid #E6DDF5;padding-top:18px;">Evidence Quality</div>`;
+      html += `<div style="font-size:12px;color:#374151;line-height:1.7;">
+        Sources searched: <b>${esc(q.sources_searched != null ? q.sources_searched : '—')}</b> &nbsp;·&nbsp;
+        Useful sources found: <b>${esc(q.useful_sources_found != null ? q.useful_sources_found : '—')}</b> &nbsp;·&nbsp;
+        Overall confidence: ${pdfConf(q.overall_confidence)}</div>`;
+      if (sources.length) html += `<div style="font-size:11px;color:#6B7280;margin-top:6px;">Source types: ${esc(sources.join(', '))}</div>`;
+
+      // Footer
+      html += `<div style="margin-top:28px;border-top:1px solid #E6DDF5;padding-top:12px;font-size:10px;color:#9CA3AF;line-height:1.5;">
+        Generated by Two Fires Customer Insight Agent. For the full Marketing Diagnosis, contact lightmyfuse@two-fires.com</div>`;
+      html += `</div>`;
+      return html;
+    }
+
+    document.getElementById('pdfBtn').addEventListener('click', () => {
+      if (!currentResult) return;
+      if (typeof html2pdf === 'undefined') {
+        const b = document.getElementById('pdfBtn');
+        const o = b.innerHTML; b.innerHTML = 'PDF unavailable';
+        setTimeout(() => { b.innerHTML = o; }, 2500);
+        return;
+      }
+      const btn = document.getElementById('pdfBtn');
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Building PDF...';
+
+      const root = document.getElementById('pdfRoot');
+      root.innerHTML = buildPdfHTML(currentResult);
+
+      const filename = `Two-Fires-Customer-Insight-${slug(state.company)}-${dateStamp()}.pdf`;
+      const opt = {
+        margin: 15,
+        filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, backgroundColor: '#ffffff', useCORS: true, windowWidth: 794 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+      };
+      html2pdf().set(opt).from(root.firstElementChild).save()
+        .then(() => { root.innerHTML = ''; })
+        .catch(() => { /* ignore */ })
+        .finally(() => { btn.disabled = false; btn.innerHTML = original; });
+    });
 
     // ---------- boot ----------
     if (state.leadId) {

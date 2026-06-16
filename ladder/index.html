@@ -381,48 +381,20 @@
 </head>
 <body>
 
-  <!-- ============ SCREEN 1: AUTH ============ -->
-  <section class="screen active center-wrap" id="screen-auth">
-    <div class="card-panel" id="authPanel">
-      <div class="brand-row">
-        <span class="brand-mark">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
-            <defs>
-              <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stop-color="#6B21A8"/><stop offset="55%" stop-color="#A855F7"/><stop offset="100%" stop-color="#C4A8FF"/>
-              </linearGradient>
-              <linearGradient id="flameFront" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stop-color="#4C1078"/><stop offset="55%" stop-color="#6B21A8"/><stop offset="100%" stop-color="#A855F7"/>
-              </linearGradient>
-            </defs>
-            <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="url(#flameBack)" opacity="0.85"/>
-            <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="url(#flameFront)"/>
-          </svg>
-        </span>
-        <div class="brand-text">
-          <h1>Two Fires</h1>
-          <span>Client Portal</span>
-        </div>
-      </div>
+  <!-- Shared flame gradient defs, referenced by the brand marks on every screen.
+       Auth is handled by portal.html; this page reuses its sessionStorage key. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#6B21A8"/><stop offset="55%" stop-color="#A855F7"/><stop offset="100%" stop-color="#C4A8FF"/>
+      </linearGradient>
+      <linearGradient id="flameFront" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#4C1078"/><stop offset="55%" stop-color="#6B21A8"/><stop offset="100%" stop-color="#A855F7"/>
+      </linearGradient>
+    </defs>
+  </svg>
 
-      <span class="panel-eyebrow">Secure Access</span>
-      <h2 class="panel-h2">Sign <em>in.</em></h2>
-      <p class="panel-sub">Enter your portal credentials to begin a Brand Benefit Ladder session.</p>
-
-      <div class="field">
-        <label for="auth-user">Username</label>
-        <input id="auth-user" type="text" autocomplete="username" autocapitalize="none" placeholder="Username">
-      </div>
-      <div class="field">
-        <label for="auth-pass">Password</label>
-        <input id="auth-pass" type="password" autocomplete="current-password" placeholder="Password">
-      </div>
-      <button class="btn btn-block" id="authBtn" type="button">Enter</button>
-      <p class="form-error" id="authError"></p>
-    </div>
-  </section>
-
-  <!-- ============ SCREEN 2: CLIENT DETAILS ============ -->
+  <!-- ============ SCREEN 1: CLIENT DETAILS ============ -->
   <section class="screen center-wrap" id="screen-details">
     <div class="card-panel">
       <div class="brand-row">
@@ -494,7 +466,7 @@
 
   <script>
     const API_BASE = 'https://insight.two-fires.com';
-    const CREDENTIALS = { username: 'twofires', password: 'TwoFires1!' };
+    const PORTAL_AUTH_KEY = 'tf_auth'; // set by portal.html on successful login
 
     const STAGES = [
       { key: 'orientation', label: 'Orientation' },
@@ -567,26 +539,6 @@
       const n = detectStageNumber(agentText);
       if (n && n > state.currentStage) { state.currentStage = n; updateStageUI(); }
     }
-
-    // ---------- AUTH ----------
-    function tryAuth() {
-      const u = $('auth-user').value.trim();
-      const p = $('auth-pass').value;
-      const err = $('authError');
-      err.textContent = '';
-      if (u === CREDENTIALS.username && p === CREDENTIALS.password) {
-        sessionStorage.setItem('tf_ladder_auth', 'true');
-        showScreen('screen-details');
-        $('d-name').focus();
-      } else {
-        const panel = $('authPanel');
-        panel.classList.remove('shake'); void panel.offsetWidth; panel.classList.add('shake');
-        err.textContent = 'Invalid credentials';
-        $('auth-pass').value = '';
-      }
-    }
-    $('authBtn').addEventListener('click', tryAuth);
-    ['auth-user', 'auth-pass'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); }));
 
     // ---------- CLIENT DETAILS -> /ladder/start ----------
     async function beginSession() {
@@ -895,8 +847,14 @@
     }
 
     // ---------- boot ----------
-    if (sessionStorage.getItem('tf_ladder_auth') === 'true') {
+    // Auth is owned by portal.html. If the user signed in there, go straight to
+    // the client-details screen. If they hit /ladder/ directly, send them to the
+    // portal to log in first.
+    if (sessionStorage.getItem(PORTAL_AUTH_KEY) === 'true') {
       showScreen('screen-details');
+      $('d-name').focus();
+    } else {
+      window.location.replace('/portal.html');
     }
   </script>
 </body>
