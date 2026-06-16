@@ -596,6 +596,10 @@
       font-size: 1.5rem; color: var(--purple-bright); margin-bottom: 12px;
     }
     .form-success p { color: var(--text-muted); }
+    .form-error { display: none; text-align: center; padding: 24px 16px; margin-top: 8px; }
+    .form-error.active { display: block; animation: fadeUp 0.5s ease; }
+    .form-error p { color: var(--text-muted); }
+    .form-error .msg { color: #F87171; font-weight: 500; margin-bottom: 4px; }
 
     /* ============================ FOOTER ============================ */
     .footer {
@@ -914,9 +918,13 @@
               <button type="submit" class="submit-btn">Send →</button>
 
               <div class="form-success" id="form-success">
-                <h4>Almost there.</h4>
-                <p>Your email client should have opened with the message ready to send. Hit Send and we'll be in touch within two business days.</p>
-                <p style="margin-top: 16px; font-size: 0.88rem;">If nothing opened, email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color: var(--purple-bright);">lightmyfuse@two-fires.com</a>.</p>
+                <h4>We've got it.</h4>
+                <p>Your message is in. We read every one and reply within two business days. A confirmation is on its way to your inbox.</p>
+              </div>
+
+              <div class="form-error" id="form-error">
+                <p class="msg">Something went wrong sending your message.</p>
+                <p style="margin-top: 10px; font-size: 0.88rem;">If this didn't work, email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color: var(--purple-bright);">lightmyfuse@two-fires.com</a>.</p>
               </div>
             </form>
           </div>
@@ -1016,7 +1024,7 @@
       document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
       e.preventDefault();
 
       const name = document.getElementById('name').value.trim();
@@ -1024,27 +1032,48 @@
       const company = document.getElementById('company').value.trim();
       const message = document.getElementById('message').value.trim();
 
-      const subject = encodeURIComponent('Two Fires enquiry — ' + (name || 'no name'));
-      const bodyLines = [
-        'Name: ' + name,
-        'Email: ' + email,
-        'Company: ' + (company || '(not provided)'),
-        '',
-        'What\'s not working:',
-        message,
-        '',
-        '— Sent from the contact form on two-fires.com'
-      ];
-      const body = encodeURIComponent(bodyLines.join('\n'));
+      const errEl = document.getElementById('form-error');
+      errEl.classList.remove('active');
 
-      window.location.href = 'mailto:lightmyfuse@two-fires.com?subject=' + subject + '&body=' + body;
+      if (!name || !email || !message) { showFormError('Please fill in your name, email, and message.'); return false; }
+      if (!email.includes('@')) { showFormError('Please enter a valid email address.'); return false; }
 
-      setTimeout(() => {
+      const btn = document.querySelector('#contact-form .submit-btn');
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch(
+          'https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_contact_enquiries',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ name, email, company: company || null, message })
+          }
+        );
+        if (!res.ok) throw new Error('Request failed: ' + res.status);
+
         document.querySelectorAll('#contact-form .field, #contact-form .submit-btn').forEach(el => el.style.display = 'none');
         document.getElementById('form-success').classList.add('active');
-      }, 500);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = original;
+        showFormError('Something went wrong sending your message.');
+      }
 
       return false;
+    }
+
+    function showFormError(msg) {
+      const errEl = document.getElementById('form-error');
+      errEl.querySelector('.msg').textContent = msg;
+      errEl.classList.add('active');
     }
   </script>
 
