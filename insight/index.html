@@ -326,11 +326,11 @@
 
     .card {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 20px; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      padding: 20px; min-width: 0; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
     .card:hover { border-color: var(--purple); box-shadow: 0 8px 40px rgba(168,85,247,0.12); transform: translateY(-2px); }
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
-    .card-title { font-family: var(--font-display); font-weight: 500; font-size: 1.02rem; line-height: 1.35; color: var(--text); }
+    .card-title { font-family: var(--font-display); font-weight: 500; font-size: 1.02rem; line-height: 1.35; color: var(--text); flex: 1; min-width: 0; overflow-wrap: anywhere; }
 
     .badge {
       font-family: var(--font-mono); font-size: 9px; font-weight: 500;
@@ -353,11 +353,16 @@
     .source-chip {
       font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--text-faint); border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px;
+      overflow-wrap: anywhere; max-width: 100%;
     }
 
     /* Question map */
     .q-card .card-title { font-size: 0.98rem; }
     .q-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; align-items: center; }
+    /* Confidence detail (text after the level word) renders as regular body text. */
+    .q-detail { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 2px 0 0; overflow-wrap: anywhere; }
+    /* Frequency / context renders as small mono text, never inside a badge. */
+    .q-freq { font-family: var(--font-mono); font-size: 11px; color: #888; line-height: 1.5; margin: 8px 0 0; letter-spacing: 0.02em; overflow-wrap: anywhere; }
 
     /* Language bank */
     .phrase-group { margin-bottom: 24px; }
@@ -680,13 +685,24 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
+    // Split "High — appears in product copy" into { head: "High", rest: "appears in product copy" }.
+    // Separator = em/en dash, a spaced hyphen, or a colon. No separator -> head is the whole string.
+    function splitMeta(s) {
+      const str = String(s || '').trim();
+      const m = str.match(/^(.*?)(?:\s*[\u2014\u2013]\s*|\s+-\s+|\s*:\s+)(.*)$/);
+      if (m && m[2]) return { head: m[1].trim(), rest: m[2].trim() };
+      return { head: str, rest: '' };
+    }
+
     function badge(conf) {
-      const c = String(conf || '').toLowerCase();
-      let cls = 'badge-insufficient', label = conf || 'Insufficient';
+      // Badges show only the confidence level word, never trailing descriptive text.
+      const level = splitMeta(conf).head || 'Insufficient';
+      const c = level.toLowerCase();
+      let cls = 'badge-insufficient';
       if (c.startsWith('high')) cls = 'badge-high';
       else if (c.startsWith('med')) cls = 'badge-medium';
       else if (c.startsWith('low')) cls = 'badge-low';
-      return `<span class="badge ${cls}">${esc(label)}</span>`;
+      return `<span class="badge ${cls}">${esc(level)}</span>`;
     }
 
     function arr(x) { return Array.isArray(x) ? x : []; }
@@ -1056,17 +1072,24 @@
       document.getElementById('painContent').innerHTML = html;
     }
 
-    // Question map
+    // Question map. Matches the Pain-Point card pattern: title + confidence-level
+    // badge on top, then descriptive text as body text, then source chips.
     function questionCard(it) {
       const q = it.question || it.concern || '';
-      const freq = it.frequency
-        ? `<span class="badge badge-freq">${esc(it.frequency)}</span>`
-        : (it.confidence ? badge(it.confidence) : '');
+      const conf = it.confidence ? splitMeta(it.confidence) : null;
+      // Badge shows only the level word; any text after the dash becomes body text.
+      const badgeHtml = (conf && conf.head) ? badge(it.confidence) : '';
+      const freq = String(it.frequency || '').trim();
+      const meta = [
+        (conf && conf.rest) ? `<p class="q-detail">${esc(conf.rest)}</p>` : '',
+        freq ? `<p class="q-freq">${esc(freq)}</p>` : '',
+      ].join('');
       return `<div class="card q-card">
         <div class="card-top">
           <div class="card-title">${esc(q)}</div>
-          ${freq}
+          ${badgeHtml}
         </div>
+        ${meta}
         ${sourceTypesHTML(it.evidence)}
       </div>`;
     }
