@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="/images/flame-favicon.jpg">
+  <meta name="description" content="Two Fires Brand Benefit Ladder. A guided session that turns your product features into a brand proposition that lands.">
+  <title>Two Fires · Brand Benefit Ladder</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-soft: #0B0B14;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --surface-card: #14091E;
+      --card: #0A0A0F;
+      --user-card: #1A1326;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #FBFAFE;
+      --text-muted: #A0A0A0;
+      --text-faint: #666666;
+
+      --purple-deep: #6B21A8;
+      --purple: #A855F7;
+      --purple-bright: #C4A8FF;
+      --purple-glow: rgba(168, 85, 247, 0.55);
+      --purple-glow-soft: rgba(168, 85, 247, 0.25);
+      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+
+      --green: #34D399;
+      --amber: #FBBF24;
+      --red: #F87171;
+
+      --font-display: 'DM Sans', system-ui, sans-serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      overflow: hidden;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.18), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 100%, rgba(168, 85, 247, 0.1), transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-9px); }
+      40%, 80% { transform: translateX(9px); }
+    }
+
+    .screen { display: none; position: relative; z-index: 2; height: 100%; }
+    .screen.active { display: flex; }
+
+    /* ============ CENTERED CARD SCREENS (auth + details) ============ */
+    .center-wrap {
+      flex-direction: column; align-items: center; justify-content: center;
+      width: 100%; padding: 24px; overflow-y: auto;
+    }
+    .card-panel {
+      width: 100%; max-width: 460px;
+      background: var(--surface); border: 1px solid var(--border-strong);
+      border-radius: 20px; padding: 40px 34px;
+      animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .card-panel.shake { animation: shake 0.4s ease; }
+
+    .brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
+    .brand-mark { width: 30px; height: 30px; display: flex; }
+    .brand-mark svg { width: 100%; height: 100%; filter: drop-shadow(0 0 8px var(--purple-glow)); }
+    .brand-text h1 {
+      font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; line-height: 1.1; letter-spacing: -0.01em;
+    }
+    .brand-text span {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--purple-bright);
+    }
+
+    .panel-eyebrow {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--purple-bright); margin-bottom: 14px;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .panel-eyebrow::before { content: ""; width: 20px; height: 1px; background: var(--purple); }
+    .panel-h2 {
+      font-family: var(--font-display); font-weight: 500; font-size: 1.7rem;
+      letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 10px;
+    }
+    .panel-h2 em { font-style: italic; color: var(--purple-bright); }
+    .panel-sub { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 28px; }
+
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
+    }
+    .field input {
+      width: 100%; font-family: var(--font-body); font-size: 15px; color: var(--text);
+      background: var(--surface); border: 1px solid var(--border-strong);
+      border-radius: 12px; padding: 14px 16px;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .field input::placeholder { color: var(--text-faint); }
+    .field input:focus {
+      outline: none; border-color: var(--purple);
+      box-shadow: 0 0 0 3px var(--purple-soft-fill), 0 0 24px var(--purple-glow-soft);
+    }
+
+    .btn {
+      font-family: var(--font-body); font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
+      padding: 15px 28px; border-radius: 999px; cursor: pointer; border: 1px solid transparent; color: white;
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset, 0 6px 28px var(--purple-glow);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 10px 40px var(--purple-glow); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-block { width: 100%; }
+    .btn-ghost {
+      background: transparent; border: 1px solid var(--border-strong); color: var(--text-muted);
+      box-shadow: none; font-weight: 500;
+    }
+    .btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--purple); box-shadow: none; transform: translateY(-1px); }
+
+    .form-error {
+      font-family: var(--font-mono); font-size: 12px; color: var(--red);
+      margin-top: 14px; min-height: 16px; letter-spacing: 0.02em; text-align: center;
+    }
+    .fineprint {
+      font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
+      margin-top: 18px; letter-spacing: 0.04em; text-align: center;
+    }
+
+    .spinner {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.35); border-top-color: white;
+      animation: spin 0.7s linear infinite; display: inline-block;
+    }
+
+    /* ============ CHAT SCREEN ============ */
+    #screen-chat { flex-direction: column; height: 100%; }
+
+    .topbar {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--border);
+      background: rgba(5, 5, 8, 0.8); backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .topbar .brand-mark { width: 24px; height: 24px; }
+    .topbar-title { font-family: var(--font-display); font-weight: 500; font-size: 0.98rem; white-space: nowrap; }
+    .topbar-title em { font-style: italic; color: var(--purple-bright); }
+    .topbar-stage {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); white-space: nowrap;
+    }
+    .topbar-stage b { color: var(--purple-bright); font-weight: 500; }
+
+    /* Stage progress dots */
+    .stage-track {
+      flex-shrink: 0; display: flex; align-items: center; gap: 0;
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .stage-track::-webkit-scrollbar { display: none; }
+    .stage-step { display: flex; align-items: center; gap: 0; flex: 1; min-width: 42px; }
+    .stage-dot {
+      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid var(--border-strong); background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono); font-size: 10px; color: var(--text-faint);
+      transition: all 0.4s ease;
+    }
+    .stage-line { height: 1px; flex: 1; background: var(--border-strong); transition: background 0.4s ease; }
+    .stage-step:last-child .stage-line { display: none; }
+    .stage-label {
+      display: none;
+    }
+    .stage-step.done .stage-dot { border-color: var(--purple-deep); background: var(--purple-deep); color: var(--purple-bright); }
+    .stage-step.done .stage-line { background: var(--purple-deep); }
+    .stage-step.current .stage-dot {
+      border-color: var(--purple); color: white; background: var(--purple);
+      box-shadow: 0 0 16px var(--purple-glow);
+    }
+
+    /* Messages */
+    .messages {
+      flex: 1; overflow-y: auto; padding: 28px 20px 16px;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+    .messages-inner { max-width: 760px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+    .msg { display: flex; animation: fadeUp 0.4s ease; }
+    .msg-bubble {
+      max-width: 86%; padding: 15px 18px; border-radius: 16px;
+      font-size: 0.97rem; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;
+    }
+    .msg.agent { justify-content: flex-start; }
+    .msg.agent .msg-bubble {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 2px solid var(--purple); color: var(--text);
+      border-top-left-radius: 5px;
+    }
+    .msg.user { justify-content: flex-end; }
+    .msg.user .msg-bubble {
+      background: var(--user-card); border: 1px solid var(--border-strong);
+      color: var(--text); border-top-right-radius: 5px;
+    }
+    .msg-bubble strong { font-weight: 600; color: var(--purple-bright); }
+    .msg-bubble a { color: var(--purple-bright); }
+
+    .typing { display: inline-flex; gap: 5px; align-items: center; padding: 4px 2px; }
+    .typing span {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--purple-bright);
+      animation: blink 1.3s infinite both;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    /* Input bar */
+    .inputbar {
+      flex-shrink: 0; border-top: 1px solid var(--border);
+      background: rgba(5, 5, 8, 0.85); backdrop-filter: blur(20px);
+      padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+    }
+    .inputbar-inner {
+      max-width: 760px; margin: 0 auto; display: flex; gap: 10px; align-items: flex-end;
+    }
+    .chat-input {
+      flex: 1; font-family: var(--font-body); font-size: 15px; color: var(--text);
+      background: var(--surface); border: 1px solid var(--border-strong);
+      border-radius: 14px; padding: 13px 16px; resize: none; max-height: 160px; line-height: 1.5;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .chat-input::placeholder { color: var(--text-faint); }
+    .chat-input:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-soft-fill); }
+    .send-btn {
+      flex-shrink: 0; width: 48px; height: 48px; border-radius: 14px; cursor: pointer; border: none; color: white;
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      box-shadow: 0 4px 20px var(--purple-glow);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .send-btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .send-btn svg { width: 20px; height: 20px; }
+    .chat-error {
+      max-width: 760px; margin: 8px auto 0; font-family: var(--font-mono); font-size: 11px;
+      color: var(--red); text-align: center; min-height: 14px;
+    }
+
+    /* ============ FINAL DELIVERABLE ============ */
+    .deliverable { animation: fadeUp 0.6s ease; margin-top: 8px; }
+    .deliv-head {
+      text-align: center; margin-bottom: 28px; padding-top: 12px;
+    }
+    .deliv-eyebrow {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--purple-bright); margin-bottom: 12px;
+    }
+    .deliv-head h2 {
+      font-family: var(--font-display); font-weight: 500; font-size: clamp(1.5rem, 4vw, 2.1rem);
+      letter-spacing: -0.02em; line-height: 1.1;
+    }
+    .deliv-head h2 em { font-style: italic; color: var(--purple-bright); }
+    .deliv-meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); margin-top: 10px; letter-spacing: 0.04em; }
+
+    .section-label {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--purple-bright); margin: 36px 0 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::before { content: ""; width: 18px; height: 1px; background: var(--purple); }
+
+    /* Ladder diagram: emotional on top, attributes at the bottom */
+    .ladder { display: flex; flex-direction: column; gap: 10px; }
+    .rung {
+      border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px;
+      background: var(--card); position: relative; overflow: hidden;
+    }
+    .rung::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    }
+    .rung-4::before { background: var(--purple-bright); }
+    .rung-3::before { background: var(--purple); }
+    .rung-2::before { background: var(--purple-deep); }
+    .rung-1::before { background: #43237a; }
+    .rung-top {
+      display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .rung-level {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .rung-name { font-family: var(--font-display); font-weight: 500; font-size: 1rem; color: var(--text); }
+    .rung-items { display: flex; flex-wrap: wrap; gap: 8px; }
+    .rung-chip {
+      font-size: 0.86rem; color: var(--text); line-height: 1.4;
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 9px; padding: 7px 12px;
+    }
+    .rung-4 .rung-chip { border-color: rgba(168,85,247,0.35); color: var(--purple-bright); }
+
+    /* Proposition cards */
+    .prop-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .prop-card {
+      border: 1px solid var(--border); border-radius: 14px; padding: 20px; background: var(--card);
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .prop-card:hover { border-color: var(--purple); transform: translateY(-2px); }
+    .prop-formula {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-faint); margin-bottom: 10px;
+    }
+    .prop-text { font-size: 1.02rem; line-height: 1.5; color: var(--text); margin-bottom: 16px; }
+    .score-row { display: flex; flex-direction: column; gap: 9px; }
+    .score { display: flex; align-items: center; gap: 10px; }
+    .score-key {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); width: 92px; flex-shrink: 0;
+    }
+    .score-bar { flex: 1; height: 6px; border-radius: 999px; background: var(--surface-strong); overflow: hidden; }
+    .score-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--purple-deep), var(--purple)); }
+    .score-num { font-family: var(--font-mono); font-size: 10px; color: var(--purple-bright); width: 30px; text-align: right; }
+
+    /* Recommended */
+    .recommended {
+      margin-top: 16px; padding: 26px 24px; border-radius: 16px;
+      border: 1px solid var(--purple-deep);
+      background: linear-gradient(135deg, rgba(107,33,168,0.18) 0%, rgba(168,85,247,0.06) 100%);
+      box-shadow: 0 0 60px rgba(168,85,247,0.12);
+    }
+    .rec-tag {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 12px;
+    }
+    .rec-text { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; line-height: 1.35; margin-bottom: 12px; }
+    .rec-rationale { color: var(--text-muted); font-size: 0.93rem; line-height: 1.6; }
+
+    .deliv-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 32px 0 8px; }
+
+    .deliv-cta {
+      margin-top: 28px; padding: 30px 24px; border-radius: 16px; text-align: center;
+      border: 1px solid var(--border-strong); background: var(--surface);
+    }
+    .deliv-cta h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; margin-bottom: 8px; }
+    .deliv-cta h3 em { font-style: italic; color: var(--purple-bright); }
+    .deliv-cta p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px; }
+
+    @media (min-width: 700px) {
+      .prop-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .msg-bubble { max-width: 92%; }
+      .card-panel { padding: 32px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ SCREEN 1: AUTH ============ -->
+  <section class="screen active center-wrap" id="screen-auth">
+    <div class="card-panel" id="authPanel">
+      <div class="brand-row">
+        <span class="brand-mark">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
+            <defs>
+              <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#6B21A8"/><stop offset="55%" stop-color="#A855F7"/><stop offset="100%" stop-color="#C4A8FF"/>
+              </linearGradient>
+              <linearGradient id="flameFront" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#4C1078"/><stop offset="55%" stop-color="#6B21A8"/><stop offset="100%" stop-color="#A855F7"/>
+              </linearGradient>
+            </defs>
+            <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="url(#flameBack)" opacity="0.85"/>
+            <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="url(#flameFront)"/>
+          </svg>
+        </span>
+        <div class="brand-text">
+          <h1>Two Fires</h1>
+          <span>Client Portal</span>
+        </div>
+      </div>
+
+      <span class="panel-eyebrow">Secure Access</span>
+      <h2 class="panel-h2">Sign <em>in.</em></h2>
+      <p class="panel-sub">Enter your portal credentials to begin a Brand Benefit Ladder session.</p>
+
+      <div class="field">
+        <label for="auth-user">Username</label>
+        <input id="auth-user" type="text" autocomplete="username" autocapitalize="none" placeholder="Username">
+      </div>
+      <div class="field">
+        <label for="auth-pass">Password</label>
+        <input id="auth-pass" type="password" autocomplete="current-password" placeholder="Password">
+      </div>
+      <button class="btn btn-block" id="authBtn" type="button">Enter</button>
+      <p class="form-error" id="authError"></p>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 2: CLIENT DETAILS ============ -->
+  <section class="screen center-wrap" id="screen-details">
+    <div class="card-panel">
+      <div class="brand-row">
+        <span class="brand-mark">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
+            <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="url(#flameBack)" opacity="0.85"/>
+            <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="url(#flameFront)"/>
+          </svg>
+        </span>
+        <div class="brand-text">
+          <h1>Brand Benefit Ladder</h1>
+          <span>Guided Session</span>
+        </div>
+      </div>
+
+      <span class="panel-eyebrow">Before We Start</span>
+      <h2 class="panel-h2">A few <em>details.</em></h2>
+      <p class="panel-sub">This is a guided conversation with a senior brand strategist. It usually takes 15 to 25 exchanges and ends with a full brand proposition.</p>
+
+      <div class="field">
+        <label for="d-name">Your name</label>
+        <input id="d-name" type="text" autocomplete="name" placeholder="Your name">
+      </div>
+      <div class="field">
+        <label for="d-email">Email</label>
+        <input id="d-email" type="email" autocomplete="email" placeholder="you@company.com">
+      </div>
+      <div class="field">
+        <label for="d-company">Company</label>
+        <input id="d-company" type="text" autocomplete="organization" placeholder="Your company">
+      </div>
+      <button class="btn btn-block" id="beginBtn" type="button">Begin</button>
+      <p class="form-error" id="detailsError"></p>
+      <p class="fineprint">Your session is private to Two Fires.</p>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 3: CHAT ============ -->
+  <section class="screen" id="screen-chat">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="brand-mark">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
+            <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="url(#flameBack)" opacity="0.85"/>
+            <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="url(#flameFront)"/>
+          </svg>
+        </span>
+        <span class="topbar-title">Brand Benefit <em>Ladder</em></span>
+      </div>
+      <span class="topbar-stage" id="topbarStage">Stage <b id="stageNum">1</b> / 7 · <span id="stageName">Orientation</span></span>
+    </div>
+
+    <div class="stage-track" id="stageTrack"></div>
+
+    <div class="messages" id="messages">
+      <div class="messages-inner" id="messagesInner"></div>
+    </div>
+
+    <div class="inputbar">
+      <div class="inputbar-inner">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Type your answer..."></textarea>
+        <button class="send-btn" id="sendBtn" type="button" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        </button>
+      </div>
+      <div class="chat-error" id="chatError"></div>
+    </div>
+  </section>
+
+  <script>
+    const API_BASE = 'https://insight.two-fires.com';
+    const CREDENTIALS = { username: 'twofires', password: 'TwoFires1!' };
+
+    const STAGES = [
+      { key: 'orientation', label: 'Orientation' },
+      { key: 'context', label: 'Context' },
+      { key: 'attributes', label: 'Attributes' },
+      { key: 'product_benefits', label: 'Product Benefits' },
+      { key: 'consumer_benefits', label: 'Consumer Benefits' },
+      { key: 'emotional', label: 'Emotional' },
+      { key: 'proposition', label: 'Proposition' },
+    ];
+
+    const state = { sessionId: null, history: [], busy: false, complete: false, currentStage: 1 };
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    // Light formatter: escape, bold **text**, links, preserve newlines (CSS handles wrapping).
+    function fmt(text) {
+      let s = esc(text);
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+      return s;
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      $(id).classList.add('active');
+    }
+
+    // Strip the LADDER_COMPLETE block (and any trailing partial) from displayed text.
+    function stripLadderBlock(text) {
+      const s = String(text || '');
+      const start = s.indexOf('LADDER_COMPLETE_START');
+      if (start === -1) return s;
+      const end = s.indexOf('LADDER_COMPLETE_END');
+      if (end === -1) return s.slice(0, start).trimEnd(); // markers still streaming
+      return (s.slice(0, start) + s.slice(end + 'LADDER_COMPLETE_END'.length)).trim();
+    }
+
+    // ---------- Stage indicator ----------
+    function buildStageTrack() {
+      const track = $('stageTrack');
+      track.innerHTML = STAGES.map((st, i) => `
+        <div class="stage-step" data-step="${i + 1}">
+          <div class="stage-dot">${i + 1}</div>
+          <div class="stage-line"></div>
+        </div>`).join('');
+      updateStageUI();
+    }
+    function updateStageUI() {
+      const n = state.currentStage;
+      document.querySelectorAll('.stage-step').forEach(step => {
+        const i = parseInt(step.dataset.step, 10);
+        step.classList.toggle('done', i < n);
+        step.classList.toggle('current', i === n);
+      });
+      $('stageNum').textContent = n;
+      $('stageName').textContent = STAGES[n - 1] ? STAGES[n - 1].label : '';
+    }
+    // Derive the stage number from agent text (cosmetic only).
+    function detectStageNumber(text) {
+      const matches = String(text || '').matchAll(/stage\s*([1-7])/gi);
+      let max = 0;
+      for (const m of matches) { const v = parseInt(m[1], 10); if (v > max) max = v; }
+      return max;
+    }
+    function maybeAdvanceStage(agentText) {
+      const n = detectStageNumber(agentText);
+      if (n && n > state.currentStage) { state.currentStage = n; updateStageUI(); }
+    }
+
+    // ---------- AUTH ----------
+    function tryAuth() {
+      const u = $('auth-user').value.trim();
+      const p = $('auth-pass').value;
+      const err = $('authError');
+      err.textContent = '';
+      if (u === CREDENTIALS.username && p === CREDENTIALS.password) {
+        sessionStorage.setItem('tf_ladder_auth', 'true');
+        showScreen('screen-details');
+        $('d-name').focus();
+      } else {
+        const panel = $('authPanel');
+        panel.classList.remove('shake'); void panel.offsetWidth; panel.classList.add('shake');
+        err.textContent = 'Invalid credentials';
+        $('auth-pass').value = '';
+      }
+    }
+    $('authBtn').addEventListener('click', tryAuth);
+    ['auth-user', 'auth-pass'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); }));
+
+    // ---------- CLIENT DETAILS -> /ladder/start ----------
+    async function beginSession() {
+      const name = $('d-name').value.trim();
+      const email = $('d-email').value.trim();
+      const company = $('d-company').value.trim();
+      const err = $('detailsError');
+      err.textContent = '';
+
+      if (!name || !email || !company) { err.textContent = 'Please fill in all three fields.'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email address.'; return; }
+
+      const btn = $('beginBtn');
+      btn.disabled = true;
+      const original = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner"></span> Preparing your strategist...';
+
+      try {
+        const res = await fetch(API_BASE + '/ladder/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, company }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Could not start the session.');
+
+        state.sessionId = data.sessionId;
+        state.history.push({ role: 'assistant', content: data.message });
+
+        buildStageTrack();
+        showScreen('screen-chat');
+        addMessage('agent', data.message);
+        maybeAdvanceStage(data.message);
+        $('chatInput').focus();
+      } catch (e) {
+        err.textContent = e.message || 'Something went wrong. Please try again.';
+        btn.disabled = false;
+        btn.innerHTML = original;
+      }
+    }
+    $('beginBtn').addEventListener('click', beginSession);
+    ['d-name', 'd-email', 'd-company'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') beginSession(); }));
+
+    // ---------- CHAT ----------
+    const messagesEl = $('messages');
+    const messagesInner = $('messagesInner');
+    const chatInput = $('chatInput');
+    const sendBtn = $('sendBtn');
+
+    function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+
+    function addMessage(who, text) {
+      const wrap = document.createElement('div');
+      wrap.className = 'msg ' + who;
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = fmt(text);
+      wrap.appendChild(bubble);
+      messagesInner.appendChild(wrap);
+      scrollToBottom();
+      return bubble;
+    }
+
+    function addTyping() {
+      const wrap = document.createElement('div');
+      wrap.className = 'msg agent';
+      wrap.id = 'typingMsg';
+      wrap.innerHTML = '<div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+      messagesInner.appendChild(wrap);
+      scrollToBottom();
+      return wrap;
+    }
+
+    chatInput.addEventListener('input', () => {
+      chatInput.style.height = 'auto';
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 160) + 'px';
+    });
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+    sendBtn.addEventListener('click', sendMessage);
+
+    function setBusy(b) {
+      state.busy = b;
+      sendBtn.disabled = b;
+      chatInput.disabled = b;
+    }
+
+    async function sendMessage() {
+      if (state.busy || state.complete) return;
+      const text = chatInput.value.trim();
+      if (!text) return;
+      $('chatError').textContent = '';
+
+      addMessage('user', text);
+      state.history.push({ role: 'user', content: text });
+      chatInput.value = '';
+      chatInput.style.height = 'auto';
+      setBusy(true);
+
+      const typing = addTyping();
+      let bubble = null;
+      let fullText = '';
+
+      try {
+        const res = await fetch(API_BASE + '/ladder/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: state.sessionId, message: text }),
+        });
+        if (!res.ok || !res.body) {
+          let msg = 'The agent could not respond. Please try again.';
+          try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
+          throw new Error(msg);
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let doneData = null;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          let sep;
+          while ((sep = buffer.indexOf('\n\n')) !== -1) {
+            const raw = buffer.slice(0, sep);
+            buffer = buffer.slice(sep + 2);
+            const evt = parseSSE(raw);
+            if (!evt) continue;
+
+            if (evt.event === 'delta' && evt.data && evt.data.text) {
+              fullText += evt.data.text;
+              if (!bubble) { if (typing) typing.remove(); bubble = addMessage('agent', ''); }
+              bubble.innerHTML = fmt(stripLadderBlock(fullText));
+              scrollToBottom();
+            } else if (evt.event === 'done') {
+              doneData = evt.data || {};
+            } else if (evt.event === 'error') {
+              throw new Error((evt.data && evt.data.message) || 'The agent could not respond.');
+            }
+          }
+        }
+
+        if (typing && typing.parentNode) typing.remove();
+        if (!bubble) bubble = addMessage('agent', stripLadderBlock(fullText) || '...');
+        else bubble.innerHTML = fmt(stripLadderBlock(fullText));
+
+        state.history.push({ role: 'assistant', content: fullText });
+        maybeAdvanceStage(fullText);
+
+        if (doneData && doneData.complete && doneData.ladder_output) {
+          finishSession(doneData.ladder_output);
+        }
+      } catch (e) {
+        if (typing && typing.parentNode) typing.remove();
+        $('chatError').textContent = e.message || 'Something went wrong. Please try again.';
+      } finally {
+        if (!state.complete) { setBusy(false); chatInput.focus(); }
+      }
+    }
+
+    function parseSSE(raw) {
+      const lines = String(raw || '').split('\n');
+      let event = 'message', dataStr = '';
+      for (const line of lines) {
+        if (line.startsWith(':')) continue;
+        if (line.startsWith('event:')) event = line.slice(6).trim();
+        else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+      }
+      if (!dataStr) return { event, data: null };
+      let data = null;
+      try { data = JSON.parse(dataStr); } catch (e) {}
+      return { event, data };
+    }
+
+    // ---------- FINAL DELIVERABLE ----------
+    function finishSession(out) {
+      state.complete = true;
+      state.currentStage = 7;
+      updateStageUI();
+      setBusy(true);
+      chatInput.placeholder = 'Your Brand Benefit Ladder is ready below.';
+      renderDeliverable(out);
+    }
+
+    function arr(x) { return Array.isArray(x) ? x : []; }
+
+    function rungHTML(levelLabel, name, items, rungClass) {
+      const chips = arr(items).filter(Boolean).map(i => `<span class="rung-chip">${esc(i)}</span>`).join('');
+      return `<div class="rung ${rungClass}">
+        <div class="rung-top"><span class="rung-level">${esc(levelLabel)}</span><span class="rung-name">${esc(name)}</span></div>
+        <div class="rung-items">${chips || '<span class="rung-chip">Not captured</span>'}</div>
+      </div>`;
+    }
+
+    function scoreHTML(key, val) {
+      const v = Math.max(0, Math.min(10, Number(val) || 0));
+      return `<div class="score">
+        <span class="score-key">${esc(key)}</span>
+        <span class="score-bar"><span class="score-fill" style="width:${v * 10}%"></span></span>
+        <span class="score-num">${v}/10</span>
+      </div>`;
+    }
+
+    function propCardHTML(p) {
+      const sc = p.scores || {};
+      return `<div class="prop-card">
+        <div class="prop-formula">${esc(p.formula || 'Proposition')}</div>
+        <div class="prop-text">${esc(p.text || '')}</div>
+        <div class="score-row">
+          ${scoreHTML('Clarity', sc.clarity)}
+          ${scoreHTML('Differentiation', sc.differentiation)}
+          ${scoreHTML('Emotional', sc.emotional_resonance)}
+          ${scoreHTML('Logic', sc.logical_support)}
+        </div>
+      </div>`;
+    }
+
+    function renderDeliverable(out) {
+      const ladder = out.ladder || {};
+      const props = arr(out.propositions);
+
+      const html = `
+        <div class="deliverable">
+          <div class="deliv-head">
+            <div class="deliv-eyebrow">Your Deliverable</div>
+            <h2>Your Brand Benefit <em>Ladder</em></h2>
+            <div class="deliv-meta">${esc(out.business_name || '')}${out.product_service ? ' · ' + esc(out.product_service) : ''}${out.target_audience ? ' · ' + esc(out.target_audience) : ''}</div>
+          </div>
+
+          <div class="section-label">The Ladder</div>
+          <div class="ladder">
+            ${rungHTML('Level 4', 'Emotional Proposition', ladder.emotional_proposition, 'rung-4')}
+            ${rungHTML('Level 3', 'Consumer Benefit', ladder.consumer_benefits, 'rung-3')}
+            ${rungHTML('Level 2', 'Product Benefit', ladder.product_benefits, 'rung-2')}
+            ${rungHTML('Level 1', 'Product Attribute', ladder.product_attributes, 'rung-1')}
+          </div>
+
+          <div class="section-label">Proposition Options</div>
+          <div class="prop-grid">${props.map(propCardHTML).join('') || '<p style="color:var(--text-faint)">No propositions returned.</p>'}</div>
+
+          ${out.recommended_proposition ? `
+          <div class="section-label">Recommended</div>
+          <div class="recommended">
+            <div class="rec-tag">★ The one to run with</div>
+            <div class="rec-text">${esc(out.recommended_proposition)}</div>
+            ${out.recommendation_rationale ? `<div class="rec-rationale">${esc(out.recommendation_rationale)}</div>` : ''}
+          </div>` : ''}
+
+          <div class="deliv-actions">
+            <button class="btn btn-ghost" id="copyBtn" type="button">Copy full output</button>
+          </div>
+
+          <div class="deliv-cta">
+            <h3>Want to take this <em>further?</em></h3>
+            <p>This is the foundation. We can turn it into messaging, campaigns, and a full positioning system.</p>
+            <a class="btn" href="mailto:lightmyfuse@two-fires.com?subject=Brand%20Benefit%20Ladder%20follow-up">Let's talk</a>
+          </div>
+        </div>`;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'msg';
+      wrap.style.display = 'block';
+      wrap.innerHTML = html;
+      messagesInner.appendChild(wrap);
+      scrollToBottom();
+
+      $('copyBtn').addEventListener('click', () => copyOutput(out));
+    }
+
+    function copyOutput(out) {
+      const ladder = out.ladder || {};
+      const L = (label, items) => `${label}:\n` + arr(items).map(i => '  - ' + i).join('\n');
+      const lines = [
+        'BRAND BENEFIT LADDER',
+        out.business_name ? 'Business: ' + out.business_name : '',
+        out.product_service ? 'Product/Service: ' + out.product_service : '',
+        out.target_audience ? 'Target Audience: ' + out.target_audience : '',
+        '',
+        'THE LADDER',
+        L('Level 4 - Emotional Proposition', ladder.emotional_proposition),
+        L('Level 3 - Consumer Benefit', ladder.consumer_benefits),
+        L('Level 2 - Product Benefit', ladder.product_benefits),
+        L('Level 1 - Product Attribute', ladder.product_attributes),
+        '',
+        'PROPOSITION OPTIONS',
+        ...arr(out.propositions).map((p, i) => {
+          const sc = p.scores || {};
+          return `${i + 1}. ${p.text || ''}\n   Formula: ${p.formula || ''}\n   Clarity ${sc.clarity || 0}/10 · Differentiation ${sc.differentiation || 0}/10 · Emotional ${sc.emotional_resonance || 0}/10 · Logic ${sc.logical_support || 0}/10`;
+        }),
+        '',
+        'RECOMMENDED',
+        out.recommended_proposition || '',
+        out.recommendation_rationale ? 'Why: ' + out.recommendation_rationale : '',
+      ].filter(x => x !== '');
+      const txt = lines.join('\n');
+      navigator.clipboard.writeText(txt).then(() => {
+        const b = $('copyBtn'); b.textContent = 'Copied ✓';
+        setTimeout(() => { b.textContent = 'Copy full output'; }, 2000);
+      }).catch(() => {
+        const b = $('copyBtn'); b.textContent = 'Copy failed';
+        setTimeout(() => { b.textContent = 'Copy full output'; }, 2000);
+      });
+    }
+
+    // ---------- boot ----------
+    if (sessionStorage.getItem('tf_ladder_auth') === 'true') {
+      showScreen('screen-details');
+    }
+  </script>
+</body>
+</html>
