@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Two Fires — Customer Intelligence Agent</title>
+<title>Two Fires · Customer Intelligence Agent</title>
 <link rel="icon" type="image/jpeg" href="/images/flame-favicon.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -721,7 +721,7 @@ a.source-citation:hover {
     <div class="intro">
       <div class="eyebrow">Customer Intelligence Agent</div>
       <h1>Meet <span>Ember.</span></h1>
-      <p>Ember is going to ask you ten short questions about your business and your customer. Answer like you're chatting to a colleague over coffee. It takes about five minutes — and at the end, you'll get a customer profile that's sharper than most agencies produce after weeks of work.</p>
+      <p>Ember is going to ask you ten short questions about your business and your customer. Answer like you're chatting to a colleague over coffee. It takes about five minutes, and at the end, you'll get a customer profile that's sharper than most agencies produce after weeks of work.</p>
       <button class="btn-primary large" onclick="startInterview()">Begin the interview</button>
     </div>
   </section>
@@ -771,7 +771,7 @@ a.source-citation:hover {
         <div class="scan-progress-fill" id="loading-1-fill"></div>
       </div>
       <div class="scan-status" id="loading-1-status">Reading your answers…</div>
-      <div class="scan-note">This takes 20–30 seconds — we're finding real data.</div>
+      <div class="scan-note">This takes 20–30 seconds. We're finding real data.</div>
       <div class="error-card" id="error-1" style="display:none;"></div>
     </div>
   </section>
@@ -779,7 +779,7 @@ a.source-citation:hover {
   <!-- PHASE 1 REPORT -->
   <section class="section" id="section-report-1">
     <div class="report-header">
-      <div class="eyebrow">Phase 1 — AI Analysis</div>
+      <div class="eyebrow">Phase 1: AI Analysis</div>
       <h2>Your Customer Profile</h2>
     </div>
     <div class="report-body" id="report-1-body">
@@ -813,7 +813,7 @@ a.source-citation:hover {
       </div>
 
       <div class="report-cta">
-        <button class="btn-primary full large" onclick="startScout()">Go Deeper — Scout the Web</button>
+        <button class="btn-primary full large" onclick="startScout()">Go Deeper: Scout the Web</button>
       </div>
     </div>
   </section>
@@ -828,7 +828,7 @@ a.source-citation:hover {
         <div class="scan-progress-fill" id="loading-2-fill"></div>
       </div>
       <div class="scan-status" id="loading-2-status">Searching Reddit and community forums…</div>
-      <div class="scan-note">This takes 60–90 seconds — we're finding real data with sources.</div>
+      <div class="scan-note">This takes 60–90 seconds. We're finding real data with sources.</div>
       <div class="error-card" id="error-2" style="display:none;"></div>
     </div>
   </section>
@@ -836,7 +836,7 @@ a.source-citation:hover {
   <!-- PHASE 2 REPORT -->
   <section class="section" id="section-report-2">
     <div class="report-header">
-      <div class="eyebrow">Phase 2 — Customer Intelligence</div>
+      <div class="eyebrow">Phase 2: Customer Intelligence</div>
       <h2>Customer Intelligence Report</h2>
       <div class="quality-checklist" id="r2-quality">
         <span><span class="qdot ok">●</span> 3+ channels</span>
@@ -867,7 +867,7 @@ a.source-citation:hover {
       </div>
 
       <div class="report-cta">
-        <button class="btn-primary full large" onclick="approveAndContinue()">Approved — Help Me Build My Messaging</button>
+        <button class="btn-primary full large" onclick="approveAndContinue()">Approved: Help Me Build My Messaging</button>
         <div class="secondary-row">
           <button class="btn-secondary" id="download-btn" onclick="downloadReport()">Download Report</button>
           <button class="btn-secondary" onclick="restart()">Start Over</button>
@@ -912,7 +912,7 @@ const QUESTIONS = [
     label: 'Location',
     text: 'Where do these people live?',
     sub: '',
-    examples: ['Sydney', 'All over Australia', "Anywhere — we're fully online"]
+    examples: ['Sydney', 'All over Australia', "Anywhere, we're fully online"]
   },
   {
     key: 'trigger',
@@ -924,21 +924,21 @@ const QUESTIONS = [
   {
     key: 'transformation',
     label: 'Transformation',
-    text: "Once you've helped them — what does their life look like? What's better?",
+    text: "Once you've helped them, what does their life look like? What's better?",
     sub: '',
     examples: ['They finally have a home they\'re proud of', 'Their business runs without them doing everything', 'They stopped losing sleep over their finances']
   },
   {
     key: 'language',
     label: 'Their language',
-    text: 'When customers talk about their problem — what do they actually say?',
+    text: 'When customers talk about their problem, what do they actually say?',
     sub: 'Think about the last time a customer explained why they needed you. What words did they use?',
     examples: ['"I just don\'t know where to start"', '"I\'ve wasted so much money already"', '"I need someone I can actually trust"']
   },
   {
     key: 'alternatives',
     label: 'Alternatives',
-    text: "When someone's deciding whether to use you — what else are they looking at?",
+    text: "When someone's deciding whether to use you, what else are they looking at?",
     sub: '',
     examples: ['Getting three quotes from competitors', 'Thinking about doing it themselves', 'Looking at a big national company']
   },
@@ -953,29 +953,29 @@ const QUESTIONS = [
     key: 'why_chosen',
     label: 'Why they choose you',
     text: 'What do you think is the number one thing that makes them choose you over someone else?',
-    sub: "Don't overthink this — what do your best customers usually say when you ask them why they came to you?",
+    sub: "Don't overthink this. What do your best customers usually say when you ask them why they came to you?",
     examples: ['Our reputation and word of mouth', "We're faster than everyone else", 'They trust us with their home']
   },
   {
     key: 'extra',
     label: 'Additional context',
     text: 'Is there anything else about your customers we should know?',
-    sub: 'Anything at all — the more specific the better.',
+    sub: 'Anything at all, the more specific the better.',
     examples: ['They\'re usually in a hurry', "They've been burned by someone before", "They're spending their own money, not a company budget"]
   }
 ];
 
 const ACKS = [
-  "Got it — that's a great start.",
+  "Got it, that's a great start.",
   "Beautiful. That tells me a lot.",
   "Perfect, helpful to know.",
-  "Mm — interesting. That's a real signal.",
+  "Mm, interesting. That's a real signal.",
   "I love that. Genuine transformations are gold.",
   "Their actual words always reveal more than they realise.",
   "Useful. Knowing what you're up against changes the message.",
-  "Right — those questions usually hide the real objections.",
+  "Right, those questions usually hide the real objections.",
   "That's powerful. Customers see things owners often miss.",
-  "Wonderful — thanks for sharing all of that."
+  "Wonderful, thanks for sharing all of that."
 ];
 
 /* ────────────────────────────────────────────
@@ -1112,10 +1112,10 @@ const PHASE1_STATUS = [
   'Writing your report…'
 ];
 const PHASE2_STATUS = [
-  'Real research takes a moment — finding actual sources...',
+  'Real research takes a moment, finding actual sources...',
   'Scanning Reddit threads and reviews...',
   'Cross-referencing multiple channels...',
-  'Almost there — compiling your report...'
+  'Almost there, compiling your report...'
 ];
 
 function startLoadingAnimation(prefix, messages) {
@@ -1174,7 +1174,7 @@ function showAgentError(prefix, message, retryFn) {
 }
 
 /* ────────────────────────────────────────────
-   PHASE 1 — AI ANALYSIS
+   PHASE 1: AI ANALYSIS
    ──────────────────────────────────────────── */
 function buildPhase1UserMessage() {
   return [
@@ -1198,7 +1198,7 @@ async function runPhase1() {
   const anim = startLoadingAnimation('loading-1', PHASE1_STATUS);
 
   const body = {
-    system: "You are a senior brand strategist with 30 years of experience at McDonald's, Mars, Unilever and Burger King. A business owner has just answered 10 questions about their customer. Your job is to synthesise their answers into a precise, insightful Customer Profile Report. Write like a senior strategist — direct, warm, confident. No jargon. No bullet-point padding. Each section should contain a genuine insight, not just a restatement of what they told you. Use plain English that a business owner will immediately understand and find useful. Format your response as JSON with these exact keys: who_they_are, what_triggers_them, what_they_really_want, the_language_they_use, what_stops_them_buying, where_to_find_them, strategic_recommendation. Each value is a string of 2-4 sentences.",
+    system: "You are a senior brand strategist with 30 years of experience at McDonald's, Mars, Unilever and Burger King. A business owner has just answered 10 questions about their customer. Your job is to synthesise their answers into a precise, insightful Customer Profile Report. Write like a senior strategist: direct, warm, confident. No jargon. No bullet-point padding. Each section should contain a genuine insight, not just a restatement of what they told you. Use plain English that a business owner will immediately understand and find useful. Format your response as JSON with these exact keys: who_they_are, what_triggers_them, what_they_really_want, the_language_they_use, what_stops_them_buying, where_to_find_them, strategic_recommendation. Each value is a string of 2-4 sentences. Do not use em dashes; use commas, colons, or full stops.",
     messages: [
       { role: 'user', content: buildPhase1UserMessage() }
     ],
@@ -1227,7 +1227,8 @@ function stripCites(str) {
   if (typeof str !== 'string') return str;
   return str
     .replace(/<cite[^>]*>(.*?)<\/cite>/gi, '$1')
-    .replace(/<\/?cite[^>]*>/gi, '');
+    .replace(/<\/?cite[^>]*>/gi, '')
+    .replace(/\s*\u2014\s*/g, ', ');
 }
 
 function renderPhase1Report() {
@@ -1242,7 +1243,7 @@ function renderPhase1Report() {
 }
 
 /* ────────────────────────────────────────────
-   PHASE 2 — WEB SCOUT
+   PHASE 2: WEB SCOUT
    ──────────────────────────────────────────── */
 function buildPhase2UserMessage() {
   const base = buildPhase1UserMessage();
@@ -1255,7 +1256,7 @@ ${base}
 Phase 1 strategic recommendation:
 ${strat}
 
-Now conduct the five-channel research methodology described in your instructions — Reddit, YouTube, Google PAA, Reviews, and Quora — before writing the response. Use web search throughout. Cite every source with platform name and URL. Return only the JSON object specified.`;
+Now conduct the five-channel research methodology described in your instructions (Reddit, YouTube, Google PAA, Reviews, and Quora) before writing the response. Use web search throughout. Cite every source with platform name and URL. Return only the JSON object specified.`;
 }
 
 async function startScout() {
@@ -1300,9 +1301,9 @@ Score each pain point on:
 - Commercial Relevance (1-5): How well the client's solution addresses this
 - Priority Score = (Frequency + Intensity) × Commercial Relevance
 
-You must use web search to find real data. Every quote must be verbatim with its source named. Do not invent quotes or generalise.
+You must use web search to find real data. Every quote must be verbatim with its source named. Do not invent quotes or generalise. Do not use em dashes; use commas, colons, or full stops.
 
-Return ONLY a valid JSON object with these exact keys — no markdown fences, no preamble:
+Return ONLY a valid JSON object with these exact keys, no markdown fences, no preamble:
 {
   "pain_point_matrix": "Top 5-7 pain points as a formatted list, each with: rank, pain point description, category, frequency score, intensity score, priority score, and one verbatim quote from a real source with URL",
   "verbatim_quotes": "Minimum 10 verbatim quotes, each with source platform, approximate date if available, and URL where found",
@@ -1338,7 +1339,7 @@ function renderPhase2Report() {
   const r = state.phase2 || {};
   const set = (id, val) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = (typeof val === 'string' && val.trim()) ? val : '—';
+    if (el) el.textContent = (typeof val === 'string' && val.trim()) ? val : '-';
   };
   set('r2-pain-matrix', stripCites(r.pain_point_matrix));
   set('r2-quotes', stripCites(r.verbatim_quotes));
@@ -1348,7 +1349,7 @@ function renderPhase2Report() {
 }
 
 function setSectionWithSources(id, val) {
-  document.getElementById(id).textContent = val || '—';
+  document.getElementById(id).textContent = val || '-';
   const sourcesEl = document.getElementById(`${id}-sources`);
   if (!sourcesEl) return;
   sourcesEl.innerHTML = '';
@@ -1440,7 +1441,7 @@ async function callAgent(body) {
 }
 
 function setText(id, val) {
-  document.getElementById(id).textContent = val || '—';
+  document.getElementById(id).textContent = val || '-';
 }
 
 async function downloadReport() {
@@ -1449,8 +1450,8 @@ async function downloadReport() {
   const p1 = document.getElementById('section-report-1');
   const p2 = document.getElementById('section-report-2');
 
-  // Detect whether Phase 2 has real data by checking state directly —
-  // no DOM read, no textContent ambiguity. If the API returned a real
+  // Detect whether Phase 2 has real data by checking state directly.
+  // No DOM read, no textContent ambiguity. If the API returned a real
   // string longer than 20 chars for pain_point_matrix, Phase 2 is real.
   const hasP2Content = state.phase2 &&
     typeof state.phase2.pain_point_matrix === 'string' &&
@@ -1463,7 +1464,7 @@ async function downloadReport() {
 
   // Force required sections visible via inline display so html2canvas
   // can compute layout. We restore the original inline display state in
-  // finally — letting the existing .section / .section.active CSS take
+  // finally, letting the existing .section / .section.active CSS take
   // back over once we're done.
   const p1Display = p1 ? p1.style.display : '';
   const p2Display = p2 ? p2.style.display : '';
@@ -1472,7 +1473,7 @@ async function downloadReport() {
 
   try {
     // Give the browser a beat to lay out and load fonts before the
-    // screenshot fires — 500 ms is enough for fonts to swap in and
+    // screenshot fires, 500 ms is enough for fonts to swap in and
     // dynamic content to paint after display:block.
     await new Promise(r => setTimeout(r, 500));
 
@@ -1509,7 +1510,7 @@ async function downloadReport() {
       : 'Two-Fires-Customer-Profile.pdf');
   } catch (err) {
     console.error('PDF error:', err);
-    alert('PDF generation failed — please try printing from your browser.');
+    alert('PDF generation failed. Please try printing from your browser.');
   } finally {
     if (p1) p1.style.display = p1Display;
     if (p2) p2.style.display = p2Display;
@@ -1528,7 +1529,7 @@ function approveAndContinue() {
     sessionStorage.setItem('tf_phase1', JSON.stringify(state.phase1));
     sessionStorage.setItem('tf_phase2', JSON.stringify(state.phase2));
   } catch (_) {}
-  alert("Brilliant. The Campaign Messaging Builder will pick up from here — it's launching soon.");
+  alert("Brilliant. The Campaign Messaging Builder will pick up from here. It's launching soon.");
 }
 
 function restart() {
@@ -1545,16 +1546,16 @@ function restart() {
 // by integer elsewhere, so the demo set is an array in q1→q10 order.
 if (new URLSearchParams(window.location.search).get('demo') === 'true') {
   state.answers = [
-    "We do home renovations — kitchens, bathrooms, extensions",
+    "We do home renovations: kitchens, bathrooms, extensions",
     "Sydney homeowners, typically 35-55, dual income, own their home",
-    "Sydney — Inner West, Northern Beaches, Eastern Suburbs",
+    "Sydney: Inner West, Northern Beaches, Eastern Suburbs",
     "They just bought a place that needs work, or finally have the budget saved up",
     "A home they're proud of, finished on time, no nasty surprises",
     "I just need someone reliable who won't rip me off",
     "Getting three quotes, considering DIY for smaller jobs",
     "How much will it actually cost? How long will it take? Are you licensed?",
     "We finish on time and we communicate every step of the way",
-    "They're living in the house during the reno — disruption is a big deal"
+    "They're living in the house during the reno. Disruption is a big deal"
   ];
   runPhase1();
 }

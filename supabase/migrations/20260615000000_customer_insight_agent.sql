@@ -1,4 +1,4 @@
--- Two Fires — Customer Insight Agent
+-- Two Fires: Customer Insight Agent
 -- Lead capture + usage limiting + session logging for the free /insight tool.
 --
 -- Three tables, all service-role only (the Vercel serverless functions use the

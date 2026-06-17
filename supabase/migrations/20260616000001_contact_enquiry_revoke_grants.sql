@@ -1,5 +1,5 @@
 -- supabase/migrations/20260616000001_contact_enquiry_revoke_grants.sql
--- Two Fires — contact enquiry: defense-in-depth grant tightening
+-- Two Fires contact enquiry: defense-in-depth grant tightening
 --
 -- tf_contact_enquiries already runs with RLS enabled and only an anon INSERT
 -- policy, so reads/updates/deletes are blocked at the policy layer. However the

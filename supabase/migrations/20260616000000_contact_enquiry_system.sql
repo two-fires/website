@@ -1,5 +1,5 @@
 -- supabase/migrations/20260616000000_contact_enquiry_system.sql
--- Two Fires — contact enquiry capture
+-- Two Fires: contact enquiry capture
 -- Same architecture as the email capture system (20260611055030): the marketing
 -- page POSTs to PostgREST with the anon key; an INSERT trigger fires the
 -- notify-enquiry edge function via pg_net, authenticated with WEBHOOK_SECRET.

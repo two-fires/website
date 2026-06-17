@@ -1,2 +1,2 @@
 # website
-Two Fires marketing site — two-fires.com
+Two Fires marketing site (two-fires.com)

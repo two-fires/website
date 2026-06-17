@@ -128,7 +128,7 @@ async function handleUpdate(resendKey: string, email: string, addedSource: strin
 
   const notify = await sendEmail(resendKey, {
     to: NOTIFY_TO,
-    subject: "🔥 Two Fires — existing subscriber updated",
+    subject: "🔥 Two Fires: existing subscriber updated",
     text:
       `Email: ${email}\n` +
       `Added to: ${addedSource}\n` +
@@ -154,7 +154,7 @@ async function handleNew(resendKey: string, record: SubscriberRecord) {
 
   const notify = await sendEmail(resendKey, {
     to: NOTIFY_TO,
-    subject: `🔥 New Two Fires subscriber — ${source}`,
+    subject: `🔥 New Two Fires subscriber: ${source}`,
     text:
       `Someone just joined the Two Fires list.\n\n` +
       `Email: ${email}\n` +

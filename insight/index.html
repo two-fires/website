@@ -224,7 +224,7 @@
       background: var(--purple-soft-fill); display: inline-block;
     }
 
-    /* ============ STATE — PROCESSING (live research feed) ============ */
+    /* ============ STATE - PROCESSING (live research feed) ============ */
     .feed-wrap { max-width: 640px; }
     .feed-head { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
     .feed-dot {
@@ -414,7 +414,7 @@
     .gaps-box .sub-label { margin-bottom: 12px; }
     .gaps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
     .gaps-list li { font-size: 0.9rem; color: var(--text-muted); padding-left: 16px; position: relative; }
-    .gaps-list li::before { content: "—"; position: absolute; left: 0; color: var(--purple-deep); }
+    .gaps-list li::before { content: "-"; position: absolute; left: 0; color: var(--purple-deep); }
     .flag-list li::before { content: "⚑"; color: var(--amber); }
     .flag-box { margin-top: 24px; padding: 16px 18px; border: 1px solid rgba(251,191,36,0.35); border-radius: 12px; background: rgba(251,191,36,0.05); }
 
@@ -484,7 +484,7 @@
 
   <main class="container">
 
-    <!-- ============ STATE 1 — GATE (register) ============ -->
+    <!-- ============ STATE 1 - GATE (register) ============ -->
     <section class="stage active" id="stage-gate">
       <div class="form-wrap">
         <span class="eyebrow">Customer Insight Agent</span>
@@ -511,7 +511,7 @@
       </div>
     </section>
 
-    <!-- ============ STATE 2 — BRIEF (intake form) ============ -->
+    <!-- ============ STATE 2 - BRIEF (intake form) ============ -->
     <section class="stage" id="stage-brief">
       <div class="form-wrap">
         <span class="eyebrow">Your Brief</span>
@@ -564,7 +564,7 @@
       </div>
     </section>
 
-    <!-- ============ STATE 2b — PROCESSING (live research feed) ============ -->
+    <!-- ============ STATE 2b - PROCESSING (live research feed) ============ -->
     <section class="stage" id="stage-processing">
       <div class="feed-wrap">
         <span class="eyebrow">Research In Progress</span>
@@ -577,7 +577,7 @@
       </div>
     </section>
 
-    <!-- ============ STATE 3 — RESULTS ============ -->
+    <!-- ============ STATE 3 - RESULTS ============ -->
     <section class="stage" id="stage-results">
       <div class="results-head">
         <span class="eyebrow">Your Customer Insight Map</span>
@@ -666,7 +666,7 @@
       </div>
     </section>
 
-    <!-- ============ STATE 1b — DAILY CAP REACHED ============ -->
+    <!-- ============ STATE 1b - DAILY CAP REACHED ============ -->
     <section class="stage" id="stage-cap">
       <div class="form-wrap">
         <span class="eyebrow">Customer Insight Agent</span>
@@ -719,7 +719,7 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-    // Split "High — appears in product copy" into { head: "High", rest: "appears in product copy" }.
+    // Split "High: appears in product copy" into { head: "High", rest: "appears in product copy" }.
     // Separator = em/en dash, a spaced hyphen, or a colon. No separator -> head is the whole string.
     function splitMeta(s) {
       const str = String(s || '').trim();
@@ -810,12 +810,12 @@
     // ---------- Returning-user: render a previously completed report ----------
     // The /register response MAY include the visitor's most recent completed
     // analysis so we can show it straight away. We don't assume one exact field
-    // name — we look through the likely wrappers (the row stored in tf_sessions)
+    // name, we look through the likely wrappers (the row stored in tf_sessions)
     // for an object that looks like an analysis result, i.e. the same JSON shape
     // the /analyse 'done' event streams and that renderResults() consumes.
     //
     // BACKEND CONTRACT / TODO: for this to do anything, /register must return the
-    // last completed session's result JSON — e.g. a top-level { ..., result: {...} }
+    // last completed session's result JSON, e.g. a top-level { ..., result: {...} }
     // or { ..., lastSession: { result: {...} } }. If the backend does NOT yet
     // return it, extractStoredResult() returns null and we fall back to the
     // existing behaviour (intake form, or the "used up" state). No frontend-only
@@ -921,7 +921,7 @@
           body: JSON.stringify({ leadId: state.leadId, brief }),
         });
 
-        // Daily spend cap — graceful exit.
+        // Daily spend cap: graceful exit.
         if (res.status === 503) {
           let j = {};
           try { j = await res.json(); } catch (e) {}
@@ -1216,8 +1216,8 @@
       const sources = arr(q.source_types_found).filter(Boolean);
       const gaps = arr(q.gaps).filter(Boolean);
       const flags = arr(q.escalation_flags).filter(Boolean);
-      const searched = (q.sources_searched != null && q.sources_searched !== '') ? q.sources_searched : '—';
-      const useful = (q.useful_sources_found != null && q.useful_sources_found !== '') ? q.useful_sources_found : '—';
+      const searched = (q.sources_searched != null && q.sources_searched !== '') ? q.sources_searched : '-';
+      const useful = (q.useful_sources_found != null && q.useful_sources_found !== '') ? q.useful_sources_found : '-';
 
       let html = `<div class="quality-grid">
         <div class="quality-stat"><div class="k">Sources Searched</div><div class="v">${esc(searched)}</div></div>
@@ -1316,7 +1316,7 @@
       );
     });
 
-    // "Run new analysis" — return the visitor to the intake form for a fresh run.
+    // "Run new analysis" returns the visitor to the intake form for a fresh run.
     // The backend still enforces the free-run limit when they submit a new brief.
     const rerunBtn = document.getElementById('rerunBtn');
     if (rerunBtn) rerunBtn.addEventListener('click', () => {
@@ -1360,7 +1360,7 @@
       if (k.startsWith('high')) col = '#15803D';
       else if (k.startsWith('med')) col = '#B45309';
       else if (k.startsWith('low')) col = '#B91C1C';
-      return `<span style="color:${col};font-weight:600;font-size:11px;">${esc(c || '—')}</span>`;
+      return `<span style="color:${col};font-weight:600;font-size:11px;">${esc(c || '-')}</span>`;
     }
 
     function pdfTable(title, headers, rows) {
@@ -1447,8 +1447,8 @@
       const sources = arr(q.source_types_found).filter(Boolean);
       html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 10px;border-top:1px solid #E6DDF5;padding-top:18px;">Evidence Quality</div>`;
       html += `<div style="font-size:12px;color:#374151;line-height:1.7;">
-        Sources searched: <b>${esc(q.sources_searched != null ? q.sources_searched : '—')}</b> &nbsp;·&nbsp;
-        Useful sources found: <b>${esc(q.useful_sources_found != null ? q.useful_sources_found : '—')}</b> &nbsp;·&nbsp;
+        Sources searched: <b>${esc(q.sources_searched != null ? q.sources_searched : '-')}</b> &nbsp;·&nbsp;
+        Useful sources found: <b>${esc(q.useful_sources_found != null ? q.useful_sources_found : '-')}</b> &nbsp;·&nbsp;
         Overall confidence: ${pdfConf(q.overall_confidence)}</div>`;
       if (sources.length) html += `<div style="font-size:11px;color:#6B7280;margin-top:6px;">Source types: ${esc(sources.join(', '))}</div>`;
 

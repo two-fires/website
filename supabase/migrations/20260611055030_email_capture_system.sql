@@ -1,4 +1,4 @@
--- Two Fires — email capture system
+-- Two Fires: email capture system
 -- Reproduces the tf_email_subscribers schema, the new-vs-existing routing trigger,
 -- and the secret-reader RPC used by the notify-subscriber edge function.
 --
