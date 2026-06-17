@@ -447,6 +447,7 @@
       background: rgba(52,211,153,0.15); border: 1px solid var(--green); color: var(--green);
     }
     .runs-note { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); margin-top: 22px; letter-spacing: 0.04em; }
+    .rerun-row { display: flex; justify-content: center; margin-top: 28px; }
 
     /* Global error banner */
     .banner-error {
@@ -658,6 +659,11 @@
         <div class="cta-confirm" id="ctaConfirm" style="display:none;"></div>
         <p class="runs-note" id="runsNote"></p>
       </div>
+
+      <!-- Returning-user control: only shown when we render a stored report. -->
+      <div class="rerun-row" id="rerunRow" style="display:none;">
+        <button class="btn btn-ghost" id="rerunBtn" type="button">Run new analysis</button>
+      </div>
     </section>
 
     <!-- ============ STATE 1b — DAILY CAP REACHED ============ -->
@@ -768,7 +774,15 @@
         state.name = name;
         state.company = company;
         persist();
-        enterBriefOrLimit();
+
+        // Returning user: if the backend handed back a previously completed
+        // analysis, render it immediately instead of showing the intake form.
+        const stored = extractStoredResult(data);
+        if (stored) {
+          showStoredReport(stored);
+        } else {
+          enterBriefOrLimit();
+        }
       } catch (err) {
         gateError.textContent = err.message || 'Something went wrong. Please try again.';
       } finally {
@@ -791,6 +805,45 @@
         wb.style.display = 'none';
       }
       showStage('stage-brief');
+    }
+
+    // ---------- Returning-user: render a previously completed report ----------
+    // The /register response MAY include the visitor's most recent completed
+    // analysis so we can show it straight away. We don't assume one exact field
+    // name — we look through the likely wrappers (the row stored in tf_sessions)
+    // for an object that looks like an analysis result, i.e. the same JSON shape
+    // the /analyse 'done' event streams and that renderResults() consumes.
+    //
+    // BACKEND CONTRACT / TODO: for this to do anything, /register must return the
+    // last completed session's result JSON — e.g. a top-level { ..., result: {...} }
+    // or { ..., lastSession: { result: {...} } }. If the backend does NOT yet
+    // return it, extractStoredResult() returns null and we fall back to the
+    // existing behaviour (intake form, or the "used up" state). No frontend-only
+    // way to fetch it otherwise, so this is the one piece that needs the backend.
+    const ANALYSIS_KEYS = ['executive_summary', 'summary_tables', 'key_insights', 'pain_point_map', 'question_map', 'language_bank', 'evidence_quality'];
+    function looksLikeAnalysis(o) {
+      return !!o && typeof o === 'object' && !Array.isArray(o) && ANALYSIS_KEYS.some(k => k in o);
+    }
+    function extractStoredResult(data) {
+      if (!data || typeof data !== 'object') return null;
+      const wrappers = [data, data.completedSession, data.session, data.lastSession, data.latestSession]
+        .filter(w => w && typeof w === 'object');
+      for (const w of wrappers) {
+        for (const c of [w.result, w.result_json, w.report, w.lastReport, w.lastResult, w.analysis]) {
+          if (looksLikeAnalysis(c)) return c;
+        }
+      }
+      return looksLikeAnalysis(data) ? data : null;
+    }
+
+    // Render a stored report through the exact same path as a live result
+    // (renderResults sets currentResult, so PDF + copy work too), then reveal
+    // the "Run new analysis" control so the visitor can start fresh.
+    function showStoredReport(result) {
+      renderResults(result);
+      const row = document.getElementById('rerunRow');
+      if (row) row.style.display = 'flex';
+      showStage('stage-results');
     }
 
     // ---------- STATE 2: brief intake ----------
@@ -1261,6 +1314,15 @@
         document.getElementById('capCtaConfirm'),
         document.getElementById('capCtaActions')
       );
+    });
+
+    // "Run new analysis" — return the visitor to the intake form for a fresh run.
+    // The backend still enforces the free-run limit when they submit a new brief.
+    const rerunBtn = document.getElementById('rerunBtn');
+    if (rerunBtn) rerunBtn.addEventListener('click', () => {
+      const wb = document.getElementById('welcomeBack');
+      if (wb) wb.style.display = 'none';
+      showStage('stage-brief');
     });
 
     // ---------- Copy Full Results ----------
