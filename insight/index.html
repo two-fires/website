@@ -250,7 +250,8 @@
     .status-item .q { color: var(--purple-bright); font-style: italic; }
 
     /* ============ RESULTS ============ */
-    .results-head { margin-bottom: 44px; }
+    /* Extra headroom so the results heading clears the fixed nav comfortably. */
+    .results-head { margin-bottom: 44px; padding-top: 2rem; }
     .result-section { margin-bottom: 56px; }
 
     /* Section divider between major blocks */
@@ -664,8 +665,11 @@
       <div class="form-wrap">
         <span class="eyebrow">Customer Insight Agent</span>
         <h1 class="display-h1">We've reached today's <em>research limit.</em></h1>
-        <p class="lede">Our free research tool runs on a daily budget. Come back tomorrow, or book a call to get your full Marketing Diagnosis now.</p>
-        <a class="btn" href="mailto:lightmyfuse@two-fires.com?subject=Full%20Marketing%20Diagnosis">Book Your Diagnosis Call</a>
+        <p class="lede">Our free research tool runs on a daily budget. Come back tomorrow, or ask us to take you deeper now with the full Marketing Diagnosis.</p>
+        <div class="cta-actions" id="capCtaActions" style="justify-content:flex-start;">
+          <button class="btn" id="capDeeperBtn" type="button">I want to go deeper</button>
+        </div>
+        <div class="cta-confirm" id="capCtaConfirm" style="display:none; margin:18px 0 0;"></div>
       </div>
     </section>
 
@@ -1198,31 +1202,27 @@
     }
 
     // ---------- "I want to go deeper" -> flag lead + notify James ----------
+    // Single backend pattern (POST /request-diagnosis) reused by every CTA state.
     let diagnosisRequested = false;
-    function setCtaMessage(msg, ok) {
-      const confirm = document.getElementById('ctaConfirm');
-      confirm.className = 'cta-confirm' + (ok ? '' : ' error');
-      confirm.innerHTML = ok
+    function setCtaMessage(confirmEl, actionsEl, msg, ok) {
+      confirmEl.className = 'cta-confirm' + (ok ? '' : ' error');
+      confirmEl.innerHTML = ok
         ? `<span class="cta-check">&#10003;</span><span>${esc(msg)}</span>`
         : `<span>${esc(msg)}</span>`;
-      confirm.style.display = 'flex';
-      if (ok) {
-        const actions = document.getElementById('ctaActions');
-        if (actions) actions.style.display = 'none'; // no further clicks once confirmed
-      }
+      confirmEl.style.display = 'flex';
+      if (ok && actionsEl) actionsEl.style.display = 'none'; // no further clicks once confirmed
     }
 
-    document.getElementById('deeperBtn').addEventListener('click', async () => {
+    async function requestDiagnosis(btn, confirmEl, actionsEl) {
       if (diagnosisRequested) return;
       if (!state.leadId) {
-        setCtaMessage('Something went wrong. Email us at lightmyfuse@two-fires.com', false);
+        setCtaMessage(confirmEl, actionsEl, 'Something went wrong. Email us at lightmyfuse@two-fires.com', false);
         return;
       }
-      const btn = document.getElementById('deeperBtn');
       const original = btn.textContent;
       btn.disabled = true;
       btn.textContent = 'Sending...';
-      document.getElementById('ctaConfirm').style.display = 'none';
+      confirmEl.style.display = 'none';
 
       try {
         const res = await fetch(API_BASE + '/request-diagnosis', {
@@ -1234,7 +1234,7 @@
         if (!res.ok || !data.success) throw new Error('request failed');
 
         diagnosisRequested = true;
-        setCtaMessage(
+        setCtaMessage(confirmEl, actionsEl,
           data.already_requested
             ? "You've already requested this. We'll be in touch."
             : "We've got your request. Expect to hear from us within 24 hours.",
@@ -1243,8 +1243,24 @@
       } catch (err) {
         btn.disabled = false;
         btn.textContent = original;
-        setCtaMessage('Something went wrong. Email us at lightmyfuse@two-fires.com', false);
+        setCtaMessage(confirmEl, actionsEl, 'Something went wrong. Email us at lightmyfuse@two-fires.com', false);
       }
+    }
+
+    document.getElementById('deeperBtn').addEventListener('click', () => {
+      requestDiagnosis(
+        document.getElementById('deeperBtn'),
+        document.getElementById('ctaConfirm'),
+        document.getElementById('ctaActions')
+      );
+    });
+
+    document.getElementById('capDeeperBtn').addEventListener('click', () => {
+      requestDiagnosis(
+        document.getElementById('capDeeperBtn'),
+        document.getElementById('capCtaConfirm'),
+        document.getElementById('capCtaActions')
+      );
     });
 
     // ---------- Copy Full Results ----------
