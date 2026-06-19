@@ -506,11 +506,6 @@ body::before {
     <p class="login-sub">Sign in to access your marketing intelligence tools.</p>
 
     <div class="field">
-      <label for="username">Username</label>
-      <input type="text" id="username" placeholder="Enter username" autocomplete="username" autocapitalize="none">
-    </div>
-
-    <div class="field">
       <label for="password">Password</label>
       <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
       <div class="error-msg" id="error-msg">Incorrect username or password.</div>
@@ -615,67 +610,76 @@ body::before {
 </div>
 
 <script>
-const CREDENTIALS = { username: 'twofires', password: 'TwoFires1!' };
+// Auth is server-side. We POST the password to /api/portal-auth, which validates
+// it and (on success) sets a signed httpOnly session cookie. The tool pages
+// (/insight, /agent.html, /ladder) are gated by Edge middleware that checks
+// that cookie — there are no credentials in this page and no sessionStorage gate.
 
-function handleLogin() {
-  const u = document.getElementById('username').value.trim();
+async function handleLogin() {
   const p = document.getElementById('password').value;
   const errMsg = document.getElementById('error-msg');
-  const uInput = document.getElementById('username');
   const pInput = document.getElementById('password');
   const btn = document.getElementById('login-btn');
 
   errMsg.classList.remove('visible');
-  uInput.classList.remove('error');
   pInput.classList.remove('error');
 
-  if (!u || !p) {
-    errMsg.textContent = 'Please enter your username and password.';
+  if (!p) {
+    errMsg.textContent = 'Please enter your password.';
     errMsg.classList.add('visible');
-    if (!u) uInput.classList.add('error');
-    if (!p) pInput.classList.add('error');
+    pInput.classList.add('error');
     return;
   }
 
   btn.disabled = true;
   btn.textContent = 'Signing in…';
 
-  setTimeout(() => {
-    if (u === CREDENTIALS.username && p === CREDENTIALS.password) {
-      sessionStorage.setItem('tf_auth', 'true');
-      sessionStorage.setItem('tf_user', u);
-      showPortal(u);
+  try {
+    const res = await fetch('/api/portal-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: p }),
+    });
+
+    if (res.ok) {
+      // Cookie is set. Show the portal dashboard; tool links are now authorized.
+      showPortal();
     } else {
-      errMsg.textContent = 'Incorrect username or password.';
+      const msg = res.status === 500
+        ? 'Portal sign-in is temporarily unavailable.'
+        : 'Incorrect password.';
+      errMsg.textContent = msg;
       errMsg.classList.add('visible');
-      uInput.classList.add('error');
       pInput.classList.add('error');
       btn.disabled = false;
       btn.textContent = 'Sign in';
       pInput.value = '';
       pInput.focus();
     }
-  }, 600);
+  } catch (e) {
+    errMsg.textContent = 'Network error. Please try again.';
+    errMsg.classList.add('visible');
+    btn.disabled = false;
+    btn.textContent = 'Sign in';
+  }
 }
 
-function showPortal(username) {
+function showPortal() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('portal-screen').classList.add('active');
-  document.getElementById('portal-user-label').textContent = username;
 }
 
 function handleLogout() {
-  sessionStorage.removeItem('tf_auth');
-  sessionStorage.removeItem('tf_user');
-  document.getElementById('portal-screen').classList.remove('active');
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('username').value = '';
-  document.getElementById('password').value = '';
-  document.getElementById('error-msg').classList.remove('visible');
-  document.getElementById('username').classList.remove('error');
-  document.getElementById('password').classList.remove('error');
-  document.getElementById('login-btn').disabled = false;
-  document.getElementById('login-btn').textContent = 'Sign in';
+  // Clear the session cookie server-side, then return to the login screen.
+  fetch('/api/portal-logout', { method: 'POST' }).finally(() => {
+    document.getElementById('portal-screen').classList.remove('active');
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('password').value = '';
+    document.getElementById('error-msg').classList.remove('visible');
+    document.getElementById('password').classList.remove('error');
+    document.getElementById('login-btn').disabled = false;
+    document.getElementById('login-btn').textContent = 'Sign in';
+  });
 }
 
 document.addEventListener('keydown', e => {
@@ -683,10 +687,6 @@ document.addEventListener('keydown', e => {
     handleLogin();
   }
 });
-
-if (sessionStorage.getItem('tf_auth') === 'true') {
-  showPortal(sessionStorage.getItem('tf_user') || 'twofires');
-}
 </script>
 </body>
 </html>
