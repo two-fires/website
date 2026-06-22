@@ -635,9 +635,10 @@ async function handleLogin() {
   btn.textContent = 'Signing in…';
 
   try {
-    const res = await fetch('/api/portal-auth', {
+    const res = await fetch('https://insight.two-fires.com/portal-auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ password: p }),
     });
 
@@ -671,7 +672,7 @@ function showPortal() {
 
 function handleLogout() {
   // Clear the session cookie server-side, then return to the login screen.
-  fetch('/api/portal-logout', { method: 'POST' }).finally(() => {
+  fetch('https://insight.two-fires.com/portal-logout', { method: 'POST', credentials: 'include' }).finally(() => {
     document.getElementById('portal-screen').classList.remove('active');
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('password').value = '';
