@@ -879,13 +879,8 @@ a.source-citation:hover {
 </main>
 
 <script>
-/* ────────────────────────────────────────────
-   AUTH GATE
-   ──────────────────────────────────────────── */
-if (sessionStorage.getItem('tf_auth') !== 'true') {
-  window.location.href = 'portal.html';
-}
-
+/* Auth is server-side: the VPS verifies the tf_portal cookie on the billable
+   endpoints. No client-side gate. */
 document.getElementById('nav-user-label').textContent =
   sessionStorage.getItem('tf_user') || '';
 

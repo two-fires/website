@@ -381,8 +381,7 @@
 </head>
 <body>
 
-  <!-- Shared flame gradient defs, referenced by the brand marks on every screen.
-       Auth is handled by portal.html; this page reuses its sessionStorage key. -->
+  <!-- Shared flame gradient defs, referenced by the brand marks on every screen. -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
@@ -466,7 +465,6 @@
 
   <script>
     const API_BASE = 'https://insight.two-fires.com';
-    const PORTAL_AUTH_KEY = 'tf_auth'; // set by portal.html on successful login
 
     const STAGES = [
       { key: 'orientation', label: 'Orientation' },
@@ -849,15 +847,10 @@
     }
 
     // ---------- boot ----------
-    // Auth is owned by portal.html. If the user signed in there, go straight to
-    // the client-details screen. If they hit /ladder/ directly, send them to the
-    // portal to log in first.
-    if (sessionStorage.getItem(PORTAL_AUTH_KEY) === 'true') {
-      showScreen('screen-details');
-      $('d-name').focus();
-    } else {
-      window.location.replace('/portal.html');
-    }
+    // Server-side auth: the VPS verifies the tf_portal cookie on /ladder/start
+    // and /ladder/chat. No client-side gate. Boot straight to the details screen.
+    showScreen('screen-details');
+    $('d-name').focus();
   </script>
 </body>
 </html>
