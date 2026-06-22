@@ -560,6 +560,7 @@
         const res = await fetch(API_BASE + '/ladder/start', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({ name, email, company }),
         });
         const data = await res.json();
@@ -647,6 +648,7 @@
         const res = await fetch(API_BASE + '/ladder/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({ sessionId: state.sessionId, message: text }),
         });
         if (!res.ok || !res.body) {
