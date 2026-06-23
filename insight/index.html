@@ -681,9 +681,6 @@
 
   </main>
 
-  <!-- Hidden render target for the PDF report (white theme, built on demand). -->
-  <div id="pdfRoot" aria-hidden="true" style="position:absolute; left:-99999px; top:0; width:794px;"></div>
-
   <script>
     const API_BASE = 'https://insight.two-fires.com';
     const MIN_FIELD_CHARS = 10;   // descriptive fields
@@ -1354,26 +1351,29 @@
       return String(s || 'Report').trim().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'Report';
     }
 
-    // Confidence as coloured inline text for the white-theme PDF.
+    // Confidence as a simple inline-block badge for the white-theme PDF.
+    // No flexbox/grid — html2canvas renders inline-block + border-radius reliably.
     function pdfConf(c) {
       const k = String(c || '').toLowerCase();
-      let col = '#6B7280';
-      if (k.startsWith('high')) col = '#15803D';
-      else if (k.startsWith('med')) col = '#B45309';
-      else if (k.startsWith('low')) col = '#B91C1C';
-      return `<span style="color:${col};font-weight:600;font-size:11px;">${esc(c || '-')}</span>`;
+      let col = '#6B7280', bg = '#F3F4F6';
+      if (k.startsWith('high')) { col = '#15803D'; bg = '#E7F6ED'; }
+      else if (k.startsWith('med')) { col = '#B45309'; bg = '#FCF1DF'; }
+      else if (k.startsWith('low')) { col = '#B91C1C'; bg = '#FBE9E9'; }
+      return `<span style="display:inline-block;padding:3px 8px;border-radius:10px;background:${bg};color:${col};font-weight:600;font-size:11px;line-height:1.3;">${esc(c || '-')}</span>`;
     }
 
+    // Tables use fixed layout + word-wrap so wide content can never push the
+    // table past the 650px capture width (the cause of the old left-side clip).
     function pdfTable(title, headers, rows) {
       if (!rows.length) return '';
-      const ths = headers.map(h => `<th style="text-align:left;padding:7px 9px;background:#F3EEFB;color:#6B21A8;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;border:1px solid #E6DDF5;">${esc(h.label)}</th>`).join('');
+      const ths = headers.map(h => `<th style="text-align:left;padding:8px;vertical-align:top;background:#F3EEFB;color:#6B21A8;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;border:1px solid #E6DDF5;word-wrap:break-word;">${esc(h.label)}</th>`).join('');
       const trs = rows.map(r => `<tr>${headers.map(h => {
         const val = h.key === '__confidence' ? pdfConf(r.confidence) : esc(r[h.key] || '');
-        return `<td style="padding:7px 9px;font-size:11px;color:#1F2937;border:1px solid #E6DDF5;vertical-align:top;line-height:1.45;">${val}</td>`;
+        return `<td style="padding:8px;vertical-align:top;font-size:13px;color:#1F2937;border:1px solid #E6DDF5;line-height:1.45;word-wrap:break-word;">${val}</td>`;
       }).join('')}</tr>`).join('');
       return `<div style="margin:0 0 18px;">
-        <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:0 0 8px;">${esc(title)}</div>
-        <table style="width:100%;border-collapse:collapse;">${`<thead><tr>${ths}</tr></thead>`}<tbody>${trs}</tbody></table>
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:0 0 8px;">${esc(title)}</div>
+        <table style="width:100%;table-layout:fixed;word-wrap:break-word;border-collapse:collapse;">${`<thead><tr>${ths}</tr></thead>`}<tbody>${trs}</tbody></table>
       </div>`;
     }
 
@@ -1384,23 +1384,18 @@
       const insights = arr(d.key_insights).filter(Boolean);
       const findings = arr(ex.top_findings).filter(Boolean);
 
-      const flame = `<svg width="26" height="26" viewBox="0 0 240 240" aria-hidden="true">
-        <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="#A855F7" opacity="0.85"/>
-        <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="#6B21A8"/></svg>`;
-
       const sub = (s) => `<div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:22px 0 8px;">${esc(s)}</div>`;
 
       let html = `<div style="font-family:'DM Sans',Arial,sans-serif;color:#1F2937;background:#ffffff;padding:4px 6px;">`;
-      // Header
-      html += `<div style="display:flex;align-items:center;gap:10px;border-bottom:2px solid #A855F7;padding-bottom:14px;margin-bottom:18px;">
-        ${flame}
-        <div>
-          <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6B21A8;font-weight:700;">Two Fires</div>
-          <div style="font-size:18px;font-weight:700;color:#111827;">Customer Insight Report</div>
-        </div></div>`;
-      html += `<div style="font-size:11px;color:#6B7280;margin-bottom:20px;">
-        ${state.company ? '<b style="color:#374151;">' + esc(state.company) + '</b> &nbsp;·&nbsp; ' : ''}
-        ${state.name ? esc(state.name) + ' &nbsp;·&nbsp; ' : ''}${esc(readableDate())}</div>`;
+      // Branded header — block layout only (no flex/grid for html2canvas safety).
+      html += `<div style="margin-bottom:20px;">
+        <div style="font-family:'DM Sans',Arial,sans-serif;font-size:24px;font-weight:700;color:#A855F7;line-height:1.1;">Two Fires</div>
+        <div style="font-size:14px;color:#666;margin-top:3px;">Customer Insight Report</div>
+        <div style="height:1px;background:#A855F7;margin:12px 0;"></div>
+        <div style="font-size:12px;color:#374151;">
+          ${state.company ? '<b style="color:#111827;">' + esc(state.company) + '</b> &nbsp;·&nbsp; ' : ''}
+          ${state.name ? esc(state.name) + ' &nbsp;·&nbsp; ' : ''}${esc(readableDate())}</div>
+      </div>`;
 
       // Executive summary
       html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:0 0 4px;">Executive Summary</div>`;
@@ -1454,42 +1449,65 @@
       if (sources.length) html += `<div style="font-size:11px;color:#6B7280;margin-top:6px;">Source types: ${esc(sources.join(', '))}</div>`;
 
       // Footer
-      html += `<div style="margin-top:28px;border-top:1px solid #E6DDF5;padding-top:12px;font-size:10px;color:#9CA3AF;line-height:1.5;">
-        Generated by Two Fires. For the full Marketing Diagnosis, visit two-fires.com/insight or contact us at lightmyfuse@two-fires.com</div>`;
+      html += `<div style="text-align:center;margin-top:28px;border-top:1px solid #E6DDF5;padding-top:12px;font-size:10px;color:#999;line-height:1.5;">two-fires.com | Confidential</div>`;
       html += `</div>`;
       return html;
     }
 
-    document.getElementById('pdfBtn').addEventListener('click', () => {
+    // Build the report into a temporary off-screen div pinned to a fixed 650px
+    // width, hand THAT element to html2pdf, then remove it. Capturing a fixed
+    // 650px container (rather than the live, full-width results) is what stops
+    // the old left-side clipping: the capture width and the element width match.
+    const PDF_WIDTH = 650; // px — fits A4 portrait content area (180mm) with the margins below
+
+    function exportPdf() {
       if (!currentResult) return;
+
+      const btn = document.getElementById('pdfBtn');
       if (typeof html2pdf === 'undefined') {
-        const b = document.getElementById('pdfBtn');
-        const o = b.innerHTML; b.innerHTML = 'PDF unavailable';
-        setTimeout(() => { b.innerHTML = o; }, 2500);
+        const o = btn.innerHTML; btn.innerHTML = 'PDF unavailable';
+        setTimeout(() => { btn.innerHTML = o; }, 2500);
         return;
       }
-      const btn = document.getElementById('pdfBtn');
       const original = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span> Building PDF...';
 
-      const root = document.getElementById('pdfRoot');
-      root.innerHTML = buildPdfHTML(currentResult);
+      // Temporary off-screen clone container at a fixed width.
+      const clone = document.createElement('div');
+      clone.id = 'pdfExportClone';
+      clone.setAttribute('aria-hidden', 'true');
+      clone.style.cssText = `position:absolute; left:-99999px; top:0; width:${PDF_WIDTH}px; background:#ffffff;`;
+      clone.innerHTML = buildPdfHTML(currentResult);
+      document.body.appendChild(clone);
+
+      // Verify the clone actually laid out at the fixed width before capture.
+      // If something overrode it, force the width back so capture stays aligned.
+      if (clone.offsetWidth !== PDF_WIDTH) {
+        clone.style.width = PDF_WIDTH + 'px';
+      }
+
+      const cleanup = () => {
+        if (clone.parentNode) clone.parentNode.removeChild(clone);
+        btn.disabled = false;
+        btn.innerHTML = original;
+      };
 
       const filename = `Two-Fires-Customer-Insight-${slug(state.company)}-${dateStamp()}.pdf`;
       const opt = {
-        margin: 15,
+        margin: [15, 15, 20, 15],
         filename,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, backgroundColor: '#ffffff', useCORS: true, windowWidth: 794 },
+        html2canvas: { scale: 2, useCORS: true, width: PDF_WIDTH, windowWidth: PDF_WIDTH },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
       };
-      html2pdf().set(opt).from(root.firstElementChild).save()
-        .then(() => { root.innerHTML = ''; })
-        .catch(() => { /* ignore */ })
-        .finally(() => { btn.disabled = false; btn.innerHTML = original; });
-    });
+      html2pdf().set(opt).from(clone).save()
+        .then(cleanup)
+        .catch(cleanup);
+    }
+
+    document.getElementById('pdfBtn').addEventListener('click', exportPdf);
 
     // ---------- boot ----------
     if (state.leadId) {
