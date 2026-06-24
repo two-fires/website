@@ -706,6 +706,13 @@
       }));
     }
 
+    // Durable email pointer (localStorage) so a completed report can be restored
+    // after a hard refresh or in a new tab, by re-calling /register on load.
+    const EMAIL_KEY = 'tf_insight_email';
+    function getSavedEmail() { try { return localStorage.getItem(EMAIL_KEY) || ''; } catch (e) { return ''; } }
+    function saveEmail(email) { try { if (email) localStorage.setItem(EMAIL_KEY, email); } catch (e) { /* ignore */ } }
+    function clearSavedEmail() { try { localStorage.removeItem(EMAIL_KEY); } catch (e) { /* ignore */ } }
+
     function showStage(id) {
       document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
@@ -771,6 +778,8 @@
         state.name = name;
         state.company = company;
         persist();
+        // Remember the email so the report survives a hard refresh / new tab.
+        saveEmail(email);
 
         // Returning user: if the backend handed back a previously completed
         // analysis, render it immediately instead of showing the intake form.
@@ -1318,6 +1327,9 @@
     // The backend still enforces the free-run limit when they submit a new brief.
     const rerunBtn = document.getElementById('rerunBtn');
     if (rerunBtn) rerunBtn.addEventListener('click', () => {
+      // Starting fresh: drop the persisted report pointer so a refresh won't
+      // pull the old report back over the new intake form.
+      clearSavedEmail();
       const wb = document.getElementById('welcomeBack');
       if (wb) wb.style.display = 'none';
       showStage('stage-brief');
@@ -1502,7 +1514,12 @@
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
       };
-      html2pdf().set(opt).from(clone).save()
+      // Capture the inner content node, NOT the wrapper: html2pdf deep-clones
+      // the source into its own render container, and the wrapper's off-screen
+      // `position:absolute; left:-99999px` would travel with it and render blank.
+      // The inner node is statically positioned, so it lays out at 0,0 and prints.
+      const captureTarget = clone.firstElementChild || clone;
+      html2pdf().set(opt).from(captureTarget).save()
         .then(cleanup)
         .catch(cleanup);
     }
@@ -1510,10 +1527,54 @@
     document.getElementById('pdfBtn').addEventListener('click', exportPdf);
 
     // ---------- boot ----------
-    if (state.leadId) {
-      // Returning within the same browser session: skip the gate.
-      enterBriefOrLimit();
+    // On load, if we have a saved email, re-call /register. The backend returns
+    // the visitor's most recent completed analysis (latestCompletedResult), so a
+    // hard refresh or fresh tab restores the report instead of resetting to the
+    // gate. Falls back gracefully if there is no email or no stored result.
+    async function restoreReportOnLoad() {
+      const email = getSavedEmail();
+      if (!email) return false;
+      try {
+        const res = await fetch(API_BASE + '/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // name/company come along when this tab already knows them; the
+          // backend keys off the email, so they are not required to restore.
+          body: JSON.stringify({ email, name: state.name || undefined, company: state.company || undefined }),
+        });
+        if (!res.ok) return false;
+        const data = await res.json();
+
+        // Adopt the returned identity so PDF/copy/CTA keep working.
+        if (data.leadId) {
+          state.leadId = data.leadId;
+          state.runsRemaining = data.runsRemaining;
+          if (data.name) state.name = data.name;
+          if (data.company) state.company = data.company;
+          persist();
+        }
+
+        // Render the stored report if one came back. Prefer an explicit non-null
+        // `result` field; fall back to the existing wrapper-detection logic.
+        const stored = (data.result != null && looksLikeAnalysis(data.result))
+          ? data.result
+          : extractStoredResult(data);
+        if (stored) {
+          showStoredReport(stored);
+          return true;
+        }
+      } catch (e) { /* network/parse error: fall through to normal flow */ }
+      return false;
     }
+
+    (async function boot() {
+      const restored = await restoreReportOnLoad();
+      if (restored) return;
+      if (state.leadId) {
+        // Returning within the same browser session: skip the gate.
+        enterBriefOrLimit();
+      }
+    })();
   </script>
 </body>
 </html>
