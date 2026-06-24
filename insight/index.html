@@ -42,9 +42,9 @@
       --red: #F87171;
       --grey: #8B8B95;
 
-      --font-display: 'DM Sans', system-ui, sans-serif;
-      --font-body: 'DM Sans', system-ui, sans-serif;
-      --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+      --font-display: 'DM Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'Geist Mono', monospace;
 
       --max-w: 1000px;
     }
@@ -461,7 +461,7 @@
 <body>
   <header class="header">
     <div class="header-inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/portal.html">
         <span class="brand-mark">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
             <defs>
@@ -478,7 +478,7 @@
         </span>
         <span class="brand-name">Two Fires</span>
       </a>
-      <a class="nav-back" href="/">← Back to site</a>
+      <a class="nav-back" href="/portal.html">← Back to Portal</a>
     </div>
   </header>
 
@@ -1378,6 +1378,9 @@
     // table past the 650px capture width (the cause of the old left-side clip).
     function pdfTable(title, headers, rows) {
       if (!rows.length) return '';
+      // Explicit per-column widths (fixed layout) so every column gets a known
+      // share of the 650px capture and all content wraps — no nowrap anywhere.
+      const cols = headers.map(h => `<col style="width:${h.width || (Math.round(100 / headers.length) + '%')}">`).join('');
       const ths = headers.map(h => `<th style="text-align:left;padding:8px;vertical-align:top;background:#F3EEFB;color:#6B21A8;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;border:1px solid #E6DDF5;word-wrap:break-word;">${esc(h.label)}</th>`).join('');
       const trs = rows.map(r => `<tr>${headers.map(h => {
         const val = h.key === '__confidence' ? pdfConf(r.confidence) : esc(r[h.key] || '');
@@ -1385,7 +1388,7 @@
       }).join('')}</tr>`).join('');
       return `<div style="margin:0 0 18px;">
         <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:0 0 8px;">${esc(title)}</div>
-        <table style="width:100%;table-layout:fixed;word-wrap:break-word;border-collapse:collapse;">${`<thead><tr>${ths}</tr></thead>`}<tbody>${trs}</tbody></table>
+        <table style="width:100%;table-layout:fixed;word-wrap:break-word;border-collapse:collapse;"><colgroup>${cols}</colgroup>${`<thead><tr>${ths}</tr></thead>`}<tbody>${trs}</tbody></table>
       </div>`;
     }
 
@@ -1398,10 +1401,12 @@
 
       const sub = (s) => `<div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:22px 0 8px;">${esc(s)}</div>`;
 
-      let html = `<div style="font-family:'DM Sans',Arial,sans-serif;color:#1F2937;background:#ffffff;padding:4px 6px;">`;
+      // padding-top:10px keeps the branded header off the top capture edge so it
+      // is never clipped; the header block adds its own top margin on top of that.
+      let html = `<div style="font-family:'DM Sans',sans-serif;color:#1F2937;background:#ffffff;padding:10px 6px 6px;">`;
       // Branded header — block layout only (no flex/grid for html2canvas safety).
-      html += `<div style="margin-bottom:20px;">
-        <div style="font-family:'DM Sans',Arial,sans-serif;font-size:24px;font-weight:700;color:#A855F7;line-height:1.1;">Two Fires</div>
+      html += `<div style="margin:6px 0 20px;">
+        <div style="font-family:'DM Sans',sans-serif;font-size:24px;font-weight:700;color:#A855F7;line-height:1.2;padding-top:2px;">Two Fires</div>
         <div style="font-size:14px;color:#666;margin-top:3px;">Customer Insight Report</div>
         <div style="height:1px;background:#A855F7;margin:12px 0;"></div>
         <div style="font-size:12px;color:#374151;">
@@ -1426,23 +1431,23 @@
       // Summary tables
       html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:26px 0 12px;border-top:1px solid #E6DDF5;padding-top:18px;">Summary Tables</div>`;
       html += pdfTable('Top Pain Points', [
-        { label: 'Pain Point', key: 'pain_point' }, { label: 'What It Means', key: 'what_it_means' },
-        { label: 'Confidence', key: '__confidence' }, { label: 'Example Evidence', key: 'example_evidence' },
+        { label: 'Pain Point', key: 'pain_point', width: '25%' }, { label: 'What It Means', key: 'what_it_means', width: '30%' },
+        { label: 'Confidence', key: '__confidence', width: '15%' }, { label: 'Example Evidence', key: 'example_evidence', width: '30%' },
       ], arr(t.top_pain_points));
       html += pdfTable('Top Customer Questions', [
-        { label: 'Question', key: 'question' }, { label: 'Buying Stage', key: 'buying_stage' },
-        { label: 'Why It Matters', key: 'why_it_matters' }, { label: 'Confidence', key: '__confidence' },
+        { label: 'Question', key: 'question', width: '30%' }, { label: 'Buying Stage', key: 'buying_stage', width: '20%' },
+        { label: 'Why It Matters', key: 'why_it_matters', width: '35%' }, { label: 'Confidence', key: '__confidence', width: '15%' },
       ], arr(t.top_customer_questions));
       html += pdfTable('Top Desired Outcomes', [
-        { label: 'Desired Outcome', key: 'desired_outcome' }, { label: 'Why It Matters', key: 'why_it_matters' },
-        { label: 'Confidence', key: '__confidence' },
+        { label: 'Desired Outcome', key: 'desired_outcome', width: '45%' }, { label: 'Why It Matters', key: 'why_it_matters', width: '40%' },
+        { label: 'Confidence', key: '__confidence', width: '15%' },
       ], arr(t.top_desired_outcomes));
       html += pdfTable('Top Objections', [
-        { label: 'Objection', key: 'objection' }, { label: 'Why It Matters', key: 'why_it_matters' },
-        { label: 'Confidence', key: '__confidence' },
+        { label: 'Objection', key: 'objection', width: '45%' }, { label: 'Why It Matters', key: 'why_it_matters', width: '40%' },
+        { label: 'Confidence', key: '__confidence', width: '15%' },
       ], arr(t.top_objections));
       html += pdfTable('Most Useful Customer Language', [
-        { label: 'Phrase', key: 'phrase' }, { label: 'Category', key: 'category' }, { label: 'Suggested Use', key: 'suggested_use' },
+        { label: 'Phrase', key: 'phrase', width: '30%' }, { label: 'Category', key: 'category', width: '20%' }, { label: 'Suggested Use', key: 'suggested_use', width: '50%' },
       ], arr(t.most_useful_language));
 
       // Key insights
