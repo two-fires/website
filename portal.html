@@ -670,6 +670,31 @@ function showPortal() {
   document.getElementById('portal-screen').classList.add('active');
 }
 
+function showLogin() {
+  document.getElementById('portal-screen').classList.remove('active');
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+// The tf_portal session cookie is httpOnly, so this page can't read it directly.
+// Ask the server whether the cookie is still valid and show the matching screen.
+// Runs on first load and on back/forward (bfcache) restores via the pageshow
+// handler below, so returning from a tool lands a signed-in user straight on the
+// dashboard (no forced re-login), and an expired session never shows stale UI.
+async function verifySession() {
+  try {
+    const res = await fetch('https://insight.two-fires.com/portal-verify', {
+      method: 'GET',
+      credentials: 'include',
+    });
+    if (res.ok) { showPortal(); return; }
+  } catch (e) { /* network error: fall through to login (fail closed) */ }
+  showLogin();
+}
+
+// pageshow fires on initial load AND when the page is restored from the bfcache
+// (e.g. clicking "Back to Portal" / the browser back button from a tool page).
+window.addEventListener('pageshow', () => { verifySession(); });
+
 function handleLogout() {
   // Clear the session cookie server-side, then return to the login screen.
   fetch('https://insight.two-fires.com/portal-logout', { method: 'POST', credentials: 'include' }).finally(() => {
