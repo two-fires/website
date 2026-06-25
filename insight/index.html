@@ -768,6 +768,8 @@
         state.runsRemaining = data.runsRemaining;
         state.name = name;
         state.company = company;
+        // Stored-report session id (returning user) so the PDF button works.
+        if (data.sessionId) { state.sessionId = data.sessionId; window.currentSessionId = data.sessionId; }
         persist();
         // Remember the email so the report survives a hard refresh / new tab.
         saveEmail(email);
@@ -1567,6 +1569,8 @@
           state.runsRemaining = data.runsRemaining;
           if (data.name) state.name = data.name;
           if (data.company) state.company = data.company;
+          // Stored-report session id (returning user) so the PDF button works.
+          if (data.sessionId) { state.sessionId = data.sessionId; window.currentSessionId = data.sessionId; }
           persist();
         }
 
