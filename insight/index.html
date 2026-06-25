@@ -674,7 +674,7 @@
     const MIN_FIELD_CHARS = 10;   // descriptive fields
     const MIN_REGION_CHARS = 2;   // region can be short ("UK", "USA", "Sydney")
 
-    const state = { leadId: null, runsRemaining: 0, name: '', company: '' };
+    const state = { leadId: null, runsRemaining: 0, name: '', company: '', sessionId: null };
     let currentResult = null; // the most recent parsed analysis, for PDF + copy
 
     // Restore session if the user already registered this browser session.
@@ -685,12 +685,15 @@
         state.runsRemaining = saved.runsRemaining;
         state.name = saved.name || '';
         state.company = saved.company || '';
+        state.sessionId = saved.sessionId || null;
+        if (saved.sessionId) window.currentSessionId = saved.sessionId;
       }
     } catch (e) { /* ignore */ }
 
     function persist() {
       sessionStorage.setItem('tf_insight', JSON.stringify({
         leadId: state.leadId, runsRemaining: state.runsRemaining, name: state.name, company: state.company,
+        sessionId: state.sessionId,
       }));
     }
 
@@ -954,7 +957,12 @@
             const evt = parseSSE(rawEvent);
             if (!evt) continue;
 
-            if (evt.event === 'status') {
+            if (evt.event === 'session') {
+              // The backend hands us the session id so we can later request the
+              // server-side PDF at /download-report/:sessionId.
+              const sid = evt.data && evt.data.sessionId;
+              if (sid) { state.sessionId = sid; window.currentSessionId = sid; persist(); }
+            } else if (evt.event === 'status') {
               const m = evt.data && evt.data.message;
               if (m) pushStatus(m, /^searching for/i.test(m));
             } else if (evt.event === 'done') {
@@ -1469,6 +1477,20 @@
       if (!currentResult) return;
 
       const btn = document.getElementById('pdfBtn');
+      const sessionId = state.sessionId || window.currentSessionId;
+      if (!sessionId) {
+        // No session id available (e.g. a stored report restored without one).
+        const o = btn.innerHTML; btn.innerHTML = 'PDF unavailable';
+        setTimeout(() => { btn.innerHTML = o; }, 2500);
+        return;
+      }
+      // Server-side PDF download (PDFKit). The browser navigates to the gated
+      // endpoint; the tf_portal cookie (Domain=.two-fires.com) rides along, and
+      // Content-Disposition: attachment triggers the download.
+      window.open(API_BASE + '/download-report/' + sessionId, '_blank');
+
+      // Legacy client-side PDF - replaced by server-side /download-report
+      /*
       if (typeof html2pdf === 'undefined') {
         const o = btn.innerHTML; btn.innerHTML = 'PDF unavailable';
         setTimeout(() => { btn.innerHTML = o; }, 2500);
@@ -1515,6 +1537,7 @@
       html2pdf().set(opt).from(captureTarget).save()
         .then(cleanup)
         .catch(cleanup);
+      */
     }
 
     document.getElementById('pdfBtn').addEventListener('click', exportPdf);
