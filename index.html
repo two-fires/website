@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/jpeg" href="/images/flame-favicon.jpg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
   <meta name="description" content="World-class marketing. Supercharged with AI. Thirty years of brand work at McDonald's, Mars, Unilever and Burger King, applied to your business and multiplied by AI.">
   <meta property="og:title" content="Two Fires · World-class marketing. Supercharged with AI.">
   <meta property="og:description" content="World-class brand craft. AI execution. Two Fires is the marketing firm for businesses whose growth has plateaued.">
@@ -104,7 +106,7 @@
     }
     .nav { display: flex; gap: 28px; align-items: center; }
     .nav a {
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
       color: var(--text-muted); text-decoration: none; cursor: pointer; transition: color 0.25s ease;
     }
     .nav a:hover { color: var(--text); }
@@ -711,13 +713,8 @@
   <!-- Header -->
   <header class="header">
     <div class="header-inner">
-      <a class="brand" href="#" onclick="event.preventDefault(); goHome()">
-        <img src="/images/flame-favicon.jpg"
-             alt="Two Fires"
-             style="width: 32px; height: 32px;
-             object-fit: cover; border-radius: 0;
-             mix-blend-mode: lighten;">
-        <span class="brand-name">Two Fires</span>
+      <a class="brand nav-logo" href="#" onclick="event.preventDefault(); goHome()">
+        <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 40px; width: auto;">
       </a>
       <nav class="nav">
         <a href="#what" onclick="event.preventDefault(); scrollToSection('what')">What we do</a>
