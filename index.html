@@ -86,7 +86,7 @@
 
     /* Header */
     .header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 18px 0;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 0;
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       background: rgba(5, 5, 8, 0.7);
@@ -106,24 +106,25 @@
     }
     .nav { display: flex; gap: 28px; align-items: center; }
     .nav a {
-      font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
+      font-family: var(--font-body); font-size: 15px; letter-spacing: normal; text-transform: none;
       color: var(--text-muted); text-decoration: none; cursor: pointer; transition: color 0.25s ease;
     }
     .nav a:hover { color: var(--text); }
-    .nav-cta {
-      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    /* a.nav-cta keeps its pill styling and wins over `.nav a` via the type+class selector. */
+    a.nav-cta {
+      font-family: var(--font-body); font-size: 14px; font-weight: 500; letter-spacing: normal; text-transform: none;
       padding: 10px 20px; border-radius: 999px; border: 1px solid var(--purple);
       color: var(--purple-bright); cursor: pointer;
       background: var(--purple-soft-fill);
       transition: all 0.3s ease;
       text-decoration: none;
     }
-    .nav-cta:hover {
+    a.nav-cta:hover {
       background: var(--purple); color: white;
       box-shadow: 0 0 24px var(--purple-glow);
     }
 
-    main { padding-top: 80px; position: relative; z-index: 2; }
+    main { padding-top: 170px; position: relative; z-index: 2; }
 
     /* Flame */
     .flame-hero {
@@ -171,9 +172,12 @@
       opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
     }
     .hero h1 em {
-      font-style: italic; color: var(--purple-bright);
-      text-shadow: 0 0 40px var(--purple-glow);
-      letter-spacing: -0.01em;
+      font-style: italic; letter-spacing: -0.01em;
+      color: var(--purple-bright); /* fallback for browsers without background-clip: text */
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero-lede {
@@ -714,7 +718,7 @@
   <header class="header">
     <div class="header-inner">
       <a class="brand nav-logo" href="#" onclick="event.preventDefault(); goHome()">
-        <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 40px; width: auto;">
+        <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 140px; width: auto; display: block;">
       </a>
       <nav class="nav">
         <a href="#what" onclick="event.preventDefault(); scrollToSection('what')">What we do</a>
@@ -733,11 +737,6 @@
 
       <!-- HERO -->
       <section class="hero container">
-        <img src="/images/flame-hero.jpg"
-             alt="Two Fires, two purple flames"
-             style="width: 480px; max-width: 90%; height: auto;
-             display: block; margin: 0 auto 2rem;
-             mix-blend-mode: screen;">
         <h1>World-class marketing.<br><em>Supercharged with AI.</em></h1>
         <p class="hero-lede">A lot of businesses are experts at what they do, but when it comes to growth, their marketing isn't doing its job. We apply proven marketing strategy to the business, supercharged by AI, so the expertise they've built turns into real, scalable growth.</p>
         <div class="hero-actions">
