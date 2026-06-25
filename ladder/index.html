@@ -383,29 +383,12 @@
 </head>
 <body>
 
-  <!-- Shared flame gradient defs, referenced by the brand marks on every screen. -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-      <linearGradient id="flameBack" x1="0%" y1="100%" x2="0%" y2="0%">
-        <stop offset="0%" stop-color="#6B21A8"/><stop offset="55%" stop-color="#A855F7"/><stop offset="100%" stop-color="#C4A8FF"/>
-      </linearGradient>
-      <linearGradient id="flameFront" x1="0%" y1="100%" x2="0%" y2="0%">
-        <stop offset="0%" stop-color="#4C1078"/><stop offset="55%" stop-color="#6B21A8"/><stop offset="100%" stop-color="#A855F7"/>
-      </linearGradient>
-    </defs>
-  </svg>
-
   <!-- ============ SCREEN 1: CLIENT DETAILS ============ -->
   <section class="screen center-wrap" id="screen-details">
     <div class="card-panel">
-      <a href="/portal.html" aria-label="Back to Portal" style="display:inline-block;margin-bottom:18px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;border:1px solid var(--border-strong);border-radius:7px;padding:6px 11px;">← Back to Portal</a>
+      <a href="/portal.html" aria-label="Back to Portal" style="display:inline-block;margin-bottom:18px;font-family:var(--font-body);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;border:1px solid var(--border-strong);border-radius:7px;padding:6px 11px;">← Back to Portal</a>
       <div class="brand-row">
-        <span class="brand-mark">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
-            <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="url(#flameBack)" opacity="0.85"/>
-            <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="url(#flameFront)"/>
-          </svg>
-        </span>
+        <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 32px; width: auto; display: block;">
         <div class="brand-text">
           <h1>Brand Benefit Ladder</h1>
           <span>Guided Session</span>
@@ -438,13 +421,8 @@
   <section class="screen" id="screen-chat">
     <div class="topbar">
       <div class="topbar-left">
-        <a href="/portal.html" aria-label="Back to Portal" style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;border:1px solid var(--border-strong);border-radius:7px;padding:5px 10px;white-space:nowrap;">← Portal</a>
-        <span class="brand-mark">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" aria-label="Two Fires">
-            <path d="M 85 220 C 60 200, 50 165, 65 130 C 70 142, 78 142, 80 130 C 75 100, 92 70, 112 45 C 105 75, 118 92, 128 98 C 138 108, 132 138, 117 150 C 127 162, 132 185, 117 215 C 107 220, 95 222, 85 220 Z" fill="url(#flameBack)" opacity="0.85"/>
-            <path d="M 145 225 C 120 205, 110 170, 125 130 C 130 144, 138 144, 140 130 C 135 95, 154 60, 178 30 C 170 64, 184 86, 196 92 C 210 105, 202 138, 184 150 C 196 165, 198 188, 180 218 C 170 224, 158 226, 145 225 Z" fill="url(#flameFront)"/>
-          </svg>
-        </span>
+        <a href="/portal.html" aria-label="Back to Portal" style="font-family:var(--font-body);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;border:1px solid var(--border-strong);border-radius:7px;padding:5px 10px;white-space:nowrap;">← Portal</a>
+        <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 32px; width: auto; display: block;">
         <span class="topbar-title">Brand Benefit <em>Ladder</em></span>
       </div>
       <span class="topbar-stage" id="topbarStage">Stage <b id="stageNum">1</b> / 7 · <span id="stageName">Orientation</span></span>

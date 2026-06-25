@@ -65,12 +65,11 @@ body::before {
 
 /* ── NAV ── */
 .nav {
-  height: 64px;
   border-bottom: 0.5px solid var(--white-08);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
+  padding: 10px 2rem;
   background: rgba(5,5,10,0.7);
   backdrop-filter: blur(16px);
   position: sticky;
@@ -78,12 +77,6 @@ body::before {
   z-index: 100;
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo span {
-  font-family: 'DM Sans', sans-serif;
-  font-style: italic;
-  font-size: 18px;
-  color: var(--white);
-}
 .nav-right { display: flex; align-items: center; gap: 1rem; }
 .nav-user {
   font-family: 'Geist Mono', monospace;
@@ -92,7 +85,7 @@ body::before {
   letter-spacing: 0.06em;
 }
 .nav-back {
-  font-family: 'Geist Mono', monospace;
+  font-family: 'DM Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -699,7 +692,7 @@ a.source-citation:hover {
 
 <nav class="nav">
   <a class="nav-logo" href="/portal.html">
-    <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 40px; width: auto;">
+    <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 140px; width: auto; display: block;">
   </a>
   <div class="nav-right">
     <span class="nav-user" id="nav-user-label"></span>

@@ -84,7 +84,7 @@
 
     /* Header */
     .header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 0;
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       background: rgba(5, 5, 8, 0.7);
@@ -102,7 +102,7 @@
       letter-spacing: 0.18em; text-transform: uppercase;
     }
     .nav-back {
-      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      font-family: var(--font-body); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--text-muted); text-decoration: none; transition: color 0.25s ease;
     }
     .nav-back:hover { color: var(--text); }
@@ -112,7 +112,7 @@
       display: flex;
       flex-direction: column;
       justify-content: safe center;
-      padding-top: 150px;
+      padding-top: 185px;
       padding-bottom: 96px;
       position: relative; z-index: 2;
     }
@@ -464,7 +464,7 @@
   <header class="header">
     <div class="header-inner">
       <a class="brand nav-logo" href="/portal.html">
-        <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 40px; width: auto;">
+        <img src="/images/two-fires-logo.png" alt="Two Fires" style="height: 140px; width: auto; display: block;">
       </a>
       <a class="nav-back" href="/portal.html">← Back to Portal</a>
     </div>
