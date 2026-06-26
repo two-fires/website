@@ -107,7 +107,11 @@
     }
     .nav-back:hover { color: var(--text); }
 
-    main {
+    /* NOTE: <main> also carries .container, whose `padding: 0 24px` shorthand
+       (class selector) outranks a bare `main` type selector and would zero out
+       padding-top. Scope this rule as `main.container` so its vertical padding
+       wins; horizontal 24px padding still comes from .container. */
+    main.container {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
