@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires · Marketing Diagnosis</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --charcoal: #05050A;
+  --purple: #A855F7;
+  --purple-bright: #C4A8FF;
+  --purple-deep: #6B21A8;
+  --purple-glow: rgba(168,85,247,0.15);
+  --purple-border: rgba(168,85,247,0.25);
+  --white: #ffffff;
+  --white-60: rgba(255,255,255,0.6);
+  --white-40: rgba(255,255,255,0.4);
+  --white-20: rgba(255,255,255,0.2);
+  --white-08: rgba(255,255,255,0.08);
+  --white-04: rgba(255,255,255,0.04);
+  --error: #f87171;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --red: #f87171;
+}
+html, body { background: var(--charcoal); color: var(--white); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100%; }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+}
+.ambient { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+.ambient-1 { width: 600px; height: 600px; background: rgba(107,33,168,0.2); top: -200px; right: -100px; }
+.ambient-2 { width: 400px; height: 400px; background: rgba(168,85,247,0.1); bottom: -100px; left: -80px; }
+
+.wrap { position: relative; z-index: 10; max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+.back-link {
+  display: inline-block; margin-bottom: 1.5rem; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--white-60); text-decoration: none; border: 0.5px solid var(--white-20); border-radius: 7px; padding: 6px 11px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.back-link:hover { color: var(--purple-bright); border-color: var(--purple-border); }
+
+.head { margin-bottom: 2rem; }
+.head .eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin-bottom: 0.6rem; }
+.head h1 { font-style: italic; font-weight: 400; font-size: 34px; line-height: 1.15; }
+.head h1 span { color: var(--purple-bright); }
+.head p.sub { font-size: 14px; color: var(--white-60); margin-top: 0.75rem; line-height: 1.6; max-width: 60ch; }
+
+.card { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.25rem; }
+
+.field { margin-bottom: 1.1rem; }
+.field label { display: block; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-60); margin-bottom: 8px; }
+.field input, .field textarea {
+  width: 100%; background: var(--white-08); border: 0.5px solid var(--white-20); border-radius: 10px;
+  padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--white); outline: none;
+  transition: border-color 0.2s, background 0.2s; resize: vertical;
+}
+.field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.25); }
+.field input:focus, .field textarea:focus { border-color: var(--purple-border); background: rgba(168,85,247,0.06); }
+.field .hint { font-size: 11px; color: var(--white-40); margin-top: 6px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+
+.btn {
+  width: 100%; height: 50px; background: var(--purple); border: none; border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--white); cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.02em; margin-top: 0.5rem;
+}
+.btn:hover { opacity: 0.9; }
+.btn:active { transform: scale(0.99); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn.secondary { background: var(--white-08); border: 0.5px solid var(--white-20); }
+
+.form-error { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--error); margin-top: 12px; display: none; }
+.form-error.visible { display: block; }
+
+/* Progress */
+#progress { display: none; }
+#progress.visible { display: block; }
+.progress-stages { display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.stage-chip { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 12px; border-radius: 20px; border: 0.5px solid var(--white-20); color: var(--white-40); }
+.stage-chip.active { color: var(--purple-bright); border-color: var(--purple-border); background: var(--purple-glow); }
+.stage-chip.done { color: var(--green); border-color: rgba(52,211,153,0.3); }
+.progress-log { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--white-60); line-height: 1.9; max-height: 220px; overflow-y: auto; }
+.progress-log .line { opacity: 0; animation: fadeIn 0.3s ease forwards; }
+.progress-log .line::before { content: '→ '; color: var(--purple-bright); }
+@keyframes fadeIn { to { opacity: 1; } }
+.spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid var(--purple-border); border-top-color: var(--purple-bright); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Results */
+#results { display: none; }
+#results.visible { display: block; animation: fadeIn 0.4s ease; }
+.score-hero { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.score-ring { width: 92px; height: 92px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; flex-shrink: 0; border: 3px solid var(--purple-border); }
+.score-ring .num { font-size: 30px; font-weight: 600; line-height: 1; }
+.score-ring .out { font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--white-40); margin-top: 2px; }
+.score-hero .headline { font-size: 19px; font-style: italic; line-height: 1.3; }
+.score-hero .summary { font-size: 14px; color: var(--white-60); margin-top: 0.5rem; line-height: 1.6; }
+
+.section-title { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin: 0 0 1rem; }
+
+.dim-row { display: flex; align-items: center; gap: 1rem; padding: 0.7rem 0; border-bottom: 0.5px solid var(--white-08); }
+.dim-row:last-child { border-bottom: none; }
+.dim-name { font-size: 13px; width: 150px; flex-shrink: 0; text-transform: capitalize; }
+.dim-bar { flex: 1; height: 7px; background: var(--white-08); border-radius: 4px; overflow: hidden; }
+.dim-bar span { display: block; height: 100%; border-radius: 4px; }
+.dim-score { font-family: 'Geist Mono', monospace; font-size: 12px; width: 38px; text-align: right; flex-shrink: 0; }
+.dim-why { font-size: 12px; color: var(--white-40); width: 100%; margin-top: 4px; padding-left: 0; }
+.dim-wrap { padding: 0.5rem 0; border-bottom: 0.5px solid var(--white-08); }
+.dim-wrap:last-child { border-bottom: none; }
+
+.item { padding: 0.85rem 0; border-bottom: 0.5px solid var(--white-08); }
+.item:last-child { border-bottom: none; }
+.item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.item p { font-size: 13px; color: var(--white-60); line-height: 1.6; }
+.sev { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 12px; }
+.sev.high { background: rgba(248,113,113,0.15); color: var(--red); }
+.sev.medium { background: rgba(251,191,36,0.15); color: var(--amber); }
+.sev.low { background: var(--white-08); color: var(--white-40); }
+
+.prio { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 0.5px solid var(--white-08); }
+.prio:last-child { border-bottom: none; }
+.prio .rank { font-family: 'Geist Mono', monospace; font-size: 18px; color: var(--purple-bright); width: 28px; flex-shrink: 0; }
+.prio .body { flex: 1; }
+.prio .action { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.prio .why { font-size: 13px; color: var(--white-60); line-height: 1.6; }
+.prio .tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 12px; border: 0.5px solid var(--white-20); color: var(--white-60); }
+.tag.high { color: var(--green); border-color: rgba(52,211,153,0.3); }
+.tag.medium { color: var(--amber); border-color: rgba(251,191,36,0.3); }
+.tag.low { color: var(--white-40); }
+.focus-banner { background: var(--purple-glow); border: 0.5px solid var(--purple-border); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.25rem; font-size: 14px; line-height: 1.6; }
+.focus-banner strong { color: var(--purple-bright); }
+.qw { font-size: 13px; color: var(--white-60); line-height: 1.8; padding-left: 18px; }
+.evidence-note { font-size: 12px; color: var(--white-40); margin-top: 1rem; line-height: 1.6; }
+.cta-row { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.cta-row .btn { width: auto; flex: 1; min-width: 200px; padding: 0 24px; }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="wrap">
+  <a class="back-link" href="/portal.html">← Back to Portal</a>
+
+  <div class="head">
+    <div class="eyebrow">Two Fires · Intelligence Suite</div>
+    <h1>Marketing <span>Diagnosis.</span></h1>
+    <p class="sub">A senior strategist's read on the state of your marketing. We research your market, diagnose your positioning, messaging, channels and offer, then hand you a prioritised plan. Built on 30 years of brand strategy.</p>
+  </div>
+
+  <!-- INTAKE -->
+  <div class="card" id="intake">
+    <div class="row2">
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" placeholder="Jane Smith" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="jane@business.com" autocomplete="email">
+      </div>
+    </div>
+    <div class="field">
+      <label for="company">Business name</label>
+      <input type="text" id="company" placeholder="Brightwater Plumbing">
+    </div>
+    <div class="field">
+      <label for="primary_goal">What do you most want your marketing to achieve?</label>
+      <textarea id="primary_goal" rows="2" placeholder="e.g. Generate more qualified residential booking enquiries from our local area"></textarea>
+    </div>
+    <div class="field">
+      <label for="current_channels">Where do you market today?</label>
+      <input type="text" id="current_channels" placeholder="e.g. Google Business Profile, Instagram, word of mouth">
+    </div>
+    <div class="field">
+      <label for="biggest_challenge">Your biggest marketing challenge, in your words</label>
+      <textarea id="biggest_challenge" rows="2" placeholder="e.g. We are invisible online next to the big franchises and our site does not convert"></textarea>
+    </div>
+    <div class="field">
+      <label for="region">Region <span style="text-transform:none;letter-spacing:0;color:var(--white-40);">(optional)</span></label>
+      <input type="text" id="region" placeholder="e.g. Brisbane, Australia">
+    </div>
+    <button class="btn" id="run-btn" onclick="runDiagnosis()">Run my diagnosis</button>
+    <div class="form-error" id="form-error"></div>
+    <div class="hint" style="font-size:11px;color:var(--white-40);margin-top:12px;">This takes 1 to 2 minutes. We run live research, so please keep this tab open.</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="card" id="progress">
+    <div class="progress-stages">
+      <div class="stage-chip" id="chip-gather">1 · Research</div>
+      <div class="stage-chip" id="chip-diagnose">2 · Diagnose</div>
+      <div class="stage-chip" id="chip-prioritise">3 · Prioritise</div>
+    </div>
+    <div class="progress-log" id="progress-log"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results"></div>
+</div>
+
+<script>
+const API_BASE = 'https://insight.two-fires.com';
+const $ = (id) => document.getElementById(id);
+let currentSessionId = null;
+
+function showFormError(msg) {
+  const el = $('form-error');
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+function clearFormError() { $('form-error').classList.remove('visible'); }
+
+function setChip(stage, cls) {
+  const el = $('chip-' + stage);
+  if (!el) return;
+  el.classList.remove('active', 'done');
+  if (cls) el.classList.add(cls);
+}
+
+function logLine(text) {
+  const log = $('progress-log');
+  const div = document.createElement('div');
+  div.className = 'line';
+  div.textContent = text;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function scoreColor(n) {
+  const v = Number(n) || 0;
+  if (v >= 7) return 'var(--green)';
+  if (v >= 4) return 'var(--amber)';
+  return 'var(--red)';
+}
+
+function parseSSE(raw) {
+  const lines = String(raw || '').split('\n');
+  let event = 'message', dataStr = '';
+  for (const line of lines) {
+    if (line.startsWith(':')) continue;
+    if (line.startsWith('event:')) event = line.slice(6).trim();
+    else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+  }
+  if (!dataStr) return { event, data: null };
+  let data = null;
+  try { data = JSON.parse(dataStr); } catch (e) {}
+  return { event, data };
+}
+
+async function runDiagnosis() {
+  clearFormError();
+  const payload = {
+    name: $('name').value.trim(),
+    email: $('email').value.trim(),
+    company: $('company').value.trim(),
+    brief: {
+      primary_goal: $('primary_goal').value.trim(),
+      current_channels: $('current_channels').value.trim(),
+      biggest_challenge: $('biggest_challenge').value.trim(),
+      region: $('region').value.trim(),
+    },
+  };
+
+  // Client-side validation mirrors the server's friendly minimums.
+  if (!payload.name || !payload.email || !payload.company) return showFormError('Please add your name, email, and business name.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return showFormError('Please enter a valid email address.');
+  if (payload.brief.primary_goal.length < 10) return showFormError('Please give a little more detail on your primary goal.');
+  if (payload.brief.biggest_challenge.length < 10) return showFormError('Please give a little more detail on your biggest challenge.');
+  if (payload.brief.current_channels.length < 2) return showFormError('Please tell us where you currently market.');
+
+  const btn = $('run-btn');
+  btn.disabled = true;
+  btn.textContent = 'Running your diagnosis…';
+  $('progress').classList.add('visible');
+  $('results').classList.remove('visible');
+  $('results').innerHTML = '';
+  $('progress-log').innerHTML = '';
+  setChip('gather', 'active'); setChip('diagnose', ''); setChip('prioritise', '');
+  logLine('Starting up the research agent…');
+
+  try {
+    const res = await fetch(API_BASE + '/diagnose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok || !res.body) {
+      let msg = 'Something went wrong. Please try again.';
+      if (res.status === 401) msg = 'Your session has expired. Please sign in to the portal again.';
+      else { try { const j = await res.json(); if (j && (j.error || j.message)) msg = j.error || j.message; } catch (e) {} }
+      throw new Error(msg);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let lastStage = 'gather';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = buffer.indexOf('\n\n')) !== -1) {
+        const raw = buffer.slice(0, sep);
+        buffer = buffer.slice(sep + 2);
+        const { event, data } = parseSSE(raw);
+        if (!data) continue;
+
+        if (event === 'session') {
+          currentSessionId = data.sessionId;
+        } else if (event === 'status') {
+          if (data.stage && data.stage !== lastStage) {
+            setChip(lastStage, 'done');
+            setChip(data.stage, 'active');
+            lastStage = data.stage;
+          }
+          if (data.message) logLine(data.message);
+        } else if (event === 'done') {
+          setChip(lastStage, 'done');
+          renderResults(data.result);
+        } else if (event === 'error') {
+          throw new Error(data.message || 'The diagnosis could not be completed.');
+        }
+      }
+    }
+  } catch (err) {
+    showFormError(err.message || 'Something went wrong. Please try again.');
+    $('progress').classList.remove('visible');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Run my diagnosis';
+  }
+}
+
+function renderResults(result) {
+  if (!result) return;
+  const d = result.diagnosis || {};
+  const plan = result.action_plan || {};
+  const research = result.research || {};
+  const score = d.overall_health_score;
+  const col = scoreColor(score);
+
+  const dims = (d.dimensions || []).map((dim) => {
+    const pct = Math.max(0, Math.min(100, (Number(dim.score) || 0) * 10));
+    const c = scoreColor(dim.score);
+    return `<div class="dim-wrap">
+      <div class="dim-row">
+        <div class="dim-name">${esc((dim.name || '').replace(/_/g, ' '))}</div>
+        <div class="dim-bar"><span style="width:${pct}%;background:${c};"></span></div>
+        <div class="dim-score" style="color:${c};">${esc(dim.score)}/10</div>
+      </div>
+      ${dim.rationale ? `<div class="dim-why">${esc(dim.rationale)}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  const strengths = (d.strengths || []).map((s) =>
+    `<div class="item"><h4>${esc(s.title)}</h4><p>${esc(s.detail)}</p></div>`).join('');
+
+  const gaps = (d.gaps || []).map((g) => {
+    const sev = (g.severity || '').toLowerCase();
+    const badge = sev ? `<span class="sev ${esc(sev)}">${esc(sev)}</span>` : '';
+    return `<div class="item"><h4>${esc(g.title)} ${badge}</h4><p>${esc(g.detail)}</p></div>`;
+  }).join('');
+
+  const risks = (d.risks || []).map((r) =>
+    `<div class="item"><h4>${esc(r.title)}</h4><p>${esc(r.detail)}</p></div>`).join('');
+
+  const prios = (plan.priorities || []).map((p, i) => {
+    const imp = (p.impact || '').toLowerCase();
+    const eff = (p.effort || '').toLowerCase();
+    return `<div class="prio">
+      <div class="rank">${esc(p.rank != null ? p.rank : i + 1)}</div>
+      <div class="body">
+        <div class="action">${esc(p.action)}</div>
+        <div class="why">${esc(p.why_now || '')}${p.expected_outcome ? ' ' + esc(p.expected_outcome) : ''}</div>
+        <div class="tags">
+          ${imp ? `<span class="tag ${esc(imp)}">Impact: ${esc(imp)}</span>` : ''}
+          ${eff ? `<span class="tag ${esc(eff)}">Effort: ${esc(eff)}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const quickWins = (plan.quick_wins || []).map((q) => `<li>${esc(q)}</li>`).join('');
+  const eq = research.evidence_quality || {};
+
+  const html = `
+    <div class="card">
+      <div class="score-hero">
+        <div class="score-ring" style="border-color:${col};">
+          <div class="num" style="color:${col};">${esc(score != null ? score : '–')}</div>
+          <div class="out">/ 10</div>
+        </div>
+        <div style="flex:1;min-width:240px;">
+          ${d.headline ? `<div class="headline">${esc(d.headline)}</div>` : ''}
+          ${d.summary ? `<div class="summary">${esc(d.summary)}</div>` : ''}
+        </div>
+      </div>
+    </div>
+
+    ${plan.ninety_day_focus ? `<div class="focus-banner"><strong>Your 90-day focus:</strong> ${esc(plan.ninety_day_focus)}</div>` : ''}
+
+    ${dims ? `<div class="card"><div class="section-title">Marketing Scorecard</div>${dims}</div>` : ''}
+    ${strengths ? `<div class="card"><div class="section-title">Strengths</div>${strengths}</div>` : ''}
+    ${gaps ? `<div class="card"><div class="section-title">Gaps</div>${gaps}</div>` : ''}
+    ${risks ? `<div class="card"><div class="section-title">Risks</div>${risks}</div>` : ''}
+    ${prios ? `<div class="card"><div class="section-title">Prioritised Action Plan</div>${prios}${quickWins ? `<div class="section-title" style="margin-top:1.5rem;">Quick Wins</div><ul class="qw">${quickWins}</ul>` : ''}</div>` : ''}
+
+    <div class="card">
+      ${(eq.overall_confidence || eq.notes) ? `<div class="evidence-note">Research confidence: ${esc(eq.overall_confidence || 'n/a')}. Sources found: ${esc(eq.sources_found != null ? eq.sources_found : 'n/a')}.${eq.notes ? ' ' + esc(eq.notes) : ''}</div>` : ''}
+      <div class="cta-row">
+        <button class="btn" onclick="downloadPDF()">Download PDF report</button>
+        <a class="btn secondary" href="mailto:lightmyfuse@two-fires.com?subject=Marketing%20Diagnosis%20follow-up%20-%20${encodeURIComponent(result.company || '')}" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">Talk to a strategist</a>
+      </div>
+    </div>
+  `;
+
+  const r = $('results');
+  r.innerHTML = html;
+  r.classList.add('visible');
+  $('progress').classList.remove('visible');
+  r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function downloadPDF() {
+  if (!currentSessionId) return;
+  // Cookie-gated GET; open in a new tab so the browser handles the file download.
+  const url = API_BASE + '/download-diagnosis/' + encodeURIComponent(currentSessionId);
+  fetch(url, { credentials: 'include' })
+    .then((res) => { if (!res.ok) throw new Error('Could not generate the PDF.'); return res.blob(); })
+    .then((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Two-Fires-Marketing-Diagnosis.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+    })
+    .catch(() => alert('Could not generate the PDF. Please try again.'));
+}
+</script>
+</body>
+</html>
