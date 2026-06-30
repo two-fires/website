@@ -774,6 +774,7 @@
 
           <div class="deliv-actions">
             <button class="btn btn-ghost" id="copyBtn" type="button">Copy full output</button>
+            <button class="btn" id="downloadPdfBtn" type="button">Download PDF</button>
           </div>
 
           <div class="deliv-cta">
@@ -791,6 +792,14 @@
       scrollToBottom();
 
       $('copyBtn').addEventListener('click', () => copyOutput(out));
+      // PDF download is only wired up here, inside the completed deliverable, so
+      // the button can never appear for an in-progress session (no ladder_output).
+      // Top-level navigation carries the SameSite=Lax tf_portal cookie to the
+      // portal-gated /download-ladder endpoint.
+      $('downloadPdfBtn').addEventListener('click', () => {
+        if (!state.sessionId) return;
+        window.open(API_BASE + '/download-ladder/' + encodeURIComponent(state.sessionId), '_blank');
+      });
     }
 
     function copyOutput(out) {
