@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires · Your Diagnosis Hub</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #050508; --purple: #A855F7; --purple-bright: #C4A8FF; --purple-deep: #6B21A8;
+  --purple-glow: rgba(168,85,247,0.15); --purple-border: rgba(168,85,247,0.25);
+  --white: #ffffff; --white-60: rgba(255,255,255,0.6); --white-40: rgba(255,255,255,0.4);
+  --white-20: rgba(255,255,255,0.2); --white-08: rgba(255,255,255,0.08); --white-04: rgba(255,255,255,0.04);
+  --error: #f87171; --green: #34d399; --amber: #fbbf24; --red: #f87171;
+}
+html, body { background: var(--bg); color: var(--white); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100%; }
+body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); }
+.ambient { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+.ambient-1 { width: 600px; height: 600px; background: rgba(107,33,168,0.2); top: -200px; right: -100px; }
+.ambient-2 { width: 400px; height: 400px; background: rgba(168,85,247,0.1); bottom: -100px; left: -80px; }
+
+.wrap { position: relative; z-index: 10; max-width: 920px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-60); text-decoration: none; border: 0.5px solid var(--white-20); border-radius: 7px; padding: 6px 11px; transition: color 0.2s, border-color 0.2s; }
+.back-link:hover { color: var(--purple-bright); border-color: var(--purple-border); }
+
+.head { margin-bottom: 1.75rem; }
+.head .eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin-bottom: 0.6rem; }
+.head h1 { font-style: italic; font-weight: 400; font-size: 32px; line-height: 1.15; }
+.head h1 span { color: var(--purple-bright); }
+
+.emailbar { display: flex; gap: 0.6rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+.emailbar input { flex: 1; min-width: 220px; background: var(--white-08); border: 0.5px solid var(--white-20); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--white); outline: none; }
+.emailbar input:focus { border-color: var(--purple-border); background: rgba(168,85,247,0.06); }
+.btn { background: var(--purple); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--white); cursor: pointer; transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.02em; padding: 0 22px; height: 46px; }
+.btn:hover { opacity: 0.9; } .btn:active { transform: scale(0.99); } .btn:disabled { opacity: 0.45; cursor: default; }
+.btn.secondary { background: var(--white-08); border: 0.5px solid var(--white-20); }
+
+.card { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 16px; padding: 1.6rem 1.75rem; margin-bottom: 1.1rem; }
+.section-title { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin: 0 0 1rem; }
+.muted { color: var(--white-40); font-size: 13px; line-height: 1.6; }
+.msg { font-size: 13px; line-height: 1.6; }
+.msg.err { color: var(--error); font-family: 'Geist Mono', monospace; }
+
+/* Status strip */
+.strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.1rem; }
+@media (max-width: 620px) { .strip { grid-template-columns: repeat(2, 1fr); } }
+.chip { border: 0.5px solid var(--white-20); border-radius: 14px; padding: 14px 14px; background: var(--white-04); }
+.chip .ico { font-size: 16px; }
+.chip .nm { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white-60); margin-top: 8px; }
+.chip .st { font-size: 12px; margin-top: 3px; }
+.chip.on { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.06); }
+.chip.on .st { color: var(--green); }
+.chip.off .st { color: var(--white-40); }
+
+/* Headline standouts */
+.headline-card { background: linear-gradient(180deg, rgba(168,85,247,0.10), rgba(168,85,247,0.02)); border: 0.5px solid var(--purple-border); }
+.headline-card h2 { font-style: italic; font-weight: 400; font-size: 24px; line-height: 1.2; margin-bottom: 0.4rem; }
+.headline-card .sub { font-size: 13px; color: var(--white-60); line-height: 1.6; margin-bottom: 1.25rem; }
+.standouts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 620px) { .standouts { grid-template-columns: 1fr; } }
+.standout { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 14px; padding: 1.1rem 1.2rem; }
+.standout .top { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.standout .rank { font-family: 'Geist Mono', monospace; font-size: 16px; color: var(--purple-bright); }
+.standout .action { font-size: 14px; font-weight: 600; line-height: 1.4; }
+.standout .why { font-size: 13px; color: var(--white-60); line-height: 1.6; margin-bottom: 10px; }
+.standout .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 12px; border: 0.5px solid var(--white-20); color: var(--white-60); white-space: nowrap; }
+.tag.src { color: var(--purple-bright); border-color: var(--purple-border); background: var(--purple-glow); }
+.tag.high { color: var(--green); border-color: rgba(52,211,153,0.3); }
+.tag.medium { color: var(--amber); border-color: rgba(251,191,36,0.3); }
+.tag.low { color: var(--white-40); }
+.focus-line { margin-top: 1.1rem; font-size: 13px; color: var(--white-60); line-height: 1.6; }
+.focus-line strong { color: var(--purple-bright); }
+
+/* Generate panel */
+.gen .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+@media (max-width: 620px) { .gen .row { grid-template-columns: 1fr; } }
+.gen input { width: 100%; background: var(--white-08); border: 0.5px solid var(--white-20); border-radius: 10px; padding: 11px 13px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--white); outline: none; }
+.gen input:focus { border-color: var(--purple-border); }
+.gen .progress { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--white-60); margin-top: 10px; line-height: 1.8; }
+
+/* Collapsible details */
+details { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 14px; margin-bottom: 0.85rem; overflow: hidden; }
+details[open] { border-color: var(--purple-border); }
+summary { list-style: none; cursor: pointer; padding: 1rem 1.4rem; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary .sn { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+summary .sd { font-size: 12px; color: var(--white-40); font-family: 'Geist Mono', monospace; }
+summary .chev { color: var(--white-40); transition: transform 0.2s; }
+details[open] summary .chev { transform: rotate(90deg); }
+.detail-body { padding: 0 1.4rem 1.3rem; }
+.kv { padding: 0.6rem 0; border-bottom: 0.5px solid var(--white-08); }
+.kv:last-child { border-bottom: none; }
+.kv .k { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white-40); margin-bottom: 4px; }
+.kv .v { font-size: 14px; line-height: 1.6; color: var(--white); }
+.sublabel { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white-40); margin: 1rem 0 6px; }
+ul.list { list-style: none; } ul.list li { font-size: 13px; color: var(--white-60); line-height: 1.6; padding: 4px 0 4px 16px; position: relative; }
+ul.list li::before { content: '–'; position: absolute; left: 0; color: var(--purple-bright); }
+.score-line { font-size: 14px; }
+.dim { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
+.dim .dn { font-size: 13px; width: 150px; text-transform: capitalize; flex-shrink: 0; }
+.dim .db { flex: 1; height: 6px; background: var(--white-08); border-radius: 4px; overflow: hidden; }
+.dim .db span { display: block; height: 100%; }
+.dim .ds { font-family: 'Geist Mono', monospace; font-size: 12px; width: 38px; text-align: right; }
+.notrun { padding: 1rem 1.4rem; }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="wrap">
+  <a class="back-link" href="/portal.html">← Back to Portal</a>
+
+  <div class="head">
+    <div class="eyebrow">Two Fires · Diagnosis Hub</div>
+    <h1>Your <span>marketing intelligence</span>, in one place.</h1>
+  </div>
+
+  <div class="emailbar">
+    <input type="email" id="email" placeholder="client@business.com" autocomplete="email">
+    <button class="btn" id="load-btn" onclick="loadProfile()">Load</button>
+  </div>
+
+  <div id="status" class="msg"></div>
+  <div id="profile"></div>
+</div>
+
+<script>
+const API_BASE = 'https://insight.two-fires.com';
+const $ = (id) => document.getElementById(id);
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+let currentEmail = '';
+let lastLead = null; // last loaded lead, reused by the generate path
+
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function impactClass(v) { const x = String(v || '').toLowerCase(); return ['high','medium','low'].includes(x) ? x : ''; }
+const SRC_LABEL = { customer_insight: 'From Insight', messaging_audit: 'From Audit', brand_ladder: 'From Ladder', inferred: 'Synthesised' };
+function srcTag(s) { const v = String(s || '').toLowerCase(); return SRC_LABEL[v] ? `<span class="tag src">${esc(SRC_LABEL[v])}</span>` : ''; }
+function scoreColor(n) { const v = Number(n) || 0; return v >= 7 ? 'var(--green)' : v >= 4 ? 'var(--amber)' : 'var(--red)'; }
+
+// Portal gate: signed-in clients only.
+(async function gate() {
+  try {
+    const r = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
+    if (!r.ok) { window.location.href = '/portal.html'; return; }
+  } catch (e) { window.location.href = '/portal.html'; return; }
+
+  // Prefill email from ?email= or the last one used on this device.
+  const qp = new URLSearchParams(location.search).get('email');
+  const saved = (() => { try { return localStorage.getItem('tf_dash_email'); } catch (e) { return null; } })();
+  const pre = qp || saved || '';
+  if (pre) { $('email').value = pre; loadProfile(); }
+})();
+
+document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && document.activeElement === $('email')) loadProfile(); });
+
+async function loadProfile() {
+  const email = $('email').value.trim().toLowerCase();
+  $('status').innerHTML = '';
+  if (!EMAIL_RE.test(email)) { $('status').innerHTML = '<div class="msg err">Please enter a valid email address.</div>'; return; }
+  currentEmail = email;
+  try { localStorage.setItem('tf_dash_email', email); } catch (e) {}
+
+  const btn = $('load-btn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+  $('profile').innerHTML = '';
+  try {
+    const res = await fetch(`${API_BASE}/client/${encodeURIComponent(email)}/profile`, { credentials: 'include' });
+    if (res.status === 401) { window.location.href = '/portal.html'; return; }
+    if (res.status === 404) { $('status').innerHTML = '<div class="msg muted">No profile yet for that email. Run a tool first, then come back.</div>'; return; }
+    if (!res.ok) throw new Error('load_failed');
+    const data = await res.json();
+    render(data);
+  } catch (e) {
+    $('status').innerHTML = '<div class="msg err">Could not load that profile. Please try again.</div>';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Load';
+  }
+}
+
+function statusStrip(present) {
+  const items = [
+    { key: 'customer_insight', label: 'Insight', ico: '🔍' },
+    { key: 'messaging_audit', label: 'Messaging Audit', ico: '🪨' },
+    { key: 'brand_ladder', label: 'Brand Ladder', ico: '🪜' },
+    { key: 'marketing_diagnosis', label: 'Diagnosis', ico: '🩺' },
+  ];
+  return `<div class="strip">${items.map((it) => {
+    const on = !!present[it.key];
+    return `<div class="chip ${on ? 'on' : 'off'}">
+      <div class="ico">${it.ico}</div>
+      <div class="nm">${esc(it.label)}</div>
+      <div class="st">${on ? '✓ Read' : 'Not run yet'}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function headlineBlock(data) {
+  const md = data.snapshots.marketing_diagnosis;
+  if (md && Array.isArray(md.top_priorities) && md.top_priorities.length) {
+    const cards = md.top_priorities.map((p, i) => `
+      <div class="standout">
+        <div class="top"><span class="rank">${esc(p.rank != null ? p.rank : i + 1)}</span><span class="action">${esc(p.action)}</span></div>
+        ${p.why_now ? `<div class="why">${esc(p.why_now)}</div>` : ''}
+        <div class="tags">
+          ${srcTag(p.source)}
+          ${p.impact ? `<span class="tag ${impactClass(p.impact)}">Impact: ${esc(p.impact)}</span>` : ''}
+          ${p.effort ? `<span class="tag ${impactClass(p.effort)}">Effort: ${esc(p.effort)}</span>` : ''}
+        </div>
+      </div>`).join('');
+    const score = md.overall_health_score;
+    return `<div class="card headline-card">
+      <h2>We've read it all. Here's what stands out.</h2>
+      <div class="sub">${score != null ? `Overall marketing health: <strong style="color:${scoreColor(score)};">${esc(score)}/10</strong>. ` : ''}Your top priority fixes, drawn straight from your tools.</div>
+      <div class="standouts">${cards}</div>
+      ${md.ninety_day_focus ? `<div class="focus-line"><strong>Your 90-day focus:</strong> ${esc(md.ninety_day_focus)}</div>` : ''}
+    </div>`;
+  }
+
+  // No diagnosis yet.
+  const anyOther = data.present.customer_insight || data.present.messaging_audit || data.present.brand_ladder;
+  if (anyOther) {
+    return `<div class="card headline-card">
+      <h2>We've read it all. Ready for the verdict.</h2>
+      <div class="sub">Your tools have run. Generate the diagnosis to pull it together into your priority fixes.</div>
+      <div class="gen" id="gen">
+        <div class="row">
+          <input type="text" id="gen-goal" placeholder="What do you most want marketing to achieve?">
+          <input type="text" id="gen-channels" placeholder="Where do you market today?">
+        </div>
+        <button class="btn" id="gen-btn" onclick="generateDiagnosis()">Generate my diagnosis</button>
+        <div class="progress" id="gen-progress"></div>
+      </div>
+    </div>`;
+  }
+  return `<div class="card headline-card">
+    <h2>Let's get started.</h2>
+    <div class="sub">No tools have run for this client yet. Run the Customer Insight tool first, then Messaging Audit and Brand Ladder. The diagnosis pulls it all together.</div>
+  </div>`;
+}
+
+// ---- detail renderers ----
+function liList(arr) {
+  if (!arr || !arr.length) return '<p class="muted">None noted.</p>';
+  return `<ul class="list">${arr.map((x) => `<li>${esc(typeof x === 'string' ? x : (x.phrase || x.finding || x.question || JSON.stringify(x)))}</li>`).join('')}</ul>`;
+}
+
+function detailInsight(ci) {
+  if (!ci) return notRun('Customer Insight', 'Run the Insight tool to map what your customers actually care about.');
+  const pains = (ci.top_insights || []).map((p) => `<li>${esc(p.finding)}${p.what_it_means ? ` <span class="muted">(${esc(p.what_it_means)})</span>` : ''}</li>`).join('');
+  const qs = (ci.customer_questions || []).map((q) => `<li>${esc(q.question)}</li>`).join('');
+  return wrapDetail('🔍', 'Customer Insight', 'What your market cares about', `
+    ${ci.executive_summary || ci.headline ? `<div class="kv"><div class="k">Summary</div><div class="v">${esc(ci.executive_summary || ci.headline)}</div></div>` : ''}
+    <div class="sublabel">Top pains</div><ul class="list">${pains || '<li class="muted">None noted.</li>'}</ul>
+    <div class="sublabel">Customer questions</div><ul class="list">${qs || '<li class="muted">None noted.</li>'}</ul>
+    <div class="sublabel">Customer language</div>${liList(ci.key_themes)}
+  `);
+}
+
+function detailAudit(ma) {
+  if (!ma) return notRun('Messaging Audit', 'Run Flint to judge your live message against customer reality.');
+  const m = ma.messaging_audit || {};
+  const fit = ma.message_to_market_fit || {};
+  const fixes = (ma.priority_fixes || []).map((f) => `
+    <div class="kv"><div class="v"><strong>${esc(f.issue)}</strong>${f.confidence ? ` <span class="tag ${impactClass(f.confidence)}">${esc(f.confidence)}</span>` : ''}</div>
+    ${f.why_it_matters ? `<div class="muted" style="margin-top:4px;">${esc(f.why_it_matters)}</div>` : ''}
+    ${f.suggested_direction ? `<div class="muted" style="margin-top:4px;">Direction: ${esc(f.suggested_direction)}</div>` : ''}</div>`).join('');
+  return wrapDetail('🪨', 'Messaging Audit (Flint)', 'Your message vs customer reality', `
+    ${m.current_core_message ? `<div class="kv"><div class="k">Current core message</div><div class="v">${esc(m.current_core_message)}</div></div>` : ''}
+    ${m.value_prop_clarity ? `<div class="kv"><div class="k">Value prop clarity</div><div class="v">${esc(m.value_prop_clarity)}</div></div>` : ''}
+    ${ma.escalation && ma.escalation.triggered ? `<div class="kv"><div class="k">Flagged</div><div class="v" style="color:var(--amber);">This audit could not fully read the live site, so findings are partial.</div></div>` : ''}
+    <div class="sublabel">Misses key pains</div>${liList(fit.misses_key_pains)}
+    <div class="sublabel">Biggest disconnects</div>${liList(fit.biggest_disconnects)}
+    <div class="sublabel">Priority fixes</div>${fixes || '<p class="muted">None noted.</p>'}
+  `);
+}
+
+function detailLadder(bl) {
+  if (!bl) return notRun('Brand Ladder', 'Build your proposition from product features up to the emotional payoff.');
+  const props = (bl.propositions || []).map((p) => `<li>${esc(p.text)}${p.scores ? ` <span class="muted">(clarity ${esc(p.scores.clarity)}, diff ${esc(p.scores.differentiation)})</span>` : ''}</li>`).join('');
+  return wrapDetail('🪜', 'Brand Ladder', 'Your proposition', `
+    ${bl.recommended_proposition ? `<div class="kv"><div class="k">Recommended proposition</div><div class="v">${esc(bl.recommended_proposition)}</div></div>` : ''}
+    <div class="sublabel">Product attributes</div>${liList(bl.product_attributes)}
+    <div class="sublabel">Consumer benefits</div>${liList(bl.consumer_benefits)}
+    <div class="sublabel">Emotional proposition</div>${liList(bl.emotional_proposition)}
+    <div class="sublabel">Proposition options</div><ul class="list">${props || '<li class="muted">None noted.</li>'}</ul>
+  `);
+}
+
+function detailDiagnosis(md) {
+  if (!md) return notRun('Diagnosis', 'The Orchestrator that synthesises everything above into a scored verdict.');
+  const dims = (md.dimensions || []).map((d) => {
+    const pct = Math.max(0, Math.min(100, (Number(d.score) || 0) * 10));
+    const c = scoreColor(d.score);
+    return `<div class="dim"><div class="dn">${esc((d.name || '').replace(/_/g, ' '))}</div><div class="db"><span style="width:${pct}%;background:${c};"></span></div><div class="ds" style="color:${c};">${esc(d.score)}/10</div></div>`;
+  }).join('');
+  const stillNeed = (md.what_we_still_need || []).map((s) => `<li>${esc(s)}</li>`).join('');
+  return wrapDetail('🩺', 'Full Diagnosis', `Health ${md.overall_health_score != null ? md.overall_health_score + '/10' : ''}`, `
+    ${md.headline ? `<div class="kv"><div class="k">Headline</div><div class="v">${esc(md.headline)}</div></div>` : ''}
+    <div class="sublabel">Dimension scores</div>${dims || '<p class="muted">None.</p>'}
+    <div class="sublabel">Top gaps</div>${liList(md.top_gaps)}
+    ${stillNeed ? `<div class="sublabel">To sharpen further</div><ul class="list">${stillNeed}</ul>` : ''}
+  `);
+}
+
+function wrapDetail(ico, name, sub, body) {
+  return `<details>
+    <summary><span class="sn">${ico} ${esc(name)}</span><span style="display:flex;align-items:center;gap:10px;"><span class="sd">${esc(sub)}</span><span class="chev">›</span></span></summary>
+    <div class="detail-body">${body}</div>
+  </details>`;
+}
+function notRun(name, sub) {
+  return `<details><summary><span class="sn" style="color:var(--white-40);">${esc(name)}</span><span class="sd">Not run yet</span></summary><div class="notrun muted">${esc(sub)}</div></details>`;
+}
+
+function render(data) {
+  lastLead = data.lead;
+  $('status').innerHTML = `<div class="muted" style="margin-bottom:1rem;">Showing <strong style="color:var(--white);">${esc(data.lead.company || data.lead.email)}</strong> · ${esc(data.lead.email)}</div>`;
+  const s = data.snapshots;
+  $('profile').innerHTML = `
+    ${statusStrip(data.present)}
+    ${headlineBlock(data)}
+    <div class="section-title" style="margin-top:1.75rem;">The detail, tool by tool</div>
+    ${detailInsight(s.customer_insight)}
+    ${detailAudit(s.messaging_audit)}
+    ${detailLadder(s.brand_ladder)}
+    ${detailDiagnosis(s.marketing_diagnosis)}
+  `;
+}
+
+// ---- Generate diagnosis (when it is the missing piece) ----
+async function generateDiagnosis() {
+  const goal = ($('gen-goal').value || '').trim();
+  const channels = ($('gen-channels').value || '').trim();
+  const prog = $('gen-progress');
+  if (goal.length < 10) { prog.innerHTML = '<span style="color:var(--error);">Please add a little more detail on your goal.</span>'; return; }
+  if (channels.length < 2) { prog.innerHTML = '<span style="color:var(--error);">Please tell us where you market.</span>'; return; }
+
+  const btn = $('gen-btn');
+  btn.disabled = true; btn.textContent = 'Generating…';
+  prog.textContent = 'Reading your tools and synthesising…';
+
+  // We need the lead identity; the loaded profile carries it via currentEmail.
+  // company/name are looked up server-side by email on /diagnose (resolveLead),
+  // so we send what we have.
+  const payload = {
+    name: (lastLead && lastLead.name) || 'Client',
+    email: currentEmail,
+    company: (lastLead && lastLead.company) || currentEmail,
+    brief: { primary_goal: goal, current_channels: channels },
+  };
+  try {
+    const res = await fetch(API_BASE + '/diagnose', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+    if (res.status === 401) { window.location.href = '/portal.html'; return; }
+    if (!res.ok || !res.body) {
+      let msg = 'Could not generate. Please try again.';
+      try { const j = await res.json(); if (j && (j.error || j.message)) msg = j.error || j.message; } catch (e) {}
+      throw new Error(msg);
+    }
+    // Drain the SSE stream until done/error, narrating progress.
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let done = false;
+    while (!done) {
+      const { done: rdone, value } = await reader.read();
+      if (rdone) break;
+      buffer += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = buffer.indexOf('\n\n')) !== -1) {
+        const raw = buffer.slice(0, sep); buffer = buffer.slice(sep + 2);
+        let event = 'message', dataStr = '';
+        for (const line of raw.split('\n')) {
+          if (line.startsWith(':')) continue;
+          if (line.startsWith('event:')) event = line.slice(6).trim();
+          else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+        }
+        if (!dataStr) continue;
+        let d = null; try { d = JSON.parse(dataStr); } catch (e) {}
+        if (event === 'status' && d && d.message) prog.textContent = d.message;
+        else if (event === 'done') { done = true; }
+        else if (event === 'error') { throw new Error((d && d.message) || 'Generation failed.'); }
+      }
+    }
+    prog.textContent = 'Done. Refreshing your hub…';
+    await loadProfile();
+  } catch (e) {
+    prog.innerHTML = `<span style="color:var(--error);">${esc(e.message || 'Could not generate. Please try again.')}</span>`;
+    btn.disabled = false; btn.textContent = 'Generate my diagnosis';
+  }
+}
+</script>
+</body>
+</html>
