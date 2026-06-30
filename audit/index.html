@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires · Messaging Audit</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --charcoal: #05050A; --purple: #A855F7; --purple-bright: #C4A8FF; --purple-deep: #6B21A8;
+  --purple-glow: rgba(168,85,247,0.15); --purple-border: rgba(168,85,247,0.25);
+  --white: #ffffff; --white-60: rgba(255,255,255,0.6); --white-40: rgba(255,255,255,0.4);
+  --white-20: rgba(255,255,255,0.2); --white-08: rgba(255,255,255,0.08); --white-04: rgba(255,255,255,0.04);
+  --error: #f87171; --green: #34d399; --amber: #fbbf24; --red: #f87171;
+}
+html, body { background: var(--charcoal); color: var(--white); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100%; }
+body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); }
+.ambient { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+.ambient-1 { width: 600px; height: 600px; background: rgba(107,33,168,0.2); top: -200px; right: -100px; }
+.ambient-2 { width: 400px; height: 400px; background: rgba(168,85,247,0.1); bottom: -100px; left: -80px; }
+
+.wrap { position: relative; z-index: 10; max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-60); text-decoration: none; border: 0.5px solid var(--white-20); border-radius: 7px; padding: 6px 11px; transition: color 0.2s, border-color 0.2s; }
+.back-link:hover { color: var(--purple-bright); border-color: var(--purple-border); }
+.head { margin-bottom: 2rem; }
+.head .eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin-bottom: 0.6rem; }
+.head h1 { font-style: italic; font-weight: 400; font-size: 34px; line-height: 1.15; }
+.head h1 span { color: var(--purple-bright); }
+.head p.sub { font-size: 14px; color: var(--white-60); margin-top: 0.75rem; line-height: 1.6; max-width: 62ch; }
+
+.card { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.25rem; }
+.field { margin-bottom: 1.1rem; }
+.field label { display: block; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-60); margin-bottom: 8px; }
+.field input, .field textarea { width: 100%; background: var(--white-08); border: 0.5px solid var(--white-20); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--white); outline: none; transition: border-color 0.2s, background 0.2s; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.25); }
+.field input:focus, .field textarea:focus { border-color: var(--purple-border); background: rgba(168,85,247,0.06); }
+.field .hint { font-size: 11px; color: var(--white-40); margin-top: 6px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+
+.btn { width: 100%; height: 50px; background: var(--purple); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--white); cursor: pointer; transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.02em; margin-top: 0.5rem; }
+.btn:hover { opacity: 0.9; } .btn:active { transform: scale(0.99); } .btn:disabled { opacity: 0.45; cursor: default; }
+.btn.secondary { background: var(--white-08); border: 0.5px solid var(--white-20); }
+.form-error { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--error); margin-top: 12px; display: none; }
+.form-error.visible { display: block; }
+
+#progress { display: none; } #progress.visible { display: block; }
+.progress-stages { display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.stage-chip { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 12px; border-radius: 20px; border: 0.5px solid var(--white-20); color: var(--white-40); }
+.stage-chip.active { color: var(--purple-bright); border-color: var(--purple-border); background: var(--purple-glow); }
+.stage-chip.done { color: var(--green); border-color: rgba(52,211,153,0.3); }
+.progress-log { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--white-60); line-height: 1.9; max-height: 220px; overflow-y: auto; }
+.progress-log .line { opacity: 0; animation: fadeIn 0.3s ease forwards; }
+.progress-log .line::before { content: '→ '; color: var(--purple-bright); }
+@keyframes fadeIn { to { opacity: 1; } }
+
+#results { display: none; } #results.visible { display: block; animation: fadeIn 0.4s ease; }
+.section-title { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin: 0 0 1rem; }
+.audit-row { padding: 0.7rem 0; border-bottom: 0.5px solid var(--white-08); }
+.audit-row:last-child { border-bottom: none; }
+.audit-row .k { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white-40); margin-bottom: 4px; }
+.audit-row .v { font-size: 14px; line-height: 1.6; color: var(--white); }
+.list { list-style: none; }
+.list li { font-size: 13px; color: var(--white-60); line-height: 1.6; padding: 5px 0 5px 18px; position: relative; }
+.list li::before { content: '–'; position: absolute; left: 0; color: var(--purple-bright); }
+.list.good li::before { content: '✓'; color: var(--green); }
+.list.miss li::before { content: '!'; color: var(--amber); }
+.growth { background: var(--purple-glow); border: 0.5px solid var(--purple-border); border-radius: 12px; padding: 1.1rem 1.25rem; margin-top: 1rem; font-size: 14px; line-height: 1.6; }
+.growth strong { color: var(--purple-bright); }
+.fix { padding: 1rem 0; border-bottom: 0.5px solid var(--white-08); }
+.fix:last-child { border-bottom: none; }
+.fix .issue { font-size: 14px; font-weight: 600; margin-bottom: 5px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.fix .why, .fix .ev, .fix .dir { font-size: 13px; color: var(--white-60); line-height: 1.6; margin-top: 3px; }
+.fix .lbl { color: var(--white-40); font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px; }
+.conf { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; border-radius: 12px; }
+.conf.high { background: rgba(52,211,153,0.15); color: var(--green); }
+.conf.medium { background: rgba(251,191,36,0.15); color: var(--amber); }
+.conf.low { background: rgba(248,113,113,0.15); color: var(--red); }
+.conf.insufficient { background: var(--white-08); color: var(--white-40); }
+.escalation { background: rgba(251,191,36,0.10); border: 0.5px solid rgba(251,191,36,0.35); border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+.escalation .etitle { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.6rem; }
+.escalation p { font-size: 14px; color: var(--white-60); line-height: 1.6; margin-bottom: 0.5rem; }
+.cta-row { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.cta-row .btn { width: auto; flex: 1; min-width: 200px; padding: 0 24px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+
+/* Blocked dependency state */
+#blocked { display: none; } #blocked.visible { display: block; animation: fadeIn 0.4s ease; }
+.blocked-card { text-align: center; padding: 2.5rem 2rem; }
+.blocked-card .icon { font-size: 34px; margin-bottom: 1rem; }
+.blocked-card h3 { font-size: 20px; font-style: italic; font-weight: 400; margin-bottom: 0.6rem; }
+.blocked-card p { font-size: 14px; color: var(--white-60); line-height: 1.6; max-width: 44ch; margin: 0 auto 1.5rem; }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="wrap">
+  <a class="back-link" href="/portal.html">← Back to Portal</a>
+
+  <div class="head">
+    <div class="eyebrow">Two Fires · Intelligence Suite</div>
+    <h1>Messaging <span>Audit.</span></h1>
+    <p class="sub">Meet Flint. He reads your Customer Insight, looks at your live message, and tells you exactly where what you say does not match what your customer actually cares about. He audits. He does not rewrite. This tool needs your Customer Insight first.</p>
+  </div>
+
+  <!-- INTAKE -->
+  <div class="card" id="intake">
+    <div class="row2">
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" placeholder="Jane Smith" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="jane@business.com" autocomplete="email">
+      </div>
+    </div>
+    <div class="field">
+      <label for="company">Business name</label>
+      <input type="text" id="company" placeholder="Two Fires">
+    </div>
+    <div class="field">
+      <label for="site_url">Your website</label>
+      <input type="text" id="site_url" placeholder="two-fires.com">
+      <div class="hint">We read your live message from here.</div>
+    </div>
+    <div class="field">
+      <label for="extra_assets">Extra messaging to include <span style="text-transform:none;letter-spacing:0;color:var(--white-40);">(optional)</span></label>
+      <textarea id="extra_assets" rows="4" placeholder="Paste any homepage copy, ad headlines, or email subject lines you want audited. Helpful if your site is new or not yet indexed."></textarea>
+    </div>
+    <button class="btn" id="run-btn" onclick="runAudit()">Run my messaging audit</button>
+    <div class="form-error" id="form-error"></div>
+    <div class="hint" style="font-size:11px;color:var(--white-40);margin-top:12px;">This takes about a minute. We run live research, so please keep this tab open.</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="card" id="progress">
+    <div class="progress-stages">
+      <div class="stage-chip" id="chip-reading_insight">1 · Read Insight</div>
+      <div class="stage-chip" id="chip-auditing">2 · Audit Message</div>
+    </div>
+    <div class="progress-log" id="progress-log"></div>
+  </div>
+
+  <!-- BLOCKED (dependency missing) -->
+  <div id="blocked">
+    <div class="card blocked-card">
+      <div class="icon">🔍</div>
+      <h3>We need your Customer Insight first</h3>
+      <p id="blocked-msg">Run the Insight tool to build your customer evidence, then come back and Flint will audit your message against it.</p>
+      <a class="btn" href="/insight/" style="display:inline-block;width:auto;padding:0 28px;line-height:50px;text-decoration:none;">Run the Insight tool</a>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results"></div>
+</div>
+
+<script>
+const API_BASE = 'https://insight.two-fires.com';
+const $ = (id) => document.getElementById(id);
+let currentSessionId = null;
+
+// Portal gate: this page is for signed-in clients only. The tf_portal cookie is
+// httpOnly, so ask the server; redirect to the portal login if not signed in.
+(async function gate() {
+  try {
+    const r = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
+    if (!r.ok) { window.location.href = '/portal.html'; }
+  } catch (e) { window.location.href = '/portal.html'; }
+})();
+
+function showFormError(msg) { const el = $('form-error'); el.textContent = msg; el.classList.add('visible'); }
+function clearFormError() { $('form-error').classList.remove('visible'); }
+function setChip(stage, cls) { const el = $('chip-' + stage); if (!el) return; el.classList.remove('active', 'done'); if (cls) el.classList.add(cls); }
+function logLine(text) { const log = $('progress-log'); const div = document.createElement('div'); div.className = 'line'; div.textContent = text; log.appendChild(div); log.scrollTop = log.scrollHeight; }
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function confClass(c) { const v = String(c || '').toLowerCase(); return ['high','medium','low','insufficient'].includes(v) ? v : 'insufficient'; }
+
+function parseSSE(raw) {
+  const lines = String(raw || '').split('\n');
+  let event = 'message', dataStr = '';
+  for (const line of lines) {
+    if (line.startsWith(':')) continue;
+    if (line.startsWith('event:')) event = line.slice(6).trim();
+    else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+  }
+  if (!dataStr) return { event, data: null };
+  let data = null;
+  try { data = JSON.parse(dataStr); } catch (e) {}
+  return { event, data };
+}
+
+async function runAudit() {
+  clearFormError();
+  const payload = {
+    name: $('name').value.trim(),
+    email: $('email').value.trim(),
+    company: $('company').value.trim(),
+    site_url: $('site_url').value.trim(),
+    extra_assets: $('extra_assets').value.trim(),
+  };
+  if (!payload.name || !payload.email || !payload.company) return showFormError('Please add your name, email, and business name.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return showFormError('Please enter a valid email address.');
+  if (payload.site_url.length < 3) return showFormError('Please enter your website address.');
+
+  const btn = $('run-btn');
+  btn.disabled = true; btn.textContent = 'Auditing your message…';
+  $('progress').classList.add('visible');
+  $('blocked').classList.remove('visible');
+  $('results').classList.remove('visible'); $('results').innerHTML = '';
+  $('progress-log').innerHTML = '';
+  setChip('reading_insight', 'active'); setChip('auditing', '');
+  logLine('Starting Flint…');
+
+  try {
+    const res = await fetch(API_BASE + '/audit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok || !res.body) {
+      let msg = 'Something went wrong. Please try again.';
+      if (res.status === 401) { window.location.href = '/portal.html'; return; }
+      try { const j = await res.json(); if (j && (j.error || j.message)) msg = j.error || j.message; } catch (e) {}
+      throw new Error(msg);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let lastStage = 'reading_insight';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = buffer.indexOf('\n\n')) !== -1) {
+        const raw = buffer.slice(0, sep);
+        buffer = buffer.slice(sep + 2);
+        const { event, data } = parseSSE(raw);
+        if (!data) continue;
+
+        if (event === 'session') {
+          currentSessionId = data.sessionId;
+        } else if (event === 'status') {
+          if (data.stage && data.stage !== lastStage) { setChip(lastStage, 'done'); setChip(data.stage, 'active'); lastStage = data.stage; }
+          if (data.message) logLine(data.message);
+        } else if (event === 'blocked') {
+          showBlocked(data.message);
+          return;
+        } else if (event === 'done') {
+          setChip(lastStage, 'done');
+          renderResults(data.result);
+        } else if (event === 'error') {
+          throw new Error(data.message || 'The audit could not be completed.');
+        }
+      }
+    }
+  } catch (err) {
+    showFormError(err.message || 'Something went wrong. Please try again.');
+    $('progress').classList.remove('visible');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Run my messaging audit';
+  }
+}
+
+function showBlocked(message) {
+  $('progress').classList.remove('visible');
+  if (message) $('blocked-msg').textContent = message;
+  $('blocked').classList.add('visible');
+  $('blocked').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function liList(items, cls) {
+  if (!items || !items.length) return '<p style="font-size:13px;color:var(--white-40);font-style:italic;">None noted.</p>';
+  return `<ul class="list ${cls || ''}">${items.map((i) => `<li>${esc(typeof i === 'string' ? i : JSON.stringify(i))}</li>`).join('')}</ul>`;
+}
+
+function renderResults(result) {
+  if (!result) return;
+  const ma = result.messaging_audit || {};
+  const fit = result.message_to_market_fit || {};
+  const escn = result.escalation || {};
+
+  const auditRows = [
+    ['Current core message', ma.current_core_message],
+    ['Who it targets', ma.who_it_targets],
+    ['Value prop clarity', ma.value_prop_clarity],
+    ['Alignment to pains', ma.alignment_to_pains],
+    ['Alignment to questions', ma.alignment_to_questions],
+    ['Customer vs internal language', ma.customer_vs_internal_language],
+    ['Differentiation', ma.differentiation],
+    ['Proof and credibility', ma.proof_and_credibility],
+    ['CTA and next step', ma.cta_and_next_step],
+    ['Confidence notes', ma.confidence_notes],
+  ].filter(([, v]) => v != null && String(v).trim() !== '')
+   .map(([k, v]) => `<div class="audit-row"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('');
+
+  const fixes = (result.priority_fixes || []).map((f) => `
+    <div class="fix">
+      <div class="issue">${esc(f.issue)} ${f.confidence ? `<span class="conf ${confClass(f.confidence)}">${esc(f.confidence)}</span>` : ''}</div>
+      ${f.why_it_matters ? `<div class="why"><span class="lbl">Why</span>${esc(f.why_it_matters)}</div>` : ''}
+      ${f.customer_evidence ? `<div class="ev"><span class="lbl">Evidence</span>${esc(f.customer_evidence)}</div>` : ''}
+      ${f.suggested_direction ? `<div class="dir"><span class="lbl">Direction</span>${esc(f.suggested_direction)}</div>` : ''}
+    </div>`).join('');
+
+  const escalationBlock = escn.triggered ? `
+    <div class="escalation">
+      <div class="etitle">⚑ Flagged for a strategist</div>
+      ${(escn.reasons || []).map((r) => `<p>${esc(r)}</p>`).join('')}
+    </div>` : '';
+
+  const html = `
+    ${escalationBlock}
+    ${auditRows ? `<div class="card"><div class="section-title">Your Message, Audited</div>${auditRows}</div>` : ''}
+    <div class="card">
+      <div class="section-title">Message to Market Fit</div>
+      <div style="margin-bottom:1rem;"><div class="audit-row" style="border:none;padding-bottom:0;"><div class="k">Aligns well</div></div>${liList(fit.aligns_well, 'good')}</div>
+      <div style="margin-bottom:1rem;"><div class="audit-row" style="border:none;padding-bottom:0;"><div class="k">Misses key pains</div></div>${liList(fit.misses_key_pains, 'miss')}</div>
+      <div style="margin-bottom:1rem;"><div class="audit-row" style="border:none;padding-bottom:0;"><div class="k">Unanswered questions</div></div>${liList(fit.unanswered_questions, 'miss')}</div>
+      <div><div class="audit-row" style="border:none;padding-bottom:0;"><div class="k">Biggest disconnects</div></div>${liList(fit.biggest_disconnects, 'miss')}</div>
+      ${fit.growth_implication ? `<div class="growth"><strong>Growth implication:</strong> ${esc(fit.growth_implication)}</div>` : ''}
+    </div>
+    <div class="card">
+      <div class="section-title">Gaps</div>
+      <div style="margin-bottom:1rem;"><div class="k" style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--white-40);margin-bottom:6px;">Clarity gaps</div>${liList(result.clarity_gaps)}</div>
+      <div style="margin-bottom:1rem;"><div class="k" style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--white-40);margin-bottom:6px;">Differentiation gaps</div>${liList(result.differentiation_gaps)}</div>
+      <div><div class="k" style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--white-40);margin-bottom:6px;">Proof gaps</div>${liList(result.proof_gaps)}</div>
+    </div>
+    ${fixes ? `<div class="card"><div class="section-title">Priority Fixes</div>${fixes}</div>` : ''}
+    <div class="card">
+      <div class="cta-row">
+        <button class="btn" onclick="downloadPDF()">Download PDF report</button>
+        <a class="btn secondary" href="mailto:lightmyfuse@two-fires.com?subject=Messaging%20Audit%20follow-up">Talk to a strategist</a>
+      </div>
+    </div>
+  `;
+
+  const r = $('results');
+  r.innerHTML = html;
+  r.classList.add('visible');
+  $('progress').classList.remove('visible');
+  r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function downloadPDF() {
+  if (!currentSessionId) return;
+  fetch(API_BASE + '/download-audit/' + encodeURIComponent(currentSessionId), { credentials: 'include' })
+    .then((res) => { if (!res.ok) throw new Error('pdf'); return res.blob(); })
+    .then((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Two-Fires-Messaging-Audit.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(a.href);
+    })
+    .catch(() => alert('Could not generate the PDF. Please try again.'));
+}
+</script>
+</body>
+</html>
