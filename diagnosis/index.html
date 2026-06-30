@@ -156,7 +156,7 @@ body::before {
   <div class="head">
     <div class="eyebrow">Two Fires · Intelligence Suite</div>
     <h1>Marketing <span>Diagnosis.</span></h1>
-    <p class="sub">A senior strategist's read on the state of your marketing. We research your market, diagnose your positioning, messaging, channels and offer, then hand you a prioritised plan. Built on 30 years of brand strategy.</p>
+    <p class="sub">A senior strategist's read on the state of your marketing. This is the Orchestrator: it pulls together what your earlier tools already found, diagnoses your positioning, messaging, channels and offer, then hands you a prioritised plan. Built on 30 years of brand strategy.</p>
   </div>
 
   <!-- INTAKE -->
@@ -176,30 +176,23 @@ body::before {
       <input type="text" id="company" placeholder="Brightwater Plumbing">
     </div>
     <div class="field">
-      <label for="primary_goal">What do you most want your marketing to achieve?</label>
+      <label for="primary_goal">What do you most want your marketing to achieve right now?</label>
       <textarea id="primary_goal" rows="2" placeholder="e.g. Generate more qualified residential booking enquiries from our local area"></textarea>
     </div>
     <div class="field">
       <label for="current_channels">Where do you market today?</label>
       <input type="text" id="current_channels" placeholder="e.g. Google Business Profile, Instagram, word of mouth">
     </div>
-    <div class="field">
-      <label for="biggest_challenge">Your biggest marketing challenge, in your words</label>
-      <textarea id="biggest_challenge" rows="2" placeholder="e.g. We are invisible online next to the big franchises and our site does not convert"></textarea>
-    </div>
-    <div class="field">
-      <label for="region">Region <span style="text-transform:none;letter-spacing:0;color:var(--white-40);">(optional)</span></label>
-      <input type="text" id="region" placeholder="e.g. Brisbane, Australia">
-    </div>
+    <p style="font-size:12px;color:var(--white-40);line-height:1.6;margin:0 0 0.5rem;">That is all we need. We read the rest from your earlier tools: your Customer Insight, Messaging Audit, and Brand Ladder. The more of those you have run, the sharper this gets.</p>
     <button class="btn" id="run-btn" onclick="runDiagnosis()">Run my diagnosis</button>
     <div class="form-error" id="form-error"></div>
-    <div class="hint" style="font-size:11px;color:var(--white-40);margin-top:12px;">This takes 1 to 2 minutes. We run live research, so please keep this tab open.</div>
+    <div class="hint" style="font-size:11px;color:var(--white-40);margin-top:12px;">This takes under a minute. We synthesise what your earlier tools already found.</div>
   </div>
 
   <!-- PROGRESS -->
   <div class="card" id="progress">
     <div class="progress-stages">
-      <div class="stage-chip" id="chip-gather">1 · Research</div>
+      <div class="stage-chip" id="chip-load_context">1 · Read your tools</div>
       <div class="stage-chip" id="chip-diagnose">2 · Diagnose</div>
       <div class="stage-chip" id="chip-prioritise">3 · Prioritise</div>
     </div>
@@ -273,8 +266,6 @@ async function runDiagnosis() {
     brief: {
       primary_goal: $('primary_goal').value.trim(),
       current_channels: $('current_channels').value.trim(),
-      biggest_challenge: $('biggest_challenge').value.trim(),
-      region: $('region').value.trim(),
     },
   };
 
@@ -282,7 +273,6 @@ async function runDiagnosis() {
   if (!payload.name || !payload.email || !payload.company) return showFormError('Please add your name, email, and business name.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return showFormError('Please enter a valid email address.');
   if (payload.brief.primary_goal.length < 10) return showFormError('Please give a little more detail on your primary goal.');
-  if (payload.brief.biggest_challenge.length < 10) return showFormError('Please give a little more detail on your biggest challenge.');
   if (payload.brief.current_channels.length < 2) return showFormError('Please tell us where you currently market.');
 
   const btn = $('run-btn');
@@ -292,8 +282,8 @@ async function runDiagnosis() {
   $('results').classList.remove('visible');
   $('results').innerHTML = '';
   $('progress-log').innerHTML = '';
-  setChip('gather', 'active'); setChip('diagnose', ''); setChip('prioritise', '');
-  logLine('Starting up the research agent…');
+  setChip('load_context', 'active'); setChip('diagnose', ''); setChip('prioritise', '');
+  logLine('Reading what your earlier tools already found…');
 
   try {
     const res = await fetch(API_BASE + '/diagnose', {
@@ -313,7 +303,7 @@ async function runDiagnosis() {
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
-    let lastStage = 'gather';
+    let lastStage = 'load_context';
 
     while (true) {
       const { done, value } = await reader.read();
@@ -356,9 +346,18 @@ function renderResults(result) {
   if (!result) return;
   const d = result.diagnosis || {};
   const plan = result.action_plan || {};
-  const research = result.research || {};
+  const inputsPresent = result.inputs_present || {};
+  const stillNeed = result.what_we_still_need || [];
   const score = d.overall_health_score;
   const col = scoreColor(score);
+
+  // Source attribution pill: shows which prior tool a finding traces to.
+  const srcLabel = { customer_insight: 'From Insight', messaging_audit: 'From Audit', brand_ladder: 'From Ladder', inferred: 'Synthesised' };
+  const srcPill = (s) => {
+    const v = String(s || '').toLowerCase();
+    if (!v || !srcLabel[v]) return '';
+    return `<span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;padding:2px 8px;border-radius:12px;border:0.5px solid var(--white-20);color:var(--white-40);margin-left:6px;white-space:nowrap;">${esc(srcLabel[v])}</span>`;
+  };
 
   const dims = (d.dimensions || []).map((dim) => {
     const pct = Math.max(0, Math.min(100, (Number(dim.score) || 0) * 10));
@@ -374,16 +373,16 @@ function renderResults(result) {
   }).join('');
 
   const strengths = (d.strengths || []).map((s) =>
-    `<div class="item"><h4>${esc(s.title)}</h4><p>${esc(s.detail)}</p></div>`).join('');
+    `<div class="item"><h4>${esc(s.title)}${srcPill(s.source)}</h4><p>${esc(s.detail)}</p></div>`).join('');
 
   const gaps = (d.gaps || []).map((g) => {
     const sev = (g.severity || '').toLowerCase();
     const badge = sev ? `<span class="sev ${esc(sev)}">${esc(sev)}</span>` : '';
-    return `<div class="item"><h4>${esc(g.title)} ${badge}</h4><p>${esc(g.detail)}</p></div>`;
+    return `<div class="item"><h4>${esc(g.title)} ${badge}${srcPill(g.source)}</h4><p>${esc(g.detail)}</p></div>`;
   }).join('');
 
   const risks = (d.risks || []).map((r) =>
-    `<div class="item"><h4>${esc(r.title)}</h4><p>${esc(r.detail)}</p></div>`).join('');
+    `<div class="item"><h4>${esc(r.title)}${srcPill(r.source)}</h4><p>${esc(r.detail)}</p></div>`).join('');
 
   const prios = (plan.priorities || []).map((p, i) => {
     const imp = (p.impact || '').toLowerCase();
@@ -391,7 +390,7 @@ function renderResults(result) {
     return `<div class="prio">
       <div class="rank">${esc(p.rank != null ? p.rank : i + 1)}</div>
       <div class="body">
-        <div class="action">${esc(p.action)}</div>
+        <div class="action">${esc(p.action)}${srcPill(p.source)}</div>
         <div class="why">${esc(p.why_now || '')}${p.expected_outcome ? ' ' + esc(p.expected_outcome) : ''}</div>
         <div class="tags">
           ${imp ? `<span class="tag ${esc(imp)}">Impact: ${esc(imp)}</span>` : ''}
@@ -402,7 +401,23 @@ function renderResults(result) {
   }).join('');
 
   const quickWins = (plan.quick_wins || []).map((q) => `<li>${esc(q)}</li>`).join('');
-  const eq = research.evidence_quality || {};
+
+  // Inputs-read panel: show the client exactly which prior tools were synthesised.
+  const inputMeta = [
+    { key: 'customer_insight', label: 'Customer Insight' },
+    { key: 'messaging_audit', label: 'Messaging Audit' },
+    { key: 'brand_ladder', label: 'Brand Ladder' },
+  ];
+  const inputBadges = inputMeta.map((m) => {
+    const on = !!inputsPresent[m.key];
+    const color = on ? 'var(--green)' : 'var(--white-40)';
+    const bd = on ? 'rgba(52,211,153,0.3)' : 'var(--white-20)';
+    return `<span style="display:inline-flex;align-items:center;gap:6px;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:0.05em;text-transform:uppercase;padding:5px 11px;border-radius:20px;border:0.5px solid ${bd};color:${color};">${on ? '✓' : '○'} ${esc(m.label)}</span>`;
+  }).join(' ');
+  const stillNeedHtml = stillNeed.length
+    ? `<p style="font-size:12px;color:var(--white-40);line-height:1.6;margin-top:0.85rem;">To sharpen this further, run: ${stillNeed.map((s) => esc(s)).join(' &nbsp;·&nbsp; ')}</p>`
+    : `<p style="font-size:12px;color:var(--green);line-height:1.6;margin-top:0.85rem;">All three inputs were available. This is the full-strength diagnosis.</p>`;
+  const inputsPanel = `<div class="card"><div class="section-title">What we read</div><div style="display:flex;gap:8px;flex-wrap:wrap;">${inputBadges}</div>${stillNeedHtml}</div>`;
 
   const html = `
     <div class="card">
@@ -420,6 +435,8 @@ function renderResults(result) {
 
     ${plan.ninety_day_focus ? `<div class="focus-banner"><strong>Your 90-day focus:</strong> ${esc(plan.ninety_day_focus)}</div>` : ''}
 
+    ${inputsPanel}
+
     ${dims ? `<div class="card"><div class="section-title">Marketing Scorecard</div>${dims}</div>` : ''}
     ${strengths ? `<div class="card"><div class="section-title">Strengths</div>${strengths}</div>` : ''}
     ${gaps ? `<div class="card"><div class="section-title">Gaps</div>${gaps}</div>` : ''}
@@ -427,7 +444,6 @@ function renderResults(result) {
     ${prios ? `<div class="card"><div class="section-title">Prioritised Action Plan</div>${prios}${quickWins ? `<div class="section-title" style="margin-top:1.5rem;">Quick Wins</div><ul class="qw">${quickWins}</ul>` : ''}</div>` : ''}
 
     <div class="card">
-      ${(eq.overall_confidence || eq.notes) ? `<div class="evidence-note">Research confidence: ${esc(eq.overall_confidence || 'n/a')}. Sources found: ${esc(eq.sources_found != null ? eq.sources_found : 'n/a')}.${eq.notes ? ' ' + esc(eq.notes) : ''}</div>` : ''}
       <div class="cta-row">
         <button class="btn" onclick="downloadPDF()">Download PDF report</button>
         <a class="btn secondary" href="mailto:lightmyfuse@two-fires.com?subject=Marketing%20Diagnosis%20follow-up%20-%20${encodeURIComponent(result.company || '')}" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">Talk to a strategist</a>
