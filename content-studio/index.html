@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires · Content Studio</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --charcoal: #05050A; --purple: #A855F7; --purple-bright: #C4A8FF; --purple-deep: #6B21A8;
+  --purple-glow: rgba(168,85,247,0.15); --purple-border: rgba(168,85,247,0.25);
+  --white: #ffffff; --white-60: rgba(255,255,255,0.6); --white-40: rgba(255,255,255,0.4);
+  --white-20: rgba(255,255,255,0.2); --white-08: rgba(255,255,255,0.08); --white-04: rgba(255,255,255,0.04);
+  --error: #f87171; --green: #34d399; --amber: #fbbf24;
+}
+html, body { background: var(--charcoal); color: var(--white); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100%; }
+body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); }
+.ambient { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+.ambient-1 { width: 600px; height: 600px; background: rgba(107,33,168,0.2); top: -200px; right: -100px; }
+.ambient-2 { width: 400px; height: 400px; background: rgba(168,85,247,0.1); bottom: -100px; left: -80px; }
+
+.wrap { position: relative; z-index: 10; max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-60); text-decoration: none; border: 0.5px solid var(--white-20); border-radius: 7px; padding: 6px 11px; transition: color 0.2s, border-color 0.2s; }
+.back-link:hover { color: var(--purple-bright); border-color: var(--purple-border); }
+.head { margin-bottom: 2rem; }
+.head .eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin-bottom: 0.6rem; }
+.head h1 { font-style: italic; font-weight: 400; font-size: 34px; line-height: 1.15; }
+.head h1 span { color: var(--purple-bright); }
+.head p.sub { font-size: 14px; color: var(--white-60); margin-top: 0.75rem; line-height: 1.6; max-width: 62ch; }
+
+.card { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.25rem; }
+.field { margin-bottom: 1.1rem; }
+.field label { display: block; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-60); margin-bottom: 8px; }
+.field input, .field textarea, .field select { width: 100%; background: var(--white-08); border: 0.5px solid var(--white-20); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--white); outline: none; transition: border-color 0.2s, background 0.2s; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.25); }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--purple-border); background: rgba(168,85,247,0.06); }
+.field .hint { font-size: 11px; color: var(--white-40); margin-top: 6px; line-height: 1.5; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+
+.btn { width: 100%; height: 50px; background: var(--purple); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--white); cursor: pointer; transition: opacity 0.2s, transform 0.15s; letter-spacing: 0.02em; margin-top: 0.5rem; }
+.btn:hover { opacity: 0.9; } .btn:active { transform: scale(0.99); } .btn:disabled { opacity: 0.45; cursor: default; }
+.btn.secondary { background: var(--white-08); border: 0.5px solid var(--white-20); }
+.btn.small { width: auto; height: auto; padding: 9px 16px; font-size: 12px; margin-top: 0; }
+.btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.btn-row .btn { flex: 1; min-width: 150px; }
+.form-error { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--error); margin-top: 12px; display: none; }
+.form-error.visible { display: block; }
+
+.section-title { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin: 0 0 1rem; }
+.muted { font-size: 13px; color: var(--white-40); font-style: italic; }
+.linkish { color: var(--purple-bright); cursor: pointer; text-decoration: none; border-bottom: 0.5px solid var(--purple-border); }
+.linkish:hover { color: var(--white); }
+
+/* voice summary */
+.voice-summary { background: var(--purple-glow); border: 0.5px solid var(--purple-border); border-radius: 12px; padding: 1.1rem 1.25rem; margin: 0.5rem 0 1rem; font-size: 14px; line-height: 1.65; color: var(--white); }
+
+/* topics */
+.topic-group { margin-bottom: 1.5rem; }
+.topic-group .grp-label { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-40); margin: 0 0 0.6rem; }
+.topic { border: 0.5px solid var(--white-20); border-radius: 12px; padding: 1rem 1.15rem; margin-bottom: 0.7rem; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s; background: var(--white-04); }
+.topic:hover { border-color: var(--purple-border); background: rgba(168,85,247,0.06); transform: translateY(-1px); }
+.topic .t-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.topic .t-fmt { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 12px; background: var(--purple-glow); color: var(--purple-bright); border: 0.5px solid var(--purple-border); }
+.topic .t-title { font-size: 15px; font-weight: 500; line-height: 1.35; }
+.topic .t-why { font-size: 12px; color: var(--white-60); line-height: 1.55; margin-top: 6px; }
+
+/* draft */
+#draft-view .draft-body { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 12px; padding: 1.5rem 1.6rem; font-size: 15px; line-height: 1.7; color: var(--white); }
+.draft-body h1 { font-size: 26px; font-style: italic; font-weight: 400; margin: 0 0 0.9rem; line-height: 1.2; }
+.draft-body h2 { font-size: 19px; font-weight: 600; margin: 1.4rem 0 0.6rem; color: var(--purple-bright); }
+.draft-body h3 { font-size: 16px; font-weight: 600; margin: 1.1rem 0 0.5rem; }
+.draft-body p { margin: 0 0 0.9rem; color: var(--white-60); }
+.draft-body strong { color: var(--white); font-weight: 600; }
+.draft-body em { font-style: italic; }
+.draft-body a { color: var(--purple-bright); }
+.draft-body ul, .draft-body ol { margin: 0 0 0.9rem 1.2rem; color: var(--white-60); }
+.draft-body li { margin: 0.3rem 0; line-height: 1.6; }
+.draft-body hr { border: none; border-top: 0.5px solid var(--white-08); margin: 1.25rem 0; }
+.nudge { background: rgba(251,191,36,0.10); border: 0.5px solid rgba(251,191,36,0.35); border-radius: 12px; padding: 0.9rem 1.15rem; margin-bottom: 1rem; font-size: 13px; color: var(--white-60); line-height: 1.55; }
+.nudge strong { color: var(--amber); }
+.email-result { font-family: 'Geist Mono', monospace; font-size: 12px; line-height: 1.6; margin-top: 10px; padding: 10px 12px; border-radius: 8px; display: none; }
+.email-result.visible { display: block; }
+.email-result.ok { background: rgba(52,211,153,0.12); color: var(--green); border: 0.5px solid rgba(52,211,153,0.3); }
+.email-result.warn { background: rgba(251,191,36,0.10); color: var(--amber); border: 0.5px solid rgba(251,191,36,0.35); }
+.email-result.err { background: rgba(248,113,113,0.12); color: var(--error); border: 0.5px solid rgba(248,113,113,0.3); }
+
+.hidden { display: none !important; }
+.spin { display: inline-block; }
+.loading { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--white-60); }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="wrap">
+  <a class="back-link" href="/portal.html">← Back to Portal</a>
+
+  <div class="head">
+    <div class="eyebrow">Two Fires · Intelligence Suite</div>
+    <h1>Content <span>Studio.</span></h1>
+    <p class="sub">Capture your voice once. We suggest topics from what your customers actually struggle with, then draft a post in your voice, using the StoryBrand shape: your customer is the hero, your business is the guide. Then take it out.</p>
+  </div>
+
+  <!-- EMAIL GATE (only if we can't resolve an email) -->
+  <div class="card hidden" id="email-gate">
+    <div class="section-title">Load your studio</div>
+    <div class="field">
+      <label for="email-input">Your email</label>
+      <input type="email" id="email-input" placeholder="you@business.com" autocomplete="email">
+      <div class="hint">We use this to find your customer insight and your saved voice.</div>
+    </div>
+    <button class="btn" id="email-go" onclick="setEmailAndLoad()">Open Content Studio</button>
+    <div class="form-error" id="email-gate-error"></div>
+  </div>
+
+  <!-- GLOBAL LOADING -->
+  <div class="card hidden" id="loading-card"><span class="loading" id="loading-text">Loading your studio…</span></div>
+
+  <!-- VOICE SETUP -->
+  <div class="card hidden" id="voice-setup">
+    <div class="section-title" id="voice-setup-title">First, let's capture your voice</div>
+    <p class="hint" style="margin-bottom:1.1rem;">Paste 2 or 3 things you have written before (posts, emails, anything that sounds like you). We will describe your voice so every draft sounds like you, not a robot.</p>
+    <div class="row2">
+      <div class="field">
+        <label for="vs-name">Your name</label>
+        <input type="text" id="vs-name" placeholder="Jane Smith" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="vs-company">Business name</label>
+        <input type="text" id="vs-company" placeholder="Two Fires">
+      </div>
+    </div>
+    <div class="field">
+      <label for="vs-samples">Your writing samples</label>
+      <textarea id="vs-samples" rows="9" placeholder="Paste 2-3 posts or emails here. Separate each one with a blank line."></textarea>
+      <div class="hint">Separate each sample with a blank line. The more real, the better.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="vs-analyse" onclick="analyseVoice()">Analyse my voice</button>
+      <button class="btn secondary" id="vs-skip" onclick="skipVoice()">Skip for now</button>
+    </div>
+    <div class="form-error" id="vs-error"></div>
+
+    <!-- analyse result -->
+    <div class="hidden" id="vs-result" style="margin-top:1.5rem;">
+      <div class="section-title">Here's how you sound</div>
+      <div class="voice-summary" id="vs-summary"></div>
+      <div class="btn-row">
+        <button class="btn" id="vs-save" onclick="saveVoice()">This sounds like me, save it</button>
+        <button class="btn secondary" onclick="analyseVoice()">Re-analyse</button>
+      </div>
+      <div class="form-error" id="vs-save-error"></div>
+    </div>
+  </div>
+
+  <!-- MAIN VIEW -->
+  <div class="hidden" id="main-view">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;">
+        <div class="section-title" style="margin-bottom:0;">Write your own topic</div>
+        <span id="voice-status" class="muted"></span>
+      </div>
+      <div class="field" style="margin-top:1rem;">
+        <label for="own-topic">Topic</label>
+        <input type="text" id="own-topic" placeholder="e.g. Why most small businesses stay invisible online">
+      </div>
+      <div class="field">
+        <label for="own-format">Format</label>
+        <select id="own-format">
+          <option value="blog">Blog post</option>
+          <option value="linkedin">LinkedIn post</option>
+          <option value="social">Short social post</option>
+        </select>
+      </div>
+      <button class="btn" id="own-draft-btn" onclick="draftOwn()">Draft this</button>
+      <div class="form-error" id="own-error"></div>
+    </div>
+
+    <div class="card" id="topics-card">
+      <div class="section-title">Suggested topics</div>
+      <div id="topics-note" class="hint" style="margin-bottom:1rem;"></div>
+      <div id="topics-container"></div>
+    </div>
+  </div>
+
+  <!-- DRAFT VIEW -->
+  <div class="hidden" id="draft-view">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;">
+        <div class="section-title" style="margin-bottom:0;">Your draft</div>
+        <span class="linkish" onclick="backToTopics()">← Back to topics</span>
+      </div>
+      <div class="nudge hidden" id="draft-nudge"><strong>Tip:</strong> This was written in a neutral voice. <span class="linkish" onclick="openVoiceSetup()">Set up your voice</span> for on-brand drafts that sound like you.</div>
+      <div id="draft-loading" class="loading hidden">Drafting in your voice…</div>
+      <div class="draft-body hidden" id="draft-body"></div>
+
+      <!-- TAKE-OUT -->
+      <div class="hidden" id="takeout" style="margin-top:1.25rem;">
+        <div class="btn-row">
+          <button class="btn secondary small" onclick="copyDraft()" id="copy-btn">Copy</button>
+          <button class="btn secondary small" onclick="downloadDraft()">Download .md</button>
+        </div>
+        <div class="field" style="margin-top:1.25rem;">
+          <label for="email-to">Email this draft to</label>
+          <input type="email" id="email-to" placeholder="you@business.com">
+        </div>
+        <button class="btn secondary" onclick="sendEmail()" id="send-btn">Send draft</button>
+        <div class="email-result" id="email-result"></div>
+      </div>
+      <div class="form-error" id="draft-error"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = 'https://insight.two-fires.com';
+const EMAIL_KEY = 'tf_dash_email';   // shared with the Dashboard tool
+const NAME_KEY = 'tf_cs_name';
+const COMPANY_KEY = 'tf_cs_company';
+const $ = (id) => document.getElementById(id);
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+let state = { email: '', voicePresent: false, pendingProfile: null, lastMarkdown: '', lastTopic: '', lastFormat: 'blog' };
+
+// ---- Portal gate: signed-in clients only. tf_portal cookie is httpOnly, so ask
+// the server; redirect to portal login if not signed in. ----
+(async function gate() {
+  try {
+    const r = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
+    if (!r.ok) { window.location.href = '/portal.html'; return; }
+    init();
+  } catch (e) { window.location.href = '/portal.html'; }
+})();
+
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function slugify(t) { return String(t || 'draft').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80) || 'draft'; }
+function show(id) { $(id).classList.remove('hidden'); }
+function hide(id) { $(id).classList.add('hidden'); }
+function showErr(id, msg) { const el = $(id); el.textContent = msg; el.classList.add('visible'); }
+function clearErr(id) { const el = $(id); el.textContent = ''; el.classList.remove('visible'); }
+
+// Small, safe markdown renderer: escape first, then apply a limited subset.
+function mdToHtml(md) {
+  const lines = String(md || '').replace(/\r\n/g, '\n').split('\n');
+  let html = '', listType = null;
+  const closeList = () => { if (listType) { html += `</${listType}>`; listType = null; } };
+  const inline = (s) => esc(s)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  for (let raw of lines) {
+    const line = raw.trimEnd();
+    if (/^\s*$/.test(line)) { closeList(); continue; }
+    if (/^###\s+/.test(line)) { closeList(); html += `<h3>${inline(line.replace(/^###\s+/, ''))}</h3>`; continue; }
+    if (/^##\s+/.test(line)) { closeList(); html += `<h2>${inline(line.replace(/^##\s+/, ''))}</h2>`; continue; }
+    if (/^#\s+/.test(line)) { closeList(); html += `<h1>${inline(line.replace(/^#\s+/, ''))}</h1>`; continue; }
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(line)) { closeList(); html += '<hr>'; continue; }
+    if (/^\s*[-*]\s+/.test(line)) { if (listType !== 'ul') { closeList(); listType = 'ul'; html += '<ul>'; } html += `<li>${inline(line.replace(/^\s*[-*]\s+/, ''))}</li>`; continue; }
+    if (/^\s*\d+\.\s+/.test(line)) { if (listType !== 'ol') { closeList(); listType = 'ol'; html += '<ol>'; } html += `<li>${inline(line.replace(/^\s*\d+\.\s+/, ''))}</li>`; continue; }
+    closeList(); html += `<p>${inline(line)}</p>`;
+  }
+  closeList();
+  return html;
+}
+
+// ---- API helper: JSON POST with credentials; 401 -> portal. ----
+async function api(path, body) {
+  const res = await fetch(API_BASE + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(body || {}),
+  });
+  if (res.status === 401) { window.location.href = '/portal.html'; throw new Error('unauthorized'); }
+  let data = {};
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function init() {
+  const saved = (localStorage.getItem(EMAIL_KEY) || '').trim();
+  $('vs-name').value = localStorage.getItem(NAME_KEY) || '';
+  $('vs-company').value = localStorage.getItem(COMPANY_KEY) || '';
+  if (saved && EMAIL_RE.test(saved)) { state.email = saved; loadStudio(); }
+  else { show('email-gate'); $('email-input').focus(); }
+}
+
+function setEmailAndLoad() {
+  clearErr('email-gate-error');
+  const v = $('email-input').value.trim().toLowerCase();
+  if (!EMAIL_RE.test(v)) return showErr('email-gate-error', 'Please enter a valid email address.');
+  state.email = v;
+  localStorage.setItem(EMAIL_KEY, v);
+  hide('email-gate');
+  loadStudio();
+}
+
+// Load topics + voice_present, then route to first-run voice setup or main view.
+async function loadStudio() {
+  hide('email-gate'); hide('voice-setup'); hide('main-view'); hide('draft-view');
+  show('loading-card');
+  try {
+    const { ok, data } = await api('/kindling/topics', { email: state.email });
+    hide('loading-card');
+    if (!ok) { show('email-gate'); showErr('email-gate-error', (data && data.error) || 'Could not load your studio. Check your email and try again.'); return; }
+    state.voicePresent = !!data.voice_present;
+    if (!state.voicePresent) { openVoiceSetup(true); renderTopics(data.topics || [], data.note, data.grounded); }
+    else { renderTopics(data.topics || [], data.note, data.grounded); showMain(); }
+  } catch (e) { hide('loading-card'); }
+}
+
+function showMain() {
+  hide('voice-setup'); hide('draft-view'); show('main-view');
+  const el = $('voice-status');
+  if (state.voicePresent) { el.innerHTML = '✓ Voice saved · <span class="linkish" onclick="openVoiceSetup()">Edit my voice</span>'; el.style.color = 'var(--green)'; }
+  else { el.innerHTML = 'Neutral voice · <span class="linkish" onclick="openVoiceSetup()">Set up my voice</span>'; el.style.color = 'var(--white-40)'; }
+}
+
+function renderTopics(topics, note, grounded) {
+  const noteEl = $('topics-note');
+  if (note) { noteEl.textContent = note; noteEl.classList.remove('hidden'); }
+  else if (grounded === false) { noteEl.textContent = 'Run a diagnosis tool for tailored topics, or write your own above.'; noteEl.classList.remove('hidden'); }
+  else noteEl.classList.add('hidden');
+
+  const blog = topics.filter((t) => (t.format || 'blog') === 'blog');
+  const social = topics.filter((t) => (t.format || 'blog') !== 'blog');
+  const card = (t) => `<div class="topic" onclick="draftTopic(${JSON.stringify(t.title).replace(/"/g, '&quot;')}, ${JSON.stringify(t.format || 'blog').replace(/"/g, '&quot;')})">
+      <div class="t-top"><span class="t-fmt">${esc(t.format || 'blog')}</span><span class="t-title">${esc(t.title)}</span></div>
+      ${t.why ? `<div class="t-why">${esc(t.why)}</div>` : ''}
+    </div>`;
+  let html = '';
+  if (blog.length) html += `<div class="topic-group"><div class="grp-label">Long form · Blog</div>${blog.map(card).join('')}</div>`;
+  if (social.length) html += `<div class="topic-group"><div class="grp-label">Short form · LinkedIn &amp; Social</div>${social.map(card).join('')}</div>`;
+  if (!html) html = '<p class="muted">No suggested topics yet. Write your own above.</p>';
+  $('topics-container').innerHTML = html;
+}
+
+// ---- Voice setup ----
+function openVoiceSetup(firstRun) {
+  hide('main-view'); hide('draft-view'); hide('email-gate'); hide('loading-card');
+  show('voice-setup');
+  $('voice-setup-title').textContent = firstRun ? "First, let's capture your voice" : 'Edit your voice';
+  $('vs-skip').classList.toggle('hidden', !firstRun && state.voicePresent);
+  hide('vs-result'); clearErr('vs-error'); clearErr('vs-save-error');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function analyseVoice() {
+  clearErr('vs-error'); clearErr('vs-save-error'); hide('vs-result');
+  const name = $('vs-name').value.trim();
+  const company = $('vs-company').value.trim();
+  const raw = $('vs-samples').value.trim();
+  const samples = raw.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
+  if (!name || !company) return showErr('vs-error', 'Please add your name and business name.');
+  if (samples.join(' ').length < 120) return showErr('vs-error', 'Please paste at least one real writing sample (a short paragraph or two).');
+
+  localStorage.setItem(NAME_KEY, name); localStorage.setItem(COMPANY_KEY, company);
+  const btn = $('vs-analyse'); btn.disabled = true; btn.textContent = 'Analysing…';
+  try {
+    const { ok, data } = await api('/kindling/voice/analyse', { email: state.email, name, company, samples });
+    if (!ok) return showErr('vs-error', (data && data.error) || 'Could not analyse your voice. Please try again.');
+    state.pendingProfile = data.voice_profile;
+    $('vs-summary').textContent = data.summary || '';
+    show('vs-result');
+    $('vs-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } catch (e) { if (e.message !== 'unauthorized') showErr('vs-error', 'Something went wrong. Please try again.'); }
+  finally { btn.disabled = false; btn.textContent = 'Analyse my voice'; }
+}
+
+async function saveVoice() {
+  clearErr('vs-save-error');
+  if (!state.pendingProfile) return showErr('vs-save-error', 'Please analyse your voice first.');
+  const btn = $('vs-save'); btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const { ok, data } = await api('/kindling/voice/save', { email: state.email, voice_profile: state.pendingProfile });
+    if (!ok) return showErr('vs-save-error', (data && data.error) || 'Could not save your voice. Please try again.');
+    state.voicePresent = true; state.pendingProfile = null;
+    await loadStudio();
+  } catch (e) { if (e.message !== 'unauthorized') showErr('vs-save-error', 'Something went wrong. Please try again.'); }
+  finally { btn.disabled = false; btn.textContent = 'This sounds like me, save it'; }
+}
+
+function skipVoice() { showMain(); }
+
+// ---- Draft ----
+function draftOwn() {
+  clearErr('own-error');
+  const topic = $('own-topic').value.trim();
+  const format = $('own-format').value;
+  if (topic.length < 3) return showErr('own-error', 'Please enter a topic to draft.');
+  draftTopic(topic, format);
+}
+
+async function draftTopic(topic, format) {
+  state.lastTopic = topic; state.lastFormat = format || 'blog';
+  hide('main-view'); show('draft-view');
+  clearErr('draft-error'); hide('draft-body'); hide('takeout'); hide('draft-nudge');
+  $('email-result').classList.remove('visible', 'ok', 'warn', 'err');
+  show('draft-loading');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  try {
+    const { ok, data } = await api('/kindling/draft', { email: state.email, topic, format: state.lastFormat });
+    hide('draft-loading');
+    if (!ok) { showErr('draft-error', (data && data.error) || 'The draft could not be completed. Please try again.'); return; }
+    state.lastMarkdown = data.markdown || '';
+    $('draft-body').innerHTML = mdToHtml(state.lastMarkdown);
+    show('draft-body'); show('takeout');
+    if (data.needs_voice) show('draft-nudge');
+    $('email-to').value = state.email || '';
+  } catch (e) { hide('draft-loading'); if (e.message !== 'unauthorized') showErr('draft-error', 'Something went wrong. Please try again.'); }
+}
+
+function backToTopics() { hide('draft-view'); showMain(); }
+
+// ---- Take-out ----
+function copyDraft() {
+  const text = state.lastMarkdown || '';
+  const done = () => { const b = $('copy-btn'); const old = b.textContent; b.textContent = 'Copied ✓'; setTimeout(() => { b.textContent = old; }, 1600); };
+  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done).catch(fallbackCopy); }
+  else fallbackCopy();
+  function fallbackCopy() { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) {} ta.remove(); }
+}
+
+function downloadDraft() {
+  const blob = new Blob([state.lastMarkdown || ''], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = slugify(state.lastTopic) + '.md';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(a.href);
+}
+
+async function sendEmail() {
+  const el = $('email-result'); el.classList.remove('visible', 'ok', 'warn', 'err');
+  const to = $('email-to').value.trim().toLowerCase();
+  if (!EMAIL_RE.test(to)) { el.textContent = 'Please enter a valid recipient email.'; el.classList.add('visible', 'err'); return; }
+  const btn = $('send-btn'); btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const subject = 'Draft: ' + (state.lastTopic || 'Your Content Studio post');
+    const { ok, data } = await api('/kindling/email', { email_to: to, subject, markdown: state.lastMarkdown || '' });
+    if (ok && data.sent) { el.textContent = '✓ Sent to ' + to + (data.id ? ' (id ' + data.id + ')' : ''); el.classList.add('visible', 'ok'); }
+    else if (ok && data.configured === false) { el.textContent = (data.message || 'Email is not configured for this service.') + (data.needed ? ' — ' + data.needed : ''); el.classList.add('visible', 'warn'); }
+    else { el.textContent = (data && data.error) || 'The email could not be sent. Please try again.'; el.classList.add('visible', 'err'); }
+  } catch (e) { if (e.message !== 'unauthorized') { el.textContent = 'Something went wrong. Please try again.'; el.classList.add('visible', 'err'); } }
+  finally { btn.disabled = false; btn.textContent = 'Send draft'; }
+}
+</script>
+</body>
+</html>
