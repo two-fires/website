@@ -461,6 +461,8 @@
     }
     .banner-error.active { display: block; }
   </style>
+  <script src="/scripts/tf-identity.js"></script>
+  <script src="/scripts/tf-work.js"></script>
 </head>
 <body>
   <header class="header">
@@ -763,6 +765,7 @@
         state.company = company;
         persist();
         saveEmail(email);
+        try { if (window.TFIdentity) TFIdentity.set({ name: name, email: email, company: company }); } catch (e2) { /* ignore */ }
         // Returning user: if they already have a completed scan, show it instead
         // of a blank brief. Otherwise fall through to the brief form.
         await rehydrateOrBrief();
@@ -916,6 +919,7 @@
         const row = document.getElementById('rerunRow');
         if (row) row.style.display = 'flex';
         showStage('stage-results');
+        mountCompetitorVersions();
       } catch (err) {
         showProcessingError(err.message || 'Something went wrong. Please try again.');
       } finally {
@@ -1152,6 +1156,38 @@
       const row = document.getElementById('rerunRow');
       if (row) row.style.display = 'flex';
       showStage('stage-results');
+      mountCompetitorVersions();
+    }
+
+    // Version history + "not you?" appended into the results stage. Idempotent so
+    // it can be called after both a live scan and a restored one.
+    function mountCompetitorVersions() {
+      var stage = document.getElementById('stage-results');
+      if (!stage) return;
+      var wrap = document.getElementById('tf-versions-wrap');
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'tf-versions-wrap';
+        wrap.className = 'tf-ver-wrap';
+        var email = (window.TFIdentity ? TFIdentity.get().email : '') || state.email || '';
+        wrap.innerHTML = '<div class="tf-ver-head">Previous versions</div>' +
+          '<div id="tf-versions"><p class="tf-ver-empty">Loading versions…</p></div>' +
+          '<div class="tf-identity-note">' + esc(email) + ' &middot; <a onclick="tfChangeIdentity()">Not you? Change details</a></div>';
+        stage.appendChild(wrap);
+      }
+      loadCompetitorVersions();
+    }
+    async function loadCompetitorVersions() {
+      var el = document.getElementById('tf-versions');
+      if (!el || !window.TFWork) return;
+      var email = (window.TFIdentity ? TFIdentity.get().email : '') || state.email || '';
+      var data = await TFWork.fetchVersions(email);
+      var items = (data && data.versions && data.versions.competitor) || [];
+      TFWork.renderVersions(el, items, { currentSessionId: state.sessionId, emptyText: 'No previous versions yet.' });
+    }
+    function tfChangeIdentity() {
+      try { if (window.TFIdentity) TFIdentity.clear(); } catch (e) { /* ignore */ }
+      location.reload();
     }
 
     // If the lead has a completed scan, show it; otherwise go to the brief form.
@@ -1166,6 +1202,14 @@
     // tab), reload their last completed scan instead of the blank brief. Matches
     // the Customer Insight tool. Falls back gracefully to the brief or the gate.
     (async function boot() {
+      try {
+        if (window.TFIdentity) {
+          var _id = TFIdentity.get();
+          if (_id.name && document.getElementById('g-name')) document.getElementById('g-name').value = _id.name;
+          if (_id.email && document.getElementById('g-email')) document.getElementById('g-email').value = _id.email;
+          if (_id.company && document.getElementById('g-company')) document.getElementById('g-company').value = _id.company;
+        }
+      } catch (e) { /* ignore */ }
       const email = getSavedEmail() || state.email;
       if (email) {
         state.email = email;
