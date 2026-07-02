@@ -686,6 +686,13 @@
       }));
     }
 
+    // Durable email pointer (localStorage) so a completed scan can be restored
+    // after a hard refresh or in a new tab, by re-fetching the lead's last scan
+    // on load. Mirrors the Customer Insight tool's returning-user behaviour.
+    const EMAIL_KEY = 'tf_competitor_email';
+    function getSavedEmail() { try { return localStorage.getItem(EMAIL_KEY) || ''; } catch (e) { return ''; } }
+    function saveEmail(email) { try { if (email) localStorage.setItem(EMAIL_KEY, email); } catch (e) { /* ignore */ } }
+
     function showStage(id) {
       document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
@@ -755,7 +762,10 @@
         state.email = email;
         state.company = company;
         persist();
-        enterBrief();
+        saveEmail(email);
+        // Returning user: if they already have a completed scan, show it instead
+        // of a blank brief. Otherwise fall through to the brief form.
+        await rehydrateOrBrief();
       } catch (err) {
         gateError.textContent = err.message || 'Something went wrong. Please try again.';
       } finally {
@@ -1111,9 +1121,59 @@
 
     document.getElementById('pdfBtn').addEventListener('click', exportPdf);
 
+    // ---------- Returning-user rehydration ----------
+    // Ask the backend for this lead's last completed scan. Portal-gated, so the
+    // tf_portal cookie must ride along (credentials: 'include'). Returns
+    // { result, sessionId } or null. Adopts the returned leadId so the download
+    // button keeps working. Never throws: on any failure we fall back to the gate.
+    async function fetchLastScan(email) {
+      if (!email) return null;
+      try {
+        const res = await fetch(API_BASE + '/competitor-last', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email }),
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (data && data.leadId) { state.leadId = data.leadId; persist(); }
+        if (data && data.result) return { result: data.result, sessionId: data.sessionId };
+        return null;
+      } catch (e) { return null; }
+    }
+
+    // Render a stored scan through the same path as a live one (renderResults sets
+    // currentResult, so PDF + copy work too), then reveal the "Run new scan"
+    // control so the visitor can still start fresh.
+    function showStoredReport(result, sessionId) {
+      if (sessionId) { state.sessionId = sessionId; persist(); }
+      renderResults(result);
+      const row = document.getElementById('rerunRow');
+      if (row) row.style.display = 'flex';
+      showStage('stage-results');
+    }
+
+    // If the lead has a completed scan, show it; otherwise go to the brief form.
+    async function rehydrateOrBrief() {
+      const last = await fetchLastScan(state.email || getSavedEmail());
+      if (last) { showStoredReport(last.result, last.sessionId); return; }
+      enterBrief();
+    }
+
     // ---------- boot ----------
-    // Returning within the same browser session: skip the gate, go to the brief.
-    (function boot() {
+    // On load, if we know the visitor's email (saved this session or in a prior
+    // tab), reload their last completed scan instead of the blank brief. Matches
+    // the Customer Insight tool. Falls back gracefully to the brief or the gate.
+    (async function boot() {
+      const email = getSavedEmail() || state.email;
+      if (email) {
+        state.email = email;
+        const last = await fetchLastScan(email);
+        if (last) { showStoredReport(last.result, last.sessionId); return; }
+        if (state.leadId) enterBrief();
+        return;
+      }
       if (state.leadId) enterBrief();
     })();
   </script>
