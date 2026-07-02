@@ -16,8 +16,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
-
   <style>
     :root {
       --bg: #050508;
@@ -1093,151 +1091,22 @@
       });
     });
 
-    // ---------- PDF Export (client-side html2pdf.js) ----------
-    function dateStamp() {
-      const d = new Date();
-      const p = (n) => String(n).padStart(2, '0');
-      return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-    }
-    function readableDate() {
-      try { return new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }); }
-      catch (e) { return dateStamp(); }
-    }
-    function slug(s) {
-      return String(s || 'Report').trim().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'Report';
-    }
-
-    // Confidence as a simple inline-block badge for the white-theme PDF.
-    function pdfConf(c) {
-      const k = String(c || '').toLowerCase();
-      let col = '#6B7280', bg = '#F3F4F6';
-      if (k.startsWith('high')) { col = '#15803D'; bg = '#E7F6ED'; }
-      else if (k.startsWith('med')) { col = '#B45309'; bg = '#FCF1DF'; }
-      else if (k.startsWith('low')) { col = '#B91C1C'; bg = '#FBE9E9'; }
-      const level = splitMeta(c).head || '-';
-      return `<span style="display:inline-block;padding:2px 8px;border-radius:10px;background:${bg};color:${col};font-weight:600;font-size:11px;line-height:1.3;">${esc(level)}</span>`;
-    }
-
-    function buildPdfHTML(d) {
-      const matrix = arr(d.competitor_messaging_matrix);
-      const p = d.category_pattern_summary || {};
-      const w = d.sameness_vs_whitespace || {};
-      const insights = arr(d.key_competitor_insights);
-
-      const sub = (s) => `<div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:18px 0 8px;">${esc(s)}</div>`;
-      const ul = (items) => {
-        const l = arr(items).filter(Boolean);
-        return l.length ? ('<ul style="margin:0 0 8px 18px;padding:0;">' + l.map(i => `<li style="font-size:12px;line-height:1.5;color:#1F2937;margin-bottom:5px;">${esc(i)}</li>`).join('') + '</ul>') : '';
-      };
-      const quote = (s) => `<div style="font-size:12px;line-height:1.55;color:#374151;border-left:3px solid #A855F7;padding:4px 0 4px 12px;">${esc(s)}</div>`;
-
-      let html = `<div style="font-family:'DM Sans',sans-serif;color:#1F2937;background:#ffffff;padding:10px 6px 6px;">`;
-      html += `<div style="margin:6px 0 20px;">
-        <div style="font-family:'DM Sans',sans-serif;font-size:24px;font-weight:700;color:#A855F7;line-height:1.2;padding-top:2px;">Two Fires</div>
-        <div style="font-size:14px;color:#666;margin-top:3px;">Competitor and Category Report</div>
-        <div style="height:1px;background:#A855F7;margin:12px 0;"></div>
-        <div style="font-size:12px;color:#374151;">
-          ${state.company ? '<b style="color:#111827;">' + esc(state.company) + '</b> &nbsp;·&nbsp; ' : ''}
-          ${state.name ? esc(state.name) + ' &nbsp;·&nbsp; ' : ''}${esc(readableDate())}</div>
-      </div>`;
-
-      if (d.escalation && d.escalation.triggered) {
-        const reasons = arr(d.escalation.reasons).filter(Boolean).join(' ');
-        html += `<div style="border:1px solid #E4B84B;background:#FCF6E6;border-radius:8px;padding:10px 12px;margin:0 0 16px;font-size:12px;color:#7A5B12;line-height:1.5;"><b>A note from the agent:</b> ${esc(reasons || 'Treat this read as directional.')}</div>`;
-      }
-
-      // 1. Competitor Messaging Matrix
-      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:0 0 10px;">Competitor Messaging Matrix</div>`;
-      if (matrix.length) {
-        matrix.forEach(c => {
-          html += `<div style="border:1px solid #E6DDF5;border-radius:8px;padding:12px 14px;margin:0 0 10px;">
-            <div style="font-size:13px;font-weight:700;color:#111827;line-height:1.35;">${esc(c.name || 'Competitor')} &nbsp; ${pdfConf(c.confidence)}</div>`;
-          const rows = [
-            ['Target audience', c.apparent_target_audience],
-            ['Core promise', c.core_promise],
-            ['Proof and credibility', c.proof_signals],
-            ['Tone and style', c.tone_style_notes],
-            ['Differentiators', c.differentiators],
-          ].filter(r => r[1] && String(r[1]).trim());
-          rows.forEach(r => {
-            html += `<div style="font-size:12px;color:#374151;line-height:1.5;margin-top:6px;"><b style="color:#6B21A8;">${esc(r[0])}:</b> ${esc(r[1])}</div>`;
-          });
-          html += `</div>`;
-        });
-      } else {
-        html += `<div style="font-size:12px;color:#6B7280;">No competitors mapped.</div>`;
-      }
-
-      // 2. Category Pattern Summary
-      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 8px;border-top:1px solid #E6DDF5;padding-top:18px;">Category Pattern Summary</div>`;
-      if (ul(p.most_repeated_claims)) html += sub('Most repeated claims') + ul(p.most_repeated_claims);
-      if (ul(p.common_offer_process_patterns)) html += sub('Common offer and process patterns') + ul(p.common_offer_process_patterns);
-      if (ul(p.common_proof_trust_signals)) html += sub('Common proof and trust signals') + ul(p.common_proof_trust_signals);
-      if (ul(p.common_tone_language)) html += sub('Common tone and language') + ul(p.common_tone_language);
-      if (p.what_the_category_rewards && String(p.what_the_category_rewards).trim()) html += sub('What the category rewards') + quote(p.what_the_category_rewards);
-
-      // 3. Sameness vs Whitespace
-      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 8px;border-top:1px solid #E6DDF5;padding-top:18px;">Sameness vs Whitespace</div>`;
-      if (ul(w.where_competitors_sound_alike)) html += sub('Where competitors sound alike') + ul(w.where_competitors_sound_alike);
-      if (ul(w.where_client_sounds_like_category)) html += sub('Where you sound like the category') + ul(w.where_client_sounds_like_category);
-      if (ul(w.possible_whitespace)) html += sub('Possible whitespace') + ul(w.possible_whitespace);
-      if (ul(w.category_tensions_or_gaps)) html += sub('Category tensions and gaps') + ul(w.category_tensions_or_gaps);
-      if (w.positioning_implications && String(w.positioning_implications).trim()) html += sub('What this means for your positioning') + quote(w.positioning_implications);
-
-      // 4. Key Competitor Insights
-      if (insights.length) {
-        html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 10px;border-top:1px solid #E6DDF5;padding-top:18px;">Key Competitor Insights</div>`;
-        html += '<ol style="margin:0 0 4px 18px;padding:0;">' + insights.map(i => {
-          const t = typeof i === 'string' ? i : (i.insight || '');
-          const m = (typeof i === 'object' && i) ? (i.what_it_means || '') : '';
-          return `<li style="font-size:12px;line-height:1.5;color:#1F2937;margin-bottom:8px;"><b>${esc(t)}</b>${m ? `<div style="color:#374151;margin-top:3px;">${esc(m)}</div>` : ''}</li>`;
-        }).join('') + '</ol>';
-      }
-
-      html += `<div style="text-align:center;margin-top:28px;border-top:1px solid #E6DDF5;padding-top:12px;font-size:10px;color:#999;line-height:1.5;">two-fires.com | Confidential</div>`;
-      html += `</div>`;
-      return html;
-    }
-
-    const PDF_WIDTH = 650; // px. Fits A4 portrait content area with the margins below
-
+    // ---------- PDF Export (server-side, matches the Customer Insight tool) ----------
+    // The browser navigates to the portal-gated /download-competitor/:sessionId
+    // route on insight.two-fires.com. The tf_portal cookie (Domain=.two-fires.com)
+    // rides along on the navigation, and Content-Disposition: attachment triggers
+    // the download. Real selectable A4 text, generated server-side by
+    // lib/pdf-generator.js. No client-side html2pdf capture.
     function exportPdf() {
       if (!currentResult) return;
       const btn = document.getElementById('pdfBtn');
-      if (typeof html2pdf === 'undefined') {
+      const sessionId = state.sessionId;
+      if (!sessionId) {
         const o = btn.innerHTML; btn.innerHTML = 'PDF unavailable';
         setTimeout(() => { btn.innerHTML = o; }, 2500);
         return;
       }
-      const original = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span> Building PDF...';
-
-      const clone = document.createElement('div');
-      clone.id = 'pdfExportClone';
-      clone.setAttribute('aria-hidden', 'true');
-      clone.style.cssText = `position:absolute; left:-99999px; top:0; width:${PDF_WIDTH}px; background:#ffffff;`;
-      clone.innerHTML = buildPdfHTML(currentResult);
-      document.body.appendChild(clone);
-      if (clone.offsetWidth !== PDF_WIDTH) clone.style.width = PDF_WIDTH + 'px';
-
-      const cleanup = () => {
-        if (clone.parentNode) clone.parentNode.removeChild(clone);
-        btn.disabled = false;
-        btn.innerHTML = original;
-      };
-
-      const filename = `Two-Fires-Competitor-Category-${slug(state.company)}-${dateStamp()}.pdf`;
-      const opt = {
-        margin: [15, 15, 20, 15],
-        filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, width: PDF_WIDTH, windowWidth: PDF_WIDTH },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-      };
-      const captureTarget = clone.firstElementChild || clone;
-      html2pdf().set(opt).from(captureTarget).save().then(cleanup).catch(cleanup);
+      window.open(API_BASE + '/download-competitor/' + sessionId, '_blank');
     }
 
     document.getElementById('pdfBtn').addEventListener('click', exportPdf);
