@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta name="description" content="Give us a simple market brief. The Two Fires Competitor and Category Agent scans your competitors and category from public sources, then shows you the norms, the sameness, and the whitespace you can own.">
+  <meta property="og:title" content="Two Fires · Competitor and Category Agent">
+  <meta property="og:description" content="Tell us about your market. Our agent scans your competitors and category and shows you where you blend in and where the whitespace is.">
+  <meta property="og:type" content="website">
+  <title>Two Fires · Where does your category sound the same?</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-soft: #0B0B14;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --surface-card: #14091E;
+      --card: #0A0A0F;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #FBFAFE;
+      --text-muted: #A0A0A0;
+      --text-faint: #666666;
+
+      --purple-deep: #6B21A8;
+      --purple: #A855F7;
+      --purple-bright: #C4A8FF;
+      --purple-glow: rgba(168, 85, 247, 0.55);
+      --purple-glow-soft: rgba(168, 85, 247, 0.25);
+      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+
+      --green: #34D399;
+      --amber: #FBBF24;
+      --red: #F87171;
+      --grey: #8B8B95;
+
+      --font-display: 'DM Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+
+      --max-w: 1000px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 90%, rgba(168, 85, 247, 0.12), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 0% 70%, rgba(168, 85, 247, 0.07), transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.4; mix-blend-mode: overlay; pointer-events: none; z-index: 1;
+    }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 0;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(5, 5, 8, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--text); }
+    .brand-mark { width: 26px; height: 26px; display: flex; }
+    .brand-mark svg { width: 100%; height: 100%; filter: drop-shadow(0 0 8px var(--purple-glow)); }
+    .brand-name {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .nav-back {
+      font-family: var(--font-body); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s ease;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* NOTE: <main> also carries .container, whose `padding: 0 24px` shorthand
+       (class selector) outranks a bare `main` type selector and would zero out
+       padding-top. Scope this rule as `main.container` so its vertical padding
+       wins; horizontal 24px padding still comes from .container. */
+    main.container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 200px;
+      padding-bottom: 96px;
+      position: relative; z-index: 2;
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulseDot { 0%, 100% { opacity: 0.3; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+
+    .stage { display: none; animation: fadeUp 0.6s ease forwards; }
+    .stage.active { display: block; }
+
+    /* Shared bits */
+    .eyebrow {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 22px;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--purple); }
+
+    .display-h1 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.1rem, 5.5vw, 3.6rem); line-height: 1.04;
+      letter-spacing: -0.025em; margin-bottom: 20px;
+    }
+    .display-h1 em {
+      font-style: italic; color: var(--purple);
+      text-shadow: 0 0 40px var(--purple-glow);
+    }
+    .lede {
+      color: var(--text-muted); max-width: 56ch;
+      font-size: clamp(1.02rem, 1.4vw, 1.15rem); line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    /* ============ FORMS (gate + intake) ============ */
+    .form-wrap { max-width: 600px; }
+    .stack { display: flex; flex-direction: column; gap: 16px; }
+    .field label {
+      display: block; font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .field .hint { text-transform: none; letter-spacing: 0.02em; color: var(--text-faint); font-size: 11px; }
+    .field input, .field textarea {
+      width: 100%; font-family: var(--font-body); font-size: 15px;
+      color: var(--text); background: var(--surface);
+      border: 1px solid var(--border-strong); border-radius: 12px;
+      padding: 15px 16px; transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      line-height: 1.5;
+    }
+    .field textarea { resize: vertical; min-height: 84px; }
+    .field input::placeholder, .field textarea::placeholder { color: var(--text-faint); }
+    .field input:focus, .field textarea:focus {
+      outline: none; border-color: var(--purple);
+      box-shadow: 0 0 0 3px var(--purple-soft-fill), 0 0 24px var(--purple-glow-soft);
+    }
+
+    .optional-toggle {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+      color: var(--purple-bright); background: none; border: none; cursor: pointer;
+      padding: 4px 0; display: inline-flex; align-items: center; gap: 8px; margin-top: 2px;
+      transition: color 0.2s ease;
+    }
+    .optional-toggle:hover { color: var(--purple); }
+    .optional-toggle .chev { transition: transform 0.25s ease; display: inline-block; }
+    .optional-toggle.open .chev { transform: rotate(90deg); }
+    .optional-fields { display: none; flex-direction: column; gap: 16px; margin-top: 4px; }
+    .optional-fields.open { display: flex; animation: fadeIn 0.35s ease; }
+
+    .btn {
+      font-family: var(--font-body); font-size: 15px; font-weight: 600;
+      letter-spacing: 0.01em; padding: 16px 30px; border-radius: 999px; cursor: pointer;
+      border: 1px solid transparent; color: white;
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset, 0 6px 28px var(--purple-glow);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      text-decoration: none;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 10px 40px var(--purple-glow); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-block { width: 100%; }
+
+    .btn-ghost {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-muted); box-shadow: none; font-weight: 500;
+    }
+    .btn-ghost:hover:not(:disabled) { color: var(--text); border-color: var(--border-strong); box-shadow: none; transform: translateY(-1px); }
+
+    .fineprint {
+      font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
+      margin-top: 18px; letter-spacing: 0.04em;
+    }
+    .form-error {
+      font-family: var(--font-mono); font-size: 12px; color: var(--red);
+      margin-top: 6px; min-height: 16px; letter-spacing: 0.02em;
+    }
+
+    .spinner {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.35); border-top-color: white;
+      animation: spin 0.7s linear infinite; display: inline-block;
+    }
+
+    .welcome-back {
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em;
+      color: var(--purple-bright); margin-bottom: 18px;
+      padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
+      background: var(--purple-soft-fill); display: inline-block;
+    }
+
+    /* ============ STATE - PROCESSING (live research feed) ============ */
+    .feed-wrap { max-width: 640px; }
+    .feed-head { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .feed-dot {
+      width: 12px; height: 12px; border-radius: 50%; background: var(--purple);
+      box-shadow: 0 0 16px var(--purple-glow); animation: pulseDot 1.2s ease-in-out infinite; flex-shrink: 0;
+    }
+    .feed-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.04em; margin-bottom: 28px; }
+    .status-feed {
+      display: flex; flex-direction: column; gap: 12px;
+      border-left: 1px solid var(--border); padding-left: 22px;
+    }
+    .status-item {
+      position: relative; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;
+      animation: fadeIn 0.4s ease;
+    }
+    .status-item::before {
+      content: ""; position: absolute; left: -27px; top: 8px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--purple-deep);
+      border: 1px solid var(--purple);
+    }
+    .status-item.current { color: var(--text); }
+    .status-item.current::before { background: var(--purple); box-shadow: 0 0 12px var(--purple-glow); animation: pulseDot 1.2s ease-in-out infinite; }
+    .status-item .q { color: var(--purple-bright); font-style: italic; }
+
+    /* ============ RESULTS ============ */
+    /* Extra headroom so the results heading clears the fixed nav comfortably. */
+    .results-head { margin-bottom: 44px; padding-top: 2rem; }
+    .result-section { margin-bottom: 56px; }
+
+    /* Section divider between major blocks */
+    .section-divider {
+      height: 1px; border: none; margin: 0 0 56px;
+      background: linear-gradient(90deg, transparent, var(--purple-glow-soft) 50%, transparent);
+    }
+
+    /* Executive Summary */
+    .exec-headline {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(1.4rem, 3.6vw, 2.05rem); line-height: 1.25; letter-spacing: -0.02em;
+      color: var(--text); margin: 4px 0 24px; max-width: 30ch;
+    }
+    .result-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 44px; align-items: stretch; }
+    /* PDF is the dominant call to action: large, bold, grows to fill the row. */
+    .btn-pdf {
+      flex: 1 1 320px; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.01em;
+      padding: 19px 28px; gap: 12px;
+    }
+    .btn-pdf svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .result-actions .btn-ghost { flex: 0 1 auto; padding: 19px 26px; font-size: 0.95rem; }
+    @media (max-width: 560px) {
+      .result-actions { flex-direction: column; }
+      .result-actions .btn { width: 100%; }
+    }
+    .exec-block { margin-bottom: 24px; }
+    .callout {
+      background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--purple);
+      border-radius: 12px; padding: 18px 20px; color: var(--text-muted);
+      font-size: 0.98rem; line-height: 1.6;
+    }
+    .pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .pattern-grid { grid-template-columns: 1fr; } }
+    .pattern-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+    .pattern-card .k {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 10px;
+    }
+    .pattern-card .v { color: var(--text); font-size: 0.94rem; line-height: 1.55; }
+    .confidence-notes {
+      font-family: var(--font-mono); font-size: 12px; color: #888;
+      line-height: 1.6; margin-top: 20px; letter-spacing: 0.02em;
+    }
+
+    /* Summary Tables */
+    .summary-table-wrap {
+      overflow-x: auto; margin-bottom: 28px;
+      border: 1px solid var(--border); border-radius: 12px; -webkit-overflow-scrolling: touch;
+    }
+    .summary-table { width: 100%; border-collapse: collapse; min-width: 540px; background: var(--card); }
+    .summary-table th {
+      background: var(--purple-soft-fill); color: var(--purple-bright);
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border);
+      font-weight: 500; white-space: nowrap;
+    }
+    .summary-table td {
+      padding: 13px 14px; font-size: 0.9rem; color: var(--text); line-height: 1.5;
+      border-bottom: 1px solid var(--border); vertical-align: top;
+    }
+    .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table td.muted { color: var(--text-muted); }
+    .summary-table td.nowrap { white-space: nowrap; }
+    .result-section > h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem); letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .result-section > h2 em { font-style: italic; color: var(--purple-bright); }
+    .section-intro { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 26px; max-width: 62ch; }
+
+    .sub-label {
+      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--purple-bright);
+      margin: 32px 0 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .sub-label::before { content: ""; width: 18px; height: 1px; background: var(--purple); }
+    .sub-label:first-child { margin-top: 0; }
+
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) { .card-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; min-width: 0; transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .card:hover { border-color: var(--purple); box-shadow: 0 8px 40px rgba(168,85,247,0.12); transform: translateY(-2px); }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .card-title { font-family: var(--font-display); font-weight: 500; font-size: 1.02rem; line-height: 1.35; color: var(--text); flex: 1; min-width: 0; overflow-wrap: anywhere; }
+
+    .badge {
+      font-family: var(--font-mono); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 4px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0;
+      border: 1px solid currentColor;
+    }
+    .badge-high { color: var(--green); background: rgba(52,211,153,0.1); }
+    .badge-medium { color: var(--amber); background: rgba(251,191,36,0.1); }
+    .badge-low { color: var(--red); background: rgba(248,113,113,0.1); }
+    .badge-insufficient { color: var(--grey); background: rgba(139,139,149,0.08); }
+    .badge-freq { color: var(--purple-bright); background: rgba(168,85,247,0.1); border-color: var(--purple-deep); }
+
+    .evidence-list { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .evidence-list li {
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;
+      padding-left: 14px; border-left: 2px solid var(--purple-deep); font-style: italic;
+    }
+    .source-types { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .source-chip {
+      font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-faint); border: 1px solid var(--border); border-radius: 6px; padding: 3px 7px;
+      overflow-wrap: anywhere; max-width: 100%;
+    }
+
+    /* Question map */
+    .q-card .card-title { font-size: 0.98rem; }
+    .q-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; align-items: center; }
+    /* Confidence detail (text after the level word) renders as regular body text. */
+    .q-detail { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin: 2px 0 0; overflow-wrap: anywhere; }
+    /* Frequency / context renders as small mono text, never inside a badge. */
+    .q-freq { font-family: var(--font-mono); font-size: 11px; color: #888; line-height: 1.5; margin: 8px 0 0; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+
+    /* Language bank */
+    .phrase-group { margin-bottom: 24px; }
+    .phrase-list { display: flex; flex-wrap: wrap; gap: 9px; }
+    .phrase {
+      font-size: 0.88rem; color: var(--text); line-height: 1.4;
+      background: var(--surface-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 13px;
+    }
+    .phrase.charged { border-color: rgba(168,85,247,0.4); color: var(--purple-bright); }
+
+    /* Key insights */
+    .insights-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .insights-list li {
+      position: relative; padding: 18px 20px 18px 52px;
+      background: var(--surface-card); border: 1px solid var(--border);
+      border-radius: 12px; font-size: 1.0rem; line-height: 1.55; color: var(--text);
+      box-shadow: 0 0 50px rgba(168,85,247,0.05);
+    }
+    .insights-list li::before {
+      content: counter(ins); counter-increment: ins;
+      position: absolute; left: 18px; top: 18px;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--purple);
+      width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--purple);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .insights-wrap { counter-reset: ins; }
+
+    /* Evidence quality */
+    .quality-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    @media (max-width: 640px) { .quality-grid { grid-template-columns: 1fr; } }
+    .quality-stat {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+    }
+    .quality-stat .k { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+    .quality-stat .v { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; color: var(--text); }
+    .gaps-box { margin-top: 4px; }
+    .gaps-box .sub-label { margin-bottom: 12px; }
+    .gaps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .gaps-list li { font-size: 0.9rem; color: var(--text-muted); padding-left: 16px; position: relative; }
+    .gaps-list li::before { content: "-"; position: absolute; left: 0; color: var(--purple-deep); }
+    .flag-list li::before { content: "⚑"; color: var(--amber); }
+    .flag-box { margin-top: 24px; padding: 16px 18px; border: 1px solid rgba(251,191,36,0.35); border-radius: 12px; background: rgba(251,191,36,0.05); }
+
+    .empty-note { font-size: 0.9rem; color: var(--text-faint); font-style: italic; }
+
+    /* CTA */
+    .cta-block {
+      margin-top: 64px; padding: 40px 36px; border-radius: 20px;
+      border: 1px solid var(--purple-deep);
+      background: linear-gradient(135deg, rgba(107,33,168,0.18) 0%, rgba(168,85,247,0.06) 100%);
+      box-shadow: 0 0 80px rgba(168,85,247,0.12);
+      text-align: center;
+    }
+    .cta-block h3 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .cta-block h3 em { font-style: italic; color: var(--purple-bright); }
+    .cta-block p { color: var(--text-muted); max-width: 52ch; margin: 0 auto 26px; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .cta-confirm {
+      display: flex; align-items: center; justify-content: center; gap: 11px;
+      max-width: 48ch; margin: 0 auto; line-height: 1.5;
+      font-family: var(--font-display); font-size: 1.08rem; font-weight: 500; color: var(--green);
+    }
+    .cta-confirm.error { color: var(--red); font-weight: 400; font-size: 0.95rem; font-family: var(--font-body); }
+    .cta-check {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 26px; height: 26px; border-radius: 50%; font-size: 14px;
+      background: rgba(52,211,153,0.15); border: 1px solid var(--green); color: var(--green);
+    }
+    .runs-note { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); margin-top: 22px; letter-spacing: 0.04em; }
+    .rerun-row { display: flex; justify-content: center; margin-top: 28px; }
+
+    /* Global error banner */
+    .banner-error {
+      display: none; margin-top: 20px; padding: 14px 18px; border-radius: 12px;
+      border: 1px solid var(--red); background: rgba(248,113,113,0.08);
+      color: var(--red); font-size: 0.9rem;
+    }
+    .banner-error.active { display: block; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand nav-logo" href="/portal.html">
+        <img src="/images/two-fires-logo-transparent.png" alt="Two Fires" style="height: 60px; width: auto; display: block;">
+      </a>
+      <a class="nav-back" href="/portal.html">← Back to Portal</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ============ STATE 1 - GATE (register) ============ -->
+    <section class="stage active" id="stage-gate">
+      <div class="form-wrap">
+        <span class="eyebrow">Competitor and Category Agent</span>
+        <h1 class="display-h1">Where does your category <em>sound the same?</em></h1>
+        <p class="lede">Give us a simple market brief. Our agent scans your competitors and your category from public sources, then shows you the norms, the sameness, and the whitespace you can own.</p>
+
+        <form class="stack" id="gateForm" novalidate>
+          <div class="field">
+            <label for="g-name">Name</label>
+            <input id="g-name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label for="g-email">Email</label>
+            <input id="g-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+          </div>
+          <div class="field">
+            <label for="g-company">Company</label>
+            <input id="g-company" name="company" type="text" autocomplete="organization" placeholder="Your company" required>
+          </div>
+          <button class="btn btn-block" type="submit" id="gateBtn">Start</button>
+          <p class="form-error" id="gateError"></p>
+        </form>
+        <p class="fineprint">Works from a simple brief. No prior tools required.</p>
+      </div>
+    </section>
+
+    <!-- ============ STATE 2 - BRIEF (intake form) ============ -->
+    <section class="stage" id="stage-brief">
+      <div class="form-wrap">
+        <span class="eyebrow">Your Market Brief</span>
+        <div id="welcomeBack" class="welcome-back" style="display:none;"></div>
+        <h1 class="display-h1">Tell us about <em>your market</em></h1>
+        <p class="lede">Keep it simple. We only need the basics. The agent will define the competitor set and go and find the evidence itself.</p>
+
+        <form class="stack" id="briefForm" novalidate>
+          <div class="field">
+            <label for="b-product">Product or Service</label>
+            <input id="b-product" type="text" placeholder="What do you sell or deliver?" required>
+          </div>
+          <div class="field">
+            <label for="b-market">Market / Category</label>
+            <input id="b-market" type="text" placeholder="What market or category are you in?" required>
+          </div>
+          <div class="field">
+            <label for="b-region">Region</label>
+            <input id="b-region" type="text" placeholder="Where do you compete? (e.g. Sydney, Australia-wide, US East Coast)" required>
+          </div>
+          <div class="field">
+            <label for="b-website">Website URL</label>
+            <input id="b-website" type="text" placeholder="https://yourcompany.com" required>
+          </div>
+
+          <button type="button" class="optional-toggle" id="optToggle"><span class="chev">›</span> Add more context (optional)</button>
+          <div class="optional-fields" id="optFields">
+            <div class="field">
+              <label for="b-competitors">Known Competitors <span class="hint">(optional)</span></label>
+              <input id="b-competitors" type="text" placeholder="Name any competitors or their URLs">
+            </div>
+            <div class="field">
+              <label for="b-substitutes">Substitutes <span class="hint">(optional)</span></label>
+              <input id="b-substitutes" type="text" placeholder="What else do customers use instead?">
+            </div>
+            <div class="field">
+              <label for="b-language">Category Language Examples <span class="hint">(optional)</span></label>
+              <textarea id="b-language" rows="2" placeholder="Phrases you often hear in your category"></textarea>
+            </div>
+            <div class="field">
+              <label for="b-offer">Offer Description <span class="hint">(optional)</span></label>
+              <textarea id="b-offer" rows="2" placeholder="Briefly describe your main offer"></textarea>
+            </div>
+          </div>
+
+          <button class="btn btn-block" type="submit" id="briefBtn">Scan My Category</button>
+          <p class="form-error" id="briefError"></p>
+        </form>
+        <p class="fineprint">Works from the brief alone. We use any prior Two Fires tools you have run to sharpen it.</p>
+      </div>
+    </section>
+
+    <!-- ============ STATE 2b - PROCESSING (live scan feed) ============ -->
+    <section class="stage" id="stage-processing">
+      <div class="feed-wrap">
+        <span class="eyebrow">Scan In Progress</span>
+        <div class="feed-head">
+          <span class="feed-dot"></span>
+          <h1 class="display-h1" style="margin-bottom:0; font-size:clamp(1.8rem,4.5vw,2.8rem);">Scanning your <em>category</em>...</h1>
+        </div>
+        <p class="feed-sub">This usually takes one to two minutes. We are reading real competitor and category sources.</p>
+        <div class="status-feed" id="statusFeed"></div>
+      </div>
+    </section>
+
+    <!-- ============ STATE 3 - RESULTS ============ -->
+    <section class="stage" id="stage-results">
+      <div class="results-head">
+        <span class="eyebrow">Your Competitor and Category Map</span>
+        <h1 class="display-h1">Here is where your category <em>blends in</em></h1>
+        <p class="lede">Built from public competitor and category evidence our agent found. Every finding carries a confidence level so you know how hard to lean on it.</p>
+      </div>
+
+      <!-- Prominent export actions, directly below the results header. -->
+      <div class="result-actions" id="resultActions">
+        <button class="btn btn-pdf" id="pdfBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF Report
+        </button>
+        <button class="btn btn-ghost" id="copyResultsBtn" type="button">Copy Full Results</button>
+      </div>
+
+      <!-- Escalation notice (only shown when escalation.triggered is true) -->
+      <div class="flag-box" id="escalationBox" style="display:none;">
+        <div class="sub-label" style="margin-top:0;">A note from the agent</div>
+        <ul class="gaps-list flag-list" id="escalationList"></ul>
+      </div>
+
+      <!-- 1. Competitor Messaging Matrix -->
+      <div class="result-section" id="matrixSection">
+        <h2>Competitor Messaging <em>Matrix</em></h2>
+        <p class="section-intro">How each competitor talks: who they target, what they promise, the proof they lean on, and how they sound.</p>
+        <div id="matrixContent"></div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 2. Category Pattern Summary -->
+      <div class="result-section" id="patternSection">
+        <h2>Category Pattern <em>Summary</em></h2>
+        <p class="section-intro">The claims, offers, proof and tone that repeat across the category, and what the category rewards.</p>
+        <div id="patternContent"></div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 3. Sameness vs Whitespace -->
+      <div class="result-section" id="whitespaceSection">
+        <h2>Sameness vs <em>Whitespace</em></h2>
+        <p class="section-intro">Where everyone sounds the same, where you blend in, and the underused angles you could own.</p>
+        <div id="whitespaceContent"></div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- 4. Key Competitor Insights -->
+      <div class="result-section insights-wrap" id="insightsSection">
+        <h2>Key Competitor <em>Insights</em></h2>
+        <p class="section-intro">The sharpest takeaways for your positioning, first.</p>
+        <ul class="insights-list" id="insightsList"></ul>
+      </div>
+
+      <!-- Sources scanned (evidence trail) -->
+      <div class="result-section" id="sourcesSection" style="display:none;">
+        <div class="sub-label">Sources scanned</div>
+        <div class="source-types" id="sourcesContent"></div>
+      </div>
+
+      <div class="cta-block">
+        <h3>This feeds your <em>Marketing Diagnosis.</em></h3>
+        <p>The full Marketing Diagnosis reads this scan alongside your customer insight and live message, then hands you a prioritised action plan.</p>
+        <div class="cta-actions">
+          <a class="btn" href="/diagnosis/">Go to Marketing Diagnosis</a>
+        </div>
+      </div>
+
+      <!-- Returning-user control: run a fresh scan. -->
+      <div class="rerun-row" id="rerunRow" style="display:none;">
+        <button class="btn btn-ghost" id="rerunBtn" type="button">Run new scan</button>
+      </div>
+    </section>
+
+    <!-- ============ STATE 1b - DAILY CAP REACHED ============ -->
+    <section class="stage" id="stage-cap">
+      <div class="form-wrap">
+        <span class="eyebrow">Competitor and Category Agent</span>
+        <h1 class="display-h1">We've reached today's <em>research limit.</em></h1>
+        <p class="lede">Our research tools run on a daily budget. Come back tomorrow, or ask us to take you deeper now with the full Marketing Diagnosis.</p>
+        <div class="cta-actions" style="justify-content:flex-start;">
+          <a class="btn" href="/diagnosis/">Go to Marketing Diagnosis</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+
+    const API_BASE = 'https://insight.two-fires.com';
+    const MIN_FIELD_CHARS = 10;   // descriptive fields
+    const MIN_REGION_CHARS = 2;   // region can be short ("UK", "USA", "Sydney")
+
+    const state = { leadId: null, name: '', email: '', company: '', sessionId: null };
+    let currentResult = null; // the most recent parsed scan, for PDF + copy
+
+    // Restore identity if the user already registered this browser session.
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('tf_competitor') || 'null');
+      if (saved && saved.leadId) {
+        state.leadId = saved.leadId;
+        state.name = saved.name || '';
+        state.email = saved.email || '';
+        state.company = saved.company || '';
+        state.sessionId = saved.sessionId || null;
+      }
+    } catch (e) { /* ignore */ }
+
+    function persist() {
+      sessionStorage.setItem('tf_competitor', JSON.stringify({
+        leadId: state.leadId, name: state.name, email: state.email, company: state.company,
+        sessionId: state.sessionId,
+      }));
+    }
+
+    function showStage(id) {
+      document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const esc = (s) => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    // Split "High: leans on reviews" into { head: "High", rest: "leans on reviews" }.
+    // Separator = em/en dash, a spaced hyphen, or a colon. No separator -> head is the whole string.
+    function splitMeta(s) {
+      const str = String(s || '').trim();
+      const m = str.match(/^(.*?)(?:\s*[\u2014\u2013]\s*|\s+-\s+|\s*:\s+)(.*)$/);
+      if (m && m[2]) return { head: m[1].trim(), rest: m[2].trim() };
+      return { head: str, rest: '' };
+    }
+
+    function badge(conf) {
+      // Badges show only the confidence level word, never trailing descriptive text.
+      const level = splitMeta(conf).head || 'Insufficient';
+      const c = level.toLowerCase();
+      let cls = 'badge-insufficient';
+      if (c.startsWith('high')) cls = 'badge-high';
+      else if (c.startsWith('med')) cls = 'badge-medium';
+      else if (c.startsWith('low')) cls = 'badge-low';
+      return `<span class="badge ${cls}">${esc(level)}</span>`;
+    }
+
+    function arr(x) { return Array.isArray(x) ? x : []; }
+
+    // ---------- STATE 1: gate (register) ----------
+    // Same public /register gate as the Customer Insight tool: it captures the
+    // visitor identity and creates or returns the lead. The protected
+    // /competitor-scan call below then rides the tf_portal cookie (set at portal
+    // login, Domain=.two-fires.com) via credentials: 'include'.
+    const gateForm = document.getElementById('gateForm');
+    const gateBtn = document.getElementById('gateBtn');
+    const gateError = document.getElementById('gateError');
+
+    gateForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      gateError.textContent = '';
+      const name = document.getElementById('g-name').value.trim();
+      const email = document.getElementById('g-email').value.trim();
+      const company = document.getElementById('g-company').value.trim();
+
+      if (!name || !email || !company) { gateError.textContent = 'Please fill in all three fields.'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { gateError.textContent = 'Please enter a valid email address.'; return; }
+
+      gateBtn.disabled = true;
+      const original = gateBtn.innerHTML;
+      gateBtn.innerHTML = '<span class="spinner"></span> Checking...';
+
+      try {
+        const res = await fetch(API_BASE + '/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, company }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Registration failed.');
+
+        state.leadId = data.leadId || null;
+        state.name = name;
+        state.email = email;
+        state.company = company;
+        persist();
+        enterBrief();
+      } catch (err) {
+        gateError.textContent = err.message || 'Something went wrong. Please try again.';
+      } finally {
+        gateBtn.disabled = false;
+        gateBtn.innerHTML = original;
+      }
+    });
+
+    function enterBrief() {
+      const wb = document.getElementById('welcomeBack');
+      if (state.name) {
+        wb.style.display = 'inline-block';
+        wb.textContent = `Welcome back, ${state.name}. Give us your market brief and we will scan the category.`;
+      } else {
+        wb.style.display = 'none';
+      }
+      showStage('stage-brief');
+    }
+
+    // ---------- STATE 2: brief intake ----------
+    const optToggle = document.getElementById('optToggle');
+    const optFields = document.getElementById('optFields');
+    optToggle.addEventListener('click', () => {
+      const open = optFields.classList.toggle('open');
+      optToggle.classList.toggle('open', open);
+    });
+
+    const briefForm = document.getElementById('briefForm');
+    const briefBtn = document.getElementById('briefBtn');
+    const briefError = document.getElementById('briefError');
+
+    function readBrief() {
+      const val = id => document.getElementById(id).value.trim();
+      return {
+        product_service: val('b-product'),
+        market_category: val('b-market'),
+        region: val('b-region'),
+        website_url: val('b-website'),
+        competitors: val('b-competitors'),
+        substitutes: val('b-substitutes'),
+        category_language: val('b-language'),
+        offer_description: val('b-offer'),
+      };
+    }
+
+    briefForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      briefError.textContent = '';
+      const brief = readBrief();
+
+      const required = [
+        ['product_service', 'Product or Service', MIN_FIELD_CHARS],
+        ['market_category', 'Market / Category', MIN_FIELD_CHARS],
+        ['region', 'Region', MIN_REGION_CHARS],
+      ];
+      for (const [key, label, min] of required) {
+        if (brief[key].length < min) {
+          briefError.textContent = `Please give a little more detail in "${label}" (at least ${min} characters).`;
+          return;
+        }
+      }
+      if (!brief.website_url) {
+        briefError.textContent = 'Please enter your website URL (for example, two-fires.com).';
+        return;
+      }
+      runScan(brief);
+    });
+
+    // ---------- STATE 2b: processing + SSE ----------
+    const statusFeed = document.getElementById('statusFeed');
+
+    function pushStatus(message, isQuery) {
+      const prev = statusFeed.querySelector('.status-item.current');
+      if (prev) prev.classList.remove('current');
+      const item = document.createElement('div');
+      item.className = 'status-item current';
+      item.innerHTML = isQuery ? `<span class="q">${esc(message)}</span>` : esc(message);
+      statusFeed.appendChild(item);
+    }
+
+    async function runScan(brief) {
+      briefBtn.disabled = true;
+      statusFeed.innerHTML = '';
+      showStage('stage-processing');
+      pushStatus('Connecting to the scan engine...');
+
+      let result = null;
+      let streamError = null;
+
+      try {
+        const res = await fetch(API_BASE + '/competitor-scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ name: state.name, email: state.email, company: state.company, brief }),
+        });
+
+        // Daily spend cap: graceful exit.
+        if (res.status === 503) {
+          showStage('stage-cap');
+          return;
+        }
+        // No valid portal session: the scan endpoint is portal-gated.
+        if (res.status === 401) {
+          throw new Error('Please sign in through the portal first, then reopen this tool.');
+        }
+        if (!res.ok || !res.body) {
+          let msg = 'The scan could not be completed. Please try again.';
+          try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
+          throw new Error(msg);
+        }
+
+        // Consume the SSE stream.
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          let sep;
+          while ((sep = buffer.indexOf('\n\n')) !== -1) {
+            const rawEvent = buffer.slice(0, sep);
+            buffer = buffer.slice(sep + 2);
+            const evt = parseSSE(rawEvent);
+            if (!evt) continue;
+
+            if (evt.event === 'session') {
+              const sid = evt.data && evt.data.sessionId;
+              if (sid) { state.sessionId = sid; persist(); }
+            } else if (evt.event === 'status') {
+              const m = evt.data && evt.data.message;
+              if (m) pushStatus(m, /^scanning\s+"/i.test(m));
+            } else if (evt.event === 'done') {
+              result = evt.data && evt.data.result;
+            } else if (evt.event === 'error') {
+              streamError = (evt.data && evt.data.message) || 'The scan could not be completed.';
+            }
+          }
+        }
+
+        if (streamError) throw new Error(streamError);
+        if (!result) throw new Error('We could not read the scan. Please try again.');
+
+        renderResults(result);
+        const row = document.getElementById('rerunRow');
+        if (row) row.style.display = 'flex';
+        showStage('stage-results');
+      } catch (err) {
+        showProcessingError(err.message || 'Something went wrong. Please try again.');
+      } finally {
+        briefBtn.disabled = false;
+      }
+    }
+
+    // Parse a single SSE event block ("event: x\ndata: {...}").
+    function parseSSE(raw) {
+      const lines = String(raw || '').split('\n');
+      let event = 'message';
+      let dataStr = '';
+      for (const line of lines) {
+        if (line.startsWith(':')) continue; // comment / heartbeat
+        if (line.startsWith('event:')) event = line.slice(6).trim();
+        else if (line.startsWith('data:')) dataStr += line.slice(5).trim();
+      }
+      if (!dataStr) return { event, data: null };
+      let data = null;
+      try { data = JSON.parse(dataStr); } catch (e) { data = null; }
+      return { event, data };
+    }
+
+    function showProcessingError(msg) {
+      const prev = statusFeed.querySelector('.status-item.current');
+      if (prev) prev.classList.remove('current');
+      const item = document.createElement('div');
+      item.className = 'status-item';
+      item.style.color = 'var(--red)';
+      item.textContent = msg;
+      statusFeed.appendChild(item);
+      const row = document.createElement('div');
+      row.style.marginTop = '20px';
+      const b = document.createElement('button');
+      b.className = 'btn btn-ghost';
+      b.textContent = 'Back to brief';
+      b.addEventListener('click', () => showStage('stage-brief'));
+      row.appendChild(b);
+      statusFeed.appendChild(row);
+    }
+
+    // ---------- STATE 3: results ----------
+    function renderResults(result) {
+      currentResult = result || {};
+      renderEscalation(currentResult.escalation);
+      renderMatrix(arr(currentResult.competitor_messaging_matrix));
+      renderPattern(currentResult.category_pattern_summary);
+      renderWhitespace(currentResult.sameness_vs_whitespace);
+      renderInsights(arr(currentResult.key_competitor_insights));
+      renderSources(currentResult.sources_scanned);
+    }
+
+    function renderEscalation(e) {
+      const box = document.getElementById('escalationBox');
+      const list = document.getElementById('escalationList');
+      if (e && e.triggered) {
+        const reasons = arr(e.reasons).filter(Boolean);
+        list.innerHTML = (reasons.length ? reasons : ['This category may be too broad or too thin to compare cleanly. Treat the read as directional.'])
+          .map(r => `<li>${esc(r)}</li>`).join('');
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+      }
+    }
+
+    // Small uppercase field label used inside the competitor cards.
+    function fieldLabel(t) {
+      return `<div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple-bright);margin-bottom:4px;">${esc(t)}</div>`;
+    }
+
+    function renderMatrix(list) {
+      const el = document.getElementById('matrixContent');
+      if (!list.length) {
+        el.innerHTML = '<p class="empty-note">No competitors could be mapped from public sources. Add known competitors in your brief and run it again.</p>';
+        return;
+      }
+      el.innerHTML = '<div class="card-grid">' + list.map(c => {
+        const rows = [
+          ['Target audience', c.apparent_target_audience],
+          ['Core promise', c.core_promise],
+          ['Proof and credibility', c.proof_signals],
+          ['Tone and style', c.tone_style_notes],
+          ['Differentiators', c.differentiators],
+        ].filter(r => r[1] && String(r[1]).trim());
+        const body = rows.map(r => `<div style="margin-top:12px;">${fieldLabel(r[0])}<div class="q-detail" style="margin:0;">${esc(r[1])}</div></div>`).join('');
+        return `<div class="card"><div class="card-top"><div class="card-title">${esc(c.name || 'Competitor')}</div>${badge(c.confidence)}</div>${body}</div>`;
+      }).join('') + '</div>';
+    }
+
+    function listBlock(items) {
+      const l = arr(items).filter(Boolean);
+      if (!l.length) return '';
+      return `<ul class="gaps-list">${l.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`;
+    }
+
+    function renderPattern(p) {
+      const el = document.getElementById('patternContent');
+      if (!p || typeof p !== 'object') {
+        el.innerHTML = '<p class="empty-note">No category pattern could be summarised.</p>';
+        return;
+      }
+      const card = (label, items) => {
+        const inner = listBlock(items);
+        return inner ? `<div class="pattern-card"><div class="k">${esc(label)}</div><div class="v">${inner}</div></div>` : '';
+      };
+      let html = '<div class="pattern-grid">';
+      html += card('Most repeated claims', p.most_repeated_claims);
+      html += card('Common offer and process patterns', p.common_offer_process_patterns);
+      html += card('Common proof and trust signals', p.common_proof_trust_signals);
+      html += card('Common tone and language', p.common_tone_language);
+      html += '</div>';
+      if (p.what_the_category_rewards && String(p.what_the_category_rewards).trim()) {
+        html += `<div class="sub-label">What the category rewards</div><div class="callout">${esc(p.what_the_category_rewards)}</div>`;
+      }
+      if (p.confidence) html += `<div class="confidence-notes">Confidence: ${esc(splitMeta(p.confidence).head)}</div>`;
+      el.innerHTML = html;
+    }
+
+    function renderWhitespace(w) {
+      const el = document.getElementById('whitespaceContent');
+      if (!w || typeof w !== 'object') {
+        el.innerHTML = '<p class="empty-note">No sameness or whitespace read available.</p>';
+        return;
+      }
+      const sec = (label, items) => {
+        const inner = listBlock(items);
+        return inner ? `<div class="sub-label">${esc(label)}</div>${inner}` : '';
+      };
+      let html = '';
+      html += sec('Where competitors sound alike', w.where_competitors_sound_alike);
+      html += sec('Where you sound like the category', w.where_client_sounds_like_category);
+      html += sec('Possible whitespace', w.possible_whitespace);
+      html += sec('Category tensions and gaps', w.category_tensions_or_gaps);
+      if (w.positioning_implications && String(w.positioning_implications).trim()) {
+        html += `<div class="sub-label">What this means for your positioning</div><div class="callout">${esc(w.positioning_implications)}</div>`;
+      }
+      if (w.confidence) html += `<div class="confidence-notes">Confidence: ${esc(splitMeta(w.confidence).head)}</div>`;
+      el.innerHTML = html || '<p class="empty-note">No sameness or whitespace read available.</p>';
+    }
+
+    function renderInsights(list) {
+      const el = document.getElementById('insightsList');
+      if (!list.length) {
+        el.innerHTML = '<li>No standout competitor insights surfaced.</li>';
+        return;
+      }
+      el.innerHTML = list.map(i => {
+        const text = typeof i === 'string' ? i : (i.insight || '');
+        const means = (typeof i === 'object' && i) ? (i.what_it_means || '') : '';
+        const conf = (typeof i === 'object' && i) ? i.confidence : '';
+        return `<li><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;"><span>${esc(text)}</span>${conf ? badge(conf) : ''}</div>${means ? `<div class="q-detail" style="margin-top:8px;">${esc(means)}</div>` : ''}</li>`;
+      }).join('');
+    }
+
+    function renderSources(list) {
+      const sec = document.getElementById('sourcesSection');
+      const el = document.getElementById('sourcesContent');
+      const l = arr(list).filter(Boolean);
+      if (!l.length) { sec.style.display = 'none'; return; }
+      el.innerHTML = l.slice(0, 40).map(u => `<span class="source-chip">${esc(u)}</span>`).join('');
+      sec.style.display = 'block';
+    }
+
+    // ---------- Run new scan ----------
+    const rerunBtn = document.getElementById('rerunBtn');
+    if (rerunBtn) rerunBtn.addEventListener('click', () => {
+      const wb = document.getElementById('welcomeBack');
+      if (wb) wb.style.display = 'none';
+      showStage('stage-brief');
+    });
+
+    // ---------- Copy Full Results ----------
+    document.getElementById('copyResultsBtn').addEventListener('click', () => {
+      if (!currentResult) return;
+      const btn = document.getElementById('copyResultsBtn');
+      const original = btn.textContent;
+      navigator.clipboard.writeText(JSON.stringify(currentResult, null, 2)).then(() => {
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = original; }, 2000);
+      }).catch(() => {
+        btn.textContent = 'Copy failed';
+        setTimeout(() => { btn.textContent = original; }, 2000);
+      });
+    });
+
+    // ---------- PDF Export (client-side html2pdf.js) ----------
+    function dateStamp() {
+      const d = new Date();
+      const p = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+    }
+    function readableDate() {
+      try { return new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }); }
+      catch (e) { return dateStamp(); }
+    }
+    function slug(s) {
+      return String(s || 'Report').trim().replace(/[^a-z0-9]+/gi, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'Report';
+    }
+
+    // Confidence as a simple inline-block badge for the white-theme PDF.
+    function pdfConf(c) {
+      const k = String(c || '').toLowerCase();
+      let col = '#6B7280', bg = '#F3F4F6';
+      if (k.startsWith('high')) { col = '#15803D'; bg = '#E7F6ED'; }
+      else if (k.startsWith('med')) { col = '#B45309'; bg = '#FCF1DF'; }
+      else if (k.startsWith('low')) { col = '#B91C1C'; bg = '#FBE9E9'; }
+      const level = splitMeta(c).head || '-';
+      return `<span style="display:inline-block;padding:2px 8px;border-radius:10px;background:${bg};color:${col};font-weight:600;font-size:11px;line-height:1.3;">${esc(level)}</span>`;
+    }
+
+    function buildPdfHTML(d) {
+      const matrix = arr(d.competitor_messaging_matrix);
+      const p = d.category_pattern_summary || {};
+      const w = d.sameness_vs_whitespace || {};
+      const insights = arr(d.key_competitor_insights);
+
+      const sub = (s) => `<div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#A855F7;font-weight:600;margin:18px 0 8px;">${esc(s)}</div>`;
+      const ul = (items) => {
+        const l = arr(items).filter(Boolean);
+        return l.length ? ('<ul style="margin:0 0 8px 18px;padding:0;">' + l.map(i => `<li style="font-size:12px;line-height:1.5;color:#1F2937;margin-bottom:5px;">${esc(i)}</li>`).join('') + '</ul>') : '';
+      };
+      const quote = (s) => `<div style="font-size:12px;line-height:1.55;color:#374151;border-left:3px solid #A855F7;padding:4px 0 4px 12px;">${esc(s)}</div>`;
+
+      let html = `<div style="font-family:'DM Sans',sans-serif;color:#1F2937;background:#ffffff;padding:10px 6px 6px;">`;
+      html += `<div style="margin:6px 0 20px;">
+        <div style="font-family:'DM Sans',sans-serif;font-size:24px;font-weight:700;color:#A855F7;line-height:1.2;padding-top:2px;">Two Fires</div>
+        <div style="font-size:14px;color:#666;margin-top:3px;">Competitor and Category Report</div>
+        <div style="height:1px;background:#A855F7;margin:12px 0;"></div>
+        <div style="font-size:12px;color:#374151;">
+          ${state.company ? '<b style="color:#111827;">' + esc(state.company) + '</b> &nbsp;·&nbsp; ' : ''}
+          ${state.name ? esc(state.name) + ' &nbsp;·&nbsp; ' : ''}${esc(readableDate())}</div>
+      </div>`;
+
+      if (d.escalation && d.escalation.triggered) {
+        const reasons = arr(d.escalation.reasons).filter(Boolean).join(' ');
+        html += `<div style="border:1px solid #E4B84B;background:#FCF6E6;border-radius:8px;padding:10px 12px;margin:0 0 16px;font-size:12px;color:#7A5B12;line-height:1.5;"><b>A note from the agent:</b> ${esc(reasons || 'Treat this read as directional.')}</div>`;
+      }
+
+      // 1. Competitor Messaging Matrix
+      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:0 0 10px;">Competitor Messaging Matrix</div>`;
+      if (matrix.length) {
+        matrix.forEach(c => {
+          html += `<div style="border:1px solid #E6DDF5;border-radius:8px;padding:12px 14px;margin:0 0 10px;">
+            <div style="font-size:13px;font-weight:700;color:#111827;line-height:1.35;">${esc(c.name || 'Competitor')} &nbsp; ${pdfConf(c.confidence)}</div>`;
+          const rows = [
+            ['Target audience', c.apparent_target_audience],
+            ['Core promise', c.core_promise],
+            ['Proof and credibility', c.proof_signals],
+            ['Tone and style', c.tone_style_notes],
+            ['Differentiators', c.differentiators],
+          ].filter(r => r[1] && String(r[1]).trim());
+          rows.forEach(r => {
+            html += `<div style="font-size:12px;color:#374151;line-height:1.5;margin-top:6px;"><b style="color:#6B21A8;">${esc(r[0])}:</b> ${esc(r[1])}</div>`;
+          });
+          html += `</div>`;
+        });
+      } else {
+        html += `<div style="font-size:12px;color:#6B7280;">No competitors mapped.</div>`;
+      }
+
+      // 2. Category Pattern Summary
+      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 8px;border-top:1px solid #E6DDF5;padding-top:18px;">Category Pattern Summary</div>`;
+      if (ul(p.most_repeated_claims)) html += sub('Most repeated claims') + ul(p.most_repeated_claims);
+      if (ul(p.common_offer_process_patterns)) html += sub('Common offer and process patterns') + ul(p.common_offer_process_patterns);
+      if (ul(p.common_proof_trust_signals)) html += sub('Common proof and trust signals') + ul(p.common_proof_trust_signals);
+      if (ul(p.common_tone_language)) html += sub('Common tone and language') + ul(p.common_tone_language);
+      if (p.what_the_category_rewards && String(p.what_the_category_rewards).trim()) html += sub('What the category rewards') + quote(p.what_the_category_rewards);
+
+      // 3. Sameness vs Whitespace
+      html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 8px;border-top:1px solid #E6DDF5;padding-top:18px;">Sameness vs Whitespace</div>`;
+      if (ul(w.where_competitors_sound_alike)) html += sub('Where competitors sound alike') + ul(w.where_competitors_sound_alike);
+      if (ul(w.where_client_sounds_like_category)) html += sub('Where you sound like the category') + ul(w.where_client_sounds_like_category);
+      if (ul(w.possible_whitespace)) html += sub('Possible whitespace') + ul(w.possible_whitespace);
+      if (ul(w.category_tensions_or_gaps)) html += sub('Category tensions and gaps') + ul(w.category_tensions_or_gaps);
+      if (w.positioning_implications && String(w.positioning_implications).trim()) html += sub('What this means for your positioning') + quote(w.positioning_implications);
+
+      // 4. Key Competitor Insights
+      if (insights.length) {
+        html += `<div style="font-size:16px;font-weight:700;color:#111827;margin:22px 0 10px;border-top:1px solid #E6DDF5;padding-top:18px;">Key Competitor Insights</div>`;
+        html += '<ol style="margin:0 0 4px 18px;padding:0;">' + insights.map(i => {
+          const t = typeof i === 'string' ? i : (i.insight || '');
+          const m = (typeof i === 'object' && i) ? (i.what_it_means || '') : '';
+          return `<li style="font-size:12px;line-height:1.5;color:#1F2937;margin-bottom:8px;"><b>${esc(t)}</b>${m ? `<div style="color:#374151;margin-top:3px;">${esc(m)}</div>` : ''}</li>`;
+        }).join('') + '</ol>';
+      }
+
+      html += `<div style="text-align:center;margin-top:28px;border-top:1px solid #E6DDF5;padding-top:12px;font-size:10px;color:#999;line-height:1.5;">two-fires.com | Confidential</div>`;
+      html += `</div>`;
+      return html;
+    }
+
+    const PDF_WIDTH = 650; // px. Fits A4 portrait content area with the margins below
+
+    function exportPdf() {
+      if (!currentResult) return;
+      const btn = document.getElementById('pdfBtn');
+      if (typeof html2pdf === 'undefined') {
+        const o = btn.innerHTML; btn.innerHTML = 'PDF unavailable';
+        setTimeout(() => { btn.innerHTML = o; }, 2500);
+        return;
+      }
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Building PDF...';
+
+      const clone = document.createElement('div');
+      clone.id = 'pdfExportClone';
+      clone.setAttribute('aria-hidden', 'true');
+      clone.style.cssText = `position:absolute; left:-99999px; top:0; width:${PDF_WIDTH}px; background:#ffffff;`;
+      clone.innerHTML = buildPdfHTML(currentResult);
+      document.body.appendChild(clone);
+      if (clone.offsetWidth !== PDF_WIDTH) clone.style.width = PDF_WIDTH + 'px';
+
+      const cleanup = () => {
+        if (clone.parentNode) clone.parentNode.removeChild(clone);
+        btn.disabled = false;
+        btn.innerHTML = original;
+      };
+
+      const filename = `Two-Fires-Competitor-Category-${slug(state.company)}-${dateStamp()}.pdf`;
+      const opt = {
+        margin: [15, 15, 20, 15],
+        filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, width: PDF_WIDTH, windowWidth: PDF_WIDTH },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+      };
+      const captureTarget = clone.firstElementChild || clone;
+      html2pdf().set(opt).from(captureTarget).save().then(cleanup).catch(cleanup);
+    }
+
+    document.getElementById('pdfBtn').addEventListener('click', exportPdf);
+
+    // ---------- boot ----------
+    // Returning within the same browser session: skip the gate, go to the brief.
+    (function boot() {
+      if (state.leadId) enterBrief();
+    })();
+  </script>
+</body>
+</html>
