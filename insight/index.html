@@ -463,6 +463,8 @@
     }
     .banner-error.active { display: block; }
   </style>
+  <script src="/scripts/tf-identity.js"></script>
+  <script src="/scripts/tf-work.js"></script>
 </head>
 <body>
   <header class="header">
@@ -777,6 +779,7 @@
         persist();
         // Remember the email so the report survives a hard refresh / new tab.
         saveEmail(email);
+        try { if (window.TFIdentity) TFIdentity.set({ name: name, email: email, company: company }); } catch (e) { /* ignore */ }
 
         // Returning user: if the backend handed back a previously completed
         // analysis, render it immediately instead of showing the intake form.
@@ -847,6 +850,37 @@
       const row = document.getElementById('rerunRow');
       if (row) row.style.display = 'flex';
       showStage('stage-results');
+      mountInsightVersions();
+    }
+
+    // Version history + "not you?" appended into the results stage. Idempotent.
+    function mountInsightVersions() {
+      var stage = document.getElementById('stage-results');
+      if (!stage) return;
+      var wrap = document.getElementById('tf-versions-wrap');
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'tf-versions-wrap';
+        wrap.className = 'tf-ver-wrap';
+        var email = (window.TFIdentity ? TFIdentity.get().email : '') || getSavedEmail() || '';
+        wrap.innerHTML = '<div class="tf-ver-head">Previous versions</div>' +
+          '<div id="tf-versions"><p class="tf-ver-empty">Loading versions…</p></div>' +
+          '<div class="tf-identity-note">' + esc(email) + ' &middot; <a onclick="tfChangeIdentity()">Not you? Change details</a></div>';
+        stage.appendChild(wrap);
+      }
+      loadInsightVersions();
+    }
+    async function loadInsightVersions() {
+      var el = document.getElementById('tf-versions');
+      if (!el || !window.TFWork) return;
+      var email = (window.TFIdentity ? TFIdentity.get().email : '') || getSavedEmail() || '';
+      var data = await TFWork.fetchVersions(email);
+      var items = (data && data.versions && data.versions.insight) || [];
+      TFWork.renderVersions(el, items, { currentSessionId: state.sessionId || window.currentSessionId, emptyText: 'No previous versions yet.' });
+    }
+    function tfChangeIdentity() {
+      try { if (window.TFIdentity) TFIdentity.clear(); } catch (e) { /* ignore */ }
+      location.reload();
     }
 
     // ---------- STATE 2: brief intake ----------
@@ -988,6 +1022,7 @@
         persist();
         renderResults(result);
         showStage('stage-results');
+        mountInsightVersions();
       } catch (err) {
         showProcessingError(err.message || 'Something went wrong. Please try again.');
       } finally {
@@ -1366,7 +1401,7 @@
     }
 
     // Confidence as a simple inline-block badge for the white-theme PDF.
-    // No flexbox/grid — html2canvas renders inline-block + border-radius reliably.
+    // No flexbox/grid - html2canvas renders inline-block + border-radius reliably.
     function pdfConf(c) {
       const k = String(c || '').toLowerCase();
       let col = '#6B7280', bg = '#F3F4F6';
@@ -1381,7 +1416,7 @@
     function pdfTable(title, headers, rows) {
       if (!rows.length) return '';
       // Explicit per-column widths (fixed layout) so every column gets a known
-      // share of the 650px capture and all content wraps — no nowrap anywhere.
+      // share of the 650px capture and all content wraps - no nowrap anywhere.
       const cols = headers.map(h => `<col style="width:${h.width || (Math.round(100 / headers.length) + '%')}">`).join('');
       const ths = headers.map(h => `<th style="text-align:left;padding:8px;vertical-align:top;background:#F3EEFB;color:#6B21A8;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;border:1px solid #E6DDF5;word-wrap:break-word;">${esc(h.label)}</th>`).join('');
       const trs = rows.map(r => `<tr>${headers.map(h => {
@@ -1406,7 +1441,7 @@
       // padding-top:10px keeps the branded header off the top capture edge so it
       // is never clipped; the header block adds its own top margin on top of that.
       let html = `<div style="font-family:'DM Sans',sans-serif;color:#1F2937;background:#ffffff;padding:10px 6px 6px;">`;
-      // Branded header — block layout only (no flex/grid for html2canvas safety).
+      // Branded header - block layout only (no flex/grid for html2canvas safety).
       html += `<div style="margin:6px 0 20px;">
         <div style="font-family:'DM Sans',sans-serif;font-size:24px;font-weight:700;color:#A855F7;line-height:1.2;padding-top:2px;">Two Fires</div>
         <div style="font-size:14px;color:#666;margin-top:3px;">Customer Insight Report</div>
@@ -1477,7 +1512,7 @@
     // width, hand THAT element to html2pdf, then remove it. Capturing a fixed
     // 650px container (rather than the live, full-width results) is what stops
     // the old left-side clipping: the capture width and the element width match.
-    const PDF_WIDTH = 650; // px — fits A4 portrait content area (180mm) with the margins below
+    const PDF_WIDTH = 650; // px - fits A4 portrait content area (180mm) with the margins below
 
     function exportPdf() {
       if (!currentResult) return;
@@ -1592,6 +1627,15 @@
     }
 
     (async function boot() {
+      // Auto-fill the one shared identity into the gate so it is asked once.
+      try {
+        if (window.TFIdentity) {
+          var _id = TFIdentity.get();
+          if (_id.name && document.getElementById('g-name')) document.getElementById('g-name').value = _id.name;
+          if (_id.email && document.getElementById('g-email')) document.getElementById('g-email').value = _id.email;
+          if (_id.company && document.getElementById('g-company')) document.getElementById('g-company').value = _id.company;
+        }
+      } catch (e) { /* ignore */ }
       const restored = await restoreReportOnLoad();
       if (restored) return;
       if (state.leadId) {

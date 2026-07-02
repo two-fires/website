@@ -145,6 +145,8 @@ body::before {
 .cta-row { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
 .cta-row .btn { width: auto; flex: 1; min-width: 200px; padding: 0 24px; }
 </style>
+  <script src="/scripts/tf-identity.js"></script>
+  <script src="/scripts/tf-work.js"></script>
 </head>
 <body>
 <div class="ambient ambient-1"></div>
@@ -274,6 +276,7 @@ async function runDiagnosis() {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return showFormError('Please enter a valid email address.');
   if (payload.brief.primary_goal.length < 10) return showFormError('Please give a little more detail on your primary goal.');
   if (payload.brief.current_channels.length < 2) return showFormError('Please tell us where you currently market.');
+  try { if (window.TFIdentity) TFIdentity.set({ name: payload.name, email: payload.email, company: payload.company }); } catch (e) { /* ignore */ }
 
   const btn = $('run-btn');
   btn.disabled = true;
@@ -455,6 +458,8 @@ function renderResults(result) {
   r.innerHTML = html;
   r.classList.add('visible');
   $('progress').classList.remove('visible');
+  $('intake').style.display = 'none';
+  appendWorkControls(r);
   r.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -475,6 +480,69 @@ function downloadPDF() {
     })
     .catch(() => alert('Could not generate the PDF. Please try again.'));
 }
+
+// ---- Shared identity + versioned work (additive) ----
+function prefillIdentity() {
+  try {
+    if (!window.TFIdentity) return;
+    const id = TFIdentity.get();
+    if (id.name && $('name')) $('name').value = id.name;
+    if (id.email && $('email')) $('email').value = id.email;
+    if (id.company && $('company')) $('company').value = id.company;
+  } catch (e) { /* ignore */ }
+}
+async function rehydrate() {
+  try {
+    if (!window.TFWork || !window.TFIdentity) return;
+    const email = TFIdentity.get().email;
+    if (!email) return;
+    const last = await TFWork.fetchLast('diagnosis', email);
+    if (last && last.result) {
+      currentSessionId = last.sessionId;
+      renderResults(last.result);
+    }
+  } catch (e) { /* fall back to intake */ }
+}
+function appendWorkControls(container) {
+  const email = ((window.TFIdentity ? TFIdentity.get().email : '') || $('email').value || '').trim();
+  const box = document.createElement('div');
+  box.className = 'card';
+  box.innerHTML =
+    '<div class="cta-row" style="margin-bottom:8px;"><button class="btn secondary" onclick="startNewVersion()">Start new version</button></div>' +
+    '<div class="tf-ver-wrap"><div class="tf-ver-head">Previous versions</div><div id="tf-versions"><p class="tf-ver-empty">Loading versions…</p></div></div>' +
+    '<div class="tf-identity-note">' + esc(email) + ' &middot; <a onclick="changeIdentity()">Not you? Change details</a></div>';
+  container.appendChild(box);
+  loadVersions();
+}
+async function loadVersions() {
+  const el = $('tf-versions');
+  if (!el || !window.TFWork) return;
+  const email = ((window.TFIdentity ? TFIdentity.get().email : '') || $('email').value || '').trim();
+  const data = await TFWork.fetchVersions(email);
+  const items = (data && data.versions && data.versions.diagnosis) || [];
+  TFWork.renderVersions(el, items, { currentSessionId: currentSessionId, emptyText: 'No previous versions yet.' });
+}
+function startNewVersion() {
+  $('results').innerHTML = ''; $('results').classList.remove('visible');
+  $('intake').style.display = '';
+  if ($('primary_goal')) $('primary_goal').value = '';
+  if ($('current_channels')) $('current_channels').value = '';
+  $('intake').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function changeIdentity() {
+  try { if (window.TFIdentity) TFIdentity.clear(); } catch (e) { /* ignore */ }
+  ['name', 'email', 'company'].forEach((k) => { if ($(k)) $(k).value = ''; });
+  $('results').innerHTML = ''; $('results').classList.remove('visible');
+  $('intake').style.display = '';
+  if ($('name')) $('name').focus();
+}
+
+// On load: auto-fill the one shared identity and, if a finished diagnosis exists,
+// show the latest version instead of the blank intake.
+(async function init() {
+  prefillIdentity();
+  await rehydrate();
+})();
 </script>
 </body>
 </html>

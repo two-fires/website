@@ -97,6 +97,8 @@ body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-event
 .blocked-card h3 { font-size: 20px; font-style: italic; font-weight: 400; margin-bottom: 0.6rem; }
 .blocked-card p { font-size: 14px; color: var(--white-60); line-height: 1.6; max-width: 44ch; margin: 0 auto 1.5rem; }
 </style>
+  <script src="/scripts/tf-identity.js"></script>
+  <script src="/scripts/tf-work.js"></script>
 </head>
 <body>
 <div class="ambient ambient-1"></div>
@@ -174,9 +176,72 @@ let currentSessionId = null;
 (async function gate() {
   try {
     const r = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
-    if (!r.ok) { window.location.href = '/portal.html'; }
-  } catch (e) { window.location.href = '/portal.html'; }
+    if (!r.ok) { window.location.href = '/portal.html'; return; }
+  } catch (e) { window.location.href = '/portal.html'; return; }
+  prefillIdentity();
+  await rehydrate();
 })();
+
+// Shared identity: auto-fill the intake from the one saved identity so it is
+// asked once across every tool.
+function prefillIdentity() {
+  try {
+    if (!window.TFIdentity) return;
+    const id = TFIdentity.get();
+    if (id.name && $('name')) $('name').value = id.name;
+    if (id.email && $('email')) $('email').value = id.email;
+    if (id.company && $('company')) $('company').value = id.company;
+  } catch (e) { /* ignore */ }
+}
+
+// Completed-first: if this lead already has a finished audit, render the latest
+// version immediately (with a working PDF) instead of the blank intake form.
+async function rehydrate() {
+  try {
+    if (!window.TFWork || !window.TFIdentity) return;
+    const email = TFIdentity.get().email;
+    if (!email) return;
+    const last = await TFWork.fetchLast('audit', email);
+    if (last && last.result) {
+      currentSessionId = last.sessionId;
+      renderResults(last.result);
+    }
+  } catch (e) { /* ignore: fall back to the intake form */ }
+}
+
+// Version history + returning-user controls, appended below any rendered result.
+function appendWorkControls(container) {
+  const email = ((window.TFIdentity ? TFIdentity.get().email : '') || $('email').value || '').trim();
+  const box = document.createElement('div');
+  box.className = 'card';
+  box.innerHTML =
+    '<div class="cta-row" style="margin-bottom:8px;"><button class="btn secondary" onclick="startNewVersion()">Start new version</button></div>' +
+    '<div class="tf-ver-wrap"><div class="tf-ver-head">Previous versions</div><div id="tf-versions"><p class="tf-ver-empty">Loading versions…</p></div></div>' +
+    '<div class="tf-identity-note">' + esc(email) + ' &middot; <a onclick="changeIdentity()">Not you? Change details</a></div>';
+  container.appendChild(box);
+  loadVersions();
+}
+async function loadVersions() {
+  const el = $('tf-versions');
+  if (!el || !window.TFWork) return;
+  const email = ((window.TFIdentity ? TFIdentity.get().email : '') || $('email').value || '').trim();
+  const data = await TFWork.fetchVersions(email);
+  const items = (data && data.versions && data.versions.audit) || [];
+  TFWork.renderVersions(el, items, { currentSessionId: currentSessionId, emptyText: 'No previous versions yet.' });
+}
+function startNewVersion() {
+  $('results').innerHTML = ''; $('results').classList.remove('visible');
+  $('intake').style.display = '';
+  $('site_url').value = ''; $('extra_assets').value = '';
+  $('intake').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function changeIdentity() {
+  try { if (window.TFIdentity) TFIdentity.clear(); } catch (e) { /* ignore */ }
+  ['name', 'email', 'company'].forEach((k) => { if ($(k)) $(k).value = ''; });
+  $('results').innerHTML = ''; $('results').classList.remove('visible');
+  $('intake').style.display = '';
+  if ($('name')) $('name').focus();
+}
 
 function showFormError(msg) { const el = $('form-error'); el.textContent = msg; el.classList.add('visible'); }
 function clearFormError() { $('form-error').classList.remove('visible'); }
@@ -211,6 +276,7 @@ async function runAudit() {
   if (!payload.name || !payload.email || !payload.company) return showFormError('Please add your name, email, and business name.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return showFormError('Please enter a valid email address.');
   if (payload.site_url.length < 3) return showFormError('Please enter your website address.');
+  try { if (window.TFIdentity) TFIdentity.set({ name: payload.name, email: payload.email, company: payload.company }); } catch (e) { /* ignore */ }
 
   const btn = $('run-btn');
   btn.disabled = true; btn.textContent = 'Auditing your message…';
@@ -351,6 +417,8 @@ function renderResults(result) {
   r.innerHTML = html;
   r.classList.add('visible');
   $('progress').classList.remove('visible');
+  $('intake').style.display = 'none';
+  appendWorkControls(r);
   r.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 

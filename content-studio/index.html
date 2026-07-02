@@ -96,6 +96,8 @@ body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-event
 .spin { display: inline-block; }
 .loading { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--white-60); }
 </style>
+  <script src="/scripts/tf-identity.js"></script>
+  <script src="/scripts/tf-work.js"></script>
 </head>
 <body>
 <div class="ambient ambient-1"></div>
@@ -287,9 +289,12 @@ async function api(path, body) {
 }
 
 function init() {
-  const saved = (localStorage.getItem(EMAIL_KEY) || '').trim();
-  $('vs-name').value = localStorage.getItem(NAME_KEY) || '';
-  $('vs-company').value = localStorage.getItem(COMPANY_KEY) || '';
+  // Shared identity: prefer the one saved identity, falling back to the legacy
+  // per-tool keys. TFIdentity mirrors both ways, so this stays in sync.
+  const id = (window.TFIdentity ? TFIdentity.get() : { name: '', email: '', company: '' });
+  const saved = (id.email || localStorage.getItem(EMAIL_KEY) || '').trim();
+  $('vs-name').value = id.name || localStorage.getItem(NAME_KEY) || '';
+  $('vs-company').value = id.company || localStorage.getItem(COMPANY_KEY) || '';
   if (saved && EMAIL_RE.test(saved)) { state.email = saved; loadStudio(); }
   else { show('email-gate'); $('email-input').focus(); }
 }
@@ -300,6 +305,7 @@ function setEmailAndLoad() {
   if (!EMAIL_RE.test(v)) return showErr('email-gate-error', 'Please enter a valid email address.');
   state.email = v;
   localStorage.setItem(EMAIL_KEY, v);
+  try { if (window.TFIdentity) TFIdentity.set({ email: v }); } catch (e) { /* ignore */ }
   hide('email-gate');
   loadStudio();
 }
@@ -364,6 +370,7 @@ async function analyseVoice() {
   if (samples.join(' ').length < 120) return showErr('vs-error', 'Please paste at least one real writing sample (a short paragraph or two).');
 
   localStorage.setItem(NAME_KEY, name); localStorage.setItem(COMPANY_KEY, company);
+  try { if (window.TFIdentity) TFIdentity.set({ name: name, company: company, email: state.email }); } catch (e) { /* ignore */ }
   const btn = $('vs-analyse'); btn.disabled = true; btn.textContent = 'Analysing…';
   try {
     const { ok, data } = await api('/kindling/voice/analyse', { email: state.email, name, company, samples });
@@ -448,7 +455,7 @@ async function sendEmail() {
     const subject = 'Draft: ' + (state.lastTopic || 'Your Content Studio post');
     const { ok, data } = await api('/kindling/email', { email_to: to, subject, markdown: state.lastMarkdown || '' });
     if (ok && data.sent) { el.textContent = '✓ Sent to ' + to + (data.id ? ' (id ' + data.id + ')' : ''); el.classList.add('visible', 'ok'); }
-    else if (ok && data.configured === false) { el.textContent = (data.message || 'Email is not configured for this service.') + (data.needed ? ' — ' + data.needed : ''); el.classList.add('visible', 'warn'); }
+    else if (ok && data.configured === false) { el.textContent = (data.message || 'Email is not configured for this service.') + (data.needed ? ' - ' + data.needed : ''); el.classList.add('visible', 'warn'); }
     else { el.textContent = (data && data.error) || 'The email could not be sent. Please try again.'; el.classList.add('visible', 'err'); }
   } catch (e) { if (e.message !== 'unauthorized') { el.textContent = 'Something went wrong. Please try again.'; el.classList.add('visible', 'err'); } }
   finally { btn.disabled = false; btn.textContent = 'Send draft'; }

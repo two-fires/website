@@ -380,6 +380,8 @@
       .card-panel { padding: 32px 22px; }
     }
   </style>
+  <script src="/scripts/tf-identity.js"></script>
+  <script src="/scripts/tf-work.js"></script>
 </head>
 <body>
 
@@ -530,6 +532,7 @@
 
       if (!name || !email || !company) { err.textContent = 'Please fill in all three fields.'; return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email address.'; return; }
+      try { if (window.TFIdentity) TFIdentity.set({ name: name, email: email, company: company }); } catch (e) { /* ignore */ }
 
       const btn = $('beginBtn');
       btn.disabled = true;
@@ -837,11 +840,84 @@
       });
     }
 
+    // ---------- Shared identity + versioned work (additive) ----------
+    function prefillDetails() {
+      try {
+        if (!window.TFIdentity) return;
+        const id = TFIdentity.get();
+        if (id.name && $('d-name')) $('d-name').value = id.name;
+        if (id.email && $('d-email')) $('d-email').value = id.email;
+        if (id.company && $('d-company')) $('d-company').value = id.company;
+      } catch (e) { /* ignore */ }
+    }
+    async function loadLadderVersions() {
+      const el = $('tf-versions');
+      if (!el || !window.TFWork) return;
+      const email = ((window.TFIdentity ? TFIdentity.get().email : '') || $('d-email').value || '').trim();
+      const data = await TFWork.fetchVersions(email);
+      const items = (data && data.versions && data.versions.ladder) || [];
+      TFWork.renderVersions(el, items, { currentSessionId: state.sessionId, emptyText: 'No previous versions yet.' });
+    }
+    function appendLadderControls() {
+      const email = ((window.TFIdentity ? TFIdentity.get().email : '') || $('d-email').value || '').trim();
+      const wrap = document.createElement('div');
+      wrap.className = 'msg';
+      wrap.style.display = 'block';
+      wrap.innerHTML =
+        '<div class="deliverable">' +
+        '<div class="deliv-actions"><button class="btn btn-ghost" id="ladderNewBtn" type="button">Start new version</button></div>' +
+        '<div class="tf-ver-wrap"><div class="tf-ver-head">Previous versions</div><div id="tf-versions"><p class="tf-ver-empty">Loading versions…</p></div></div>' +
+        '<div class="tf-identity-note">' + esc(email) + ' &middot; <a id="ladderChangeId">Not you? Change details</a></div>' +
+        '</div>';
+      messagesInner.appendChild(wrap);
+      scrollToBottom();
+      $('ladderNewBtn').addEventListener('click', startNewLadder);
+      $('ladderChangeId').addEventListener('click', changeIdentityLadder);
+      loadLadderVersions();
+    }
+    function startNewLadder() {
+      // A fresh /ladder/start creates a new session row, i.e. a new version. The
+      // previous versions stay downloadable from the list and the hub.
+      state.sessionId = null; state.history = []; state.complete = false; state.currentStage = 1;
+      messagesInner.innerHTML = '';
+      showScreen('screen-details');
+      $('d-name').focus();
+    }
+    function changeIdentityLadder() {
+      try { if (window.TFIdentity) TFIdentity.clear(); } catch (e) { /* ignore */ }
+      ['d-name', 'd-email', 'd-company'].forEach((k) => { if ($(k)) $(k).value = ''; });
+      startNewLadder();
+    }
+    // Completed-first: if this lead already has a finished ladder, show the latest
+    // deliverable (with a working PDF) instead of restarting the interview.
+    async function rehydrateLadder() {
+      try {
+        if (!window.TFWork || !window.TFIdentity) return false;
+        const email = TFIdentity.get().email;
+        if (!email) return false;
+        const last = await TFWork.fetchLast('ladder', email);
+        if (last && last.result) {
+          state.sessionId = last.sessionId;
+          state.complete = true;
+          showScreen('screen-chat');
+          messagesInner.innerHTML = '';
+          renderDeliverable(last.result);
+          appendLadderControls();
+          return true;
+        }
+      } catch (e) { /* fall back to the details screen */ }
+      return false;
+    }
+
     // ---------- boot ----------
     // Server-side auth: the VPS verifies the tf_portal cookie on /ladder/start
-    // and /ladder/chat. No client-side gate. Boot straight to the details screen.
-    showScreen('screen-details');
-    $('d-name').focus();
+    // and /ladder/chat. No client-side gate. Auto-fill the shared identity and,
+    // if a finished ladder exists, show it; otherwise go to the details screen.
+    (async function boot() {
+      prefillDetails();
+      const restored = await rehydrateLadder();
+      if (!restored) { showScreen('screen-details'); $('d-name').focus(); }
+    })();
   </script>
 </body>
 </html>
