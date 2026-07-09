@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta name="description" content="Great businesses don't plateau because the product got worse. They plateau because their marketing never scaled to the level the business reached.">
+  <meta property="og:title" content="Two Fires · Your Product Isn't the Problem. Your Altitude Is">
+  <meta property="og:description" content="Great businesses don't plateau because the product got worse. They plateau because their marketing never scaled to the level the business reached.">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-07-10">
+  <meta property="article:section" content="Growth">
+  <title>Two Fires · Your Product Isn't the Problem. Your Altitude Is</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-soft: #0B0B14;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --surface-card: #14091E;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #FBFAFE;
+      --text-muted: #9F9AB0;
+      --text-faint: #5E5868;
+      --text-on-light: #0A0612;
+      --text-muted-on-light: #5B5267;
+      --light-surface: #F7F4FC;
+
+      --purple-deep: #6B21A8;
+      --purple: #A855F7;
+      --purple-bright: #C4A8FF;
+      --purple-glow: rgba(168, 85, 247, 0.55);
+      --purple-glow-soft: rgba(168, 85, 247, 0.25);
+      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+
+      --font-display: 'DM Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+
+      --max-w: 1140px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.25), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 90%, rgba(168, 85, 247, 0.15), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 0% 70%, rgba(168, 85, 247, 0.08), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: ""; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 0;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(5, 5, 8, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); cursor: pointer; }
+    .brand-name {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .nav { display: flex; gap: 28px; align-items: center; }
+    .nav a {
+      font-family: var(--font-body); font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; cursor: pointer; transition: color 0.25s ease;
+    }
+    .nav a:hover { color: var(--text); }
+    .nav a.active { color: var(--purple-bright); }
+    .nav-cta {
+      font-family: var(--font-body); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 10px 20px; border-radius: 999px; border: 1px solid var(--purple);
+      color: var(--purple-bright); cursor: pointer;
+      background: var(--purple-soft-fill);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .nav-cta:hover {
+      background: var(--purple); color: white;
+      box-shadow: 0 0 24px var(--purple-glow);
+    }
+
+    main { padding-top: 185px; position: relative; z-index: 2; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ============================ CASE STUDY HERO ============================ */
+    .cs-hero {
+      padding: 56px 0 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cs-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      margin-bottom: 36px;
+      transition: color 0.25s ease;
+      opacity: 0; animation: fadeUp 0.8s ease 0.05s forwards;
+    }
+    .cs-back:hover { color: var(--purple-bright); }
+
+    .cs-eyebrow {
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 28px;
+      display: inline-flex; align-items: center; gap: 12px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.1s forwards;
+    }
+    .cs-eyebrow::before {
+      content: ""; width: 24px; height: 1px; background: var(--purple);
+    }
+
+    .cs-hero h1 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.4rem, 5.5vw, 4.4rem); line-height: 1.04;
+      letter-spacing: -0.025em; margin-bottom: 28px;
+      max-width: 18ch;
+      opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .cs-hero h1 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+      letter-spacing: -0.01em;
+    }
+
+    .cs-lede {
+      color: var(--text-muted); max-width: 60ch;
+      margin-bottom: 44px; font-size: clamp(1.05rem, 1.4vw, 1.15rem);
+      line-height: 1.6;
+      opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .cs-meta {
+      display: flex; flex-wrap: wrap; gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 720px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+    .cs-meta-item {
+      flex: 1; min-width: 140px;
+      padding: 18px 24px;
+      border-right: 1px solid var(--border);
+    }
+    .cs-meta-item:last-child { border-right: none; }
+    .cs-meta-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-faint); margin-bottom: 6px;
+    }
+    .cs-meta-value {
+      font-family: var(--font-display); font-size: 1rem;
+      color: var(--text); font-weight: 500;
+    }
+
+    /* ============================ BODY SECTIONS ============================ */
+    .section { padding: 80px 0; position: relative; z-index: 2; }
+    .section-light {
+      background: var(--light-surface);
+      color: var(--text-on-light);
+    }
+
+    .section-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 28px;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .section-label::before {
+      content: ""; width: 24px; height: 1px; background: var(--purple);
+    }
+    .section-light .section-label { color: var(--purple-deep); }
+    .section-light .section-label::before { background: var(--purple-deep); }
+
+    .section h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 28px;
+    }
+    .section h2 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 30px var(--purple-glow-soft);
+    }
+    .section-light h2 em {
+      color: var(--purple-deep);
+      text-shadow: none;
+    }
+
+    .body-copy {
+      font-size: 1.05rem; line-height: 1.7;
+      max-width: 68ch;
+    }
+    .body-copy p { margin-bottom: 20px; }
+    .body-copy p:last-child { margin-bottom: 0; }
+
+    .section-light .body-copy { color: var(--text-on-light); }
+    .section-light .body-copy p { color: var(--text-muted-on-light); }
+
+    /* ============================ TWO FIRES WORK CARDS ============================ */
+    .work-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-top: 8px;
+    }
+    @media (max-width: 800px) { .work-grid { grid-template-columns: 1fr; } }
+
+    .work-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--purple);
+      border-radius: 6px;
+      padding: 36px 32px;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.04);
+    }
+
+    .work-card-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .work-card h3 {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+      margin-bottom: 20px; line-height: 1.1;
+    }
+    .work-list {
+      list-style: none; display: flex; flex-direction: column; gap: 12px;
+    }
+    .work-list li {
+      font-size: 0.95rem; line-height: 1.55;
+      color: var(--text-muted);
+      padding-left: 20px; position: relative;
+    }
+    .work-list li::before {
+      content: "-";
+      position: absolute; left: 0;
+      color: var(--purple); font-size: 0.85rem;
+    }
+
+    /* ============================ RESULTS STATS ============================ */
+    .results-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-top: 8px;
+    }
+    @media (max-width: 900px) { .results-grid { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 28px;
+      position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ""; position: absolute;
+      top: 0; left: 0; width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
+    }
+    .stat-number {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(2.8rem, 5vw, 3.8rem);
+      line-height: 1; letter-spacing: -0.02em;
+      color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+      margin-bottom: 12px;
+    }
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: 1rem; line-height: 1.45;
+      color: var(--text); font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .stat-context {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    /* ============================ PULLQUOTE ============================ */
+    .pullquote {
+      background: var(--surface-card);
+      border-left: 3px solid var(--purple);
+      padding: 32px 36px;
+      border-radius: 4px;
+      max-width: 80ch;
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.08);
+    }
+    .pullquote .quote {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+      line-height: 1.5; color: var(--text);
+      margin-bottom: 20px;
+    }
+    .pullquote .citation {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+    }
+
+    /* ============================ TIMELINE ============================ */
+    .timeline {
+      display: flex; flex-direction: column; gap: 0;
+      border-left: 1px solid var(--border);
+      padding-left: 32px;
+      margin-top: 8px;
+    }
+    .timeline-item {
+      position: relative; padding-bottom: 36px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before {
+      content: ""; position: absolute;
+      left: -37px; top: 5px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--purple);
+      box-shadow: 0 0 10px var(--purple-glow-soft);
+    }
+    .timeline-week {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 8px;
+    }
+    .timeline-title {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 1.05rem; margin-bottom: 6px;
+    }
+    .timeline-desc {
+      font-size: 0.95rem; color: var(--text-muted); line-height: 1.55;
+    }
+    .section-light .timeline { border-left-color: rgba(107, 33, 168, 0.25); }
+    .section-light .timeline-item::before { background: var(--purple-deep); box-shadow: none; }
+    .section-light .timeline-week { color: var(--purple-deep); }
+    .section-light .timeline-title { color: var(--text-on-light); }
+    .section-light .timeline-desc { color: var(--text-muted-on-light); }
+
+    /* ============================ FINAL CTA ============================ */
+    .cs-cta {
+      text-align: center; padding: 80px 0 64px;
+      border-top: 1px solid var(--border);
+    }
+    .cs-cta .section-label {
+      justify-content: center; margin-bottom: 28px;
+    }
+    .cs-cta h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      line-height: 1.05; letter-spacing: -0.02em;
+      margin: 0 auto 24px;
+    }
+    .cs-cta h2 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+    }
+    .cs-cta p {
+      color: var(--text-muted); max-width: 52ch;
+      margin: 0 auto 40px; font-size: 1.05rem; line-height: 1.65;
+    }
+
+    .pill {
+      font-family: var(--font-body); font-size: 15px; font-weight: 500;
+      letter-spacing: 0.01em;
+      padding: 17px 34px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--border-strong); background: var(--surface);
+      color: var(--text);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative; overflow: hidden;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px;
+    }
+    .pill::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--purple-soft-fill) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .pill:hover {
+      border-color: var(--purple); transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--purple-glow);
+    }
+    .pill:hover::before { opacity: 1; }
+    .pill span { position: relative; z-index: 1; }
+
+    .pill-primary {
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      border-color: transparent;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 6px 28px var(--purple-glow);
+      font-weight: 600;
+    }
+    .pill-primary:hover {
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 10px 40px var(--purple-glow);
+      transform: translateY(-2px);
+    }
+
+    .cta-row {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    }
+
+    /* ============================ FOOTER ============================ */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 44px 0 28px;
+      position: relative; z-index: 2;
+      background: var(--bg);
+      margin-top: 0;
+    }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
+      display: flex; flex-wrap: wrap; gap: 24px;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 12px; }
+    .footer-text {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer-links a {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      .nav { gap: 12px; }
+      .nav a:not(.nav-cta) { display: none; }
+      .header-inner { padding: 0 20px; }
+      .container { padding: 0 20px; }
+      .footer-inner { padding: 0 20px; flex-direction: column; text-align: center; }
+      .cs-hero h1 { max-width: 100%; }
+      .cs-meta { max-width: 100%; }
+      .cs-meta-item { min-width: 45%; border-bottom: 1px solid var(--border); }
+      .cs-meta-item:nth-child(odd) { border-right: 1px solid var(--border); }
+      .cs-meta-item:last-child, .cs-meta-item:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+      .section { padding: 56px 0; }
+    }
+  
+    /* ============================ ARTICLE ============================ */
+    .post-hero { padding: 56px 0 56px; border-bottom: 1px solid var(--border); }
+    .post-hero h1 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.1rem, 4.6vw, 3.6rem); line-height: 1.06;
+      letter-spacing: -0.025em; margin-bottom: 28px;
+      max-width: 20ch;
+      opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .post-hero .cs-lede {
+      margin-bottom: 0;
+    }
+    .post-dateline {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-faint); margin-top: 28px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+    .post-article { padding: 72px 0 80px; }
+    .post-article h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.5rem, 2.8vw, 2.1rem); line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 48px 0 24px; max-width: 24ch;
+    }
+    .post-article h2:first-child { margin-top: 0; }
+    .post-article .body-copy a { color: var(--purple-bright); text-decoration: none; border-bottom: 1px solid var(--purple-glow-soft); }
+    .post-article .body-copy a:hover { border-bottom-color: var(--purple); }
+    @media (max-width: 720px) {
+      .post-hero h1 { max-width: 100%; }
+      .post-article { padding: 48px 0 56px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand nav-logo" href="/index.html">
+        <img src="/images/two-fires-logo-transparent.png" alt="Two Fires" style="height: 60px; width: auto; display: block;">
+      </a>
+      <nav class="nav">
+        <a href="/index.html#what">What we do</a>
+        <a href="/index.html#principals">Who we are</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/podcast.html">Podcast</a>
+        <a class="nav-cta" href="/index.html#contact">Light the fuse</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- POST HERO -->
+    <article>
+    <section class="post-hero">
+      <div class="container">
+        <a class="cs-back" href="/blog.html">← Blog</a>
+        <div class="cs-eyebrow">Growth</div>
+        <h1>Your Product Isn't the Problem. Your Altitude Is.</h1>
+        <p class="cs-lede">Great businesses don't plateau because the product got worse. They plateau because their marketing never scaled to the level the business reached.</p>
+        <div class="post-dateline">
+          <time datetime="2026-07-10">10 July 2026</time>
+        </div>
+      </div>
+    </section>
+
+    <!-- POST BODY -->
+    <section class="post-article">
+      <div class="container">
+        <div class="body-copy">
+          <p>You built something good. The product works. Customers who find you tend to stay. The team is strong.</p>
+          <p>And yet growth has flattened, and you cannot quite work out why.</p>
+          <p>So you look at the product. You look at the team. You look everywhere except the place the problem usually lives.</p>
+        </div>
+
+        <h2>Great businesses rarely plateau on product</h2>
+
+        <div class="body-copy">
+          <p>They plateau because they have never had the calibre of marketing required at this altitude.</p>
+          <p>The marketing that took you to two million is not the marketing that takes you to ten. Early growth runs on hustle, referrals and founder energy. That engine is real, and it works, right up until it doesn't. At a certain altitude it stalls, and you need something you have probably never had inside the business: genuine strategic marketing depth.</p>
+        </div>
+
+        <h2>What most businesses reach for instead</h2>
+
+        <div class="body-copy">
+          <p>They hire a marketer still developing the fundamentals. Or they bring on an agency that executes tactics without strategic depth. More activity arrives. The ceiling stays exactly where it was.</p>
+          <p>It feels like you tried. What you actually did was add volume to a foundation that was never built for this height.</p>
+        </div>
+
+        <h2>What the altitude demands</h2>
+
+        <div class="body-copy">
+          <p>Positioning sharp enough to matter in a crowded category. Customer insight tested against real behaviour, not assumed in a meeting. Brand assets distinctive enough to be remembered. And an engine capable of putting all of it into market at scale.</p>
+          <p>This is the level at which marketing either performs or the business feels it. There is nowhere to hide.</p>
+        </div>
+
+        <h2>How we think about it</h2>
+
+        <div class="body-copy">
+          <p>Fire One is thirty years of brand work at McDonald's, Mars, Unilever, Burger King and Primo Foods. The altitude where marketing has to earn its place. Fire Two is the engine that executes it, every day, at volume.</p>
+          <p>We bring both to your hardest growth problem.</p>
+        </div>
+
+        <h2>The reframe</h2>
+
+        <div class="body-copy">
+          <p>A plateau is not a failure of your product. It is a signal that you have outgrown the marketing that got you here.</p>
+          <p>Bring us the hardest version of it. The conversation is forty-five minutes of your time and a full day of ours in preparation. You leave clearer either way.</p>
+          <p><a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
+        </div>
+      </div>
+    </section>
+    </article>
+
+    <!-- FINAL CTA -->
+    <section class="cs-cta">
+      <div class="container">
+        <div class="section-label" style="justify-content: center;">Work with us</div>
+        <h2>Got a growth problem<br><em>that needs both fires?</em></h2>
+        <p>Every engagement starts with one conversation. Forty-five minutes of your time, a full day of ours in preparation.</p>
+        <div class="cta-row">
+          <a class="pill pill-primary" href="/index.html#contact"><span>Book the conversation →</span></a>
+          <a class="pill" href="/blog.html"><span>Read more from the blog</span></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-text">Two Fires · Sydney · 2026</span>
+      </div>
+      <div class="footer-links">
+        <a href="/index.html">Home</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/podcast.html">Podcast</a>
+        <a href="/index.html#contact">Contact</a>
+        <a href="/portal.html">Client Portal</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
