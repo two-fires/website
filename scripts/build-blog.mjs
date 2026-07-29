@@ -48,7 +48,7 @@ const POSTS = {
     fires: {
       section: 'How we think about it',
       intro: [],
-      one: { label: 'Fire One · Brand', name: 'Brand.', desc: 'Thirty years of brand work at McDonald\'s, Mars, Unilever, Burger King and Primo Foods. The altitude where marketing has to earn its place.' },
+      one: { label: 'Fire One · Brand', name: 'Brand.', desc: 'Thirty years of brand work at McDonald\'s, Mars, Unilever, Burger King and Scotts Lawn & Garden. The altitude where marketing has to earn its place.' },
       two: { label: 'Fire Two · Engine', name: 'Engine.', desc: 'The engine that executes it, every day, at volume.' },
       outro: ['We bring both to your hardest growth problem.'],
     },

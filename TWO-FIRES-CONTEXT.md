@@ -23,7 +23,7 @@
 
 **The two fires (the two principals):**
 
-- **Brand Fire - Paul Tredinnick.** "Thirty years of marketing leadership at McDonald's, Mars, Unilever, Burger King and Primo Foods. Brand strategy, positioning, customer insight and integrated marketing across the world's most competitive categories. Author of *Marketing Executive's AI Authority*."
+- **Brand Fire - Paul Tredinnick.** "Thirty years of marketing leadership at McDonald's, Mars, Unilever, Burger King and Scotts Lawn & Garden. Brand strategy, positioning, customer insight and integrated marketing across the world's most competitive categories. Author of *Marketing Executive's AI Authority*."
 - **Engine Fire - James Whitehill.** "Fifteen years in advertising production for international multi-million-dollar businesses. Four years deploying AI tools and execution systems across SMEs in operation, and now leading our agent architecture." James operates as the **Chief Connector**: strategic decisions and architecture, not hands-on execution (see §9).
 
 **Commercial model:**
