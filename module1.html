@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires · Module 1 · Marketing Diagnosis</title>
+<meta name="description" content="Module 1 of the Two Fires Intelligence Suite. Four stages that diagnose your marketing, from customer reality to a prioritised action plan.">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --charcoal: #05050A; --purple: #A855F7; --purple-bright: #C4A8FF; --purple-deep: #6B21A8;
+  --purple-glow: rgba(168,85,247,0.15); --purple-border: rgba(168,85,247,0.25);
+  --white: #ffffff; --off-white: #FBFAFE;
+  --white-60: rgba(255,255,255,0.6); --white-40: rgba(255,255,255,0.4);
+  --white-20: rgba(255,255,255,0.2); --white-08: rgba(255,255,255,0.08); --white-04: rgba(255,255,255,0.04);
+  --green: #34d399; --amber: #fbbf24; --error: #f87171;
+}
+html, body { background: var(--charcoal); color: var(--white); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100%; }
+body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); }
+.ambient { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+.ambient-1 { width: 620px; height: 620px; background: rgba(107,33,168,0.22); top: -220px; right: -120px; }
+.ambient-2 { width: 420px; height: 420px; background: rgba(168,85,247,0.10); bottom: -120px; left: -90px; }
+
+.wrap { position: relative; z-index: 10; max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.back-link { display: inline-block; margin-bottom: 1.75rem; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-60); text-decoration: none; border: 0.5px solid var(--white-20); border-radius: 7px; padding: 6px 11px; transition: color .2s, border-color .2s; }
+.back-link:hover { color: var(--purple-bright); border-color: var(--purple-border); }
+
+.eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--purple-bright); margin-bottom: 0.75rem; display: block; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; font-weight: 400; font-style: italic; letter-spacing: -0.02em; margin-bottom: 1rem; }
+h1 em { font-style: italic; color: var(--purple-bright); }
+.lede { font-size: 1.05rem; line-height: 1.7; color: var(--white-60); max-width: 66ch; }
+
+h2 { font-size: 1.35rem; font-weight: 400; font-style: italic; margin-bottom: 0.4rem; }
+h2 em { color: var(--purple-bright); }
+.section { margin-top: 3rem; }
+.section-intro { font-size: 0.95rem; color: var(--white-60); line-height: 1.65; max-width: 66ch; margin-bottom: 1.4rem; }
+
+.panel { background: var(--white-04); border: 0.5px solid var(--white-20); border-radius: 16px; padding: 1.6rem 1.75rem; }
+.panel + .panel { margin-top: 1rem; }
+
+.need-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.need { border: 1px solid var(--white-08); border-radius: 12px; padding: 14px 16px; background: rgba(255,255,255,0.02); }
+.need .n-l { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); margin-bottom: 6px; }
+.need .n-d { font-size: 0.86rem; color: var(--white-60); line-height: 1.55; }
+
+.stage-list { display: grid; gap: 12px; }
+.stage-item { display: grid; grid-template-columns: 44px 1fr auto; gap: 16px; align-items: start; border: 1px solid var(--white-08); border-radius: 14px; padding: 18px 20px; background: rgba(255,255,255,0.02); text-decoration: none; color: inherit; transition: all .2s ease; }
+.stage-item:hover { border-color: var(--purple-border); background: rgba(168,85,247,0.06); transform: translateY(-1px); }
+.stage-num { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; font-family: 'Geist Mono', monospace; font-size: 13px; background: var(--white-08); border: 1px solid var(--white-20); color: var(--white-60); }
+.stage-item.done .stage-num { background: rgba(52,211,153,0.16); border-color: rgba(52,211,153,0.4); color: var(--green); }
+.stage-name { display: block; font-size: 1.02rem; font-weight: 600; margin-bottom: 5px; }
+.stage-ex { display: block; font-size: 0.88rem; color: var(--white-60); line-height: 1.6; }
+.stage-pr { display: block; font-size: 0.82rem; color: var(--white-40); line-height: 1.6; margin-top: 6px; }
+.stage-pr strong { color: var(--purple-bright); font-weight: 500; }
+.stage-flag { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; white-space: nowrap; align-self: center; }
+.flag-done { background: rgba(52,211,153,0.14); color: var(--green); }
+.flag-todo { background: var(--white-08); color: var(--white-40); }
+
+.outcome { display: grid; gap: 10px; }
+.outcome li { list-style: none; font-size: 0.94rem; color: var(--white-60); line-height: 1.65; padding-left: 22px; position: relative; }
+.outcome li::before { content: '✓'; position: absolute; left: 0; color: var(--green); }
+.outcome li strong { color: var(--off-white); font-weight: 500; }
+
+.field { margin-bottom: 1.05rem; }
+.field label { display: block; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-60); margin-bottom: 8px; }
+.field label .req { color: var(--purple-bright); }
+.field label .opt { color: var(--white-40); text-transform: none; letter-spacing: 0; }
+.field input, .field textarea { width: 100%; background: var(--white-08); border: 0.5px solid var(--white-20); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--white); outline: none; transition: border-color .2s, background .2s; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.25); }
+.field input:focus, .field textarea:focus { border-color: var(--purple-border); background: rgba(168,85,247,0.06); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 620px) { .row2 { grid-template-columns: 1fr; } }
+
+.opt-toggle { background: none; border: none; color: var(--purple-bright); font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 6px 0; display: flex; align-items: center; gap: 8px; }
+.opt-toggle .chev { display: inline-block; transition: transform .2s ease; }
+.opt-toggle.open .chev { transform: rotate(90deg); }
+.opt-fields { display: none; padding-top: 1rem; }
+.opt-fields.open { display: block; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 11px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: all .2s ease; }
+.btn-primary { background: var(--purple); color: #fff; box-shadow: 0 6px 22px rgba(168,85,247,0.3); }
+.btn-primary:hover { background: #9333ea; transform: translateY(-1px); }
+.btn-ghost { background: var(--white-04); color: var(--off-white); border-color: var(--white-20); }
+.btn-ghost:hover { border-color: var(--purple-border); background: rgba(168,85,247,0.1); }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1.25rem; align-items: center; }
+.save-note { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--green); display: none; }
+.save-note.visible { display: inline; }
+.form-error { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--error); margin-top: 12px; display: none; }
+.form-error.visible { display: block; }
+
+.brandbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; border: 1px solid var(--purple-border); background: rgba(168,85,247,0.07); border-radius: 12px; padding: 12px 16px; margin-bottom: 1.25rem; }
+.brandbar .bb-l { font-size: 0.9rem; color: var(--white-60); }
+.brandbar .bb-l strong { color: var(--off-white); font-weight: 600; }
+.brandbar a { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--purple-bright); text-decoration: none; border-bottom: 1px solid rgba(168,85,247,0.4); cursor: pointer; padding-bottom: 2px; }
+.brandbar a:hover { color: var(--off-white); }
+
+footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 0.5px solid var(--white-08); display: flex; gap: 22px; flex-wrap: wrap; }
+footer a { font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--white-40); text-decoration: none; }
+footer a:hover { color: var(--purple-bright); }
+</style>
+<script src="/scripts/tf-identity.js"></script>
+<script src="/scripts/tf-work.js"></script>
+<script src="/scripts/tf-brief.js"></script>
+<script src="/scripts/tf-module1.js"></script>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="wrap">
+  <a class="back-link" href="/portal.html">← Back to Portal</a>
+
+  <span class="eyebrow">Two Fires · Intelligence Suite · Module 1</span>
+  <h1>Find out what is actually <em>wrong with your marketing.</em></h1>
+  <p class="lede">The Intelligence Suite is a set of agents that do senior strategy work on your business using real public evidence, not guesswork. Module 1 is the diagnosis. Four stages, run in order, each one building on the last: what your customer actually cares about, whether your message matches it, how your category talks, and what to fix first.</p>
+
+  <!-- Where you are -->
+  <div class="section">
+    <div id="stepper"></div>
+  </div>
+
+  <!-- What you need to provide -->
+  <div class="section">
+    <h2>What you need to <em>provide</em></h2>
+    <p class="section-intro">Four things, once. We collect them here and carry them into every stage, so no agent asks you to type your business out again.</p>
+    <div class="need-grid">
+      <div class="need"><div class="n-l">Product or service</div><div class="n-d">What you actually sell or deliver.</div></div>
+      <div class="need"><div class="n-l">Website</div><div class="n-d">We read your live message from here.</div></div>
+      <div class="need"><div class="n-l">Market category</div><div class="n-d">The category a customer would put you in.</div></div>
+      <div class="need"><div class="n-l">Region</div><div class="n-d">Where you operate and compete.</div></div>
+    </div>
+  </div>
+
+  <!-- The four stages -->
+  <div class="section">
+    <h2>The four <em>stages</em></h2>
+    <p class="section-intro">Each stage reads the ones before it. Run them in order and the work compounds. You can leave and come back: every completed stage is saved against your login with a downloadable PDF.</p>
+    <div class="stage-list" id="stageList"></div>
+  </div>
+
+  <!-- What you get -->
+  <div class="section">
+    <h2>What you get at the <em>end</em></h2>
+    <div class="panel">
+      <ul class="outcome">
+        <li><strong>Four reports</strong>, each downloadable as a branded PDF, each with its evidence and confidence level shown.</li>
+        <li><strong>An executive summary</strong> on the Communications Audit: your top comms issues, your strengths, and what to prioritise.</li>
+        <li><strong>A marketing scorecard</strong> rating your positioning, messaging, channels and offer.</li>
+        <li><strong>A prioritised action plan</strong> with quick wins, drawn from all three upstream stages rather than one tool's opinion.</li>
+        <li><strong>Your Diagnosis Hub</strong>, one page that holds every run and every version so you can see how the picture changed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- The shared brief -->
+  <div class="section" id="briefSection">
+    <h2>Your <em>brief</em></h2>
+    <p class="section-intro">Fill this in once. Every stage below is pre-populated from it, and every field stays editable inside each stage if you want to sharpen it there.</p>
+
+    <div class="brandbar" id="brandBar" style="display:none;">
+      <div class="bb-l">Current brand test: <strong id="brandLabel"></strong></div>
+      <a id="newBrandLink">Start a new brand test</a>
+    </div>
+
+    <div class="panel">
+      <form id="briefForm" novalidate>
+        <div class="field">
+          <label for="m-brand">Name this brand test <span class="opt">(optional, helps if you run more than one)</span></label>
+          <input id="m-brand" type="text" placeholder="e.g. Scotts Lawn and Garden, spring campaign">
+        </div>
+        <div class="field">
+          <label for="m-product">Product or service <span class="req">*</span></label>
+          <input id="m-product" type="text" placeholder="What do you sell or deliver?">
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="m-market">Market or category <span class="req">*</span></label>
+            <input id="m-market" type="text" placeholder="What market or category are you in?">
+          </div>
+          <div class="field">
+            <label for="m-region">Region <span class="req">*</span></label>
+            <input id="m-region" type="text" placeholder="e.g. Sydney, Australia-wide, US East Coast">
+          </div>
+        </div>
+        <div class="field">
+          <label for="m-website">Website <span class="req">*</span></label>
+          <input id="m-website" type="text" placeholder="https://yourcompany.com">
+        </div>
+        <div class="field">
+          <label for="m-customer">Who you think your ideal customer is <span class="opt">(recommended)</span></label>
+          <textarea id="m-customer" rows="3" placeholder="Describe them in your own words. The Customer Insight agent tests this against real evidence."></textarea>
+        </div>
+
+        <button type="button" class="opt-toggle" id="optToggle"><span class="chev">›</span> Add more context (optional, sharpens every stage)</button>
+        <div class="opt-fields" id="optFields">
+          <div class="field">
+            <label for="m-competitors">Known competitors <span class="opt">(optional)</span></label>
+            <input id="m-competitors" type="text" placeholder="Name any competitors or their URLs">
+          </div>
+          <div class="field">
+            <label for="m-substitutes">Substitutes <span class="opt">(optional)</span></label>
+            <input id="m-substitutes" type="text" placeholder="What else do customers use instead?">
+          </div>
+          <div class="field">
+            <label for="m-offer">Your main offer <span class="opt">(optional)</span></label>
+            <textarea id="m-offer" rows="2" placeholder="Briefly describe your main offer"></textarea>
+          </div>
+          <div class="field">
+            <label for="m-language">Category language you often hear <span class="opt">(optional)</span></label>
+            <textarea id="m-language" rows="2" placeholder="Phrases that come up again and again in your category"></textarea>
+          </div>
+          <div class="field">
+            <label for="m-testimonials">Customer feedback you already have <span class="opt">(optional)</span></label>
+            <textarea id="m-testimonials" rows="3" placeholder="Paste testimonials, reviews, or things customers say to you"></textarea>
+          </div>
+          <div class="field">
+            <label for="m-assets">Extra messaging to audit <span class="opt">(optional)</span></label>
+            <textarea id="m-assets" rows="3" placeholder="Homepage copy, ad headlines, email subject lines. Useful if your site is new or not yet indexed."></textarea>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label for="m-goal">What you want marketing to achieve <span class="opt">(optional)</span></label>
+              <textarea id="m-goal" rows="2" placeholder="e.g. More qualified residential enquiries from our local area"></textarea>
+            </div>
+            <div class="field">
+              <label for="m-channels">Where you market today <span class="opt">(optional)</span></label>
+              <input id="m-channels" type="text" placeholder="e.g. Google Business Profile, Instagram, word of mouth">
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary" id="startBtn">Save brief and start Module 1 →</button>
+          <button type="button" class="btn btn-ghost" id="saveBtn">Save brief</button>
+          <span class="save-note" id="saveNote">Saved.</span>
+        </div>
+        <p class="form-error" id="briefError"></p>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <a href="/portal.html">Back to portal</a>
+    <a href="/dashboard/">Diagnosis Hub</a>
+    <a href="mailto:lightmyfuse@two-fires.com">Contact</a>
+  </footer>
+</div>
+
+<script>
+const API_BASE = 'https://insight.two-fires.com';
+const $ = (id) => document.getElementById(id);
+
+// Field id to brief field. One map, used to fill the form and read it back.
+const BRIEF_MAP = {
+  'm-brand': 'brand_label',
+  'm-product': 'product_service',
+  'm-market': 'market_category',
+  'm-region': 'region',
+  'm-website': 'website_url',
+  'm-customer': 'customer_description',
+  'm-competitors': 'competitors',
+  'm-substitutes': 'substitutes',
+  'm-offer': 'offer_description',
+  'm-language': 'category_language',
+  'm-testimonials': 'testimonials',
+  'm-assets': 'extra_assets',
+  'm-goal': 'primary_goal',
+  'm-channels': 'current_channels',
+};
+
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+// Portal gate: signed in clients only. The tf_portal cookie is httpOnly, so ask
+// the server and send anyone without a session back to the login.
+(async function gate() {
+  try {
+    const r = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
+    if (!r.ok) { window.location.href = '/portal.html'; return; }
+  } catch (e) { window.location.href = '/portal.html'; return; }
+  init();
+})();
+
+let doneMap = {};
+
+async function init() {
+  TFBrief.fillForm(BRIEF_MAP);
+  renderBrandBar();
+
+  const email = (window.TFIdentity ? TFIdentity.get().email : '') || '';
+  doneMap = await TFModule1.fetchDone(email);
+  TFModule1.renderStepper($('stepper'), null, doneMap);
+  renderStages();
+}
+
+function renderBrandBar() {
+  const b = TFBrief.get();
+  if (!b.product_service && !b.brand_label) { $('brandBar').style.display = 'none'; return; }
+  $('brandBar').style.display = 'flex';
+  $('brandLabel').textContent = TFBrief.label();
+}
+
+function renderStages() {
+  $('stageList').innerHTML = TFModule1.STAGES.map((s) => `
+    <a class="stage-item ${doneMap[s.key] ? 'done' : ''}" href="${s.href}">
+      <span class="stage-num">${doneMap[s.key] ? '&#10003;' : s.n}</span>
+      <span>
+        <span class="stage-name">${esc(s.label)}</span>
+        <span class="stage-ex">${esc(s.examines)}</span>
+        <span class="stage-pr"><strong>You get:</strong> ${esc(s.provides)}</span>
+      </span>
+      <span class="stage-flag ${doneMap[s.key] ? 'flag-done' : 'flag-todo'}">${doneMap[s.key] ? 'Complete' : 'Not run'}</span>
+    </a>`).join('');
+}
+
+// First stage the client has not completed, so "start" always lands them in the
+// right place rather than back at stage 1.
+function firstIncomplete() {
+  for (const s of TFModule1.STAGES) { if (!doneMap[s.key]) return s; }
+  return TFModule1.STAGES[TFModule1.STAGES.length - 1];
+}
+
+$('optToggle').addEventListener('click', () => {
+  const open = $('optFields').classList.toggle('open');
+  $('optToggle').classList.toggle('open', open);
+});
+
+function showError(msg) { const el = $('briefError'); el.textContent = msg; el.classList.add('visible'); }
+function clearError() { $('briefError').classList.remove('visible'); }
+
+function saveBrief() {
+  clearError();
+  TFBrief.captureForm(BRIEF_MAP);
+  renderBrandBar();
+  return TFBrief.get();
+}
+
+$('saveBtn').addEventListener('click', () => {
+  saveBrief();
+  const note = $('saveNote');
+  note.classList.add('visible');
+  setTimeout(() => note.classList.remove('visible'), 2400);
+});
+
+$('briefForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  clearError();
+  const b = saveBrief();
+  const missing = TFBrief.missingCore();
+  if (missing.length) {
+    showError('Still needed before stage 1 can run: ' + missing.join(', ') + '.');
+    return;
+  }
+  window.location.href = firstIncomplete().href;
+});
+
+// Start a new brand test. Archives the current brief, never deletes it, and
+// clears the per tool rehydration keys so the next run starts clean. Reports
+// already saved against this login stay exactly where they are.
+$('newBrandLink').addEventListener('click', (e) => {
+  e.preventDefault();
+  const label = TFBrief.label();
+  const ok = window.confirm('Start a new brand test?\n\n"' + label + '" will be archived, not deleted, and the brief will be cleared so you can enter a new brand. Your saved reports and PDFs are untouched.');
+  if (!ok) return;
+  TFBrief.startNew();
+  Object.keys(BRIEF_MAP).forEach((id) => { const el = $(id); if (el) el.value = ''; });
+  renderBrandBar();
+  $('m-brand').focus();
+  const note = $('saveNote');
+  note.textContent = 'Archived. New brand test ready.';
+  note.classList.add('visible');
+  setTimeout(() => { note.classList.remove('visible'); note.textContent = 'Saved.'; }, 4000);
+});
+</script>
+</body>
+</html>

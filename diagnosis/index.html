@@ -142,11 +142,19 @@ body::before {
 .focus-banner strong { color: var(--purple-bright); }
 .qw { font-size: 13px; color: var(--white-60); line-height: 1.8; padding-left: 18px; }
 .evidence-note { font-size: 12px; color: var(--white-40); margin-top: 1rem; line-height: 1.6; }
+/* Dependency note: which upstream stages this synthesis has to work with. */
+.dep-note { display: flex; align-items: flex-start; gap: 10px; border: 0.5px solid rgba(52,211,153,0.3); background: rgba(52,211,153,0.07); border-radius: 12px; padding: 12px 15px; margin-bottom: 1.25rem; }
+.dep-note.warn { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.07); }
+.dep-note .dn-i { flex: none; font-size: 14px; line-height: 1.5; }
+.dep-note .dn-t { font-size: 13px; line-height: 1.6; color: var(--white-60); }
+.dep-note .dn-t strong { color: var(--white); font-weight: 500; }
 .cta-row { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
 .cta-row .btn { width: auto; flex: 1; min-width: 200px; padding: 0 24px; }
 </style>
   <script src="/scripts/tf-identity.js"></script>
   <script src="/scripts/tf-work.js"></script>
+  <script src="/scripts/tf-brief.js"></script>
+  <script src="/scripts/tf-module1.js"></script>
 </head>
 <body>
 <div class="ambient ambient-1"></div>
@@ -154,6 +162,12 @@ body::before {
 
 <div class="wrap">
   <a class="back-link" href="/portal.html">← Back to Portal</a>
+
+  <!-- Module 1 progress rail: where you are, what is next. -->
+  <div id="m1Stepper" style="margin-bottom:26px;"></div>
+
+  <!-- What this synthesis has to work with. -->
+  <div id="depNote"></div>
 
   <div class="head">
     <div class="eyebrow">Two Fires · Intelligence Suite</div>
@@ -268,6 +282,9 @@ async function runDiagnosis() {
     brief: {
       primary_goal: $('primary_goal').value.trim(),
       current_channels: $('current_channels').value.trim(),
+      // The backend reads region too. Take it from the shared Module 1 brief
+      // rather than asking for it a fourth time.
+      region: (window.TFBrief ? TFBrief.get().region : ''),
     },
   };
 
@@ -277,6 +294,7 @@ async function runDiagnosis() {
   if (payload.brief.primary_goal.length < 10) return showFormError('Please give a little more detail on your primary goal.');
   if (payload.brief.current_channels.length < 2) return showFormError('Please tell us where you currently market.');
   try { if (window.TFIdentity) TFIdentity.set({ name: payload.name, email: payload.email, company: payload.company }); } catch (e) { /* ignore */ }
+  try { if (window.TFBrief) TFBrief.captureForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
 
   const btn = $('run-btn');
   btn.disabled = true;
@@ -330,6 +348,7 @@ async function runDiagnosis() {
           if (data.message) logLine(data.message);
         } else if (event === 'done') {
           setChip(lastStage, 'done');
+          try { if (window.TFBrief) TFBrief.clearFresh('diagnosis'); } catch (e) { /* ignore */ }
           renderResults(data.result);
         } else if (event === 'error') {
           throw new Error(data.message || 'The diagnosis could not be completed.');
@@ -446,12 +465,7 @@ function renderResults(result) {
     ${risks ? `<div class="card"><div class="section-title">Risks</div>${risks}</div>` : ''}
     ${prios ? `<div class="card"><div class="section-title">Prioritised Action Plan</div>${prios}${quickWins ? `<div class="section-title" style="margin-top:1.5rem;">Quick Wins</div><ul class="qw">${quickWins}</ul>` : ''}</div>` : ''}
 
-    <div class="card">
-      <div class="cta-row">
-        <button class="btn" onclick="downloadPDF()">Download PDF report</button>
-        <a class="btn secondary" href="mailto:lightmyfuse@two-fires.com?subject=Marketing%20Diagnosis%20follow-up%20-%20${encodeURIComponent(result.company || '')}" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">Talk to a strategist</a>
-      </div>
-    </div>
+    <div id="m1End"></div>
   `;
 
   const r = $('results');
@@ -459,6 +473,15 @@ function renderResults(result) {
   r.classList.add('visible');
   $('progress').classList.remove('visible');
   $('intake').style.display = 'none';
+  $('depNote').innerHTML = '';
+  if (window.TFModule1) {
+    TFModule1.renderEndState($('m1End'), 'diagnosis', {
+      onDownload: downloadPDF,
+      downloadLabel: 'Download Diagnosis PDF',
+      // Module 1 ends here, so this is where a new brand test belongs.
+      onNewBrandTest: startNewBrandTest,
+    });
+  }
   appendWorkControls(r);
   r.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -494,6 +517,8 @@ function prefillIdentity() {
 async function rehydrate() {
   try {
     if (!window.TFWork || !window.TFIdentity) return;
+    // A new brand test: the stored diagnosis belongs to the previous brand.
+    if (window.TFBrief && TFBrief.isFresh('diagnosis')) return;
     const email = TFIdentity.get().email;
     if (!email) return;
     const last = await TFWork.fetchLast('diagnosis', email);
@@ -527,7 +552,20 @@ function startNewVersion() {
   $('intake').style.display = '';
   if ($('primary_goal')) $('primary_goal').value = '';
   if ($('current_channels')) $('current_channels').value = '';
+  try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  checkInputs();
   $('intake').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Start a new brand test from the end of the module. The current brief is
+// archived, never deleted, and every saved report stays where it is.
+function startNewBrandTest() {
+  if (!window.TFBrief) return;
+  const label = TFBrief.label();
+  const ok = window.confirm('Start a new brand test?\n\n"' + label + '" will be archived, not deleted, and the brief cleared so you can enter a new brand. Your saved reports and PDFs are untouched.');
+  if (!ok) return;
+  TFBrief.startNew();
+  window.location.href = '/module1.html';
 }
 function changeIdentity() {
   try { if (window.TFIdentity) TFIdentity.clear(); } catch (e) { /* ignore */ }
@@ -539,10 +577,65 @@ function changeIdentity() {
 
 // On load: auto-fill the one shared identity and, if a finished diagnosis exists,
 // show the latest version instead of the blank intake.
+// Field id to shared Module 1 brief field.
+const M1_BRIEF_MAP = { 'primary_goal': 'primary_goal', 'current_channels': 'current_channels' };
+
 (async function init() {
+  // Portal gate: signed in clients only, fail closed.
+  try {
+    const r = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
+    if (!r.ok) { window.location.href = '/portal.html'; return; }
+  } catch (e) { window.location.href = '/portal.html'; return; }
+
   prefillIdentity();
+  try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  renderStepper();
+  await checkInputs();
   await rehydrate();
 })();
+
+
+async function renderStepper() {
+  if (!window.TFModule1) return;
+  try {
+    const email = (window.TFIdentity ? TFIdentity.get().email : '') || '';
+    const done = await TFModule1.fetchDone(email);
+    TFModule1.renderStepper($('m1Stepper'), 'diagnosis', done);
+  } catch (e) { /* ignore */ }
+}
+
+// This stage synthesises the three before it. Show which of them exist before
+// the client runs it, with a link back to whichever stage is missing, so a thin
+// diagnosis is a choice rather than a surprise.
+async function checkInputs() {
+  const el = $('depNote');
+  if (!el || !window.TFModule1) return;
+  const email = (window.TFIdentity ? TFIdentity.get().email : '') || '';
+  if (!email) return;
+  try {
+    const r = await fetch(API_BASE + '/client/' + encodeURIComponent(email) + '/profile', { credentials: 'include' });
+    if (!r.ok) return;
+    const data = await r.json();
+    const present = (data && data.present) || {};
+    const upstream = [
+      { key: 'customer_insight', label: 'Customer Insight', href: '/insight/' },
+      { key: 'messaging_audit', label: 'Communications Audit', href: '/audit/' },
+      { key: 'brand_ladder', label: 'Brand Ladder', href: '/ladder/index.html' },
+    ];
+    const have = upstream.filter((u) => present[u.key]);
+    const missing = upstream.filter((u) => !present[u.key]);
+    el.innerHTML =
+      '<div class="dep-note' + (missing.length ? ' warn' : '') + '"><span class="dn-i">' + (missing.length ? '⚑' : '🧩') + '</span><span class="dn-t">' +
+      (have.length
+        ? '<strong>Synthesising from: ' + have.map((h) => esc(h.label)).join(', ') + '.</strong> '
+        : '<strong>No upstream reports found for this login yet.</strong> ') +
+      (missing.length
+        ? 'Not yet run: ' + missing.map((m) => '<a href="' + m.href + '" style="color:var(--purple-bright);">' + esc(m.label) + '</a>').join(', ') +
+          '. You can still run the diagnosis, it will just have less to work with.'
+        : 'Every upstream stage is in. This is the full picture.') +
+      '</span></div>';
+  } catch (e) { /* ignore */ }
+}
 </script>
 </body>
 </html>

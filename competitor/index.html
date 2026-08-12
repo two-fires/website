@@ -463,6 +463,8 @@
   </style>
   <script src="/scripts/tf-identity.js"></script>
   <script src="/scripts/tf-work.js"></script>
+  <script src="/scripts/tf-brief.js"></script>
+  <script src="/scripts/tf-module1.js"></script>
 </head>
 <body>
   <header class="header">
@@ -475,6 +477,9 @@
   </header>
 
   <main class="container">
+
+    <!-- Module 1 progress rail: where you are, what is next. -->
+    <div id="m1Stepper" style="margin-bottom:28px;"></div>
 
     <!-- ============ STATE 1 - GATE (register) ============ -->
     <section class="stage active" id="stage-gate">
@@ -632,13 +637,8 @@
         <div class="source-types" id="sourcesContent"></div>
       </div>
 
-      <div class="cta-block">
-        <h3>This feeds your <em>Marketing Diagnosis.</em></h3>
-        <p>The full Marketing Diagnosis reads this scan alongside your customer insight and live message, then hands you a prioritised action plan.</p>
-        <div class="cta-actions">
-          <a class="btn" href="/diagnosis/">Go to Marketing Diagnosis</a>
-        </div>
-      </div>
+      <!-- Module 1 end state: download plus the sequential next step. -->
+      <div id="m1End"></div>
 
       <!-- Returning-user control: run a fresh scan. -->
       <div class="rerun-row" id="rerunRow" style="display:none;">
@@ -777,7 +777,16 @@
       }
     });
 
+    // The brief form has no name, email or company field: those live on the gate.
+    // So never enter the brief without a complete identity in state, or the scan
+    // POSTs blanks and the backend's "please provide your name, email, and
+    // company" lands on a form with nowhere to type it. Fall back to the gate,
+    // which is already pre-filled from the shared identity.
     function enterBrief() {
+      if (!state.name || !state.email || !state.company) {
+        showStage('stage-gate');
+        return;
+      }
       const wb = document.getElementById('welcomeBack');
       if (state.name) {
         wb.style.display = 'inline-block';
@@ -814,10 +823,25 @@
       };
     }
 
+    // Field id to shared Module 1 brief field. The Competitor stage used to make
+    // the client rebuild a brief they had already given the Insight stage. Now it
+    // is filled from the shared brief on load and written back on submit.
+    const M1_BRIEF_MAP = {
+      'b-product': 'product_service',
+      'b-market': 'market_category',
+      'b-region': 'region',
+      'b-website': 'website_url',
+      'b-competitors': 'competitors',
+      'b-substitutes': 'substitutes',
+      'b-language': 'category_language',
+      'b-offer': 'offer_description',
+    };
+
     briefForm.addEventListener('submit', (e) => {
       e.preventDefault();
       briefError.textContent = '';
       const brief = readBrief();
+      try { if (window.TFBrief) TFBrief.captureForm(M1_BRIEF_MAP); } catch (e2) { /* ignore */ }
 
       const required = [
         ['product_service', 'Product or Service', MIN_FIELD_CHARS],
@@ -871,6 +895,21 @@
           showStage('stage-cap');
           return;
         }
+        // Identity rejected. The brief form cannot collect a name, email or
+        // company, so send the client back to the gate that can, with the
+        // message attached there. Never ask for a field with no input.
+        if (res.status === 400) {
+          let j = {};
+          try { j = await res.json(); } catch (e) {}
+          if (j.error && /name, email, and company|valid email address/i.test(j.error)) {
+            gateError.textContent = j.error;
+            showStage('stage-gate');
+            const firstEmpty = ['g-name', 'g-email', 'g-company'].find((id) => !document.getElementById(id).value.trim());
+            if (firstEmpty) document.getElementById(firstEmpty).focus();
+            return;
+          }
+          throw new Error(j.error || 'The scan could not be completed. Please try again.');
+        }
         // No valid portal session: the scan endpoint is portal-gated.
         if (res.status === 401) {
           throw new Error('Please sign in through the portal first, then reopen this tool.');
@@ -915,7 +954,9 @@
         if (streamError) throw new Error(streamError);
         if (!result) throw new Error('We could not read the scan. Please try again.');
 
+        try { if (window.TFBrief) TFBrief.clearFresh('competitor'); } catch (e) { /* ignore */ }
         renderResults(result);
+        renderM1End();
         const row = document.getElementById('rerunRow');
         if (row) row.style.display = 'flex';
         showStage('stage-results');
@@ -990,10 +1031,27 @@
       return `<div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--purple-bright);margin-bottom:4px;">${esc(t)}</div>`;
     }
 
+    // Jump back to the brief, expand the optional fields, and focus the
+    // Known Competitors input — used by the empty-state prompts below so
+    // "add it in your brief" is one click, not a hunt.
+    function goToBriefForCompetitors() {
+      const wb = document.getElementById('welcomeBack');
+      if (wb) wb.style.display = 'none';
+      const optFields = document.getElementById('optFields');
+      const optToggle = document.getElementById('optToggle');
+      if (optFields && !optFields.classList.contains('open')) {
+        optFields.classList.add('open');
+        if (optToggle) optToggle.classList.add('open');
+      }
+      showStage('stage-brief');
+      const input = document.getElementById('b-competitors');
+      if (input) input.focus();
+    }
+
     function renderMatrix(list) {
       const el = document.getElementById('matrixContent');
       if (!list.length) {
-        el.innerHTML = '<p class="empty-note">No competitors could be mapped from public sources. Add known competitors in your brief and run it again.</p>';
+        el.innerHTML = '<p class="empty-note">No competitors could be mapped from public sources. <button type="button" class="btn btn-ghost add-competitors-btn" style="margin-top:10px;">Add known competitors and rescan</button></p>';
         return;
       }
       el.innerHTML = '<div class="card-grid">' + list.map(c => {
@@ -1091,6 +1149,13 @@
       showStage('stage-brief');
     });
 
+    // Empty-state "add known competitors" buttons are injected into
+    // innerHTML on every render, so listen via delegation on the results
+    // section rather than binding to elements that get replaced.
+    document.getElementById('stage-results').addEventListener('click', (e) => {
+      if (e.target.closest('.add-competitors-btn')) goToBriefForCompetitors();
+    });
+
     // ---------- Copy Full Results ----------
     document.getElementById('copyResultsBtn').addEventListener('click', () => {
       if (!currentResult) return;
@@ -1150,9 +1215,19 @@
     // Render a stored scan through the same path as a live one (renderResults sets
     // currentResult, so PDF + copy work too), then reveal the "Run new scan"
     // control so the visitor can still start fresh.
+    // Module 1 end state: prominent download plus the sequential next step.
+    function renderM1End() {
+      if (!window.TFModule1) return;
+      TFModule1.renderEndState(document.getElementById('m1End'), 'competitor', {
+        onDownload: exportPdf,
+        downloadLabel: 'Download Competitor and Category PDF',
+      });
+    }
+
     function showStoredReport(result, sessionId) {
       if (sessionId) { state.sessionId = sessionId; persist(); }
       renderResults(result);
+      renderM1End();
       const row = document.getElementById('rerunRow');
       if (row) row.style.display = 'flex';
       showStage('stage-results');
@@ -1192,6 +1267,8 @@
 
     // If the lead has a completed scan, show it; otherwise go to the brief form.
     async function rehydrateOrBrief() {
+      // A new brand test: skip the stored scan and go straight to the brief.
+      if (window.TFBrief && TFBrief.isFresh('competitor')) { enterBrief(); return; }
       const last = await fetchLastScan(state.email || getSavedEmail());
       if (last) { showStoredReport(last.result, last.sessionId); return; }
       enterBrief();
@@ -1202,17 +1279,51 @@
     // tab), reload their last completed scan instead of the blank brief. Matches
     // the Customer Insight tool. Falls back gracefully to the brief or the gate.
     (async function boot() {
+      // Portal gate: this tool is for signed in clients. Fail closed.
+      try {
+        const vr = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
+        if (!vr.ok) { window.location.href = '/portal.html'; return; }
+      } catch (e) { window.location.href = '/portal.html'; return; }
+
+      // Hydrate the shared identity into BOTH the gate inputs and state. Writing
+      // only the inputs was the bug behind the dead end: a returning visitor in a
+      // new tab skipped the gate with a blank name and company in state, so the
+      // scan POSTed blanks and the backend asked for an email on a form that has
+      // no email field.
       try {
         if (window.TFIdentity) {
           var _id = TFIdentity.get();
           if (_id.name && document.getElementById('g-name')) document.getElementById('g-name').value = _id.name;
           if (_id.email && document.getElementById('g-email')) document.getElementById('g-email').value = _id.email;
           if (_id.company && document.getElementById('g-company')) document.getElementById('g-company').value = _id.company;
+          state.name = state.name || _id.name || '';
+          state.email = state.email || _id.email || '';
+          state.company = state.company || _id.company || '';
         }
       } catch (e) { /* ignore */ }
+
+      // Pre-populate the market brief from the shared Module 1 brief.
+      try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+
+      // Progress rail.
+      try {
+        if (window.TFModule1) {
+          var _done = await TFModule1.fetchDone(state.email);
+          TFModule1.renderStepper(document.getElementById('m1Stepper'), 'competitor', _done);
+        }
+      } catch (e) { /* ignore */ }
+
       const email = getSavedEmail() || state.email;
       if (email) {
         state.email = email;
+        persist();
+        if (window.TFBrief && TFBrief.isFresh('competitor')) {
+          // New brand test. Resolve the lead so the identity is known, but do
+          // not surface the previous brand's scan.
+          await fetchLastScan(email);
+          enterBrief();
+          return;
+        }
         const last = await fetchLastScan(email);
         if (last) { showStoredReport(last.result, last.sessionId); return; }
         if (state.leadId) enterBrief();

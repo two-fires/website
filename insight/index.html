@@ -465,6 +465,8 @@
   </style>
   <script src="/scripts/tf-identity.js"></script>
   <script src="/scripts/tf-work.js"></script>
+  <script src="/scripts/tf-brief.js"></script>
+  <script src="/scripts/tf-module1.js"></script>
 </head>
 <body>
   <header class="header">
@@ -477,6 +479,10 @@
   </header>
 
   <main class="container">
+
+    <!-- Module 1 progress rail: where you are, what is next. Rendered by
+         tf-module1.js and shown on every state of this stage. -->
+    <div id="m1Stepper" style="margin-bottom:28px;"></div>
 
     <!-- ============ STATE 1 - GATE (register) ============ -->
     <section class="stage active" id="stage-gate">
@@ -501,7 +507,7 @@
           <button class="btn btn-block" type="submit" id="gateBtn">Start</button>
           <p class="form-error" id="gateError"></p>
         </form>
-        <p class="fineprint">Free. One market analysis per email. No credit card.</p>
+        <p class="fineprint">Included with your portal access. Run it as often as you need, on as many brands as you need.</p>
       </div>
     </section>
 
@@ -554,7 +560,7 @@
           <button class="btn btn-block" type="submit" id="briefBtn">Research My Market</button>
           <p class="form-error" id="briefError"></p>
         </form>
-        <p class="fineprint">Free. One market analysis per email. No credit card.</p>
+        <p class="fineprint">Included with your portal access. Run it as often as you need, on as many brands as you need.</p>
       </div>
     </section>
 
@@ -653,6 +659,9 @@
         <div class="cta-confirm" id="ctaConfirm" style="display:none;"></div>
         <p class="runs-note" id="runsNote"></p>
       </div>
+
+      <!-- Module 1 end state: download plus the sequential next step. -->
+      <div id="m1End"></div>
 
       <!-- Returning-user control: only shown when we render a stored report. -->
       <div class="rerun-row" id="rerunRow" style="display:none;">
@@ -783,7 +792,10 @@
 
         // Returning user: if the backend handed back a previously completed
         // analysis, render it immediately instead of showing the intake form.
-        const stored = extractStoredResult(data);
+        // A new brand test means any stored report belongs to the previous
+        // brand, so open the brief instead of the old report.
+        const fresh = !!(window.TFBrief && TFBrief.isFresh('insight'));
+        const stored = fresh ? null : extractStoredResult(data);
         if (stored) {
           showStoredReport(stored);
         } else {
@@ -797,16 +809,15 @@
       }
     });
 
+    // Portal clients are metered by daily research spend, not by a run count, so
+    // this no longer walls off a returning visitor after one analysis. The
+    // used-up view still exists and is shown only if the backend ever answers
+    // 403, which it does not for a valid portal session.
     function enterBriefOrLimit() {
-      if (state.runsRemaining <= 0) {
-        renderUsedUp();
-        showStage('stage-results');
-        return;
-      }
       const wb = document.getElementById('welcomeBack');
       if (state.name) {
         wb.style.display = 'inline-block';
-        wb.textContent = `Welcome back, ${state.name}. You have your free market analysis ready to run.`;
+        wb.textContent = `Welcome back, ${state.name}. Your brief is below, pre-filled and ready to run.`;
       } else {
         wb.style.display = 'none';
       }
@@ -909,10 +920,25 @@
       };
     }
 
+    // Field id to shared brief field. Used both ways: pre-populate this stage
+    // from the Module 1 brief on load, and write any edits back so the later
+    // stages inherit them.
+    const M1_BRIEF_MAP = {
+      'b-product': 'product_service',
+      'b-market': 'market_category',
+      'b-region': 'region',
+      'b-customer': 'customer_description',
+      'b-website': 'website_url',
+      'b-competitors': 'competitors',
+      'b-testimonials': 'testimonials',
+      'b-offer': 'offer_description',
+    };
+
     briefForm.addEventListener('submit', (e) => {
       e.preventDefault();
       briefError.textContent = '';
       const brief = readBrief();
+      try { if (window.TFBrief) TFBrief.captureForm(M1_BRIEF_MAP); } catch (e2) { /* ignore */ }
 
       const required = [
         ['product_service', 'Product or Service', MIN_FIELD_CHARS],
@@ -1017,9 +1043,10 @@
         if (streamError) throw new Error(streamError);
         if (!result) throw new Error('We could not read the analysis. Please try again.');
 
-        // Success: this consumed the free run.
-        state.runsRemaining = 0;
+        // Success. The run is logged server side against tf_usage for the
+        // record, but it does not lock the client out of a further brand test.
         persist();
+        try { if (window.TFBrief) TFBrief.clearFresh('insight'); } catch (e) { /* ignore */ }
         renderResults(result);
         showStage('stage-results');
         mountInsightVersions();
@@ -1075,6 +1102,17 @@
       renderLanguage(d.language_bank || {});
       renderQuality(d.evidence_quality || {});
       renderRunsFooter();
+      renderM1End();
+    }
+
+    // Module 1 end state: a prominent download and the sequential next step, so
+    // a finished stage 1 never leaves the client wondering what happens now.
+    function renderM1End() {
+      if (!window.TFModule1) return;
+      TFModule1.renderEndState(document.getElementById('m1End'), 'insight', {
+        onDownload: exportPdf,
+        downloadLabel: 'Download Customer Insight PDF',
+      });
     }
 
     // ---------- Executive Summary (new) ----------
@@ -1281,7 +1319,7 @@
     }
 
     function renderRunsFooter() {
-      document.getElementById('runsNote').textContent = "You've used your free analysis. Talk to us about the full system.";
+      document.getElementById('runsNote').textContent = 'Every run is saved as a version against your login, so you can compare brands and re-runs later.';
     }
 
     // Results view shown when a visitor has already used their free analysis.
@@ -1591,13 +1629,21 @@
     async function restoreReportOnLoad() {
       const email = getSavedEmail();
       if (!email) return false;
+      // Starting a new brand test: nothing to restore, go to the brief.
+      if (window.TFBrief && TFBrief.isFresh('insight')) return false;
+      // /register requires name and company as well as email. A fresh tab has
+      // no session state, so fall back to the shared identity rather than
+      // POSTing a bare email and taking a silent 400 that skips the restore.
+      let ident = { name: '', company: '' };
+      try { if (window.TFIdentity) ident = TFIdentity.get(); } catch (e) { /* ignore */ }
+      const name = state.name || ident.name;
+      const company = state.company || ident.company;
+      if (!name || !company) return false;
       try {
         const res = await fetch(API_BASE + '/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          // name/company come along when this tab already knows them; the
-          // backend keys off the email, so they are not required to restore.
-          body: JSON.stringify({ email, name: state.name || undefined, company: state.company || undefined }),
+          body: JSON.stringify({ email, name, company }),
         });
         if (!res.ok) return false;
         const data = await res.json();
@@ -1627,6 +1673,13 @@
     }
 
     (async function boot() {
+      // Portal gate: this tool is for signed in clients. The tf_portal cookie is
+      // httpOnly, so ask the server rather than guessing, and fail closed.
+      try {
+        const vr = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
+        if (!vr.ok) { window.location.href = '/portal.html'; return; }
+      } catch (e) { window.location.href = '/portal.html'; return; }
+
       // Auto-fill the one shared identity into the gate so it is asked once.
       try {
         if (window.TFIdentity) {
@@ -1636,6 +1689,18 @@
           if (_id.company && document.getElementById('g-company')) document.getElementById('g-company').value = _id.company;
         }
       } catch (e) { /* ignore */ }
+
+      // Pre-populate the brief from the shared Module 1 brief, then draw the
+      // progress rail with whatever this client has already completed.
+      try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+      try {
+        if (window.TFModule1) {
+          var _em = (window.TFIdentity ? TFIdentity.get().email : '') || '';
+          var _done = await TFModule1.fetchDone(_em);
+          TFModule1.renderStepper(document.getElementById('m1Stepper'), 'insight', _done);
+        }
+      } catch (e) { /* ignore */ }
+
       const restored = await restoreReportOnLoad();
       if (restored) return;
       if (state.leadId) {

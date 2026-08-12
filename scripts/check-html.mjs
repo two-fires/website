@@ -3,7 +3,7 @@
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const FILES = ['insight/index.html', 'diagnosis/index.html', 'audit/index.html', 'dashboard/index.html', 'portal.html', 'content-studio/index.html'];
+const FILES = ['insight/index.html', 'diagnosis/index.html', 'audit/index.html', 'dashboard/index.html', 'portal.html', 'content-studio/index.html', 'competitor/index.html', 'module1.html'];
 
 let blocks = 0;
 for (const file of FILES) {

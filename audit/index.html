@@ -90,6 +90,31 @@ body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-event
 .cta-row { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
 .cta-row .btn { width: auto; flex: 1; min-width: 200px; padding: 0 24px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
 
+/* Executive summary: the decision-maker layer above the full report. */
+.exec { background: linear-gradient(180deg, rgba(168,85,247,0.13), var(--white-04)); border: 0.5px solid var(--purple-border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.25rem; }
+.exec .exec-eyebrow { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--purple-bright); margin-bottom: 0.7rem; }
+.exec .exec-head { font-size: 17px; line-height: 1.5; color: var(--white); margin-bottom: 1.4rem; max-width: 66ch; }
+.exec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.1rem; }
+.exec-col .ec-title { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.6rem; }
+.exec-col.issues .ec-title { color: var(--amber); }
+.exec-col.strengths .ec-title { color: var(--green); }
+.exec-col.priorities .ec-title { color: var(--purple-bright); }
+.exec-col ol, .exec-col ul { list-style: none; }
+.exec-col li { font-size: 13px; line-height: 1.6; color: var(--white-60); padding: 5px 0 5px 20px; position: relative; }
+.exec-col.issues li::before { content: '!'; position: absolute; left: 2px; color: var(--amber); font-weight: 600; }
+.exec-col.strengths li::before { content: '✓'; position: absolute; left: 0; color: var(--green); }
+.exec-col.priorities li { counter-increment: pri; }
+.exec-col.priorities { counter-reset: pri; }
+.exec-col.priorities li::before { content: counter(pri); position: absolute; left: 0; color: var(--purple-bright); font-family: 'Geist Mono', monospace; font-size: 11px; }
+.exec-empty { font-size: 13px; color: var(--white-40); font-style: italic; }
+
+/* Dependency note: shows that this stage read the Customer Insight. */
+.dep-note { display: flex; align-items: flex-start; gap: 10px; border: 0.5px solid rgba(52,211,153,0.3); background: rgba(52,211,153,0.07); border-radius: 12px; padding: 12px 15px; margin-bottom: 1.25rem; }
+.dep-note.warn { border-color: rgba(251,191,36,0.35); background: rgba(251,191,36,0.07); }
+.dep-note .dn-i { flex: none; font-size: 14px; line-height: 1.5; }
+.dep-note .dn-t { font-size: 13px; line-height: 1.6; color: var(--white-60); }
+.dep-note .dn-t strong { color: var(--white); font-weight: 500; }
+
 /* Blocked dependency state */
 #blocked { display: none; } #blocked.visible { display: block; animation: fadeIn 0.4s ease; }
 .blocked-card { text-align: center; padding: 2.5rem 2rem; }
@@ -99,6 +124,8 @@ body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-event
 </style>
   <script src="/scripts/tf-identity.js"></script>
   <script src="/scripts/tf-work.js"></script>
+  <script src="/scripts/tf-brief.js"></script>
+  <script src="/scripts/tf-module1.js"></script>
 </head>
 <body>
 <div class="ambient ambient-1"></div>
@@ -107,11 +134,17 @@ body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-event
 <div class="wrap">
   <a class="back-link" href="/portal.html">← Back to Portal</a>
 
+  <!-- Module 1 progress rail: where you are, what is next. -->
+  <div id="m1Stepper" style="margin-bottom:26px;"></div>
+
   <div class="head">
     <div class="eyebrow">Two Fires · Intelligence Suite</div>
     <h1>Messaging <span>Audit.</span></h1>
     <p class="sub">Meet Flint. He reads your Customer Insight, looks at your live message, and tells you exactly where what you say does not match what your customer actually cares about. He audits. He does not rewrite. This tool needs your Customer Insight first.</p>
   </div>
+
+  <!-- Dependency state: what stage 1 gave us to audit against. -->
+  <div id="depNote"></div>
 
   <!-- INTAKE -->
   <div class="card" id="intake">
@@ -173,14 +206,67 @@ let currentSessionId = null;
 
 // Portal gate: this page is for signed-in clients only. The tf_portal cookie is
 // httpOnly, so ask the server; redirect to the portal login if not signed in.
+// Field id to shared Module 1 brief field. Filled on load, captured on submit,
+// so the client never retypes their website here.
+const M1_BRIEF_MAP = { 'site_url': 'website_url', 'extra_assets': 'extra_assets' };
+
+// What this run actually read, so the client can see the work is cumulative.
+let runSources = { queries: [], fetchedChars: null, insightDate: '' };
+
 (async function gate() {
   try {
     const r = await fetch(API_BASE + '/portal-verify', { credentials: 'include' });
     if (!r.ok) { window.location.href = '/portal.html'; return; }
   } catch (e) { window.location.href = '/portal.html'; return; }
   prefillIdentity();
+  try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  renderStepper();
+  await checkDependency();
   await rehydrate();
 })();
+
+async function renderStepper() {
+  if (!window.TFModule1) return;
+  try {
+    const email = (window.TFIdentity ? TFIdentity.get().email : '') || '';
+    const done = await TFModule1.fetchDone(email);
+    TFModule1.renderStepper($('m1Stepper'), 'audit', done);
+  } catch (e) { /* ignore */ }
+}
+
+// Flint does not run standalone: the backend blocks the audit unless this lead
+// has a Customer Insight snapshot. Check it up front and say so, rather than
+// letting the client fill the form and fail at the end. When the Insight is
+// there, name it, so the dependency is visible instead of implied.
+async function checkDependency() {
+  const el = $('depNote');
+  if (!el) return;
+  const email = (window.TFIdentity ? TFIdentity.get().email : '') || '';
+  if (!email) return;
+  try {
+    const r = await fetch(API_BASE + '/client/' + encodeURIComponent(email) + '/profile', { credentials: 'include' });
+    if (!r.ok) return;
+    const data = await r.json();
+    const ci = data && data.snapshots && data.snapshots.customer_insight;
+    if (ci) {
+      const when = ci.updated_at || ci.created_at || '';
+      runSources.insightDate = when && window.TFWork ? TFWork.fmtDate(when) : '';
+      el.innerHTML =
+        '<div class="dep-note"><span class="dn-i">🔍</span><span class="dn-t">' +
+        '<strong>Reading your Customer Insight' + (runSources.insightDate ? ' from ' + esc(runSources.insightDate) : '') + '.</strong> ' +
+        'Flint audits your live message against the customer reality stage 1 found, not against a generic best practice checklist.' +
+        '</span></div>';
+    } else {
+      runSources.insightDate = '';
+      el.innerHTML =
+        '<div class="dep-note warn"><span class="dn-i">⚑</span><span class="dn-t">' +
+        '<strong>No Customer Insight found for this login yet.</strong> ' +
+        'Stage 1 has to run first: Flint audits your message against real customer evidence, so without it there is nothing to audit against. ' +
+        '<a href="/insight/" style="color:var(--purple-bright);">Run Customer Insight</a>.' +
+        '</span></div>';
+    }
+  } catch (e) { /* ignore: the backend still gates the run itself */ }
+}
 
 // Shared identity: auto-fill the intake from the one saved identity so it is
 // asked once across every tool.
@@ -199,6 +285,8 @@ function prefillIdentity() {
 async function rehydrate() {
   try {
     if (!window.TFWork || !window.TFIdentity) return;
+    // A new brand test: the stored audit belongs to the previous brand.
+    if (window.TFBrief && TFBrief.isFresh('audit')) return;
     const email = TFIdentity.get().email;
     if (!email) return;
     const last = await TFWork.fetchLast('audit', email);
@@ -232,7 +320,11 @@ async function loadVersions() {
 function startNewVersion() {
   $('results').innerHTML = ''; $('results').classList.remove('visible');
   $('intake').style.display = '';
+  // Re-seed from the shared brief rather than blanking the form: a new version
+  // of the same brand test should not make the client retype their website.
   $('site_url').value = ''; $('extra_assets').value = '';
+  try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  checkDependency();
   $('intake').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function changeIdentity() {
@@ -277,6 +369,8 @@ async function runAudit() {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return showFormError('Please enter a valid email address.');
   if (payload.site_url.length < 3) return showFormError('Please enter your website address.');
   try { if (window.TFIdentity) TFIdentity.set({ name: payload.name, email: payload.email, company: payload.company }); } catch (e) { /* ignore */ }
+  try { if (window.TFBrief) TFBrief.captureForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  runSources = { queries: [], fetchedChars: null, insightDate: runSources.insightDate };
 
   const btn = $('run-btn');
   btn.disabled = true; btn.textContent = 'Auditing your message…';
@@ -321,12 +415,21 @@ async function runAudit() {
           currentSessionId = data.sessionId;
         } else if (event === 'status') {
           if (data.stage && data.stage !== lastStage) { setChip(lastStage, 'done'); setChip(data.stage, 'active'); lastStage = data.stage; }
-          if (data.message) logLine(data.message);
+          if (data.message) {
+            logLine(data.message);
+            // Capture the search queries as they stream so the finished report
+            // can name what was actually looked at, instead of losing it with
+            // the progress log.
+            const m = /^Checking "(.+)"\.\.\.$/.exec(data.message);
+            if (m && runSources.queries.indexOf(m[1]) === -1) runSources.queries.push(m[1]);
+          }
         } else if (event === 'blocked') {
           showBlocked(data.message);
           return;
         } else if (event === 'done') {
           setChip(lastStage, 'done');
+          if (typeof data.fetched_chars === 'number') runSources.fetchedChars = data.fetched_chars;
+          try { if (window.TFBrief) TFBrief.clearFresh('audit'); } catch (e) { /* ignore */ }
           renderResults(data.result);
         } else if (event === 'error') {
           throw new Error(data.message || 'The audit could not be completed.');
@@ -388,6 +491,8 @@ function renderResults(result) {
     </div>` : '';
 
   const html = `
+    ${execSummary(result)}
+    <div id="m1Sources"></div>
     ${escalationBlock}
     ${auditRows ? `<div class="card"><div class="section-title">Your Message, Audited</div>${auditRows}</div>` : ''}
     <div class="card">
@@ -405,12 +510,7 @@ function renderResults(result) {
       <div><div class="k" style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--white-40);margin-bottom:6px;">Proof gaps</div>${liList(result.proof_gaps)}</div>
     </div>
     ${fixes ? `<div class="card"><div class="section-title">Priority Fixes</div>${fixes}</div>` : ''}
-    <div class="card">
-      <div class="cta-row">
-        <button class="btn" onclick="downloadPDF()">Download PDF report</button>
-        <a class="btn secondary" href="mailto:lightmyfuse@two-fires.com?subject=Messaging%20Audit%20follow-up">Talk to a strategist</a>
-      </div>
-    </div>
+    <div id="m1End"></div>
   `;
 
   const r = $('results');
@@ -418,8 +518,98 @@ function renderResults(result) {
   r.classList.add('visible');
   $('progress').classList.remove('visible');
   $('intake').style.display = 'none';
+  $('depNote').innerHTML = '';
+  renderSourcesPanel();
+  if (window.TFModule1) {
+    TFModule1.renderEndState($('m1End'), 'audit', {
+      onDownload: downloadPDF,
+      downloadLabel: 'Download Comms Audit PDF',
+    });
+  }
   appendWorkControls(r);
   r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Executive summary. Built entirely from the audit result already on screen, so
+// it adds no AI call and no cost. Top comms issues, strengths, priorities, with
+// the full report underneath.
+function execSummary(result) {
+  const fit = result.message_to_market_fit || {};
+  const fixes = result.priority_fixes || [];
+
+  const strList = (a) => (a || []).filter((x) => x && String(x).trim()).map((x) => String(x));
+  let issues = strList(fit.biggest_disconnects);
+  if (!issues.length) issues = strList(fit.misses_key_pains);
+  if (!issues.length) issues = strList(result.clarity_gaps);
+  issues = issues.slice(0, 3);
+
+  const strengths = strList(fit.aligns_well).slice(0, 3);
+  const priorities = fixes.slice(0, 3).map((f) => ({
+    issue: String(f.issue || '').trim(),
+    conf: String(f.confidence || '').trim(),
+  })).filter((f) => f.issue);
+
+  if (!issues.length && !strengths.length && !priorities.length) return '';
+
+  const headline = fit.growth_implication
+    ? esc(fit.growth_implication)
+    : (issues.length
+        ? `The biggest gap between your message and your customer: ${esc(issues[0])}`
+        : 'Your message and your customer evidence line up on the points we could test.');
+
+  const col = (cls, title, items, empty) => `
+    <div class="exec-col ${cls}">
+      <div class="ec-title">${esc(title)}</div>
+      ${items.length ? `<ul>${items.join('')}</ul>` : `<p class="exec-empty">${esc(empty)}</p>`}
+    </div>`;
+
+  return `
+    <div class="exec">
+      <div class="exec-eyebrow">Executive Summary</div>
+      <div class="exec-head">${headline}</div>
+      <div class="exec-grid">
+        ${col('issues', 'Top comms issues', issues.map((i) => `<li>${esc(i)}</li>`), 'No material disconnects found.')}
+        ${col('strengths', 'Strengths', strengths.map((i) => `<li>${esc(i)}</li>`), 'Nothing yet strong enough to call a strength.')}
+        ${col('priorities', 'Fix first', priorities.map((p) => `<li>${esc(p.issue)}${p.conf ? ` <span class="conf ${confClass(p.conf)}">${esc(p.conf)}</span>` : ''}</li>`), 'No priority fixes returned.')}
+      </div>
+    </div>`;
+}
+
+// Name the sources this audit actually read. Honest about the retrieval path:
+// the homepage is fetched server side, extra pages come from web search, and the
+// customer reality comes from the Customer Insight stage. No source is claimed
+// that the agent does not use.
+function renderSourcesPanel() {
+  if (!window.TFModule1) return;
+  const site = ($('site_url') && $('site_url').value.trim()) || (window.TFBrief ? TFBrief.get().website_url : '') || 'your website';
+  const items = [];
+
+  // fetchedChars is only known for a run this page just watched. A rehydrated
+  // report from an earlier session has no source telemetry, so claim only what
+  // is certain about it rather than inventing detail.
+  const liveRun = runSources.fetchedChars != null;
+
+  if (liveRun) {
+    items.push(runSources.fetchedChars > 0
+      ? `Your live homepage at ${site}, read directly (${runSources.fetchedChars.toLocaleString()} characters)`
+      : `Your website ${site}, via web search (the homepage could not be fetched directly)`);
+  } else {
+    items.push(`Your live message at ${site}`);
+  }
+
+  if (liveRun && runSources.queries.length) {
+    const shown = runSources.queries.slice(0, 5).map((q) => `"${q}"`).join(', ');
+    items.push(`${runSources.queries.length} web ${runSources.queries.length === 1 ? 'search' : 'searches'}: ${shown}${runSources.queries.length > 5 ? ', and more' : ''}`);
+  }
+
+  items.push(`Your Customer Insight report${runSources.insightDate ? ' from ' + runSources.insightDate : ''} (stage 1)`);
+
+  const extra = ($('extra_assets') && $('extra_assets').value.trim()) || '';
+  if (liveRun && extra) items.push('The extra messaging assets you pasted in');
+
+  TFModule1.renderSources($('m1Sources'), items, {
+    title: liveRun ? 'Sources analysed' : 'Sources analysed (from your saved report)',
+  });
 }
 
 function downloadPDF() {
