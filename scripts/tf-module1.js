@@ -35,7 +35,7 @@
       label: 'Marketing Diagnosis Report', href: '/diagnosis/',
       short: 'Diagnosis Report',
       examines: 'Everything above, pulled together. Your positioning, messaging, channels and offer, scored and ranked.',
-      provides: 'A marketing scorecard and a prioritised action plan.',
+      provides: 'An executive summary, the detail behind it with a real example under every point, and the direction we would take you in.',
     },
   ];
 

@@ -118,6 +118,50 @@ body::before {
 .dim-wrap { padding: 0.5rem 0; border-bottom: 0.5px solid var(--white-08); }
 .dim-wrap:last-child { border-bottom: none; }
 
+/* Carried-over brief: what the client already told us at the start of Module 1.
+   Read only by default. Nothing here is ever asked for a second time. */
+.brief-carry { border: 0.5px solid var(--white-20); background: var(--white-04); border-radius: 12px; padding: 1rem 1.15rem; margin-bottom: 1.1rem; }
+.brief-carry .bc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.brief-carry .bc-title { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); }
+.brief-carry .bc-edit { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: var(--white-40); text-decoration: none; border-bottom: 1px solid var(--white-20); cursor: pointer; }
+.brief-carry .bc-edit:hover { color: var(--purple-bright); border-color: var(--purple-border); }
+.bc-row { display: flex; gap: 12px; padding: 7px 0; border-bottom: 0.5px solid var(--white-08); font-size: 13px; line-height: 1.55; }
+.bc-row:last-child { border-bottom: none; }
+.bc-row .bc-k { flex: none; width: 128px; color: var(--white-40); }
+.bc-row .bc-v { flex: 1; color: var(--white); }
+.bc-row.missing .bc-v { color: var(--amber); }
+
+/* Detailed diagnosis: one bold headline claim, then the supporting detail. */
+.finding { padding: 1.35rem 0 1.5rem; border-bottom: 0.5px solid var(--white-08); }
+.finding:last-child { border-bottom: none; padding-bottom: 0.25rem; }
+.finding .f-head { font-size: 17px; font-weight: 600; line-height: 1.35; margin-bottom: 0.6rem; display: flex; align-items: flex-start; gap: 9px; flex-wrap: wrap; }
+.finding .f-exp { font-size: 14px; color: var(--white-60); line-height: 1.65; margin-bottom: 0.85rem; }
+.finding .f-ev { border-left: 2px solid var(--purple); background: var(--purple-glow); border-radius: 0 10px 10px 0; padding: 0.8rem 1rem; margin-bottom: 0.85rem; font-size: 14px; line-height: 1.6; }
+.finding .f-ev .f-quote { font-style: italic; color: var(--white); }
+.finding .f-ev .f-ref { color: var(--white); }
+.finding .f-ev .f-evwhat { font-size: 12.5px; line-height: 1.55; color: var(--white-60); margin-top: 8px; }
+.finding .f-ev cite { display: block; font-family: 'Geist Mono', monospace; font-style: normal; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-40); margin-top: 7px; }
+.finding .f-line { font-size: 14px; line-height: 1.65; color: var(--white-60); margin-bottom: 0.5rem; }
+.finding .f-do { color: var(--white); }
+.finding .f-lab { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); display: block; margin-bottom: 3px; }
+
+/* Executive summary: the first thing on the page, before any detail. */
+.exec .exec-diag { font-size: 15px; line-height: 1.7; color: var(--white); margin-bottom: 1.4rem; }
+.exec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.3rem; }
+@media (max-width: 620px) { .exec-grid { grid-template-columns: 1fr; } }
+.exec-col h4 { font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.6rem; }
+.exec-col.good h4 { color: var(--green); }
+.exec-col.bad h4 { color: var(--amber); }
+.exec-col ul { list-style: none; }
+.exec-col li { font-size: 13.5px; line-height: 1.6; color: var(--white-60); padding: 0 0 0 17px; margin-bottom: 0.5rem; position: relative; }
+.exec-col li::before { position: absolute; left: 0; font-size: 11px; }
+.exec-col.good li::before { content: '✓'; color: var(--green); }
+.exec-col.bad li::before { content: '!'; color: var(--amber); }
+.exec-block { border-top: 0.5px solid var(--white-08); padding-top: 1.1rem; margin-top: 0.2rem; }
+.exec-block + .exec-block { margin-top: 1.1rem; }
+.exec-block .f-lab { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); display: block; margin-bottom: 5px; }
+.exec-block p { font-size: 14px; line-height: 1.65; color: var(--white); }
+
 .item { padding: 0.85rem 0; border-bottom: 0.5px solid var(--white-08); }
 .item:last-child { border-bottom: none; }
 .item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
@@ -172,7 +216,7 @@ body::before {
   <div class="head">
     <div class="eyebrow">Two Fires · Intelligence Suite</div>
     <h1>Marketing <span>Diagnosis.</span></h1>
-    <p class="sub">A senior strategist's read on the state of your marketing. This is the Orchestrator: it pulls together what your earlier tools already found, diagnoses your positioning, messaging, channels and offer, then hands you a prioritised plan. Built on 30 years of brand strategy.</p>
+    <p class="sub">A senior strategist's read on the state of your marketing, in plain English. It pulls together your brief and everything your first three stages found, backs every point with a real example from your own material, and finishes with the direction we would take you in. Built on 30 years of brand strategy.</p>
   </div>
 
   <!-- INTAKE -->
@@ -191,26 +235,36 @@ body::before {
       <label for="company">Business name</label>
       <input type="text" id="company" placeholder="Brightwater Plumbing">
     </div>
-    <div class="field">
-      <label for="primary_goal">What do you most want your marketing to achieve right now?</label>
-      <textarea id="primary_goal" rows="2" placeholder="e.g. Generate more qualified residential booking enquiries from our local area"></textarea>
+    <!-- Carried over from the shared Module 1 brief. Read only: this stage asks
+         for nothing the client has already given us. -->
+    <div class="brief-carry" id="briefCarry"></div>
+
+    <!-- Revealed only if the brief is genuinely missing something, or if the
+         client chooses to edit it. Hidden by default, so a complete brief is
+         never re-presented as a question. -->
+    <div id="briefEdit" style="display:none;">
+      <div class="field">
+        <label for="primary_goal">What you want your marketing to achieve</label>
+        <textarea id="primary_goal" rows="2" placeholder="e.g. Generate more qualified residential booking enquiries from our local area"></textarea>
+        <div class="hint">Saved back to your brief, so no other stage asks again.</div>
+      </div>
+      <div class="field">
+        <label for="current_channels">Where you market today</label>
+        <input type="text" id="current_channels" placeholder="e.g. Google Business Profile, Instagram, word of mouth">
+      </div>
     </div>
-    <div class="field">
-      <label for="current_channels">Where do you market today?</label>
-      <input type="text" id="current_channels" placeholder="e.g. Google Business Profile, Instagram, word of mouth">
-    </div>
-    <p style="font-size:12px;color:var(--white-40);line-height:1.6;margin:0 0 0.5rem;">That is all we need. We read the rest from your earlier tools: your Customer Insight, Messaging Audit, and Brand Ladder. The more of those you have run, the sharper this gets.</p>
+
+    <p style="font-size:12px;color:var(--white-40);line-height:1.6;margin:0 0 0.5rem;">Nothing to retype. We use the brief above, plus everything your Customer Insight, Communications Audit and Competitor and Category Review already found.</p>
     <button class="btn" id="run-btn" onclick="runDiagnosis()">Run my diagnosis</button>
     <div class="form-error" id="form-error"></div>
-    <div class="hint" style="font-size:11px;color:var(--white-40);margin-top:12px;">This takes under a minute. We synthesise what your earlier tools already found.</div>
+    <div class="hint" style="font-size:11px;color:var(--white-40);margin-top:12px;">This takes about two minutes. It is one long read of everything your earlier stages found, written up in full.</div>
   </div>
 
   <!-- PROGRESS -->
   <div class="card" id="progress">
     <div class="progress-stages">
-      <div class="stage-chip" id="chip-load_context">1 · Read your tools</div>
-      <div class="stage-chip" id="chip-diagnose">2 · Diagnose</div>
-      <div class="stage-chip" id="chip-prioritise">3 · Prioritise</div>
+      <div class="stage-chip" id="chip-load_context">1 · Read your earlier stages</div>
+      <div class="stage-chip" id="chip-diagnose">2 · Write your report</div>
     </div>
     <div class="progress-log" id="progress-log"></div>
   </div>
@@ -252,6 +306,26 @@ function esc(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// Where a finding or a priority traces back to. The Brand Benefit Ladder is not
+// here on purpose: it is a standalone portal tool, not a Module 1 stage, and
+// this report does not read it.
+const SRC_LABEL = {
+  customer_insight: 'From Insight',
+  messaging_audit: 'From Comms Audit',
+  competitor_category: 'From Competitor Review',
+  brief: 'From your brief',
+  inferred: 'Synthesised',
+};
+function srcPill(s) {
+  const v = String(s || '').toLowerCase();
+  if (!v || !SRC_LABEL[v]) return '';
+  return `<span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;padding:2px 8px;border-radius:12px;border:0.5px solid var(--white-20);color:var(--white-40);margin-left:6px;white-space:nowrap;">${esc(SRC_LABEL[v])}</span>`;
+}
+function evidenceLabel(s) {
+  const v = String(s || '').toLowerCase();
+  return SRC_LABEL[v] || '';
+}
+
 function scoreColor(n) {
   const v = Number(n) || 0;
   if (v >= 7) return 'var(--green)';
@@ -275,26 +349,38 @@ function parseSSE(raw) {
 
 async function runDiagnosis() {
   clearFormError();
+
+  // If the edit panel is open the client has just typed something, so fold it
+  // back into the shared brief first. Otherwise nothing on this page feeds the
+  // brief: the brief feeds the page.
+  try { if (window.TFBrief && $('briefEdit').style.display !== 'none') TFBrief.captureForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+
+  const b = (window.TFBrief ? TFBrief.get() : {});
   const payload = {
     name: $('name').value.trim(),
     email: $('email').value.trim(),
     company: $('company').value.trim(),
+    // Every one of these was collected once, in the Module 1 brief. This stage
+    // carries them through and re-asks for none of them.
     brief: {
-      primary_goal: $('primary_goal').value.trim(),
-      current_channels: $('current_channels').value.trim(),
-      // The backend reads region too. Take it from the shared Module 1 brief
-      // rather than asking for it a fourth time.
-      region: (window.TFBrief ? TFBrief.get().region : ''),
+      primary_goal: b.primary_goal || '',
+      current_channels: b.current_channels || '',
+      region: b.region || '',
+      product_service: b.product_service || '',
+      market_category: b.market_category || '',
+      website_url: b.website_url || '',
+      offer_description: b.offer_description || '',
     },
   };
 
   // Client-side validation mirrors the server's friendly minimums.
   if (!payload.name || !payload.email || !payload.company) return showFormError('Please add your name, email, and business name.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) return showFormError('Please enter a valid email address.');
-  if (payload.brief.primary_goal.length < 10) return showFormError('Please give a little more detail on your primary goal.');
-  if (payload.brief.current_channels.length < 2) return showFormError('Please tell us where you currently market.');
+  if (payload.brief.primary_goal.length < 10 || payload.brief.current_channels.length < 2) {
+    revealBriefEdit();
+    return showFormError('Your brief is missing a detail we need. Fill it in above and we will save it back to your brief.');
+  }
   try { if (window.TFIdentity) TFIdentity.set({ name: payload.name, email: payload.email, company: payload.company }); } catch (e) { /* ignore */ }
-  try { if (window.TFBrief) TFBrief.captureForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
 
   const btn = $('run-btn');
   btn.disabled = true;
@@ -303,15 +389,38 @@ async function runDiagnosis() {
   $('results').classList.remove('visible');
   $('results').innerHTML = '';
   $('progress-log').innerHTML = '';
-  setChip('load_context', 'active'); setChip('diagnose', ''); setChip('prioritise', '');
-  logLine('Reading what your earlier tools already found…');
+  setChip('load_context', 'active'); setChip('diagnose', '');
+  logLine('Reading what your earlier stages already found…');
+
+  // A full report takes around two minutes to write, so there is deliberately NO
+  // total time limit: a long run is a working run, not a stuck one. A run can
+  // take five minutes and still succeed.
+  //
+  // What is guarded is silence, not duration. The server sends a keep-alive every
+  // 15 seconds and a status event at each stage, so the timer below is reset long
+  // before it expires on any run that is still producing. It can only fire when
+  // the connection is genuinely dead, and then we fail cleanly instead of leaving
+  // the client watching a spinner forever.
+  //
+  // 180 seconds is 12 missed heartbeats. Nothing short of a dropped connection
+  // gets near it.
+  const SSE_IDLE_MS = 180000;
+  const ctrl = new AbortController();
+  let idleTimer = null;
+  const bumpIdle = () => {
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => ctrl.abort(), SSE_IDLE_MS);
+  };
+  const stopIdle = () => { if (idleTimer) clearTimeout(idleTimer); idleTimer = null; };
 
   try {
+    bumpIdle();
     const res = await fetch(API_BASE + '/diagnose', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify(payload),
+      signal: ctrl.signal,
     });
 
     if (!res.ok || !res.body) {
@@ -329,6 +438,7 @@ async function runDiagnosis() {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
+      bumpIdle();
       buffer += decoder.decode(value, { stream: true });
       let sep;
       while ((sep = buffer.indexOf('\n\n')) !== -1) {
@@ -348,6 +458,7 @@ async function runDiagnosis() {
           if (data.message) logLine(data.message);
         } else if (event === 'done') {
           setChip(lastStage, 'done');
+          stopIdle();
           try { if (window.TFBrief) TFBrief.clearFresh('diagnosis'); } catch (e) { /* ignore */ }
           renderResults(data.result);
         } else if (event === 'error') {
@@ -356,32 +467,140 @@ async function runDiagnosis() {
       }
     }
   } catch (err) {
-    showFormError(err.message || 'Something went wrong. Please try again.');
+    // An abort here means the connection went silent, not that the diagnosis
+    // failed: the run may well have finished server side. Say so, and point at
+    // the reload that will pick the finished report up.
+    const msg = (err && err.name === 'AbortError')
+      ? 'The connection dropped while your diagnosis was running. It may have finished anyway. Reload this page to pick it up.'
+      : (err.message || 'Something went wrong. Please try again.');
+    showFormError(msg);
     $('progress').classList.remove('visible');
   } finally {
+    stopIdle();
     btn.disabled = false;
     btn.textContent = 'Run my diagnosis';
   }
 }
 
+// Old reports were stored in the previous shape (headline/summary, strengths,
+// gaps, risks, and a separate action_plan). Those are never rewritten or
+// deleted, so a returning client's stored report is mapped into the current
+// shape here rather than failing to render. Mirrors normaliseDiagnosis on the
+// server, so the page and the PDF always agree.
+function normaliseResult(result) {
+  const r = result || {};
+  const d = r.diagnosis || {};
+  if (d.executive_summary || d.sections || d.strategic_direction) {
+    return {
+      executive_summary: d.executive_summary || {},
+      scorecard: d.scorecard || [],
+      sections: d.sections || [],
+      strategic_direction: d.strategic_direction || {},
+      legacy: false,
+    };
+  }
+  const plan = r.action_plan || {};
+  // No evidence was stored against legacy findings, so they are marked as
+  // references. We never manufacture a quote after the fact.
+  const asSection = (item, severity) => ({
+    headline: item.title || '',
+    explanation: item.detail || '',
+    evidence: { type: 'reference', quote: '', detail: '', source: item.source || '' },
+    why_it_matters: '',
+    recommended_action: '',
+    severity: severity || String(item.severity || '').toLowerCase() || '',
+  });
+  return {
+    executive_summary: {
+      overall_diagnosis: [d.headline, d.summary].filter(Boolean).join(' '),
+      overall_health_score: d.overall_health_score != null ? d.overall_health_score : null,
+      key_strengths: (d.strengths || []).map((s) => s.title || '').filter(Boolean),
+      key_issues: (d.gaps || []).map((g) => g.title || '').filter(Boolean),
+      main_implication: '',
+      recommended_direction: plan.ninety_day_focus || '',
+    },
+    scorecard: d.dimensions || [],
+    sections: []
+      .concat((d.gaps || []).map((g) => asSection(g)))
+      .concat((d.risks || []).map((x) => asSection(x, 'medium')))
+      .concat((d.strengths || []).map((s) => asSection(s, 'low'))),
+    strategic_direction: {
+      current_position: '',
+      needs_attention: (d.risks || []).map((x) => x.title || '').filter(Boolean),
+      recommended_next_move: '',
+      ninety_day_focus: plan.ninety_day_focus || '',
+      priorities: plan.priorities || [],
+      quick_wins: plan.quick_wins || [],
+    },
+    legacy: true,
+  };
+}
+
 function renderResults(result) {
   if (!result) return;
-  const d = result.diagnosis || {};
-  const plan = result.action_plan || {};
+  const d = normaliseResult(result);
+  const es = d.executive_summary || {};
+  const sd = d.strategic_direction || {};
   const inputsPresent = result.inputs_present || {};
   const stillNeed = result.what_we_still_need || [];
-  const score = d.overall_health_score;
+  const score = es.overall_health_score;
   const col = scoreColor(score);
 
-  // Source attribution pill: shows which prior tool a finding traces to.
-  const srcLabel = { customer_insight: 'From Insight', messaging_audit: 'From Audit', brand_ladder: 'From Ladder', inferred: 'Synthesised' };
-  const srcPill = (s) => {
-    const v = String(s || '').toLowerCase();
-    if (!v || !srcLabel[v]) return '';
-    return `<span style="font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;padding:2px 8px;border-radius:12px;border:0.5px solid var(--white-20);color:var(--white-40);margin-left:6px;white-space:nowrap;">${esc(srcLabel[v])}</span>`;
-  };
+  const bullets = (arr) => (arr || []).filter(Boolean).map((x) => `<li>${esc(x)}</li>`).join('');
 
-  const dims = (d.dimensions || []).map((dim) => {
+  // A. Executive summary. Everything a reader needs before any detail.
+  const execCard = `
+    <div class="card exec">
+      <div class="section-title">Executive Summary</div>
+      <div class="score-hero" style="margin-bottom:1.4rem;">
+        <div class="score-ring" style="border-color:${col};">
+          <div class="num" style="color:${col};">${esc(score != null ? score : '–')}</div>
+          <div class="out">/ 10</div>
+        </div>
+        <div style="flex:1;min-width:240px;">
+          ${es.overall_diagnosis ? `<div class="exec-diag" style="margin-bottom:0;">${esc(es.overall_diagnosis)}</div>` : ''}
+        </div>
+      </div>
+      ${(es.key_strengths || []).length || (es.key_issues || []).length ? `
+      <div class="exec-grid">
+        ${(es.key_strengths || []).length ? `<div class="exec-col good"><h4>Key strengths</h4><ul>${bullets(es.key_strengths)}</ul></div>` : ''}
+        ${(es.key_issues || []).length ? `<div class="exec-col bad"><h4>Key issues</h4><ul>${bullets(es.key_issues)}</ul></div>` : ''}
+      </div>` : ''}
+      ${es.main_implication ? `<div class="exec-block"><span class="f-lab">What this means</span><p>${esc(es.main_implication)}</p></div>` : ''}
+      ${es.recommended_direction ? `<div class="exec-block"><span class="f-lab">Recommended direction</span><p>${esc(es.recommended_direction)}</p></div>` : ''}
+    </div>`;
+
+  // B. The detail. One bold headline claim per finding, each carrying a real
+  // example. Where the report had no verbatim wording it names the finding
+  // instead: a quote is never invented to fill the space.
+  const sections = (d.sections || []).map((s) => {
+    const sev = String(s.severity || '').toLowerCase();
+    const badge = sev ? `<span class="sev ${esc(sev)}">${esc(sev)}</span>` : '';
+    const ev = s.evidence || {};
+    const evSrc = evidenceLabel(ev.source);
+    let evHtml = '';
+    // The quote reads first and largest. What it is an example of sits under it
+    // in normal sentence case; only the short source label is set in the small
+    // uppercase cite, so a long detail never becomes a wall of capitals.
+    if (ev.quote) {
+      evHtml = `<div class="f-ev"><div class="f-quote">“${esc(ev.quote)}”</div>` +
+        `${ev.detail ? `<div class="f-evwhat">${esc(ev.detail)}</div>` : ''}` +
+        `${evSrc ? `<cite>${esc(evSrc)}</cite>` : ''}</div>`;
+    } else if (ev.detail) {
+      evHtml = `<div class="f-ev"><div class="f-ref">${esc(ev.detail)}</div>` +
+        `<cite>${esc([evSrc, 'no direct wording available'].filter(Boolean).join(' · '))}</cite></div>`;
+    }
+    return `<div class="finding">
+      <h3 class="f-head">${esc(s.headline)}${badge}</h3>
+      ${s.explanation ? `<p class="f-exp">${esc(s.explanation)}</p>` : ''}
+      ${evHtml}
+      ${s.why_it_matters ? `<p class="f-line"><span class="f-lab">Why it matters</span>${esc(s.why_it_matters)}</p>` : ''}
+      ${s.recommended_action ? `<p class="f-line f-do"><span class="f-lab">Do this</span>${esc(s.recommended_action)}</p>` : ''}
+    </div>`;
+  }).join('');
+
+  // Scorecard, demoted below the summary and the detail.
+  const dims = (d.scorecard || []).map((dim) => {
     const pct = Math.max(0, Math.min(100, (Number(dim.score) || 0) * 10));
     const c = scoreColor(dim.score);
     return `<div class="dim-wrap">
@@ -394,19 +613,8 @@ function renderResults(result) {
     </div>`;
   }).join('');
 
-  const strengths = (d.strengths || []).map((s) =>
-    `<div class="item"><h4>${esc(s.title)}${srcPill(s.source)}</h4><p>${esc(s.detail)}</p></div>`).join('');
-
-  const gaps = (d.gaps || []).map((g) => {
-    const sev = (g.severity || '').toLowerCase();
-    const badge = sev ? `<span class="sev ${esc(sev)}">${esc(sev)}</span>` : '';
-    return `<div class="item"><h4>${esc(g.title)} ${badge}${srcPill(g.source)}</h4><p>${esc(g.detail)}</p></div>`;
-  }).join('');
-
-  const risks = (d.risks || []).map((r) =>
-    `<div class="item"><h4>${esc(r.title)}${srcPill(r.source)}</h4><p>${esc(r.detail)}</p></div>`).join('');
-
-  const prios = (plan.priorities || []).map((p, i) => {
+  // C. Final strategic direction.
+  const prios = (sd.priorities || []).map((p, i) => {
     const imp = (p.impact || '').toLowerCase();
     const eff = (p.effort || '').toLowerCase();
     return `<div class="prio">
@@ -421,14 +629,24 @@ function renderResults(result) {
       </div>
     </div>`;
   }).join('');
+  const quickWins = (sd.quick_wins || []).map((q) => `<li>${esc(q)}</li>`).join('');
 
-  const quickWins = (plan.quick_wins || []).map((q) => `<li>${esc(q)}</li>`).join('');
+  const directionCard = (sd.current_position || (sd.needs_attention || []).length || sd.recommended_next_move || prios)
+    ? `<div class="card">
+        <div class="section-title">Strategic Direction</div>
+        ${sd.current_position ? `<div class="exec-block" style="border-top:none;padding-top:0;"><span class="f-lab">Where you stand now</span><p>${esc(sd.current_position)}</p></div>` : ''}
+        ${(sd.needs_attention || []).length ? `<div class="exec-block"><span class="f-lab">What needs attention</span><ul class="qw" style="margin-top:6px;">${bullets(sd.needs_attention)}</ul></div>` : ''}
+        ${sd.recommended_next_move ? `<div class="exec-block"><span class="f-lab">Recommended next move</span><p>${esc(sd.recommended_next_move)}</p></div>` : ''}
+        ${prios ? `<div class="section-title" style="margin:1.75rem 0 0.5rem;">Priorities</div>${prios}` : ''}
+        ${quickWins ? `<div class="section-title" style="margin-top:1.5rem;">Quick Wins</div><ul class="qw">${quickWins}</ul>` : ''}
+      </div>`
+    : '';
 
-  // Inputs-read panel: show the client exactly which prior tools were synthesised.
+  // What we read: the three Module 1 stages this synthesis is built on.
   const inputMeta = [
     { key: 'customer_insight', label: 'Customer Insight' },
-    { key: 'messaging_audit', label: 'Messaging Audit' },
-    { key: 'brand_ladder', label: 'Brand Ladder' },
+    { key: 'messaging_audit', label: 'Communications Audit' },
+    { key: 'competitor_category', label: 'Competitor and Category' },
   ];
   const inputBadges = inputMeta.map((m) => {
     const on = !!inputsPresent[m.key];
@@ -438,32 +656,16 @@ function renderResults(result) {
   }).join(' ');
   const stillNeedHtml = stillNeed.length
     ? `<p style="font-size:12px;color:var(--white-40);line-height:1.6;margin-top:0.85rem;">To sharpen this further, run: ${stillNeed.map((s) => esc(s)).join(' &nbsp;·&nbsp; ')}</p>`
-    : `<p style="font-size:12px;color:var(--green);line-height:1.6;margin-top:0.85rem;">All three inputs were available. This is the full-strength diagnosis.</p>`;
-  const inputsPanel = `<div class="card"><div class="section-title">What we read</div><div style="display:flex;gap:8px;flex-wrap:wrap;">${inputBadges}</div>${stillNeedHtml}</div>`;
+    : `<p style="font-size:12px;color:var(--green);line-height:1.6;margin-top:0.85rem;">All three stages were available. This is the full-strength diagnosis.</p>`;
+  const inputsPanel = `<div class="card"><div class="section-title">What we read</div><div style="display:flex;gap:8px;flex-wrap:wrap;">${inputBadges}</div>${stillNeedHtml}${briefReadHtml(result.brief)}</div>`;
 
   const html = `
-    <div class="card">
-      <div class="score-hero">
-        <div class="score-ring" style="border-color:${col};">
-          <div class="num" style="color:${col};">${esc(score != null ? score : '–')}</div>
-          <div class="out">/ 10</div>
-        </div>
-        <div style="flex:1;min-width:240px;">
-          ${d.headline ? `<div class="headline">${esc(d.headline)}</div>` : ''}
-          ${d.summary ? `<div class="summary">${esc(d.summary)}</div>` : ''}
-        </div>
-      </div>
-    </div>
-
-    ${plan.ninety_day_focus ? `<div class="focus-banner"><strong>Your 90-day focus:</strong> ${esc(plan.ninety_day_focus)}</div>` : ''}
-
-    ${inputsPanel}
-
+    ${execCard}
+    ${sections ? `<div class="card"><div class="section-title">The Detail</div>${sections}</div>` : ''}
     ${dims ? `<div class="card"><div class="section-title">Marketing Scorecard</div>${dims}</div>` : ''}
-    ${strengths ? `<div class="card"><div class="section-title">Strengths</div>${strengths}</div>` : ''}
-    ${gaps ? `<div class="card"><div class="section-title">Gaps</div>${gaps}</div>` : ''}
-    ${risks ? `<div class="card"><div class="section-title">Risks</div>${risks}</div>` : ''}
-    ${prios ? `<div class="card"><div class="section-title">Prioritised Action Plan</div>${prios}${quickWins ? `<div class="section-title" style="margin-top:1.5rem;">Quick Wins</div><ul class="qw">${quickWins}</ul>` : ''}</div>` : ''}
+    ${directionCard}
+    ${sd.ninety_day_focus ? `<div class="focus-banner"><strong>Your 90-day focus:</strong> ${esc(sd.ninety_day_focus)}</div>` : ''}
+    ${inputsPanel}
 
     <div id="m1End"></div>
   `;
@@ -484,6 +686,63 @@ function renderResults(result) {
   }
   appendWorkControls(r);
   r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// The brief this report was built on, restated at the bottom of the What we read
+// panel. Carried-over context, never a question.
+function briefReadHtml(brief) {
+  const b = brief || {};
+  const rows = [
+    ['Your goal', b.primary_goal],
+    ['Where you market', b.current_channels],
+    ['Region', b.region],
+  ].filter((r) => r[1]);
+  if (!rows.length) return '';
+  return `<p style="font-size:12px;color:var(--white-40);line-height:1.7;margin-top:0.85rem;border-top:0.5px solid var(--white-08);padding-top:0.85rem;">Built on the brief you gave us: ` +
+    rows.map((r) => `<strong style="color:var(--white-60);font-weight:400;">${esc(r[0].toLowerCase())}</strong> ${esc(r[1])}`).join(' &nbsp;·&nbsp; ') + `.</p>`;
+}
+
+// ---- Carried-over brief ----
+// The client filled the Module 1 brief once. This stage shows it back to them as
+// context they already gave us, and asks for none of it again. The edit link is
+// there so a complete brief is still correctable, not so it can be re-collected.
+function renderBriefCarry() {
+  const el = $('briefCarry');
+  if (!el) return;
+  const b = (window.TFBrief ? TFBrief.get() : {});
+  const rows = [
+    ['Your goal', b.primary_goal, true],
+    ['Where you market', b.current_channels, true],
+    ['Product or service', b.product_service, false],
+    ['Market or category', b.market_category, false],
+    ['Region', b.region, false],
+    ['Website', b.website_url, false],
+  ];
+  const shown = rows.filter((r) => r[1] || r[2]);
+  const body = shown.map((r) => {
+    const missing = !r[1];
+    return `<div class="bc-row${missing ? ' missing' : ''}"><div class="bc-k">${esc(r[0])}</div><div class="bc-v">${missing ? 'Not in your brief yet' : esc(r[1])}</div></div>`;
+  }).join('');
+  el.innerHTML =
+    `<div class="bc-head">` +
+      `<span class="bc-title">From your brief · nothing to retype</span>` +
+      `<a class="bc-edit" id="bcEdit">Edit</a>` +
+    `</div>${body}`;
+  const edit = $('bcEdit');
+  if (edit) edit.addEventListener('click', revealBriefEdit);
+
+  // A brief missing the essentials opens the fields straight away, so the client
+  // is never blocked, but a complete brief is never turned back into a question.
+  if (!b.primary_goal || !b.current_channels) revealBriefEdit();
+}
+
+function revealBriefEdit() {
+  const box = $('briefEdit');
+  if (!box || box.style.display !== 'none') return;
+  box.style.display = '';
+  try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  const goal = $('primary_goal');
+  if (goal && !goal.value.trim()) goal.focus();
 }
 
 function downloadPDF() {
@@ -550,9 +809,10 @@ async function loadVersions() {
 function startNewVersion() {
   $('results').innerHTML = ''; $('results').classList.remove('visible');
   $('intake').style.display = '';
-  if ($('primary_goal')) $('primary_goal').value = '';
-  if ($('current_channels')) $('current_channels').value = '';
-  try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  // The brief carries straight over into the new version. Nothing is cleared and
+  // nothing is asked again.
+  $('briefEdit').style.display = 'none';
+  renderBriefCarry();
   checkInputs();
   $('intake').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -588,7 +848,7 @@ const M1_BRIEF_MAP = { 'primary_goal': 'primary_goal', 'current_channels': 'curr
   } catch (e) { window.location.href = '/portal.html'; return; }
 
   prefillIdentity();
-  try { if (window.TFBrief) TFBrief.fillForm(M1_BRIEF_MAP); } catch (e) { /* ignore */ }
+  renderBriefCarry();
   renderStepper();
   await checkInputs();
   await rehydrate();
@@ -620,7 +880,7 @@ async function checkInputs() {
     const upstream = [
       { key: 'customer_insight', label: 'Customer Insight', href: '/insight/' },
       { key: 'messaging_audit', label: 'Communications Audit', href: '/audit/' },
-      { key: 'brand_ladder', label: 'Brand Ladder', href: '/ladder/index.html' },
+      { key: 'competitor_category', label: 'Competitor and Category Review', href: '/competitor/' },
     ];
     const have = upstream.filter((u) => present[u.key]);
     const missing = upstream.filter((u) => !present[u.key]);
