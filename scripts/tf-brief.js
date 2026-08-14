@@ -70,7 +70,10 @@
     return !!(b.product_service && b.market_category && b.region);
   }
 
-  // Which required core fields are still blank, for the onboarding page.
+  // Which required core fields are still blank, for the onboarding page. The goal
+  // and channels are here because the final stage cannot run without them: left
+  // out of the core they were skipped at the brief and then asked for again at
+  // the Diagnosis, which is the one thing the shared brief exists to prevent.
   function missingCore() {
     var b = get();
     var core = [
@@ -78,6 +81,8 @@
       ['market_category', 'Market or category'],
       ['region', 'Region'],
       ['website_url', 'Website'],
+      ['primary_goal', 'What you want marketing to achieve'],
+      ['current_channels', 'Where you market today'],
     ];
     return core.filter(function (c) { return !b[c[0]]; }).map(function (c) { return c[1]; });
   }

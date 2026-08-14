@@ -197,6 +197,19 @@ footer a:hover { color: var(--purple-bright); }
           <label for="m-customer">Who you think your ideal customer is <span class="opt">(recommended)</span></label>
           <textarea id="m-customer" rows="3" placeholder="Describe them in your own words. The Customer Insight agent tests this against real evidence."></textarea>
         </div>
+        <!-- Stage 4 needs both of these, so they belong in the main brief. Left in
+             the optional panel they were easy to skip, and the client then met them
+             again as questions at the last stage. -->
+        <div class="row2">
+          <div class="field">
+            <label for="m-goal">What you want marketing to achieve <span class="req">*</span></label>
+            <textarea id="m-goal" rows="2" placeholder="e.g. More qualified residential enquiries from our local area"></textarea>
+          </div>
+          <div class="field">
+            <label for="m-channels">Where you market today <span class="req">*</span></label>
+            <input id="m-channels" type="text" placeholder="e.g. Google Business Profile, Instagram, word of mouth">
+          </div>
+        </div>
 
         <button type="button" class="opt-toggle" id="optToggle"><span class="chev">›</span> Add more context (optional, sharpens every stage)</button>
         <div class="opt-fields" id="optFields">
@@ -223,16 +236,6 @@ footer a:hover { color: var(--purple-bright); }
           <div class="field">
             <label for="m-assets">Extra messaging to audit <span class="opt">(optional)</span></label>
             <textarea id="m-assets" rows="3" placeholder="Homepage copy, ad headlines, email subject lines. Useful if your site is new or not yet indexed."></textarea>
-          </div>
-          <div class="row2">
-            <div class="field">
-              <label for="m-goal">What you want marketing to achieve <span class="opt">(optional)</span></label>
-              <textarea id="m-goal" rows="2" placeholder="e.g. More qualified residential enquiries from our local area"></textarea>
-            </div>
-            <div class="field">
-              <label for="m-channels">Where you market today <span class="opt">(optional)</span></label>
-              <input id="m-channels" type="text" placeholder="e.g. Google Business Profile, Instagram, word of mouth">
-            </div>
           </div>
         </div>
 
@@ -354,7 +357,7 @@ $('briefForm').addEventListener('submit', (e) => {
   const b = saveBrief();
   const missing = TFBrief.missingCore();
   if (missing.length) {
-    showError('Still needed before stage 1 can run: ' + missing.join(', ') + '.');
+    showError('Still needed before Module 1 can run: ' + missing.join(', ') + '.');
     return;
   }
   window.location.href = firstIncomplete().href;
