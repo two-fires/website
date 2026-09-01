@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <meta name="description" content="A field study across Sydney, the Central Coast and the Hunter: which law firms the AI answer engines actually recommend, and the established firms they have never heard of.">
+  <meta property="og:title" content="Two Fires · We Asked the AI to Find a Lawyer. 92 Times.">
+  <meta property="og:description" content="A field study across Sydney, the Central Coast and the Hunter: which law firms the AI answer engines actually recommend, and the established firms they have never heard of.">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-09-01">
+  <meta property="article:section" content="Case Studies">
+  <title>Two Fires · We Asked the AI to Find a Lawyer. 92 Times.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-soft: #0B0B14;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --surface-card: #14091E;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #FBFAFE;
+      --text-muted: #9F9AB0;
+      --text-faint: #5E5868;
+      --text-on-light: #0A0612;
+      --text-muted-on-light: #5B5267;
+      --light-surface: #F7F4FC;
+
+      --purple-deep: #6B21A8;
+      --purple: #A855F7;
+      --purple-bright: #C4A8FF;
+      --purple-glow: rgba(168, 85, 247, 0.55);
+      --purple-glow-soft: rgba(168, 85, 247, 0.25);
+      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+
+      --font-display: 'DM Sans', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+
+      --max-w: 1140px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.25), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 100% 90%, rgba(168, 85, 247, 0.15), transparent 60%),
+        radial-gradient(ellipse 60% 60% at 0% 70%, rgba(168, 85, 247, 0.08), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: ""; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+
+    /* Header */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 0;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(5, 5, 8, 0.7);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); cursor: pointer; }
+    .brand-name {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .nav { display: flex; gap: 28px; align-items: center; }
+    .nav a {
+      font-family: var(--font-body); font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; cursor: pointer; transition: color 0.25s ease;
+    }
+    .nav a:hover { color: var(--text); }
+    .nav a.active { color: var(--purple-bright); }
+    .nav-cta {
+      font-family: var(--font-body); font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 10px 20px; border-radius: 999px; border: 1px solid var(--purple);
+      color: var(--purple-bright); cursor: pointer;
+      background: var(--purple-soft-fill);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .nav-cta:hover {
+      background: var(--purple); color: white;
+      box-shadow: 0 0 24px var(--purple-glow);
+    }
+
+    main { padding-top: 185px; position: relative; z-index: 2; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ============================ CASE STUDY HERO ============================ */
+    .cs-hero {
+      padding: 56px 0 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cs-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      margin-bottom: 36px;
+      transition: color 0.25s ease;
+      opacity: 0; animation: fadeUp 0.8s ease 0.05s forwards;
+    }
+    .cs-back:hover { color: var(--purple-bright); }
+
+    .cs-eyebrow {
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 28px;
+      display: inline-flex; align-items: center; gap: 12px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.1s forwards;
+    }
+    .cs-eyebrow::before {
+      content: ""; width: 24px; height: 1px; background: var(--purple);
+    }
+
+    .cs-hero h1 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.4rem, 5.5vw, 4.4rem); line-height: 1.04;
+      letter-spacing: -0.025em; margin-bottom: 28px;
+      max-width: 18ch;
+      opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .cs-hero h1 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+      letter-spacing: -0.01em;
+    }
+
+    .cs-lede {
+      color: var(--text-muted); max-width: 60ch;
+      margin-bottom: 44px; font-size: clamp(1.05rem, 1.4vw, 1.15rem);
+      line-height: 1.6;
+      opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .cs-meta {
+      display: flex; flex-wrap: wrap; gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 720px;
+      opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
+    }
+    .cs-meta-item {
+      flex: 1; min-width: 140px;
+      padding: 18px 24px;
+      border-right: 1px solid var(--border);
+    }
+    .cs-meta-item:last-child { border-right: none; }
+    .cs-meta-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-faint); margin-bottom: 6px;
+    }
+    .cs-meta-value {
+      font-family: var(--font-display); font-size: 1rem;
+      color: var(--text); font-weight: 500;
+    }
+
+    /* ============================ BODY SECTIONS ============================ */
+    .section { padding: 80px 0; position: relative; z-index: 2; }
+    .section-light {
+      background: var(--light-surface);
+      color: var(--text-on-light);
+    }
+
+    .section-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 28px;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .section-label::before {
+      content: ""; width: 24px; height: 1px; background: var(--purple);
+    }
+    .section-light .section-label { color: var(--purple-deep); }
+    .section-light .section-label::before { background: var(--purple-deep); }
+
+    .section h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 28px;
+    }
+    .section h2 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 30px var(--purple-glow-soft);
+    }
+    .section-light h2 em {
+      color: var(--purple-deep);
+      text-shadow: none;
+    }
+
+    .body-copy {
+      font-size: 1.05rem; line-height: 1.7;
+      max-width: 68ch;
+    }
+    .body-copy p { margin-bottom: 20px; }
+    .body-copy p:last-child { margin-bottom: 0; }
+
+    .section-light .body-copy { color: var(--text-on-light); }
+    .section-light .body-copy p { color: var(--text-muted-on-light); }
+
+    /* ============================ TWO FIRES WORK CARDS ============================ */
+    .work-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-top: 8px;
+    }
+    @media (max-width: 800px) { .work-grid { grid-template-columns: 1fr; } }
+
+    .work-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--purple);
+      border-radius: 6px;
+      padding: 36px 32px;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.04);
+    }
+
+    .work-card-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .work-card h3 {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+      margin-bottom: 20px; line-height: 1.1;
+    }
+    .work-list {
+      list-style: none; display: flex; flex-direction: column; gap: 12px;
+    }
+    .work-list li {
+      font-size: 0.95rem; line-height: 1.55;
+      color: var(--text-muted);
+      padding-left: 20px; position: relative;
+    }
+    .work-list li::before {
+      content: "-";
+      position: absolute; left: 0;
+      color: var(--purple); font-size: 0.85rem;
+    }
+
+    /* ============================ RESULTS STATS ============================ */
+    .results-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-top: 8px;
+    }
+    @media (max-width: 900px) { .results-grid { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 28px;
+      position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ""; position: absolute;
+      top: 0; left: 0; width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
+    }
+    .stat-number {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(2.8rem, 5vw, 3.8rem);
+      line-height: 1; letter-spacing: -0.02em;
+      color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+      margin-bottom: 12px;
+    }
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: 1rem; line-height: 1.45;
+      color: var(--text); font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .stat-context {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    /* ============================ PULLQUOTE ============================ */
+    .pullquote {
+      background: var(--surface-card);
+      border-left: 3px solid var(--purple);
+      padding: 32px 36px;
+      border-radius: 4px;
+      max-width: 80ch;
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.08);
+    }
+    .pullquote .quote {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+      line-height: 1.5; color: var(--text);
+      margin-bottom: 20px;
+    }
+    .pullquote .citation {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600;
+    }
+
+    /* ============================ TIMELINE ============================ */
+    .timeline {
+      display: flex; flex-direction: column; gap: 0;
+      border-left: 1px solid var(--border);
+      padding-left: 32px;
+      margin-top: 8px;
+    }
+    .timeline-item {
+      position: relative; padding-bottom: 36px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before {
+      content: ""; position: absolute;
+      left: -37px; top: 5px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--purple);
+      box-shadow: 0 0 10px var(--purple-glow-soft);
+    }
+    .timeline-week {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 8px;
+    }
+    .timeline-title {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 1.05rem; margin-bottom: 6px;
+    }
+    .timeline-desc {
+      font-size: 0.95rem; color: var(--text-muted); line-height: 1.55;
+    }
+    .section-light .timeline { border-left-color: rgba(107, 33, 168, 0.25); }
+    .section-light .timeline-item::before { background: var(--purple-deep); box-shadow: none; }
+    .section-light .timeline-week { color: var(--purple-deep); }
+    .section-light .timeline-title { color: var(--text-on-light); }
+    .section-light .timeline-desc { color: var(--text-muted-on-light); }
+
+    /* ============================ FINAL CTA ============================ */
+    .cs-cta {
+      text-align: center; padding: 80px 0 64px;
+      border-top: 1px solid var(--border);
+    }
+    .cs-cta .section-label {
+      justify-content: center; margin-bottom: 28px;
+    }
+    .cs-cta h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      line-height: 1.05; letter-spacing: -0.02em;
+      margin: 0 auto 24px;
+    }
+    .cs-cta h2 em {
+      font-style: italic; color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+    }
+    .cs-cta p {
+      color: var(--text-muted); max-width: 52ch;
+      margin: 0 auto 40px; font-size: 1.05rem; line-height: 1.65;
+    }
+
+    .pill {
+      font-family: var(--font-body); font-size: 15px; font-weight: 500;
+      letter-spacing: 0.01em;
+      padding: 17px 34px; border-radius: 999px; cursor: pointer;
+      border: 1px solid var(--border-strong); background: var(--surface);
+      color: var(--text);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative; overflow: hidden;
+      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px;
+    }
+    .pill::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--purple-soft-fill) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .pill:hover {
+      border-color: var(--purple); transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--purple-glow);
+    }
+    .pill:hover::before { opacity: 1; }
+    .pill span { position: relative; z-index: 1; }
+
+    .pill-primary {
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      border-color: transparent;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 6px 28px var(--purple-glow);
+      font-weight: 600;
+    }
+    .pill-primary:hover {
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 10px 40px var(--purple-glow);
+      transform: translateY(-2px);
+    }
+
+    .cta-row {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    }
+
+    /* ============================ FOOTER ============================ */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 44px 0 28px;
+      position: relative; z-index: 2;
+      background: var(--bg);
+      margin-top: 0;
+    }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
+      display: flex; flex-wrap: wrap; gap: 24px;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 12px; }
+    .footer-text {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer-links a {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* Mobile */
+    @media (max-width: 720px) {
+      .nav { gap: 12px; }
+      .nav a:not(.nav-cta) { display: none; }
+      .header-inner { padding: 0 20px; }
+      .container { padding: 0 20px; }
+      .footer-inner { padding: 0 20px; flex-direction: column; text-align: center; }
+      .cs-hero h1 { max-width: 100%; }
+      .cs-meta { max-width: 100%; }
+      .cs-meta-item { min-width: 45%; border-bottom: 1px solid var(--border); }
+      .cs-meta-item:nth-child(odd) { border-right: 1px solid var(--border); }
+      .cs-meta-item:last-child, .cs-meta-item:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+      .section { padding: 56px 0; }
+    }
+  
+    /* ============================ READING PROGRESS ============================ */
+    .progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0;
+      background: linear-gradient(90deg, var(--purple-deep), var(--purple), var(--purple-bright));
+      box-shadow: 0 0 12px var(--purple-glow);
+      z-index: 200; transition: width 0.1s linear;
+    }
+
+    /* ============================ POST HERO ============================ */
+    .post-hero { padding: 56px 0 64px; border-bottom: 1px solid var(--border); }
+    .post-hero h1 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.04;
+      letter-spacing: -0.025em; margin-bottom: 28px; max-width: 20ch;
+      opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .post-hero h1 em {
+      font-style: italic; letter-spacing: -0.01em;
+      color: var(--purple-bright);
+      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ============================ SECTIONS ============================ */
+    .post-section { padding: 76px 0; position: relative; z-index: 2; }
+    .post-section.intro { padding-top: 64px; padding-bottom: 40px; }
+    .post-section.soft { background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .post-num {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .post-num::after { content: ""; width: 32px; height: 1px; background: var(--purple); opacity: 0.5; }
+    .section-light .post-num { color: var(--purple-deep); }
+    .section-light .post-num::after { background: var(--purple-deep); }
+
+    .post-section h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.12;
+      letter-spacing: -0.02em; margin-bottom: 32px; max-width: 22ch;
+    }
+
+    /* Opening paragraph carries a drop cap and rides a little larger. */
+    .post-lede-para {
+      font-size: clamp(1.15rem, 1.7vw, 1.35rem);
+      line-height: 1.6; color: var(--text);
+    }
+    .post-lede-para::first-letter {
+      font-family: var(--font-display); font-style: italic; font-weight: 500;
+      float: left; font-size: 4.6rem; line-height: 0.82;
+      padding: 6px 14px 0 0; color: var(--purple-bright);
+      text-shadow: 0 0 40px var(--purple-glow);
+    }
+
+    .section-light .body-copy p { color: var(--text-muted-on-light); }
+
+    /* ============================ PULLQUOTE ============================ */
+    .post-pull { padding: 4px 0 20px; position: relative; z-index: 2; }
+    .post-pull .quote {
+      font-family: var(--font-display); font-style: italic; font-weight: 500;
+      font-size: clamp(1.5rem, 3.2vw, 2.4rem); line-height: 1.3;
+      letter-spacing: -0.015em; color: var(--text);
+      max-width: 22ch;
+      border-left: 3px solid var(--purple);
+      padding-left: 32px;
+    }
+    @media (max-width: 720px) { .post-pull .quote { padding-left: 20px; max-width: 100%; } }
+
+    /* ============================ FIRES ============================ */
+    .post-fires {
+      padding: 84px 0; position: relative; z-index: 2;
+      background: var(--bg-soft);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .fires-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 8px; }
+    @media (max-width: 800px) { .fires-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .fire-rule { width: 40px; height: 2px; background: var(--purple); box-shadow: 0 0 12px var(--purple-glow); margin-bottom: 16px; }
+    .fire-label {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--purple-bright); font-weight: 600; margin-bottom: 12px;
+    }
+    .fire-name { font-family: var(--font-display); font-style: italic; font-size: clamp(2rem, 3.5vw, 2.6rem); margin-bottom: 20px; line-height: 1; }
+    .fire-desc { font-size: 1.02rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0; }
+    .fires-outro { margin-top: 48px; }
+    .fires-outro p {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(1.15rem, 1.9vw, 1.5rem); line-height: 1.4;
+      color: var(--purple-bright); max-width: 30ch;
+    }
+
+    /* ============================ CLOSE ============================ */
+    .post-close { padding: 84px 0 72px; position: relative; z-index: 2; }
+    .post-close h2 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.12;
+      letter-spacing: -0.02em; margin-bottom: 32px;
+    }
+    .post-close .body-copy p:first-of-type {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 1.45;
+      color: var(--text); letter-spacing: -0.01em; margin-bottom: 24px;
+    }
+
+    /* ============================ RELATED ============================ */
+    .related { padding: 72px 0 80px; border-top: 1px solid var(--border); position: relative; z-index: 2; }
+    .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 36px; }
+    @media (max-width: 900px) { .related-grid { grid-template-columns: 1fr; } }
+    .post-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 0.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px; padding: 1.75rem;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; min-height: 190px;
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+    .post-card:hover { border-color: rgba(168, 85, 247, 0.4); transform: translateY(-3px); }
+    .post-cat {
+      font-family: var(--font-mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
+      color: var(--purple-bright); background: var(--purple-soft-fill);
+      padding: 5px 11px; border-radius: 999px; align-self: flex-start;
+    }
+    .post-title { font-family: var(--font-display); font-weight: 500; font-size: 19px; color: var(--text); line-height: 1.3; margin-top: 12px; }
+    .post-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: auto; padding-top: 20px;
+      font-family: var(--font-mono); font-size: 11px; color: rgba(255, 255, 255, 0.4);
+    }
+    .post-card:hover .post-readmore { color: var(--purple-bright); }
+
+    /* ============================ REVEAL ============================ */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .post-hero h1, .cs-back, .cs-eyebrow, .cs-lede, .cs-meta { animation: none; opacity: 1; }
+      .progress { transition: none; }
+    }
+
+    @media (max-width: 720px) {
+      .post-hero h1 { max-width: 100%; }
+      .post-section { padding: 56px 0; }
+      .post-fires, .post-close { padding: 60px 0; }
+      .post-lede-para::first-letter { font-size: 3.6rem; padding-right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress" id="progress"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="brand nav-logo" href="/index.html">
+        <img src="/images/two-fires-logo-transparent.png" alt="Two Fires" style="height: 60px; width: auto; display: block;">
+      </a>
+      <nav class="nav">
+        <a href="/index.html#what">What we do</a>
+        <a href="/index.html#principals">Who we are</a>
+        <a href="/blog.html" class="active">Blog</a>
+        <a href="/podcast.html">Podcast</a>
+        <a class="nav-cta" href="/index.html#contact">Light the fuse</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <article>
+
+    <!-- HERO -->
+    <section class="post-hero">
+      <div class="container">
+        <a class="cs-back" href="/blog.html">← Blog</a>
+        <div class="cs-eyebrow">Case Study · Field Research</div>
+        <h1>We asked the AI to find a lawyer. <em>92 times.</em></h1>
+        <p class="cs-lede">Before your next client calls a professional, they ask an AI. We ran the questions they ask, across three regions and five AI tools, and logged every firm every answer named. Here's what the machines are actually recommending.</p>
+        <div class="cs-meta">
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Published</div>
+            <div class="cs-meta-value"><time datetime="2026-09-01">1 September 2026</time></div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Category</div>
+            <div class="cs-meta-value">Case Study</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Read</div>
+            <div class="cs-meta-value">4 min</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Written by</div>
+            <div class="cs-meta-value">Two Fires</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="post-section intro">
+      <div class="container">
+        <div class="body-copy">
+            <p class="post-lede-para">On 26 August 2026 we ran 92 real client questions through the AI tools people now ask first. Google's AI Mode, ChatGPT, Perplexity, Claude and Gemini. "Best family lawyer in the Sutherland Shire." "My dad died without a will in Newcastle, what lawyer do I need." The questions people actually type.</p>
+            <p>We covered thirteen areas across Greater Sydney, the Central Coast and the Hunter, four practice areas each. Every answer was logged: which tool, which question, which firms, in order.</p>
+            <p>We expected gaps. We didn't expect what we found.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="post-section">
+      <div class="container reveal">
+        <div class="post-num">01</div>
+        <h2>The machines have already picked winners</h2>
+        <div class="body-copy">
+            <p>88 answers came back. 239 different firms were named. And the biggest surprise: Google's AI Mode named specific firms in all 52 of its answers. Not "here's how to choose a lawyer". Actual shortlists, with star ratings, years in business, and individual practitioners recommended by name.</p>
+            <p>No firm dominates state-wide. The game is patch by patch, and patch monopolies are already forming. In one Hunter town, a single firm appeared in all four practice areas. In Sydney's Inner West, one firm took a slot in every category we tested.</p>
+            <p>When the same client question was put to Claude with no web access, it named zero firms in 14 of 20 runs. The models' memories hold maybe a dozen suburban firms. To the tool most buyers actually use, everyone else gets ranked live, from signals the machines can read today.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="post-pull">
+      <div class="container reveal">
+        <div class="quote">The firms getting named aren't the best lawyers. They're the best-documented lawyers.</div>
+      </div>
+    </section>
+
+    <section class="post-section section-light">
+      <div class="container reveal">
+        <div class="post-num">02</div>
+        <h2>The ghosts</h2>
+        <div class="body-copy">
+            <p>The real story is who's missing. One Hunter Valley firm has practised continuously since 1896. Around 130 years of service, five-star client feedback, one of the oldest practices in its region. Named in zero of 92 answers, while a competitor a few hundred metres away appeared in every practice area.</p>
+            <p>A beachside firm with fifty years of history is recommended by name in local community groups. The AI named it once, and never for the work the locals actually send people there for. A Manly practice holding specialist accreditation in two fields, the exact credential the AI treats as proof, appeared nowhere, because that credential isn't written anywhere the machines read.</p>
+            <p>These aren't struggling firms. They're good, established practices whose reputations live in referrals, handshakes and community threads. Word of mouth built them. The machines can't hear it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="post-section">
+      <div class="container reveal">
+        <div class="post-num">03</div>
+        <h2>What actually gets a firm named</h2>
+        <div class="body-copy">
+            <p>The pattern was consistent across every tool. Review volume wins slots, and reviews that praise individual practitioners get those people recommended personally. The "years in business" field on a Google profile gets quoted verbatim. Accredited Specialist status is treated as proof: in one thin market, a firm ranked first for wills with a single review, off accreditation alone. Peer directories carry weight. And the AI reads community threads too, quoting recommendations word for word.</p>
+            <p>None of that is clever. That's the point. Every signal on that list is boring, buildable and measurable. The firms winning aren't running sophisticated campaigns. They're simply legible to machines.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="post-fires">
+      <div class="container reveal">
+        <div class="post-num">04</div>
+        <h2 style="font-family: var(--font-display); font-weight: 500; font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 32px;">How we work it</h2>
+        <div class="body-copy" style="margin-bottom: 44px;">
+            <p>This study is now how we start every visibility engagement. Two fires, applied.</p>
+        </div>
+        <div class="fires-grid">
+          <div class="fire">
+            <div class="fire-rule"></div>
+            <div class="fire-label">Fire One · Craft</div>
+            <div class="fire-name">The signals.</div>
+            <p class="fire-desc">Positioning, credentials, story and reviews rebuilt so what makes a firm good is written where the machines read. Thirty years of brand craft pointed at a new referee.</p>
+          </div>
+          <div class="fire">
+            <div class="fire-rule"></div>
+            <div class="fire-label">Fire Two · Engine</div>
+            <div class="fire-name">The measurement.</div>
+            <p class="fire-desc">The same logged questions, re-run at day 0 and day 90. Clients watch themselves appear in the answers, or see exactly why not. Measured, not promised.</p>
+          </div>
+        </div>
+        <div class="fires-outro">
+            <p>We don't control the AI, so we never guarantee a ranking. We build every signal it reads and measure in the open. AI answers change week to week. Everything above is a dated snapshot, and every number in it is logged.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="post-close">
+      <div class="container reveal">
+        <div class="post-num">05</div>
+        <h2>The question for your business</h2>
+        <div class="body-copy">
+            <p>This study happened to be about law firms. The mechanics apply to every local service business: the accountants, the physios, the builders. Somewhere on your patch, an AI is already answering the question your next customer asks before they call anyone.</p>
+            <p>The question isn't whether it recommends someone. It's whether that someone is you. We'll run your patch and show you, on one page, no charge. If the answer stings, it's fixable. The fixes are boring. That's the good news.</p>
+        </div>
+      </div>
+    </section>
+
+    </article>
+
+    <!-- CTA -->
+    <section class="cs-cta">
+      <div class="container">
+        <div class="section-label" style="justify-content: center;">Work with us</div>
+        <h2>Got a growth problem<br><em>that needs both fires?</em></h2>
+        <p>Every engagement starts with one conversation. Forty-five minutes of your time, a full day of ours in preparation.</p>
+        <div class="cta-row">
+          <a class="pill pill-primary" href="/index.html#contact"><span>Book the conversation →</span></a>
+          <a class="pill" href="mailto:lightmyfuse@two-fires.com"><span>lightmyfuse@two-fires.com</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELATED -->
+    <section class="related">
+      <div class="container">
+        <div class="section-label">Keep reading</div>
+        <div class="related-grid">
+        <a class="post-card" href="/blog/a-customer-youve-never-studied.html">
+          <span class="post-cat">Customer Intelligence</span>
+          <div class="post-title">You're Marketing to a Customer You've Never Actually Studied.</div>
+          <div class="post-meta">
+            <span>14 Jul 2026</span>
+            <span class="post-readmore">Read →</span>
+          </div>
+        </a>
+
+        <a class="post-card" href="/blog/busy-is-not-the-same-as-growing.html">
+          <span class="post-cat">Growth</span>
+          <div class="post-title">Busy Is Not the Same as Growing.</div>
+          <div class="post-meta">
+            <span>12 Jul 2026</span>
+            <span class="post-readmore">Read →</span>
+          </div>
+        </a>
+
+        <a class="post-card" href="/blog/theyre-already-buying-just-not-from-you.html">
+          <span class="post-cat">Brand Strategy</span>
+          <div class="post-title">They're Already Buying. Just Not From You.</div>
+          <div class="post-meta">
+            <span>11 Jul 2026</span>
+            <span class="post-readmore">Read →</span>
+          </div>
+        </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-text">Two Fires · Sydney · 2026</span>
+      </div>
+      <div class="footer-links">
+        <a href="/index.html">Home</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/podcast.html">Podcast</a>
+        <a href="/index.html#contact">Contact</a>
+        <a href="/portal.html">Client Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Reading progress
+    const bar = document.getElementById('progress');
+    const onScroll = () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Reveal on scroll
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const targets = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      targets.forEach(el => el.classList.add('in'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { rootMargin: '0px 0px -12% 0px' });
+      targets.forEach(el => io.observe(el));
+    }
+  </script>
+
+</body>
+</html>
