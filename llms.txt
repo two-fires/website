@@ -1,0 +1,26 @@
+# Two Fires
+
+> Two Fires is an embedded marketing firm in Sydney, Australia. It combines world-class brand strategy (Fire One) with an AI-powered execution engine (Fire Two) to help growing, expert businesses turn capability into clear positioning and measurable commercial growth.
+
+## What we do
+
+- Brand strategy and positioning: thirty years of brand work at McDonald's, Mars, Unilever and Burger King, applied to growing businesses.
+- AI execution engine: an internal AI agent stack that handles research, drafting, distribution and reporting, so human judgment stays on strategy.
+- AI visibility field studies: we log real AI answers (Google AI Mode and others) for a market, identify which businesses the machines recommend and which they skip, and fix the machine-readable record for clients.
+
+## Founders
+
+- Paul Tredinnick (Fire One, Brand): 30 years of executive marketing leadership at McDonald's, Mars, Unilever, Burger King and Primo Foods. Author of Marketing Executive's AI Authority.
+- James Whitehill (Fire Two, Engine): advertising production and operational systems, leads the AI agent architecture.
+
+## Key pages
+
+- [Home](https://two-fires.com/): what Two Fires does and how the two fires work together.
+- [Blog](https://two-fires.com/blog.html): field notes on brand, AI and growth.
+- [We asked the AI to find a lawyer](https://two-fires.com/blog/we-asked-the-ai-to-find-a-lawyer.html): our logged AI-visibility field study of Australian law firms.
+- [Podcast](https://two-fires.com/podcast.html): The Two Fires Podcast on AI and leadership in business.
+
+## Contact
+
+- Email: james@two-fires.com
+- LinkedIn: https://www.linkedin.com/company/two-fires
