@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Northline Physio | Physiotherapy Dee Why, Northern Beaches</title>
+  <meta name="description" content="Northline Physio offers quality physiotherapy services in Dee Why on Sydney's Northern Beaches. Experienced physios, modern clinic, all ages welcome.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --teal: #1f8a8a; --teal-dark: #156868; --ink: #243240; --grey: #6b7784; --bg: #ffffff; --soft: #f2f7f7; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', Arial, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.6; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    header { border-bottom: 1px solid #e3e9ec; }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+    .logo { font-weight: 800; font-size: 22px; color: var(--teal-dark); text-decoration: none; }
+    .logo span { color: var(--teal); }
+    .nav ul { list-style: none; display: flex; gap: 24px; }
+    .nav a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; }
+    .nav a.btn { background: var(--teal); color: #fff; padding: 10px 18px; border-radius: 6px; }
+    .hero { background: var(--soft); padding: 72px 0; text-align: center; }
+    .hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+    .hero p { font-size: 18px; color: var(--grey); max-width: 640px; margin: 0 auto 28px; }
+    .btn-lg { display: inline-block; background: var(--teal); color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 700; }
+    .btn-lg:hover { background: var(--teal-dark); }
+    section { padding: 64px 0; }
+    h2 { font-size: 30px; font-weight: 800; margin-bottom: 12px; text-align: center; }
+    .lead { text-align: center; color: var(--grey); max-width: 640px; margin: 0 auto 40px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .card { background: #fff; border: 1px solid #e3e9ec; border-radius: 10px; padding: 28px 24px; }
+    .card h3 { font-size: 19px; margin-bottom: 8px; color: var(--teal-dark); }
+    .card p { color: var(--grey); font-size: 15px; }
+    .about { background: var(--soft); }
+    .about .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .about h2 { text-align: left; }
+    .about p { color: var(--grey); margin-bottom: 14px; }
+    .about-img { background: linear-gradient(135deg, #cfe6e6, #9fcaca); border-radius: 12px; min-height: 300px; }
+    .why ul { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 32px; max-width: 760px; margin: 0 auto; }
+    .why li { padding-left: 28px; position: relative; color: var(--ink); }
+    .why li::before { content: "\2713"; position: absolute; left: 0; color: var(--teal); font-weight: 800; }
+    .team .grid { grid-template-columns: repeat(3, 1fr); }
+    .avatar { width: 84px; height: 84px; border-radius: 50%; background: #d9e7e7; margin-bottom: 14px; }
+    .contact { background: var(--teal-dark); color: #fff; text-align: center; }
+    .contact h2 { color: #fff; }
+    .contact p { color: #d7ecec; margin-bottom: 20px; }
+    .contact .btn-lg { background: #fff; color: var(--teal-dark); }
+    footer { padding: 28px 0; font-size: 13px; color: var(--grey); border-top: 1px solid #e3e9ec; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .demo-note { background: #fff7e0; color: #7a5a00; font-size: 12px; text-align: center; padding: 8px; }
+    @media (max-width: 800px) { .grid, .about .wrap, .why ul, .team .grid { grid-template-columns: 1fr; } .nav ul { display: none; } .hero h1 { font-size: 30px; } }
+  </style>
+</head>
+<body>
+  <div class="demo-note">Demonstration website. Northline Physio is a fictional business created by Two Fires to produce sample Marketing Diagnosis reports. Not a real clinic.</div>
+
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="#">Northline <span>Physio</span></a>
+      <ul>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#team">Our Team</a></li>
+        <li><a href="#contact" class="btn">Book Now</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>Welcome to Northline Physio</h1>
+      <p>Quality physiotherapy services for the whole family in Dee Why, on Sydney's beautiful Northern Beaches. Our experienced team is dedicated to helping you feel your best.</p>
+      <a class="btn-lg" href="#contact">Book an Appointment</a>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <h2>Our Services</h2>
+      <p class="lead">We offer a comprehensive range of physiotherapy services to suit all your needs.</p>
+      <div class="grid">
+        <div class="card"><h3>Sports Physiotherapy</h3><p>Treatment and rehabilitation for sporting injuries of all kinds. We help you get back to doing what you love.</p></div>
+        <div class="card"><h3>Back and Neck Pain</h3><p>Effective treatment for back and neck pain using the latest evidence-based techniques.</p></div>
+        <div class="card"><h3>Post-Surgical Rehab</h3><p>Personalised rehabilitation programs following surgery to help restore movement and strength.</p></div>
+        <div class="card"><h3>Dry Needling</h3><p>A modern treatment technique used to relieve muscle pain and tension.</p></div>
+        <div class="card"><h3>Clinical Pilates</h3><p>Small group and one-on-one Pilates sessions led by qualified physiotherapists.</p></div>
+        <div class="card"><h3>Massage Therapy</h3><p>Remedial and relaxation massage to complement your treatment plan.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div>
+        <h2>About Us</h2>
+        <p>Northline Physio was established in 2014 with a simple mission: to provide high quality, patient-centred physiotherapy care to the Northern Beaches community.</p>
+        <p>Our modern, fully equipped clinic is conveniently located in the heart of Dee Why, with parking available. We pride ourselves on our friendly, professional approach and our commitment to achieving the best possible outcomes for every patient.</p>
+        <p>Whether you are recovering from an injury, managing a chronic condition, or simply want to move better, we are here to help.</p>
+      </div>
+      <div class="about-img" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="wrap">
+      <h2>Why Choose Us</h2>
+      <p class="lead">Here are just a few reasons why our patients keep coming back.</p>
+      <ul>
+        <li>Experienced and qualified physiotherapists</li>
+        <li>Modern, fully equipped clinic</li>
+        <li>Personalised treatment plans</li>
+        <li>Convenient Dee Why location with parking</li>
+        <li>HICAPS on-the-spot health fund claims</li>
+        <li>Early morning and evening appointments</li>
+        <li>All ages welcome</li>
+        <li>Friendly, caring team</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="team" id="team">
+    <div class="wrap">
+      <h2>Our Team</h2>
+      <p class="lead">Meet the friendly faces behind Northline Physio.</p>
+      <div class="grid">
+        <div class="card"><div class="avatar"></div><h3>Daniel Reyes</h3><p>Principal Physiotherapist. Daniel has over 15 years of experience and a special interest in sports injuries.</p></div>
+        <div class="card"><div class="avatar"></div><h3>Priya Nair</h3><p>Senior Physiotherapist. Priya specialises in back and neck pain and clinical Pilates.</p></div>
+        <div class="card"><div class="avatar"></div><h3>Tom Whitlock</h3><p>Physiotherapist. Tom enjoys working with active people of all ages to help them reach their goals.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <h2>Get in Touch</h2>
+      <p>We'd love to hear from you. Call us or book online today.<br>Open Monday to Saturday. Dee Why, NSW 2099.</p>
+      <a class="btn-lg" href="#">Book Online</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div>&copy; 2026 Northline Physio. All rights reserved.</div>
+      <div>Fictional demonstration business &middot; <a href="https://two-fires.com" style="color: var(--grey);">Two Fires</a></div>
+    </div>
+  </footer>
+</body>
+</html>
