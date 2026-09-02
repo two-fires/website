@@ -19,4 +19,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://two-fires.com/sitemap.xml
+Sitemap: https://www.two-fires.com/sitemap.xml

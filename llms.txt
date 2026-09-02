@@ -15,10 +15,10 @@
 
 ## Key pages
 
-- [Home](https://two-fires.com/): what Two Fires does and how the two fires work together.
-- [Blog](https://two-fires.com/blog.html): field notes on brand, AI and growth.
-- [We asked the AI to find a lawyer](https://two-fires.com/blog/we-asked-the-ai-to-find-a-lawyer.html): our logged AI-visibility field study of Australian law firms.
-- [Podcast](https://two-fires.com/podcast.html): The Two Fires Podcast on AI and leadership in business.
+- [Home](https://www.two-fires.com/): what Two Fires does and how the two fires work together.
+- [Blog](https://www.two-fires.com/blog.html): field notes on brand, AI and growth.
+- [We asked the AI to find a lawyer](https://www.two-fires.com/blog/we-asked-the-ai-to-find-a-lawyer.html): our logged AI-visibility field study of Australian law firms.
+- [Podcast](https://www.two-fires.com/podcast.html): The Two Fires Podcast on AI and leadership in business.
 
 ## Contact
 
