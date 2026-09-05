@@ -1,687 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
-  <title>Two Fires · World-class marketing. Supercharged with AI. (design preview)</title>
-  <meta name="description" content="Design preview of the Two Fires website.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Fires (design preview)</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --void: #000000;
-    --bone: #ffffff;
-    --ash: #9a9a9a;
-    --mist: #bdbdbd;
+    --void: #050505;
+    --bone: #f5f3f8;
+    --mist: #b9b6c2;
+    --ash: #8a8792;
+    --coal: #3a3840;
+    --rule: rgba(245,243,248,0.10);
     --iris: #a855f7;
-    --iris-deep: #6b21a8;
     --iris-bright: #c4a8ff;
-    --glass-edge: rgba(196,168,255,0.14);
+    --glass-edge: rgba(196,168,255,0.16);
     --glass-fill: rgba(196,168,255,0.035);
     --font: 'DM Sans', 'Inter', system-ui, sans-serif;
     --mono: 'Geist Mono', 'JetBrains Mono', monospace;
-    --max: 1280px;
+    --max: 1240px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body { background: var(--void); color: var(--bone); font-family: var(--font); font-weight: 300; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   a { color: inherit; text-decoration: none; }
   .wrap { max-width: var(--max); margin: 0 auto; padding: 0 40px; }
+  ::selection { background: var(--iris); color: #fff; }
 
-  /* NAV: transparent, no border */
-  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 26px 0; }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; }
-  .nav img { height: 34px; width: auto; display: block; }
-  .nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
-  .nav li a { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ash); transition: color .3s; }
-  .nav li a:hover { color: var(--bone); }
-  .pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 13px 24px; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; transition: transform .4s cubic-bezier(.52,.01,0,1), background .3s, color .3s; }
-  .pill-iris { background: var(--iris); color: #fff; }
-  .pill-iris:hover { background: var(--iris-bright); color: #0a0612; transform: translateY(-2px); }
-  .pill-ghost { color: var(--bone); box-shadow: inset 0 0 0 1px var(--glass-edge); background: rgba(196,168,255,0.04); }
-  .pill-ghost:hover { background: rgba(196,168,255,0.09); transform: translateY(-2px); }
-
-  /* HERO */
-  .hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: 40px; max-width: var(--max); margin: 0 auto; padding: 140px 40px 80px; }
-  .hero-copy { position: relative; z-index: 2; }
-  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 36px; display: inline-flex; align-items: center; gap: 14px; }
+  /* type */
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 32px; display: inline-flex; align-items: center; gap: 14px; }
   .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--iris); }
-  h1 { font-weight: 400; font-size: clamp(3.2rem, 6.6vw, 6rem); line-height: 0.96; letter-spacing: -0.045em; text-wrap: balance; margin-bottom: 36px; }
-  h1 em { font-style: normal; color: var(--iris-bright); }
-  .lede { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 46ch; line-height: 1.55; margin-bottom: 44px; }
-  .lede strong { font-weight: 400; color: var(--bone); }
+  h1 { font-weight: 400; font-size: clamp(2.9rem, 5.6vw, 5.1rem); line-height: 0.98; letter-spacing: -0.045em; text-wrap: balance; margin-bottom: 34px; }
+  h2 { font-weight: 400; font-size: clamp(2.2rem, 4.8vw, 4.4rem); line-height: 1.02; letter-spacing: -0.04em; max-width: 18ch; text-wrap: balance; margin-bottom: 26px; }
+  h1 em, h2 em, h3 em { font-style: normal; color: var(--iris-bright); }
+  .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 50ch; line-height: 1.55; }
+  .lead strong { font-weight: 400; color: var(--bone); }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); }
+
+  /* buttons: squared, editorial */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 26px; border-radius: 2px; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; transition: background .25s, color .25s, box-shadow .25s; }
+  .btn-iris { background: var(--iris); color: #fff; }
+  .btn-iris:hover { background: var(--iris-bright); color: #0a0612; }
+  .btn-line { color: var(--bone); box-shadow: inset 0 0 0 1px rgba(245,243,248,0.22); }
+  .btn-line:hover { box-shadow: inset 0 0 0 1px var(--iris-bright); color: var(--iris-bright); }
+  .link { display: inline-flex; gap: 10px; align-items: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone); transition: gap .3s, color .3s; }
+  .link:hover { gap: 16px; color: var(--iris-bright); }
+
+  /* nav */
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 24px 0; transition: background .3s; }
+  .nav.scrolled { background: rgba(5,5,5,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .nav img { height: 40px; width: auto; display: block; }
+  .nav ul { list-style: none; display: flex; gap: 30px; align-items: center; }
+  .nav li a:not(.btn) { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ash); transition: color .25s; }
+  .nav li a:not(.btn):hover { color: var(--bone); }
+  .nav .btn { padding: 12px 20px; font-size: 12px; }
+
+  /* hero */
+  .hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: 40px; max-width: var(--max); margin: 0 auto; padding: 150px 40px 80px; }
+  .hero-copy { position: relative; z-index: 2; }
+  .hero .lead { margin-bottom: 40px; max-width: 44ch; }
   .actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-  .actions .pill { padding: 17px 30px; font-size: 13px; }
-  .hero-canvas { position: relative; height: min(78vh, 760px); width: 100%; }
+  .hero-note { margin-top: 26px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
+  .hero-canvas { position: relative; height: min(76vh, 720px); width: 100%; }
   .hero-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  .hero-caption { position: absolute; left: 0; bottom: -6px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #4a4a4a; }
 
-  /* BRANDS: text only, floating on void */
-  .brands { max-width: var(--max); margin: 0 auto; padding: 40px 40px 0; display: flex; flex-wrap: wrap; gap: 20px 56px; align-items: baseline; }
-  .brands .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ash); }
-  .brands span:not(.lbl) { font-size: 22px; font-weight: 300; color: var(--mist); letter-spacing: -0.02em; }
+  /* sections */
+  section { padding: 150px 0; }
+  .band { border-top: 1px solid var(--rule); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+  .two.center { align-items: center; }
 
-  /* SECTIONS */
-  section.block { padding: 160px 0; }
-  .block h2, .cathedral h2, .diag h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; text-wrap: balance; margin-bottom: 28px; }
-  .block h2 em, .cathedral h2 em, .diag h2 em { font-style: normal; color: var(--iris-bright); }
-  .block .lead, .cathedral .lead, .diag .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
-  .zig { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
-  .zig.flip > :first-child { order: 2; }
-  .big-stat { font-weight: 400; font-size: clamp(6rem, 16vw, 15rem); line-height: 0.9; letter-spacing: -0.06em; color: var(--bone); }
-  .big-stat small { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ash); margin-top: 22px; }
-  .big-stat em { font-style: normal; color: var(--iris-bright); }
-
-  /* CATHEDRAL: glass section with blueprint grid + spotlight */
-  .cathedral { position: relative; padding: 180px 0; isolation: isolate; }
-  .cathedral::before { content: ""; position: absolute; inset: 0; z-index: -2;
-    background-image: linear-gradient(rgba(196,168,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(196,168,255,0.06) 1px, transparent 1px);
-    background-size: 88px 88px;
-    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 30%, transparent 75%); }
-  .cathedral::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background: conic-gradient(at 50% -8%, transparent 44%, rgba(168,85,247,0.14) 48.5%, rgba(196,168,255,0.28) 50%, rgba(168,85,247,0.14) 51.5%, transparent 56%);
-    -webkit-mask-image: linear-gradient(#000 0%, #000 35%, transparent 75%); mask-image: linear-gradient(#000 0%, #000 35%, transparent 75%); }
-  .cathedral .head { text-align: center; margin: 0 auto 80px; }
-  .cathedral .head h2 { margin: 0 auto 22px; max-width: 16ch; }
-  .cathedral .head .lead { margin: 0 auto; }
-  .eyebrow-c { justify-content: center; display: flex; gap: 16px; align-items: center; margin-bottom: 30px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); }
-  .eyebrow-c::before, .eyebrow-c::after { content: ""; width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--glass-edge), transparent); }
-
-  .fan { position: relative; height: 520px; max-width: 1080px; margin: 0 auto; }
-  .glass { position: absolute; width: 400px; border-radius: 16px; padding: 28px; background: var(--glass-fill);
-    box-shadow: inset 0 1px 1px rgba(216,236,248,0.2), inset 0 24px 48px rgba(168,85,247,0.06), 0 24px 40px rgba(0,0,0,0.6), inset 0 0 0 1px var(--glass-edge);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    transition: transform .6s cubic-bezier(.52,.01,0,1); }
-  .glass:hover { transform: translateY(-10px) rotate(0deg) !important; z-index: 5; }
-  .g1 { left: 0; top: 60px; transform: rotate(-4deg); }
-  .g2 { left: 50%; top: 0; margin-left: -210px; width: 420px; z-index: 3; }
-  .g3 { right: 0; top: 70px; transform: rotate(4deg); }
-  .glass .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); display: flex; justify-content: space-between; margin-bottom: 18px; }
-  .glass .tag span:last-child { color: var(--ash); }
-  .glass h3 { font-weight: 400; font-size: 24px; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 14px; }
-  .glass p { font-size: 14px; color: var(--mist); line-height: 1.5; }
-  .glass .rows { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
-  .glass .row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-top: 1px solid var(--glass-edge); }
-  .glass .row b { font-weight: 400; color: var(--bone); }
-  .glass .row i { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
-  .glass .row i.hi { color: var(--iris-bright); }
-  .glass .row i.mid { color: #ffb829; }
-  .glass .score { font-weight: 400; font-size: 72px; letter-spacing: -0.05em; line-height: 1; margin: 10px 0 6px; }
-  .glass .score span { font-size: 26px; color: var(--ash); letter-spacing: -0.02em; }
-  .glass .bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 12px 0 18px; overflow: hidden; }
-  .glass .bar i { display: block; height: 100%; width: 40%; background: var(--iris); }
-  .cta-row { text-align: center; margin-top: 64px; }
-
-  /* DIAGNOSIS: one violet moment */
-  .diag { padding: 160px 0; }
-  .diag .zig { align-items: start; }
-  .diag .price { font-weight: 400; font-size: clamp(5rem, 12vw, 11rem); letter-spacing: -0.06em; line-height: 0.9; color: var(--iris-bright); }
-  .diag .price small { font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ash); display: block; margin-top: 18px; }
-  .stages { list-style: none; display: flex; flex-direction: column; margin-top: 40px; }
-  .stages li { display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: baseline; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.08); }
-  .stages li:last-child { border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .stages .n { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--iris-bright); }
-  .stages .t { font-size: 22px; font-weight: 400; letter-spacing: -0.02em; }
-  .stages .t span { display: block; font-size: 14px; font-weight: 300; color: var(--ash); margin-top: 4px; }
-  .stages .s { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ash); white-space: nowrap; }
-  .stages .s:hover { color: var(--bone); }
-
-  /* CLOSE */
-  .close { padding: 200px 0 120px; text-align: center; }
-  .close h2 { font-weight: 400; font-size: clamp(3.6rem, 10vw, 9.5rem); letter-spacing: -0.05em; line-height: 0.92; margin: 0 auto 40px; max-width: 100%; }
-  .close h2 em { font-style: normal; color: var(--iris-bright); }
-  .close .lead { margin: 0 auto 44px; text-align: center; }
-  .foot { padding: 60px 0 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #4a4a4a; }
-  .foot a:hover { color: var(--ash); }
-  .foot nav { display: flex; gap: 22px; }
-
-  @media (max-width: 960px) {
-    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; min-height: auto; }
-    .hero-canvas { height: 380px; order: -1; }
-    .zig, .zig.flip { grid-template-columns: 1fr; gap: 40px; }
-    .zig.flip > :first-child { order: 0; }
-    .wrap { padding: 0 24px; }
-    .nav ul li:not(:last-child) { display: none; }
-    .fan { height: auto; display: flex; flex-direction: column; gap: 20px; }
-    .glass { position: static; width: 100%; transform: none !important; margin: 0; }
-    section.block, .cathedral, .diag { padding: 100px 0; }
-    .stages li { grid-template-columns: 40px 1fr; }
-    .stages .s { grid-column: 2; }
-  }
-  @media (prefers-reduced-motion: reduce) { .pill, .glass { transition: none; } }
-
-  /* ===== additions for the full page ===== */
-  .nav.scrolled { background: rgba(0,0,0,0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-  .nav .site-logo { height: 46px; width: auto; display: block; }
-  .quote { margin-top: 44px; padding-left: 28px; border-left: 1px solid var(--iris); max-width: 60ch; }
-  .quote p { font-size: 22px; font-weight: 300; line-height: 1.4; letter-spacing: -0.01em; color: var(--bone); margin-bottom: 14px; }
-  .quote cite { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); }
-
-  /* two fires: no cards, two columns of text on void */
-  .fires { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 64px; }
-  .fire .n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 18px; display: inline-flex; align-items: center; gap: 12px; }
-  .fire .n::before { content: ""; width: 24px; height: 1px; background: var(--iris); }
-  .fire h3 { font-weight: 400; font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: -0.04em; line-height: 1; margin-bottom: 18px; }
-  .fire p { font-size: 17px; font-weight: 300; color: var(--mist); line-height: 1.55; max-width: 44ch; }
-  .fire .meta { margin-top: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
-
-  /* pillars: hairline rows, not cards */
-  .pillars { margin-top: 72px; border-top: 1px solid rgba(255,255,255,0.1); }
-  .pillar { display: grid; grid-template-columns: 90px 1.1fr 1fr; gap: 40px; padding: 44px 0; border-bottom: 1px solid rgba(255,255,255,0.1); align-items: start; }
-  .pillar .num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--iris-bright); padding-top: 10px; }
-  .pillar h3 { font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -0.035em; line-height: 1.05; }
-  .pillar h3 em { font-style: normal; color: var(--iris-bright); }
-  .pillar p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.55; margin-bottom: 16px; }
-  .pillar ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .pillar li { font-size: 15px; color: var(--bone); padding-left: 20px; position: relative; line-height: 1.45; }
-  .pillar li::before { content: ""; position: absolute; left: 0; top: 0.7em; width: 10px; height: 1px; background: var(--iris); }
-  .pillar li span { color: var(--ash); }
-  .pillar a.more { display: inline-flex; gap: 8px; align-items: center; margin-top: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone); transition: gap .3s, color .3s; }
-  .pillar a.more:hover { color: var(--iris-bright); gap: 14px; }
-  .measure { margin-top: 36px; font-size: 16px; font-weight: 300; color: var(--mist); max-width: 70ch; line-height: 1.6; }
-  .measure strong { font-weight: 400; color: var(--iris-bright); }
-
-  /* study */
-  .study-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 32px; }
-  .stat .v { font-weight: 400; font-size: clamp(3rem, 6vw, 5.4rem); letter-spacing: -0.05em; line-height: 0.95; }
+  /* proof */
+  .proof-head { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: end; margin-bottom: 64px; }
+  .brands { display: flex; flex-wrap: wrap; gap: 14px 40px; align-items: baseline; }
+  .brands span { font-size: 24px; font-weight: 300; color: var(--mist); letter-spacing: -0.02em; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--rule); }
+  .stat:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 28px; }
+  .stat:nth-child(even) { padding-left: 28px; border-right: none; }
+  .stat:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+  .stat { padding: 30px 0; }
+  .stat .v { font-weight: 400; font-size: clamp(3rem, 5.4vw, 4.8rem); letter-spacing: -0.05em; line-height: 0.95; }
   .stat .v em { font-style: normal; color: var(--iris-bright); }
-  .stat .l { margin-top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.6; max-width: 26ch; }
+  .stat .l { margin-top: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.6; }
+  .proof-foot { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding-top: 28px; border-top: 1px solid var(--rule); }
+  .proof-foot p { font-size: 15px; color: var(--mist); max-width: 62ch; }
 
-  /* doors */
-  .doors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 64px; border-top: 1px solid rgba(255,255,255,0.1); }
-  .door { padding: 40px 32px 40px 0; border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
-  .door + .door { padding-left: 32px; }
-  .door:last-child { border-right: none; padding-right: 0; }
-  .door .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 20px; }
-  .door h3 { font-weight: 400; font-size: 26px; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 6px; }
-  .door .price { font-size: 17px; color: var(--iris-bright); margin-bottom: 16px; }
-  .door p { font-size: 15px; font-weight: 300; color: var(--mist); line-height: 1.55; margin-bottom: 22px; }
-  .door p strong { font-weight: 400; color: var(--bone); }
-  .door .ft { margin-top: auto; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
-  .door .ft a { color: var(--bone); display: inline-flex; gap: 8px; align-items: center; transition: gap .3s, color .3s; }
-  .door .ft a:hover { color: var(--iris-bright); gap: 14px; }
+  /* the work: one glass document, the only translucent surface on the page */
+  .doc { position: relative; border-radius: 4px; padding: 36px 36px 30px; background: var(--glass-fill); box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 rgba(245,243,248,0.12); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .doc .tag { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 26px; }
+  .doc .tag span:last-child { color: var(--ash); }
+  .doc .score { font-weight: 400; font-size: 88px; letter-spacing: -0.06em; line-height: 0.9; margin-bottom: 6px; }
+  .doc .score span { font-size: 28px; color: var(--ash); letter-spacing: -0.02em; margin-left: 6px; }
+  .doc .bar { height: 2px; background: rgba(245,243,248,0.1); margin: 18px 0 24px; }
+  .doc .bar i { display: block; height: 100%; width: 40%; background: var(--iris); }
+  .doc h3 { font-weight: 400; font-size: 24px; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 12px; }
+  .doc p { font-size: 15px; color: var(--mist); line-height: 1.5; }
+  .doc .rows { margin-top: 22px; }
+  .doc .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 14px; padding: 10px 0; border-top: 1px solid var(--rule); }
+  .doc .row span { white-space: nowrap; color: var(--mist); }
+  .doc .row i { text-align: right; white-space: normal; }
+  .doc .row i { font-style: normal; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--iris-bright); white-space: nowrap; }
+  .doc .row i.w { color: var(--ash); }
 
-  /* podcast strip */
-  .podcast { display: grid; grid-template-columns: auto 1fr auto; gap: 48px; align-items: center; padding: 56px 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
-  .podcast .mark { width: 128px; height: 128px; border-radius: 16px; background: var(--glass-fill); box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 1px rgba(216,236,248,0.2); display: flex; flex-direction: column; justify-content: center; padding: 18px; font-size: 20px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.05; }
-  .podcast .mark span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 10px; }
-  .podcast h3 { font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -0.035em; line-height: 1.05; margin-bottom: 10px; }
-  .podcast h3 em { font-style: normal; color: var(--iris-bright); }
-  .podcast p { font-size: 16px; font-weight: 300; color: var(--mist); max-width: 58ch; line-height: 1.55; }
+  /* problem */
+  .altitude { position: relative; display: flex; flex-direction: column; gap: 0; }
+  .alt-line { display: grid; grid-template-columns: 110px 1fr; gap: 24px; padding: 22px 0; border-top: 1px solid var(--rule); align-items: baseline; }
+  .alt-line:last-child { border-bottom: 1px solid var(--rule); }
+  .alt-line .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); }
+  .alt-line .t { font-size: 20px; font-weight: 300; color: var(--bone); letter-spacing: -0.01em; }
+  .alt-line.hit .t { color: var(--iris-bright); }
+  .alt-line.hit .k { color: var(--iris-bright); }
+  .quote { margin-top: 44px; padding-left: 26px; border-left: 1px solid var(--iris); max-width: 58ch; }
+  .quote p { font-size: 22px; font-weight: 300; line-height: 1.4; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .quote cite { font-style: normal; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); }
 
-  /* principals: Dala team style, no cards */
-  .people { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 64px; }
-  .person .role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 14px; }
-  .person h3 { font-weight: 400; font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: -0.04em; line-height: 1; margin-bottom: 18px; }
-  .person p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.55; max-width: 46ch; }
+  /* model: brand + engine as one diagram */
+  .model { display: grid; grid-template-columns: 1fr auto 1fr; gap: 48px; align-items: stretch; margin-top: 64px; }
+  .fire { padding-top: 26px; border-top: 1px solid var(--rule); }
+  .fire .n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 20px; }
+  .fire h3 { font-weight: 400; font-size: clamp(2.6rem, 5vw, 4.4rem); letter-spacing: -0.045em; line-height: 0.95; margin-bottom: 20px; }
+  .fire p { font-size: 17px; color: var(--mist); line-height: 1.55; max-width: 40ch; }
+  .fire ul { list-style: none; margin-top: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .fire li { font-size: 15px; color: var(--bone); padding-left: 20px; position: relative; }
+  .fire li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 10px; height: 1px; background: var(--iris); }
+  .model .join { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--ash); }
+  .model .join .v { width: 1px; flex: 1; background: var(--rule); }
+  .model .join .o { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; writing-mode: vertical-rl; color: var(--iris-bright); }
+  .outcome { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .outcome h3 { font-weight: 400; font-size: clamp(1.8rem, 3.2vw, 2.6rem); letter-spacing: -0.035em; line-height: 1.05; }
+  .outcome p { font-size: 17px; color: var(--mist); line-height: 1.55; max-width: 52ch; }
+
+  /* principals */
+  .people { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 56px; }
+  .person { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: start; }
+  .portrait { aspect-ratio: 4 / 5; position: relative; overflow: hidden; border-radius: 2px; background: #0d0c10; box-shadow: inset 0 0 0 1px var(--rule); }
+  .portrait canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .portrait .initial { position: absolute; left: 16px; bottom: 10px; font-weight: 400; font-size: 64px; letter-spacing: -0.06em; color: var(--iris-bright); line-height: 1; }
+  .portrait .note { position: absolute; top: 12px; left: 16px; right: 12px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--coal); }
+  .person .role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 12px; }
+  .person h3 { font-weight: 400; font-size: clamp(1.9rem, 3.2vw, 2.6rem); letter-spacing: -0.04em; line-height: 1; margin-bottom: 14px; }
+  .person p { font-size: 16px; color: var(--mist); line-height: 1.55; }
   .person p em { color: var(--bone); font-style: italic; }
+  .person .fact { margin-top: 16px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.8; }
 
   /* fit */
-  .fit { text-align: center; }
-  .fit h2 { margin: 0 auto 22px; max-width: 100%; }
-  .fit .lead { margin: 0 auto 36px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 760px; margin: 0 auto 36px; }
-  .tags span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--glass-edge); color: var(--iris-bright); background: var(--glass-fill); }
-  .fit .closer { font-size: 22px; font-weight: 300; color: var(--iris-bright); letter-spacing: -0.01em; }
+  .fit .two { align-items: start; }
+  .fit .no { font-size: 19px; color: var(--mist); line-height: 1.6; max-width: 48ch; }
+  .fit .no strong { color: var(--bone); font-weight: 400; }
+  .fit .yes { margin-top: 28px; font-size: 26px; font-weight: 300; letter-spacing: -0.02em; color: var(--iris-bright); }
+  .fit .cap { padding-top: 26px; border-top: 1px solid var(--rule); }
+  .fit .cap .v { font-weight: 400; font-size: clamp(5rem, 11vw, 9rem); letter-spacing: -0.06em; line-height: 0.9; }
+  .fit .cap .l { margin-top: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.7; max-width: 30ch; }
 
-  /* contact */
-  .contact { padding: 120px 0; border-top: 1px solid rgba(255,255,255,0.1); }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
-  .contact h3 { font-weight: 400; font-size: clamp(2rem, 3.6vw, 3rem); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 18px; }
-  .contact h3 em { font-style: normal; color: var(--iris-bright); }
-  .contact p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.55; margin-bottom: 28px; max-width: 46ch; }
-  .direct .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); margin-bottom: 8px; }
-  .direct a { font-size: 24px; font-weight: 300; letter-spacing: -0.02em; color: var(--iris-bright); }
-  .direct a:hover { color: var(--bone); }
-  .form { border-radius: 16px; padding: 32px; background: var(--glass-fill); box-shadow: inset 0 1px 1px rgba(216,236,248,0.2), inset 0 24px 48px rgba(168,85,247,0.05), 0 24px 40px rgba(0,0,0,0.5), inset 0 0 0 1px var(--glass-edge); }
-  .field { margin-bottom: 18px; }
-  .field label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); margin-bottom: 8px; }
-  .field input, .field textarea { width: 100%; background: rgba(0,0,0,0.5); border: 0; box-shadow: inset 0 0 0 1px var(--glass-edge); border-radius: 6px; padding: 13px 14px; font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--bone); transition: box-shadow .3s; }
-  .field input:focus, .field textarea:focus { outline: none; box-shadow: inset 0 0 0 1px var(--iris), 0 0 0 3px rgba(168,85,247,0.15); }
-  .field textarea { resize: vertical; min-height: 100px; }
-  .submit { width: 100%; padding: 15px; border: 0; border-radius: 999px; background: var(--iris); color: #fff; font-family: var(--font); font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; transition: background .3s, color .3s; }
-  .submit:hover { background: var(--iris-bright); color: #0a0612; }
-  .form-success { display: none; text-align: center; padding: 28px 16px; }
-  .form-success.active { display: block; }
-  .form-success h4 { font-weight: 400; font-size: 24px; color: var(--iris-bright); margin-bottom: 10px; letter-spacing: -0.02em; }
-  .form-success p, .form-error p { color: var(--mist); font-size: 15px; margin: 0; }
-  .form-error { display: none; text-align: center; padding: 20px 8px 0; }
-  .form-error.active { display: block; }
-  .form-error .msg { color: #f87171; }
+  /* ways in */
+  .ways { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 0; margin-top: 56px; border-top: 1px solid var(--rule); }
+  .way { padding: 40px 36px 40px 0; border-right: 1px solid var(--rule); display: flex; flex-direction: column; }
+  .way + .way { padding-left: 36px; }
+  .way:last-child { border-right: none; padding-right: 0; }
+  .way .n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 22px; }
+  .way h3 { font-weight: 400; font-size: 28px; letter-spacing: -0.035em; line-height: 1.05; margin-bottom: 8px; }
+  .way.primary h3 { font-size: clamp(2rem, 3.4vw, 2.8rem); }
+  .way .sub { font-size: 16px; color: var(--iris-bright); margin-bottom: 16px; }
+  .way p { font-size: 15px; color: var(--mist); line-height: 1.55; margin-bottom: 26px; max-width: 40ch; }
+  .way .ft { margin-top: auto; }
 
-  /* legal */
-  .legal-page { display: none; padding: 160px 0 100px; }
-  .legal-page.active { display: block; }
-  .legal-page h1 { font-weight: 400; font-size: clamp(2.4rem, 5vw, 4rem); letter-spacing: -0.04em; margin-bottom: 32px; }
-  .legal-page h1 em { font-style: normal; color: var(--iris-bright); }
-  .legal-content { max-width: 680px; }
-  .legal-content p { color: var(--mist); margin-bottom: 18px; font-size: 16px; font-weight: 300; line-height: 1.65; }
-  .legal-content p.muted { color: var(--ash); }
-  .legal-content h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); margin: 32px 0 12px; font-weight: 400; }
-  .legal-content a { color: var(--iris-bright); border-bottom: 1px solid rgba(196,168,255,0.3); }
-  .main-content.hidden { display: none; }
-  .preview-note { position: fixed; bottom: 14px; left: 14px; z-index: 60; font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: #4a4a4a; }
+  /* close */
+  .close { text-align: center; padding: 190px 0 120px; }
+  .close h2 { font-size: clamp(3.4rem, 9.5vw, 8.8rem); letter-spacing: -0.05em; line-height: 0.92; margin: 0 auto 36px; max-width: 100%; }
+  .close .lead { margin: 0 auto 40px; text-align: center; }
+  .close .mono { margin-top: 22px; display: block; }
+  .foot { padding: 56px 0 36px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--coal); }
+  .foot nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  .foot a:hover { color: var(--ash); }
 
-  @media (max-width: 960px) {
-    .fires, .people, .contact-grid, .study-stats { grid-template-columns: 1fr; gap: 40px; }
-    .pillar { grid-template-columns: 1fr; gap: 14px; }
-    .doors { grid-template-columns: 1fr; }
-    .door { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 32px 0; }
-    .door + .door { padding-left: 0; }
-    .podcast { grid-template-columns: 1fr; gap: 24px; }
+  /* mobile */
+  @media (max-width: 1024px) {
+    .ways { grid-template-columns: 1fr; }
+    .way { border-right: none; border-bottom: 1px solid var(--rule); padding: 32px 0; }
+    .way + .way { padding-left: 0; }
   }
+  @media (max-width: 860px) {
+    .wrap { padding: 0 22px; }
+    .nav { padding: 16px 0; }
+    .nav img { height: 32px; }
+    .nav ul li:not(:last-child) { display: none; }
+    .nav .btn { padding: 11px 16px; font-size: 11px; }
+    .hero { grid-template-columns: 1fr; padding: 110px 22px 56px; min-height: auto; gap: 8px; }
+    .hero-canvas { height: 40vh; min-height: 260px; order: 2; margin-top: 12px; }
+    h1 { font-size: clamp(2.6rem, 11.5vw, 3.6rem); }
+    .hero .lead { font-size: 17px; }
+    .actions { flex-direction: column; align-items: stretch; }
+    .actions .btn { width: 100%; }
+    section { padding: 96px 0; }
+    .two, .proof-head, .model, .outcome, .people, .fit .two { grid-template-columns: 1fr; gap: 36px; }
+    .model .join { flex-direction: row; height: auto; }
+    .model .join .v { height: 1px; width: auto; flex: 1; }
+    .model .join .o { writing-mode: horizontal-tb; }
+    .person { grid-template-columns: 1fr; }
+    .portrait { max-width: 240px; }
+    .close { padding: 120px 0 80px; }
+    .foot { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn, .link { transition: none; } }
 </style>
 </head>
 <body>
+
 <header class="nav" id="nav">
   <div class="wrap">
-    <a href="#" onclick="event.preventDefault(); goHome()"><img class="site-logo" src="/images/two-fires-logo-transparent.png" alt="Two Fires"></a>
+    <a href="#top"><img src="/images/two-fires-logo-transparent.png" alt="Two Fires"></a>
     <ul>
-      <li><a href="#services" onclick="event.preventDefault(); scrollToSection('services')">What we do</a></li>
-      <li><a href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">Diagnosis</a></li>
-      <li><a href="#principals" onclick="event.preventDefault(); scrollToSection('principals')">Who we are</a></li>
+      <li><a href="#proof">Proof</a></li>
+      <li><a href="#model">How we work</a></li>
+      <li><a href="#people">Principals</a></li>
+      <li><a href="#fit">Fit</a></li>
       <li><a href="/blog.html">Blog</a></li>
-      <li><a href="/podcast.html">Podcast</a></li>
-      <li><a href="/portal.html">Portal</a></li>
-      <li><a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Light the fuse</a></li>
+      <li><a href="#ways" class="btn btn-iris">Book a conversation</a></li>
     </ul>
   </div>
 </header>
 
-<div class="main-content" id="main-content">
-
 <section class="hero" id="top">
   <div class="hero-copy">
-    <div class="eyebrow">Brand craft + AI engine · Sydney</div>
-    <h1>Great business. Marketing that <em>isn't keeping up.</em></h1>
-    <p class="lede">Thirty years of brand strategy at McDonald's, Mars, Unilever and Burger King, applied to your business and run on an AI engine we built ourselves. <strong>Two fires, one firm.</strong></p>
+    <div class="eyebrow">An embedded marketing firm · Sydney</div>
+    <h1>You outgrew your marketing. <em>We catch it up, then run it.</em></h1>
+    <p class="lead">Two principals, both in the room. Thirty years of brand strategy from inside McDonald's, Mars, Unilever and Burger King, and an AI engine we built to execute it at a pace no agency can match. <strong>Two fires. One outcome.</strong></p>
     <div class="actions">
-      <a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Get your free visibility report</a>
-      <a href="#diagnosis" class="pill pill-ghost" onclick="event.preventDefault(); scrollToSection('diagnosis')">See the Diagnosis</a>
+      <a href="#ways" class="btn btn-iris">Book a 45-minute conversation</a>
+      <a href="#model" class="btn btn-line">See how we work</a>
     </div>
+    <div class="hero-note">No deck · No pitch · You leave clearer either way</div>
   </div>
-  <div class="hero-canvas">
-    <canvas id="flames" aria-hidden="true"></canvas>
-    <div class="hero-caption">Two fires · 4,000 particles · live</div>
+  <div class="hero-canvas"><canvas id="flames" aria-hidden="true"></canvas></div>
+</section>
+
+<!-- 2. PROOF -->
+<section class="band" id="proof">
+  <div class="wrap">
+    <div class="proof-head">
+      <div>
+        <div class="eyebrow">Proof first</div>
+        <h2>Thirty years at the brands <em>everyone has heard of.</em></h2>
+      </div>
+      <div class="brands"><span>McDonald's</span><span>Mars</span><span>Unilever</span><span>Burger King</span><span>Scotts</span></div>
+    </div>
+    <div class="two center">
+      <div>
+        <p class="lead" style="margin-bottom:28px">Then we pointed the engine at a question every local business should be losing sleep over: when your next customer asks an AI who to call, does it say your name? We ran 92 real client questions through five AI tools and logged every firm that got named.</p>
+        <div class="stats" style="border-top:1px solid var(--rule)">
+          <div class="stat"><div class="v">92</div><div class="l">Real questions · 5 AI tools</div></div>
+          <div class="stat"><div class="v">239</div><div class="l">Firms named across 88 answers</div></div>
+          <div class="stat"><div class="v">52<em>/52</em></div><div class="l">Google AI Mode answers that named specific firms</div></div>
+          <div class="stat"><div class="v"><em>0</em>/92</div><div class="l">Answers naming a 130-year-old, five-star firm</div></div>
+        </div>
+        <div class="proof-foot">
+          <p>Every number logged. Every finding labelled evidence or inference. That's how we work.</p>
+          <a class="link" href="/blog/we-asked-the-ai-to-find-a-lawyer.html">Read the field study →</a>
+        </div>
+      </div>
+      <div class="doc">
+        <div class="tag"><span>Marketing Diagnosis · Sample report</span><span>Stage 4 of 4</span></div>
+        <div class="score">4<span>/ 10</span></div>
+        <div class="bar"><i></i></div>
+        <h3>Invisible at the moment a new patient decides where to book.</h3>
+        <p>Says nothing a competitor doesn't also say. Answers none of the questions that stop people booking. Speaks to no specific person doing any specific thing.</p>
+        <div class="rows">
+          <div class="row"><span>Primary diagnosis</span><i>Undifferentiated message</i></div>
+          <div class="row"><span>Priority action 1</span><i>Name the customer</i></div>
+          <div class="row"><span>Priority action 2</span><i>Answer the booking questions</i></div>
+          <div class="row"><span>Evidence base</span><i class="w">3 upstream stages · 21 pp</i></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<div class="brands">
-  <span class="lbl">Thirty years of brand work at</span>
-  <span>McDonald's</span><span>Mars</span><span>Unilever</span><span>Burger King</span><span>Scotts</span>
-</div>
+<!-- 3. PRINCIPALS -->
+<section class="band" id="people">
+  <div class="wrap">
+    <div class="eyebrow">Two principals</div>
+    <h2>Both fires. <em>Both in the room.</em></h2>
+    <p class="lead">No account managers, no handovers. The two people on this page are the two people who do the work.</p>
+    <div class="people">
+      <div class="person">
+        <div class="portrait"><canvas data-portrait="P"></canvas><span class="note">Portrait · duotone</span><span class="initial">P</span></div>
+        <div>
+          <div class="role">Brand fire</div>
+          <h3>Paul Tredinnick</h3>
+          <p>Thirty years of marketing leadership at McDonald's, Mars, Unilever, Burger King and Scotts. Brand strategy, positioning and customer insight in the world's most competitive categories. Author of <em>Marketing Executive's AI Authority</em>.</p>
+          <div class="fact">Sydney · Strategy, positioning, insight</div>
+        </div>
+      </div>
+      <div class="person">
+        <div class="portrait"><canvas data-portrait="J"></canvas><span class="note">Portrait · duotone</span><span class="initial">J</span></div>
+        <div>
+          <div class="role">Engine fire</div>
+          <h3>James Whitehill</h3>
+          <p>Fifteen years in advertising production for international multi-million-dollar businesses, then four years deploying AI systems across SMEs. Built the agent architecture that runs Two Fires. Moved from traditional to digital before the market caught up. Same instinct, applied to AI.</p>
+          <div class="fact">Sydney · Systems, execution, measurement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- PROBLEM -->
-<section class="block" id="problem">
-  <div class="wrap zig">
+<!-- 4. PROBLEM -->
+<section class="band" id="problem">
+  <div class="wrap two">
     <div>
-      <div class="eyebrow">The problem we solve</div>
-      <h2>Most marketing isn't working <em>because the foundation is weak.</em></h2>
-      <p class="lead">Good businesses don't hit a growth ceiling because the product isn't good enough. They hit it because they've never had marketing built at this calibre. Agencies that run tactics without strategic depth. AI tools spitting out content with no foundation under it. And now the ground has shifted again: before your next customer calls anyone, they ask an AI.</p>
+      <div class="eyebrow">The problem</div>
+      <h2>Good businesses plateau when their marketing <em>hasn't reached their altitude.</em></h2>
+      <p class="lead">Nobody hits a ceiling because the product isn't good enough. They hit it because the marketing was built for a smaller company. What got you here was word of mouth and being very good. What gets you there is a story sharp enough to travel without you, and an engine that keeps it moving.</p>
       <div class="quote">
         <p>"If your foundation is weak, AI will amplify that weakness at scale. If your foundation is strong, AI becomes the most powerful multiplier you've ever encountered."</p>
         <cite>Paul Tredinnick · Marketing Executive's AI Authority</cite>
       </div>
     </div>
-    <div class="big-stat"><em>0</em>/92<small>Answers naming one 130-year-old, five-star firm in our AI field study</small></div>
+    <div class="altitude">
+      <div class="alt-line"><span class="k">Year one</span><span class="t">Referrals, handshakes, a good name.</span></div>
+      <div class="alt-line"><span class="k">Year five</span><span class="t">An agency running tactics with no strategy underneath.</span></div>
+      <div class="alt-line"><span class="k">Year eight</span><span class="t">A marketer still learning the fundamentals. AI tools with nothing to stand on.</span></div>
+      <div class="alt-line hit"><span class="k">Now</span><span class="t">Your customers ask an AI before they call anyone. Your story isn't written where it reads.</span></div>
+    </div>
   </div>
 </section>
 
-<!-- TWO FIRES -->
-<section class="block" id="what" style="padding-top:0">
+<!-- 5. MODEL -->
+<section class="band" id="model">
   <div class="wrap">
-    <div class="eyebrow">What we bring</div>
-    <h2>Two fires. <em>One firm.</em></h2>
-    <div class="fires">
+    <div class="eyebrow">How we work</div>
+    <h2>Brand depth first. <em>Then the engine.</em></h2>
+    <p class="lead">Most firms give you one or the other. Strategists who hand over a deck and leave. Automation shops who produce at volume with nothing to say. We are both fires, in order, in the same room.</p>
+    <div class="model">
       <div class="fire">
         <div class="n">Fire one · Brand</div>
         <h3>Craft.</h3>
-        <p>Thirty years of global brand work at the world's most competitive companies. Sharp positioning, deep customer insight, distinctive assets. Every framework tested against real consumer behaviour. Every dollar measured against a commercial outcome.</p>
-        <div class="meta">Positioning · Customer insight · Messaging · Brand strategy</div>
+        <p>Who your customer is, what they actually care about, and the single most powerful thing you can say to them. Tested against real behaviour, not opinion.</p>
+        <ul><li>Positioning and proposition</li><li>Customer insight from evidence</li><li>Messaging that matches the buyer</li><li>Category whitespace</li></ul>
       </div>
+      <div class="join"><span class="v"></span><span class="o">One outcome</span><span class="v"></span></div>
       <div class="fire">
         <div class="n">Fire two · Engine</div>
         <h3>Engine.</h3>
-        <p>An AI agent stack we run every day inside our own firm, and hand to you through the client portal. Agents do the production: research, drafting, auditing, reporting. We do the judgment, the strategy, the calls that matter.</p>
-        <div class="meta">Built from craft, not from gimmick · Measured in the open</div>
+        <p>An AI agent stack we run inside our own firm and hand to you through your portal. It does the production. We do the judgment.</p>
+        <ul><li>Four-stage Marketing Diagnosis</li><li>Research, drafting, auditing, reporting</li><li>AI visibility, measured day 0 to day 90</li><li>Content in your voice, from your evidence</li></ul>
       </div>
+    </div>
+    <div class="outcome">
+      <h3>Measured, <em>not promised.</em></h3>
+      <p>We don't control the market or the machines, so we never guarantee a ranking or a number. We build every signal, show you the before and after, and log everything. You'll always know what we're sure of and what we're not.</p>
     </div>
   </div>
 </section>
 
-<!-- WHAT WE DO -->
-<section class="block" id="services" style="padding-top:0">
-  <div class="wrap">
-    <div class="eyebrow">What we do</div>
-    <h2>Three ways the fires <em>go to work on your business.</em></h2>
-    <div class="pillars">
-      <div class="pillar">
-        <div class="num">01</div>
-        <div>
-          <h3>Brand and strategy. <em>Get the story right.</em></h3>
-        </div>
-        <div>
-          <p>The work that decides whether everything else lands. Who your customer actually is, what they care about, and the single most powerful thing you can say to them.</p>
-          <ul>
-            <li>Brand positioning and proposition</li>
-            <li>Customer insight from real evidence, not guesswork</li>
-            <li>Messaging that matches what buyers care about</li>
-            <li>Category and competitor whitespace</li>
-          </ul>
-        </div>
-      </div>
-      <div class="pillar">
-        <div class="num">02</div>
-        <div>
-          <h3>The Intelligence Suite. <em>Your marketing, diagnosed and built.</em></h3>
-        </div>
-        <div>
-          <p>Our client portal. Give us your brief once and the agents carry it through a four-stage diagnosis, then keep working for you. Eight tools live today.</p>
-          <ul>
-            <li>Module 1: Marketing Diagnosis <span>· four stages, four PDF reports, one action plan</span></li>
-            <li>Customer Insight and Intelligence Chat <span>· scouts Reddit, forums and groups</span></li>
-            <li>Messaging Audit <span>· meet Flint, he finds the gap between what you say and what they want</span></li>
-            <li>Brand Benefit Ladder, Competitor and Category Agent, Content Studio</li>
-          </ul>
-          <a class="more" href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">Start with the Diagnosis →</a>
-        </div>
-      </div>
-      <div class="pillar">
-        <div class="num">03</div>
-        <div>
-          <h3>AI visibility. <em>Get named in the answer.</em></h3>
-        </div>
-        <div>
-          <p>When someone asks ChatGPT or Google's AI Mode who to call, we make sure it's you. Every signal the machines read, rebuilt and measured day 0 against day 90.</p>
-          <ul>
-            <li>Free one-page visibility patch report <span>· the door</span></li>
-            <li>90-day visibility sprint <span>· $7,500, or 3 x $2,750 ($8,250 total)</span></li>
-            <li>Keep It Visible <span>· $999/mo</span></li>
-            <li>Full Concierge <span>· from $1,500/mo, the ongoing marketing work too</span></li>
-          </ul>
-          <a class="more" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Request your free report →</a>
-        </div>
-      </div>
-    </div>
-    <p class="measure"><strong>Measured, not promised.</strong> We don't control the AI or the market, so we never guarantee a ranking. We build every signal, show you the before and after, and log every number.</p>
-  </div>
-</section>
-
-<!-- INTELLIGENCE SUITE: cathedral -->
-<section class="cathedral" id="suite">
-  <div class="wrap">
-    <div class="head">
-      <div class="eyebrow-c">The Intelligence Suite · Client portal</div>
-      <h2>What a Diagnosis <em>actually looks like.</em></h2>
-      <p class="lead">Real output from a demonstration run on a fictional Dee Why physio clinic. Four stages, each reading the last. Every finding labelled evidence or inference, high confidence or low.</p>
-    </div>
-    <div class="fan">
-      <div class="glass g1">
-        <div class="tag"><span>Stage 1 · Customer Insight</span><span>5 pp</span></div>
-        <h3>Northern Beaches physio customers want to get back to a named activity, not just be pain-free.</h3>
-        <div class="rows">
-          <div class="row"><b>Return to surf, run, sport</b><i class="hi">High</i></div>
-          <div class="row"><b>"Explained what was wrong"</b><i class="hi">High</i></div>
-          <div class="row"><b>Referral and cost friction</b><i class="hi">High</i></div>
-          <div class="row"><b>Clinical Pilates confusion</b><i class="mid">Medium</i></div>
-        </div>
-      </div>
-      <div class="glass g2">
-        <div class="tag"><span>Stage 4 · Marketing Diagnosis</span><span>6 pp</span></div>
-        <div class="score">4<span>/10</span></div>
-        <div class="bar"><i></i></div>
-        <h3>Invisible at the moment a new patient decides where to book.</h3>
-        <p>Says nothing a competitor doesn't also say. Answers none of the questions that stop people booking. Speaks to no specific person doing any specific thing.</p>
-      </div>
-      <div class="glass g3">
-        <div class="tag"><span>Stage 2 · Messaging Audit</span><span>Flint</span></div>
-        <h3>"Inclusive to the point of being directionless."</h3>
-        <div class="rows">
-          <div class="row"><b>Value prop clarity</b><i class="mid">Weak</i></div>
-          <div class="row"><b>Customer language</b><i class="mid">Absent</i></div>
-          <div class="row"><b>Proof on homepage</b><i class="mid">None</i></div>
-          <div class="row"><b>Priority fix</b><i class="hi">Named</i></div>
-        </div>
-      </div>
-    </div>
-    <div class="cta-row"><a href="/samples/diagnosis-stage-4-marketing-diagnosis.pdf" class="pill pill-ghost">Read the sample reports</a></div>
-  </div>
-</section>
-
-<!-- DIAGNOSIS -->
-<section class="diag" id="diagnosis">
-  <div class="wrap zig">
+<!-- 6. FIT -->
+<section class="band fit" id="fit">
+  <div class="wrap two">
     <div>
-      <div class="eyebrow">The Marketing Diagnosis · Module 1</div>
-      <h2>Know what's actually broken. <em>Four reports. One priority.</em></h2>
-      <p class="lead">Most businesses describe symptoms. The Diagnosis finds the cause, ranks what to fix first, and tells you what we're sure of and what we're not. Reviewed by Paul before it reaches you.</p>
-      <ul class="stages">
-        <li><span class="n">01</span><span class="t">Customer Insight<span>Pain-point map, question map, language bank, insight summary</span></span><a class="s" href="/samples/diagnosis-stage-1-customer-insight.pdf">Sample →</a></li>
-        <li><span class="n">02</span><span class="t">Messaging Audit<span>Your words against what they care about. Flint finds the gap.</span></span><a class="s" href="/samples/diagnosis-stage-2-messaging-audit.pdf">Sample →</a></li>
-        <li><span class="n">03</span><span class="t">Competitor and Category<span>Where everyone sounds the same. Your whitespace.</span></span><a class="s" href="/samples/diagnosis-stage-3-competitor-category.pdf">Sample →</a></li>
-        <li><span class="n">04</span><span class="t">Marketing Diagnosis Report<span>One primary diagnosis. Three priority actions. Confidence notes.</span></span><a class="s" href="/samples/diagnosis-stage-4-marketing-diagnosis.pdf">Sample →</a></li>
-      </ul>
+      <div class="eyebrow">Fit</div>
+      <h2>We're not for everyone. <em>On purpose.</em></h2>
+      <p class="no">We work with leaders we'd be proud to be seen with, in businesses that make people's lives better. That rules a few things out no matter the fee: <strong>gambling, adult content, predatory lending, MLM, wealth coaching, speculative crypto, tobacco.</strong> Easier for everyone to know up front.</p>
+      <p class="yes">Everyone else, we're listening.</p>
     </div>
-    <div>
-      <div class="price">$1,999<small>+ GST · One-off · Credited against your engagement</small></div>
-      <div class="actions" style="margin-top:40px"><a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Start the Diagnosis</a></div>
+    <div class="cap">
+      <div class="v">Six.</div>
+      <div class="l">Client engagements at any one time. Never more, because we do the work ourselves.</div>
     </div>
   </div>
 </section>
 
-<!-- STUDY -->
-<section class="block" id="study" style="padding-top:0">
-  <div class="wrap zig">
-    <div>
-      <div class="eyebrow">Field research · Case study</div>
-      <h2>We asked the AI to find a lawyer. <em>92 times.</em></h2>
-      <p class="lead">We ran 92 real client questions through Google's AI Mode, ChatGPT, Perplexity, Claude and Gemini, across thirteen areas of Sydney, the Central Coast and the Hunter, and logged every firm every answer named. The firms getting named aren't the best. They're the best-documented.</p>
-      <div class="actions" style="margin-top:32px"><a href="/blog/we-asked-the-ai-to-find-a-lawyer.html" class="pill pill-ghost">Read the full study</a></div>
-    </div>
-    <div class="study-stats">
-      <div class="stat"><div class="v">92</div><div class="l">Real questions · 5 AI tools</div></div>
-      <div class="stat"><div class="v">239</div><div class="l">Different firms named across 88 answers</div></div>
-      <div class="stat"><div class="v">52<em>/52</em></div><div class="l">Google AI Mode answers that named specific firms</div></div>
-      <div class="stat"><div class="v"><em>130</em> yrs</div><div class="l">One firm's history. Five stars. Named in zero of 92 answers.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- WAYS IN -->
-<section class="block" id="how" style="padding-top:0">
+<!-- 7. WAYS IN -->
+<section class="band" id="ways">
   <div class="wrap">
     <div class="eyebrow">Ways in</div>
-    <h2>Three doors. <em>Pick whichever fits.</em></h2>
-    <div class="doors">
-      <div class="door">
-        <div class="num">01 · The door</div>
+    <h2>Start with a conversation. <em>No deck, no pitch.</em></h2>
+    <div class="ways">
+      <div class="way primary">
+        <div class="n">01 · The conversation</div>
+        <h3>Book a 45-minute conversation</h3>
+        <div class="sub">Both of us. A full day of preparation on our side.</div>
+        <p>Bring your hardest growth problem. You leave with a clearer view of what's actually broken, whether you work with us or not.</p>
+        <div class="ft"><a href="mailto:lightmyfuse@two-fires.com?subject=A%2045-minute%20conversation" class="btn btn-iris">Book a 45-minute conversation</a></div>
+      </div>
+      <div class="way">
+        <div class="n">02 · The report</div>
         <h3>Free AI visibility report</h3>
-        <div class="price">Free. One page. Your patch.</div>
-        <p>Tell us what you do and where. We run your patch through the tools your customers use and show you who gets named for your work, and whether it's you. <strong>If the answer stings, it's fixable.</strong></p>
-        <div class="ft"><a href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Request yours →</a></div>
+        <div class="sub">One page. Your patch.</div>
+        <p>Tell us what you do and where. We show you who the AI names for your work, and whether it's you.</p>
+        <div class="ft"><a class="link" href="mailto:lightmyfuse@two-fires.com?subject=Free%20visibility%20report">Request yours →</a></div>
       </div>
-      <div class="door">
-        <div class="num">02 · The Diagnosis</div>
+      <div class="way">
+        <div class="n">03 · The Diagnosis</div>
         <h3>Marketing Diagnosis</h3>
-        <div class="price">$1,999 + GST</div>
-        <p>Four stages, four PDF reports, one primary diagnosis and three priority actions. Reviewed by Paul. Credited against your engagement if you go on with us.</p>
-        <div class="ft"><a href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">What's in it →</a></div>
-      </div>
-      <div class="door">
-        <div class="num">03 · The engagement</div>
-        <h3>Both fires, on retainer</h3>
-        <div class="price">Scoped from the Diagnosis</div>
-        <p>Strategy from Paul, the Intelligence Suite in your portal, execution from the engine, and a monthly read on what moved. Six client engagements at a time, never more, because we do the work ourselves.</p>
-        <div class="ft">Measured monthly · Reported in the open</div>
+        <div class="sub">$1,999 + GST. Credited if you go on with us.</div>
+        <p>Four stages, four reports, one primary diagnosis and three priority actions. Reviewed by Paul before it reaches you.</p>
+        <div class="ft"><a class="link" href="/samples/diagnosis-stage-4-marketing-diagnosis.pdf">See a sample →</a></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PODCAST -->
-<section class="block" id="podcast" style="padding-top:0">
+<!-- 8. CLOSE -->
+<section class="close">
   <div class="wrap">
-    <div class="podcast">
-      <div class="mark"><span>Podcast</span>Ignite &amp; Scale</div>
-      <div>
-        <h3>The marketing podcast <em>for ambitious businesses.</em></h3>
-        <p>James and Paul on brand, growth, and what actually works in marketing now that the AI era is here. No fluff, no agency speak. Spotify, Apple, YouTube and Amazon at launch.</p>
-      </div>
-      <a href="/podcast.html" class="pill pill-ghost">Be first to know</a>
-    </div>
-  </div>
-</section>
-
-<!-- PRINCIPALS -->
-<section class="block" id="principals" style="padding-top:0">
-  <div class="wrap">
-    <div class="eyebrow">Who we are</div>
-    <h2>Two principals. <em>Both fires, same firm.</em></h2>
-    <div class="people">
-      <div class="person">
-        <div class="role">Brand fire</div>
-        <h3>Paul Tredinnick</h3>
-        <p>Thirty years of marketing leadership at McDonald's, Mars, Unilever, Burger King and Scotts Lawn &amp; Garden. Brand strategy, positioning, customer insight and integrated marketing across the world's most competitive categories. Author of <em>Marketing Executive's AI Authority</em>.</p>
-      </div>
-      <div class="person">
-        <div class="role">Engine fire</div>
-        <h3>James Whitehill</h3>
-        <p>Fifteen years in advertising production for international multi-million-dollar businesses. Four years deploying AI tools and execution systems across SMEs, and now leading our agent architecture. Moved from traditional to digital advertising before the market caught up. Same instinct, applied to the AI shift.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FIT -->
-<section class="block fit" style="padding-top:0">
-  <div class="wrap">
-    <div class="eyebrow-c">A note on fit</div>
-    <h2>We're not for everyone. <em>And that's on purpose.</em></h2>
-    <p class="lead">We work with no more than six client engagements at any time, because we do the work ourselves. Some businesses are an automatic no for us, no matter the fee. Easier for everyone to know up front.</p>
-    <div class="tags">
-      <span>No gambling</span><span>No adult content</span><span>No predatory lending</span><span>No MLM or pyramid</span><span>No "wealth coaching"</span><span>No speculative crypto</span><span>No tobacco or vape</span>
-    </div>
-    <div class="closer">Everyone else, we're listening.</div>
-  </div>
-</section>
-
-<!-- CLOSE -->
-<section class="close" style="padding-bottom:0">
-  <div class="wrap">
-    <h2>Two fires.<br><em>Your business.</em><br>Let's begin.</h2>
-    <p class="lead">Start with the free visibility report. If it stings, the Diagnosis tells you exactly why, and what to fix first.</p>
-    <a href="#contact" class="pill pill-iris" style="padding:18px 34px" onclick="event.preventDefault(); scrollToSection('contact')">Get the free report</a>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact" id="contact" style="margin-top:120px">
-  <div class="wrap contact-grid">
-    <div>
-      <h3>Light the <em>fuse.</em></h3>
-      <p>For the free report, just tell us what you do and where. For the Diagnosis, say so and we'll send the intake link. We reply within two business days.</p>
-      <div class="direct"><div class="l">Direct line</div><a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></div>
-    </div>
-    <form class="form" id="contact-form" onsubmit="handleSubmit(event)">
-      <div class="field"><label for="name">Your name</label><input type="text" id="name" required autocomplete="name"></div>
-      <div class="field"><label for="email">Email</label><input type="email" id="email" required autocomplete="email"></div>
-      <div class="field"><label for="company">Business</label><input type="text" id="company" autocomplete="organization"></div>
-      <div class="field"><label for="message">What's not working?</label><textarea id="message" required placeholder="e.g. Family law, Sutherland Shire. Free report please."></textarea></div>
-      <button type="submit" class="submit">Send</button>
-      <div class="form-success" id="form-success"><h4>We've got it.</h4><p>Your message is in. We read every one and reply within two business days.</p></div>
-      <div class="form-error" id="form-error"><p class="msg">Something went wrong sending your message.</p><p style="margin-top:8px;font-size:14px">Email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color:var(--iris-bright)">lightmyfuse@two-fires.com</a>.</p></div>
-    </form>
-  </div>
-  <div class="wrap">
+    <h2>Two fires.<br><em>One outcome.</em></h2>
+    <p class="lead">Forty-five minutes of your time. A full day of ours. Bring the problem that's been sitting there the longest.</p>
+    <a href="mailto:lightmyfuse@two-fires.com?subject=A%2045-minute%20conversation" class="btn btn-iris" style="padding:18px 32px">Book a 45-minute conversation</a>
+    <span class="mono">lightmyfuse@two-fires.com · Sydney</span>
     <div class="foot">
       <span>Two Fires · Sydney · 2026</span>
-      <nav>
-        <a href="#" onclick="event.preventDefault(); goHome()">Home</a>
-        <a href="/blog.html">Blog</a>
-        <a href="/podcast.html">Podcast</a>
-        <a href="#" onclick="event.preventDefault(); showLegal('privacy')">Privacy</a>
-        <a href="#" onclick="event.preventDefault(); showLegal('terms')">Terms</a>
-        <a href="/portal.html">Client Portal</a>
-      </nav>
+      <nav><a href="/blog.html">Blog</a><a href="/podcast.html">Podcast</a><a href="/portal.html">Client portal</a><a href="#">Privacy</a><a href="#">Terms</a></nav>
     </div>
   </div>
 </section>
-
-</div><!-- /main-content -->
-
-<div class="legal-page" id="privacy-page">
-  <div class="wrap">
-    <h1>Privacy <em>Policy.</em></h1>
-    <div class="legal-content">
-      <p class="muted">Last updated: May 2026.</p>
-      <p>Two Fires (the "firm," "we," or "us") respects your privacy. This page explains what we collect, why, and how we treat it. We've kept it short on purpose. If anything isn't clear, write to us at <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
-      <h3>What we collect</h3>
-      <p>When you submit our contact form or email us directly, we collect your name, email address, company name (if provided), and the message you send. That's it. We do not use third-party tracking pixels or sell data to anyone.</p>
-      <h3>How we use it</h3>
-      <p>We use this information solely to respond to your enquiry and continue any conversation you start with us. If we work together, we'll keep your contact details on file for the duration of our engagement and a reasonable period afterwards.</p>
-      <h3>Analytics and cookies</h3>
-      <p>This website uses minimal first-party analytics to understand which pages are read. No personal data is shared with third parties. We do not use advertising cookies or cross-site tracking.</p>
-      <h3>Your rights</h3>
-      <p>You can ask us at any time what we hold about you, request a copy, or ask us to delete it. Email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a> and we'll act within 30 days.</p>
-      <h3>Changes to this policy</h3>
-      <p>If we update this policy, the change will appear here with a new "last updated" date. Material changes will be communicated to active clients directly.</p>
-      <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()">← Back to home</a></p>
-    </div>
-  </div>
-</div>
-
-<div class="legal-page" id="terms-page">
-  <div class="wrap">
-    <h1>Terms of <em>use.</em></h1>
-    <div class="legal-content">
-      <p class="muted">Last updated: May 2026.</p>
-      <p>These terms govern your use of the Two Fires website. By visiting two-fires.com, you accept them. They are deliberately brief.</p>
-      <h3>Information on this site</h3>
-      <p>Content on this website is provided for general information about Two Fires. It is not professional advice. Specific marketing, brand, or commercial recommendations are made under engagement agreements, not via website content.</p>
-      <h3>Intellectual property</h3>
-      <p>The Two Fires brand, name, mark, and original content are the property of Two Fires Pty Ltd. You may quote short passages with attribution. You may not reproduce, modify, or commercially redistribute substantial portions without written permission.</p>
-      <h3>Limitation of liability</h3>
-      <p>Use of this website is at your own risk. To the extent permitted by Australian law, Two Fires excludes liability for any loss arising from the use of the site or reliance on its content.</p>
-      <h3>Governing law</h3>
-      <p>These terms are governed by the laws of New South Wales, Australia.</p>
-      <h3>Contact</h3>
-      <p>Questions? <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></p>
-      <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()">← Back to home</a></p>
-    </div>
-  </div>
-</div>
-
-<div class="preview-note">Design preview · Not the live site</div>
 
 <script>
 (function(){
-  const cv = document.getElementById('flames'); const ctx = cv.getContext('2d');
+  const nav=document.getElementById('nav'); addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const N = 4200;
-  const palette = ['#a855f7','#c4a8ff','#6b21a8','#ffffff','#e9d5ff','#ffb829','#7c3aed'];
+  // HERO: particles sampled from the Two Fires mark
+  const cv = document.getElementById('flames'); const ctx = cv.getContext('2d');
+  const N0 = 4200; const palette = ['#a855f7','#c4a8ff','#6b21a8','#f5f3f8','#e9d5ff','#7c3aed'];
   let W,H,dpr,pts=[],mask=null,MW=0,MH=0;
   const img = new Image();
   img.onload = () => { const c=document.createElement('canvas'); MW=c.width=img.width; MH=c.height=img.height; const x=c.getContext('2d'); x.drawImage(img,0,0); mask=x.getImageData(0,0,MW,MH).data; build(); draw(); };
   img.src = 'data:image/png;base64,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';
   function alphaAt(u,v){ const px=Math.floor(u*MW), py=Math.floor(v*MH); if(px<0||py<0||px>=MW||py>=MH) return 0; return mask[(py*MW+px)*4+3]/255; }
   function build(){
-    dpr = Math.min(devicePixelRatio||1,2);
-    W = cv.clientWidth; H = cv.clientHeight; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-    pts = []; let tries=0;
+    dpr = Math.min(devicePixelRatio||1,2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    const N = Math.max(1200, Math.round(N0 * Math.min(1, (W*H)/(560*720)))); pts = []; let tries=0;
     while(pts.length<N && tries<N*60){
-      tries++;
-      const u=Math.random(), v=Math.random();
-      const a=alphaAt(u,v); if(a<0.5) continue;
-      // edge weighting: denser near the silhouette edge for a drawn feel
-      const e = Math.min(alphaAt(u+0.012,v),alphaAt(u-0.012,v),alphaAt(u,v+0.009),alphaAt(u,v-0.009));
-      const edge = e<0.5;
+      tries++; const u=Math.random(), v=Math.random(); if(alphaAt(u,v)<0.5) continue;
+      const e = Math.min(alphaAt(u+0.012,v),alphaAt(u-0.012,v),alphaAt(u,v+0.009),alphaAt(u,v-0.009)); const edge = e<0.5;
       if(!edge && Math.random()<0.45) continue;
       const r=Math.random();
-      const c = edge ? (r<0.5?palette[1]:r<0.8?palette[3]:palette[4]) : (r<0.55?palette[0]:r<0.8?palette[2]:r<0.93?palette[6]:palette[5]);
+      const c = edge ? (r<0.5?palette[1]:r<0.8?palette[3]:palette[4]) : (r<0.55?palette[0]:r<0.8?palette[2]:palette[5]);
       pts.push({u,v, s: edge? 1.4+Math.random()*1.8 : 1.6+Math.random()*2.4, c, a: edge?0.6+Math.random()*0.4:0.25+Math.random()*0.5, ph: Math.random()*6.28, sp: 0.4+Math.random()*1.1, yy:1-v});
     }
   }
@@ -690,50 +450,28 @@
   function tri(x,y,s,rot){ ctx.beginPath(); for(let i=0;i<3;i++){ const a=rot+i*2.094; const px=x+Math.cos(a)*s, py=y+Math.sin(a)*s; i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath(); ctx.stroke(); }
   function draw(){
     ctx.clearRect(0,0,W,H);
-    const ar = MW/MH; let mh = H*0.82, mw = mh*ar; if(mw>W*0.9){ mw=W*0.9; mh=mw/ar; }
-    const ox=(W-mw)/2, oy=(H-mh)/2;
-    const g=ctx.createRadialGradient(W/2,H*0.6,0,W/2,H*0.6,mh*0.7); g.addColorStop(0,'rgba(107,33,168,0.30)'); g.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    ctx.lineWidth = 1;
+    const ar = MW/MH; let mh = H*0.86, mw = mh*ar; if(mw>W*0.92){ mw=W*0.92; mh=mw/ar; }
+    const ox=(W-mw)/2, oy=(H-mh)/2; ctx.lineWidth = 1;
     for(const p of pts){
       const rise = reduce?0:(Math.sin(t*p.sp+p.ph)*0.010*(0.3+p.yy));
       const sway = reduce?0:(Math.cos(t*0.7*p.sp+p.ph)*0.008*(0.2+p.yy));
-      const x = ox + (p.u + sway + mx*0.04*(1-p.yy))*mw;
-      const y = oy + (p.v - rise + my*0.02)*mh;
-      ctx.globalAlpha = p.a*(0.6+0.4*Math.sin(t*1.3+p.ph));
-      ctx.strokeStyle = p.c;
-      tri(x,y,p.s,t*0.2+p.ph);
+      const x = ox + (p.u + sway + mx*0.04*(1-p.yy))*mw, y = oy + (p.v - rise + my*0.02)*mh;
+      ctx.globalAlpha = p.a*(0.6+0.4*Math.sin(t*1.3+p.ph)); ctx.strokeStyle = p.c; tri(x,y,p.s,t*0.2+p.ph);
     }
-    ctx.globalAlpha=1; t += 0.016;
-    if(!reduce) requestAnimationFrame(draw);
+    ctx.globalAlpha=1; t += 0.016; if(!reduce) requestAnimationFrame(draw);
   }
   let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ if(mask){build(); if(reduce) draw();} },150); });
+
+  // PORTRAIT placeholders: fine-line hatching, violet, until real duotone photos drop in
+  document.querySelectorAll('canvas[data-portrait]').forEach(c=>{
+    const d=Math.min(devicePixelRatio||1,2); const w=c.clientWidth, h=c.clientHeight; c.width=w*d; c.height=h*d; const x=c.getContext('2d'); x.setTransform(d,0,0,d,0,0);
+    x.strokeStyle='rgba(196,168,255,0.16)'; x.lineWidth=1;
+    for(let i=-h;i<w+h;i+=9){ x.beginPath(); x.moveTo(i,0); x.lineTo(i+h,h); x.stroke(); }
+    x.strokeStyle='rgba(196,168,255,0.06)';
+    for(let i=-h;i<w+h;i+=9){ x.beginPath(); x.moveTo(i+h,0); x.lineTo(i,h); x.stroke(); }
+  });
 })();
 </script>
 
-
-<script>
-  const navEl=document.getElementById('nav');
-  addEventListener('scroll',()=>{navEl.classList.toggle('scrolled',scrollY>40)},{passive:true});
-  function scrollToSection(id){ goHome(); setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },50); }
-  function showLegal(name){ document.getElementById('main-content').classList.add('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); document.getElementById(name+'-page').classList.add('active'); window.scrollTo({top:0,behavior:'instant'}); }
-  function goHome(){ document.getElementById('main-content').classList.remove('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); }
-  async function handleSubmit(e){
-    e.preventDefault();
-    const name=document.getElementById('name').value.trim(), email=document.getElementById('email').value.trim(), company=document.getElementById('company').value.trim(), message=document.getElementById('message').value.trim();
-    const errEl=document.getElementById('form-error'); errEl.classList.remove('active');
-    if(!name||!email||!message){ showFormError('Please fill in your name, email, and message.'); return false; }
-    if(!email.includes('@')){ showFormError('Please enter a valid email address.'); return false; }
-    const btn=document.querySelector('#contact-form .submit'); const original=btn.textContent; btn.disabled=true; btn.textContent='Sending...';
-    try{
-      const res=await fetch('https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_contact_enquiries',{method:'POST',headers:{'Content-Type':'application/json','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc','Prefer':'return=minimal'},body:JSON.stringify({name,email,company:company||null,message})});
-      if(!res.ok) throw new Error('Request failed: '+res.status);
-      document.querySelectorAll('#contact-form .field, #contact-form .submit').forEach(el=>el.style.display='none');
-      document.getElementById('form-success').classList.add('active');
-    }catch(err){ btn.disabled=false; btn.textContent=original; showFormError('Something went wrong sending your message.'); }
-    return false;
-  }
-  function showFormError(msg){ const errEl=document.getElementById('form-error'); errEl.querySelector('.msg').textContent=msg; errEl.classList.add('active'); }
-</script>
 </body>
 </html>
