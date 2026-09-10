@@ -274,6 +274,32 @@
     .door + .door { padding-left: 0; }
     .podcast { grid-template-columns: 1fr; gap: 24px; }
   }
+
+  /* ===== FOR AGENTS ===== */
+  .agents { padding: 160px 0; border-top: 1px solid rgba(255,255,255,0.1); }
+  .agents .zig { align-items: start; }
+  .agents h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; margin-bottom: 28px; }
+  .agents h2 em { font-style: normal; color: var(--iris-bright); }
+  .agents .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
+  .tools { list-style: none; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .tools li { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .tools .t { font-size: 20px; font-weight: 400; letter-spacing: -0.02em; }
+  .tools .t span { display: block; font-size: 14px; font-weight: 300; color: var(--ash); margin-top: 4px; }
+  .tools code { font-family: var(--mono); font-size: 12px; color: var(--iris-bright); white-space: nowrap; }
+  .snippet { margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+  .snippet .bar { display: flex; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.1); font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); }
+  .snippet .bar b { color: var(--iris-bright); font-weight: 500; }
+  .snippet pre { margin: 0; padding: 22px 18px; font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--mist); overflow-x: auto; }
+  .snippet pre .k { color: var(--bone); }
+  .snippet pre .v { color: var(--iris-bright); }
+  .snippet pre .c { color: #4a4a4a; }
+  .agents .who { margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .agents .who div { padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .agents .who b { display: block; font-weight: 400; font-size: 17px; margin-bottom: 6px; }
+  .agents .who p { font-size: 14px; color: var(--ash); line-height: 1.5; }
+  .agents .note { margin-top: 32px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.8; }
+  .agents .note em { font-style: normal; color: var(--iris-bright); }
+  @media (max-width: 960px) { .agents { padding: 100px 0; } .agents .who { grid-template-columns: 1fr; } .tools li { grid-template-columns: 1fr; gap: 6px; } }
 </style>
 </head>
 <body>
@@ -287,6 +313,7 @@
       <li><a href="/blog.html">Blog</a></li>
       <li><a href="/podcast.html">Podcast</a></li>
       <li><a href="/portal.html">Portal</a></li>
+      <li><a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">For agents</a></li>
       <li><a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Light the fuse</a></li>
     </ul>
   </div>
@@ -518,6 +545,47 @@
         <p>Strategy from Paul, the Intelligence Suite in your portal, execution from the engine, and a monthly read on what moved. Six client engagements at a time, never more, because we do the work ourselves.</p>
         <div class="ft">Measured monthly · Reported in the open</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR AGENTS -->
+<section class="agents" id="agents">
+  <div class="wrap zig">
+    <div>
+      <div class="eyebrow">For agents · Two Fires Engine</div>
+      <h2>Your agents can write copy. <em>They can't tell you if it's wrong.</em></h2>
+      <p class="lead">The same four agents that run inside our client portal, available to yours. One MCP URL, one API key, paid per run, no contract. Customer evidence, a message audit, a category scan, an AI visibility check: the strategist your AI calls before it writes a word.</p>
+      <ul class="tools">
+        <li><span class="t">Customer Insight<span>Real pains, questions and language for any category and region</span></span><code>customer_insight</code></li>
+        <li><span class="t">Messaging Audit<span>Flint reads any URL against what the customer actually cares about</span></span><code>messaging_audit</code></li>
+        <li><span class="t">Competitor and Category<span>Where everyone sounds the same. The whitespace nobody has taken.</span></span><code>competitor_category</code></li>
+        <li><span class="t">AI Visibility Check<span>Who the AI names for your work on your patch, and whether it's you</span></span><code>ai_visibility_check</code></li>
+      </ul>
+      <div class="who">
+        <div><b>Marketing departments</b><p>A strategist's read every week, without the strategist.</p></div>
+        <div><b>Founders</b><p>Before the agency. Before the rebrand. Know what's actually wrong.</p></div>
+        <div><b>Agent builders</b><p>Wire "audit this page" into your own SDR, content or CRM stack.</p></div>
+      </div>
+    </div>
+    <div>
+      <div class="snippet">
+        <div class="bar"><span><b>MCP</b> · claude, cursor, openclaw, anything</span><span>engine.two-fires.com</span></div>
+        <pre><span class="c">// paste into your agent's MCP config</span>
+<span class="k">"two-fires"</span>: {
+  <span class="k">"url"</span>: <span class="v">"https://engine.two-fires.com/mcp"</span>,
+  <span class="k">"headers"</span>: { <span class="k">"Authorization"</span>: <span class="v">"Bearer tfe_live_…"</span> }
+}</pre>
+      </div>
+      <div class="snippet" style="margin-top:16px">
+        <div class="bar"><span><b>REST</b> · async, poll or callback</span><span>v1</span></div>
+        <pre><span class="c">POST</span> /v1/audit
+{ <span class="k">"site_url"</span>: <span class="v">"https://yourclinic.com.au"</span> }
+
+<span class="c">202</span> { <span class="k">"run_id"</span>: <span class="v">"run_8f2…"</span> }
+<span class="c">GET</span>  /v1/runs/run_8f2…  <span class="c">→ structured result + pdf_url</span></pre>
+      </div>
+      <div class="note">Per run · No contracts · Every report ends with the human option<br><em>Early access</em> · <a href="mailto:lightmyfuse@two-fires.com?subject=Two%20Fires%20Engine%20early%20access" style="color:var(--bone)">lightmyfuse@two-fires.com</a></div>
     </div>
   </div>
 </section>
