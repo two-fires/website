@@ -180,7 +180,11 @@ body::before {
 .item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
 .item p { font-size: 13px; color: var(--white-60); line-height: 1.6; }
 .sev { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: 12px; }
-.sev.high { background: rgba(248,113,113,0.15); color: var(--red); }
+/* Priority, not alarm. Red left the scorecard when the scale gained a floor, and
+   a red badge beside an opportunity-framed headline was the last thing on the
+   page still shouting. Brand purple reads as "start here" and stays clear of
+   the amber used for medium. */
+.sev.high { background: var(--purple-glow); color: var(--purple-bright); }
 .sev.medium { background: rgba(251,191,36,0.15); color: var(--amber); }
 .sev.low { background: var(--white-08); color: var(--white-40); }
 
