@@ -115,6 +115,11 @@ body::before {
 .dim-bar span { display: block; height: 100%; border-radius: 4px; }
 .dim-score { font-family: 'Geist Mono', monospace; font-size: 12px; width: 38px; text-align: right; flex-shrink: 0; }
 .dim-why { font-size: 12px; color: var(--white-40); width: 100%; margin-top: 4px; padding-left: 0; }
+/* Three parts per dimension: what is working, the biggest lever, and what the
+   higher score looks like. Split so the reader can see the shape at a glance. */
+.dim-part { font-size: 12px; line-height: 1.6; color: var(--white-40); width: 100%; margin-top: 5px; }
+.dim-part b { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; color: var(--purple-bright); display: block; margin-bottom: 2px; }
+.dim-part.unlocks { color: var(--white-60); }
 .dim-wrap { padding: 0.5rem 0; border-bottom: 0.5px solid var(--white-08); }
 .dim-wrap:last-child { border-bottom: none; }
 
@@ -144,6 +149,14 @@ body::before {
 .finding .f-line { font-size: 14px; line-height: 1.65; color: var(--white-60); margin-bottom: 0.5rem; }
 .finding .f-do { color: var(--white); }
 .finding .f-lab { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple-bright); display: block; margin-bottom: 3px; }
+
+/* Try this: suggested copy we wrote, deliberately unlike the purple evidence
+   block above it. No quotation marks, a dashed edge rather than a solid rule,
+   and a standing note that it is a suggestion. A reader must never be able to
+   mistake our sample line for their own words read back to them. */
+.finding .f-try { border: 0.5px dashed var(--white-20); border-radius: 10px; padding: 0.8rem 1rem; margin: 0.15rem 0 0.85rem; background: transparent; }
+.finding .f-try .f-trycopy { font-size: 14px; line-height: 1.6; color: var(--white); }
+.finding .f-try .f-trynote { font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white-40); margin-top: 7px; }
 
 /* Executive summary: the first thing on the page, before any detail. */
 .exec .exec-diag { font-size: 15px; line-height: 1.7; color: var(--white); margin-bottom: 1.4rem; }
@@ -326,11 +339,35 @@ function evidenceLabel(s) {
   return SRC_LABEL[v] || '';
 }
 
+// The scale runs 6 to 10, so red is gone by design: there is no score on this
+// report that means alarm. 6 is amber, an opportunity worth attention; 7 and up
+// is green. Mirrors the bands the prompt scores against.
 function scoreColor(n) {
   const v = Number(n) || 0;
   if (v >= 7) return 'var(--green)';
-  if (v >= 4) return 'var(--amber)';
-  return 'var(--red)';
+  return 'var(--amber)';
+}
+
+// The 6 to 10 floor is enforced on the server, at generation and again on the
+// display path. It is repeated here so a report stored before the floor existed
+// can never render a 3 in front of a client. Mirrors applyScoreFloor in
+// server.js, the same way normaliseResult mirrors normaliseDiagnosis.
+const SCORE_FLOOR = 6;
+function clampScore(n) {
+  // Number(null) and Number('') are both 0, which would invent a 6 out of a
+  // score that was never given. A missing score stays missing.
+  if (n === null || n === undefined || n === '') return null;
+  const v = Number(n);
+  if (!Number.isFinite(v)) return null;
+  return Math.max(SCORE_FLOOR, Math.min(10, Math.round(v)));
+}
+function applyScoreFloor(shape) {
+  const es = shape.executive_summary;
+  if (es && es.overall_health_score != null) es.overall_health_score = clampScore(es.overall_health_score);
+  shape.scorecard = (shape.scorecard || []).map((dim) => (
+    dim && dim.score != null ? { ...dim, score: clampScore(dim.score) } : dim
+  ));
+  return shape;
 }
 
 function parseSSE(raw) {
@@ -491,13 +528,13 @@ function normaliseResult(result) {
   const r = result || {};
   const d = r.diagnosis || {};
   if (d.executive_summary || d.sections || d.strategic_direction) {
-    return {
-      executive_summary: d.executive_summary || {},
+    return applyScoreFloor({
+      executive_summary: { ...(d.executive_summary || {}) },
       scorecard: d.scorecard || [],
       sections: d.sections || [],
       strategic_direction: d.strategic_direction || {},
       legacy: false,
-    };
+    });
   }
   const plan = r.action_plan || {};
   // No evidence was stored against legacy findings, so they are marked as
@@ -510,7 +547,7 @@ function normaliseResult(result) {
     recommended_action: '',
     severity: severity || String(item.severity || '').toLowerCase() || '',
   });
-  return {
+  return applyScoreFloor({
     executive_summary: {
       overall_diagnosis: [d.headline, d.summary].filter(Boolean).join(' '),
       overall_health_score: d.overall_health_score != null ? d.overall_health_score : null,
@@ -533,7 +570,7 @@ function normaliseResult(result) {
       quick_wins: plan.quick_wins || [],
     },
     legacy: true,
-  };
+  });
 }
 
 function renderResults(result) {
@@ -564,7 +601,7 @@ function renderResults(result) {
       ${(es.key_strengths || []).length || (es.key_issues || []).length ? `
       <div class="exec-grid">
         ${(es.key_strengths || []).length ? `<div class="exec-col good"><h4>Key strengths</h4><ul>${bullets(es.key_strengths)}</ul></div>` : ''}
-        ${(es.key_issues || []).length ? `<div class="exec-col bad"><h4>Key issues</h4><ul>${bullets(es.key_issues)}</ul></div>` : ''}
+        ${(es.key_issues || []).length ? `<div class="exec-col bad"><h4>Biggest growth levers</h4><ul>${bullets(es.key_issues)}</ul></div>` : ''}
       </div>` : ''}
       ${es.main_implication ? `<div class="exec-block"><span class="f-lab">What this means</span><p>${esc(es.main_implication)}</p></div>` : ''}
       ${es.recommended_direction ? `<div class="exec-block"><span class="f-lab">Recommended direction</span><p>${esc(es.recommended_direction)}</p></div>` : ''}
@@ -596,6 +633,7 @@ function renderResults(result) {
       ${evHtml}
       ${s.why_it_matters ? `<p class="f-line"><span class="f-lab">Why it matters</span>${esc(s.why_it_matters)}</p>` : ''}
       ${s.recommended_action ? `<p class="f-line f-do"><span class="f-lab">Do this</span>${esc(s.recommended_action)}</p>` : ''}
+      ${s.suggested_example ? `<div class="f-try"><span class="f-lab">Try this</span><div class="f-trycopy">${esc(s.suggested_example)}</div><div class="f-trynote">Suggested wording, not a quote from your material</div></div>` : ''}
     </div>`;
   }).join('');
 
@@ -609,7 +647,11 @@ function renderResults(result) {
         <div class="dim-bar"><span style="width:${pct}%;background:${c};"></span></div>
         <div class="dim-score" style="color:${c};">${esc(dim.score)}/10</div>
       </div>
-      ${dim.rationale ? `<div class="dim-why">${esc(dim.rationale)}</div>` : ''}
+      ${dim.rationale_working || dim.rationale_improve || dim.rationale_unlocks
+        ? `${dim.rationale_working ? `<div class="dim-part"><b>What is working</b>${esc(dim.rationale_working)}</div>` : ''}` +
+          `${dim.rationale_improve ? `<div class="dim-part"><b>Biggest lever</b>${esc(dim.rationale_improve)}</div>` : ''}` +
+          `${dim.rationale_unlocks ? `<div class="dim-part unlocks"><b>At a higher score</b>${esc(dim.rationale_unlocks)}</div>` : ''}`
+        : (dim.rationale ? `<div class="dim-why">${esc(dim.rationale)}</div>` : '')}
     </div>`;
   }).join('');
 
