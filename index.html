@@ -668,6 +668,7 @@
   function scrollToSection(id){ goHome(); setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },50); }
   function showLegal(name){ document.getElementById('main-content').classList.add('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); document.getElementById(name+'-page').classList.add('active'); window.scrollTo({top:0,behavior:'instant'}); }
   function goHome(){ document.getElementById('main-content').classList.remove('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); }
+  (function(){ const h=location.hash.replace('#',''); if(h==='privacy-page'||h==='privacy') showLegal('privacy'); else if(h==='terms-page'||h==='terms') showLegal('terms'); else if(h){ setTimeout(()=>{ const el=document.getElementById(h); if(el) el.scrollIntoView({behavior:'instant',block:'start'}); },50); } })();
   function showFormError(msg){ const errEl=document.getElementById('form-error'); errEl.querySelector('.msg').textContent=msg; errEl.classList.add('active'); }
   async function handleSnapshot(e){
     e.preventDefault();
