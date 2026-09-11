@@ -179,7 +179,8 @@
 
   /* ===== additions for the full page ===== */
   .nav.scrolled { background: rgba(0,0,0,0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-  .nav .site-logo { height: 46px; width: auto; display: block; }
+  .nav .site-logo { height: 60px; width: auto; display: block; }
+  @media (max-width: 960px) { .nav .site-logo { height: 48px; } }
   .quote { margin-top: 44px; padding-left: 28px; border-left: 1px solid var(--iris); max-width: 60ch; }
   .quote p { font-size: 22px; font-weight: 300; line-height: 1.4; letter-spacing: -0.01em; color: var(--bone); margin-bottom: 14px; }
   .quote cite { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); }
