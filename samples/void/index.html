@@ -130,9 +130,14 @@
 
   /* DIAGNOSIS: one violet moment */
   .diag { padding: 96px 0; }
-  .diag .zig { align-items: start; }
-  .diag .price { font-weight: 400; font-size: clamp(5rem, 12vw, 11rem); letter-spacing: -0.06em; line-height: 0.9; color: var(--iris-bright); }
+  .diag .zig, .snap .zig, .agents .zig { align-items: start; }
+  .diag .zig > :last-child, .snap .zig > :last-child, .agents .zig > :last-child { position: sticky; top: 110px; }
+  @media (max-width: 960px) { .diag .zig > :last-child, .snap .zig > :last-child, .agents .zig > :last-child { position: static; } }
+  .diag .price { font-weight: 400; font-size: clamp(4.5rem, 9vw, 8rem); letter-spacing: -0.06em; line-height: 0.9; color: var(--iris-bright); }
   .diag .price small { font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ash); display: block; margin-top: 18px; }
+  .incl { list-style: none; margin-top: 28px; max-width: 34ch; }
+  .incl li { font-size: 15px; font-weight: 300; color: var(--mist); padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.16); }
+  .incl li:last-child { border-bottom: 1px solid rgba(255,255,255,0.16); }
   .stages { list-style: none; display: flex; flex-direction: column; margin-top: 40px; }
   .stages li { display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: baseline; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.14); }
   .stages li:last-child { border-bottom: 1px solid rgba(255,255,255,0.14); }
@@ -243,8 +248,11 @@
   .fit { padding-bottom: 60px !important; } .fit .closer { font-size: 22px; font-weight: 300; color: var(--iris-bright); letter-spacing: -0.01em; }
 
   /* contact */
-  .contact { padding: 80px 0; border-top: 1px solid rgba(255,255,255,0.16); }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .contact { padding: 64px 0 40px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .contact-line { display: flex; justify-content: space-between; align-items: baseline; gap: 32px; flex-wrap: wrap; margin-bottom: 56px; }
+  .contact-line h3 { margin-bottom: 0; }
+  .contact-line .mail { font-size: clamp(1.3rem, 2.4vw, 2rem); font-weight: 300; letter-spacing: -0.02em; color: var(--iris-bright); }
+  .contact-line .mail:hover { color: var(--bone); }
   .contact h3 { font-weight: 400; font-size: clamp(2rem, 3.6vw, 3rem); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 18px; }
   .contact h3 em { font-style: normal; color: var(--iris-bright); }
   .contact p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.55; margin-bottom: 28px; max-width: 46ch; }
@@ -293,7 +301,6 @@
 
   /* ===== SNAPSHOT (free door) ===== */
   .snap { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.16); }
-  .snap .zig { align-items: start; }
   .snap h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; text-wrap: balance; margin-bottom: 28px; }
   .snap h2 em { font-style: normal; color: var(--iris-bright); }
   .snap .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
@@ -314,7 +321,6 @@
 
   /* ===== FOR AGENTS ===== */
   .agents { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.16); }
-  .agents .zig { align-items: start; }
   .agents h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; margin-bottom: 28px; }
   .agents h2 em { font-style: normal; color: var(--iris-bright); }
   .agents .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
@@ -344,14 +350,12 @@
   <div class="wrap">
     <a href="#" onclick="event.preventDefault(); goHome()"><img class="site-logo" src="/images/two-fires-logo-transparent.png" alt="Two Fires"></a>
     <ul>
-      <li><a href="#services" onclick="event.preventDefault(); scrollToSection('services')">What we do</a></li>
-      <li><a href="#snapshot" onclick="event.preventDefault(); scrollToSection('snapshot')">Free Snapshot</a></li>
       <li><a href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">Diagnosis</a></li>
       <li><a href="#principals" onclick="event.preventDefault(); scrollToSection('principals')">Who we are</a></li>
       <li><a href="/blog.html">Blog</a></li>
       <li><a href="/portal.html">Portal</a></li>
       <li><a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">For agents</a></li>
-      <li><a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Light the fuse</a></li>
+      <li><a href="#snapshot" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('snapshot')">Free Snapshot</a></li>
     </ul>
   </div>
 </header>
@@ -422,63 +426,6 @@
   </div>
 </section>
 
-<!-- WHAT WE DO -->
-<section class="block" id="services" style="padding-top:0">
-  <div class="wrap">
-    <div class="eyebrow">What we do</div>
-    <h2>Three ways the fires <em>go to work on your business.</em></h2>
-    <div class="pillars">
-      <div class="pillar">
-        <div class="num">01</div>
-        <div>
-          <h3>Brand and strategy. <em>Get the story right.</em></h3>
-        </div>
-        <div>
-          <p>The work that decides whether everything else lands. Who your customer actually is, what they care about, and the single most powerful thing you can say to them.</p>
-          <ul>
-            <li>Brand positioning and proposition</li>
-            <li>Customer insight from real evidence, not guesswork</li>
-            <li>Messaging that matches what buyers care about</li>
-            <li>Category and competitor whitespace</li>
-          </ul>
-        </div>
-      </div>
-      <div class="pillar">
-        <div class="num">02</div>
-        <div>
-          <h3>The Intelligence Suite. <em>Your marketing, diagnosed and built.</em></h3>
-        </div>
-        <div>
-          <p>Our client portal. Give it your brief once and the agents carry it through a four-stage diagnosis, then stay in your hands for the work that follows. Self-serve, no meetings. Eight tools live today.</p>
-          <ul>
-            <li>Module 1: Marketing Diagnosis <span>· four stages, four PDF reports, one action plan</span></li>
-            <li>Customer Insight and Intelligence Chat <span>· scouts Reddit, forums and groups</span></li>
-            <li>Messaging Audit <span>· meet Flint, he finds the gap between what you say and what they want</span></li>
-            <li>Brand Benefit Ladder, Competitor and Category Agent, Content Studio</li>
-          </ul>
-          <a class="more" href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">Start with the Diagnosis →</a>
-        </div>
-      </div>
-      <div class="pillar">
-        <div class="num">03</div>
-        <div>
-          <h3>AI visibility. <em>Know if you're named in the answer.</em></h3>
-        </div>
-        <div>
-          <p>Before your next customer calls anyone, they ask ChatGPT or Google's AI Mode who to call. The visibility check asks the same tools the same questions for your category and patch, and logs every firm they name. You run it, or your agent does.</p>
-          <ul>
-            <li>Free Snapshot <span>· the door. Named or not named, one page</span></li>
-            <li>Inside the Diagnosis <span>· the full run, every question, every firm named</span></li>
-            <li>On the Engine <span>· <code style="font-family:var(--mono);font-size:12px">ai_visibility_check</code>, one MCP call</span></li>
-          </ul>
-          <a class="more" href="#snapshot" onclick="event.preventDefault(); scrollToSection('snapshot')">Get your free Snapshot →</a>
-        </div>
-      </div>
-    </div>
-    <p class="measure"><strong>Measured, not promised.</strong> We don't control the AI or the market, so we never guarantee a ranking. Every tool shows its evidence, labels what it's sure of, and logs every number, so you can run it again and see what moved.</p>
-  </div>
-</section>
-
 <!-- SNAPSHOT: the free door -->
 <section class="snap" id="snapshot">
   <div class="wrap zig">
@@ -532,7 +479,8 @@
     </div>
     <div>
       <div class="price">$1,999<small>+ GST · One-off · Self-serve in the portal</small></div>
-      <div class="actions" style="margin-top:40px"><a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Start the Diagnosis</a></div>
+      <ul class="incl"><li>Four stages, four PDF reports</li><li>One primary diagnosis, three priority actions</li><li>Every finding labelled evidence or inference</li><li>Run it again any time. Your portal, your history.</li></ul>
+      <div class="actions" style="margin-top:32px"><a href="mailto:lightmyfuse@two-fires.com?subject=Start%20the%20Diagnosis" class="pill pill-iris">Start the Diagnosis</a></div>
     </div>
   </div>
 </section>
@@ -636,36 +584,11 @@
   </div>
 </section>
 
-<!-- FIT -->
-<section class="block fit" style="padding-top:0">
-  <div class="wrap">
-    <div class="eyebrow-c">A note on fit</div>
-    <h2>Not for everyone. <em>On purpose.</em></h2>
-    <p class="lead">Some businesses are an automatic no, no matter the fee.</p>
-    <div class="tags">
-      <span>No gambling</span><span>No adult content</span><span>No predatory lending</span><span>No MLM or pyramid</span><span>No "wealth coaching"</span><span>No speculative crypto</span><span>No tobacco or vape</span>
-    </div>
-    <div class="closer">Everyone else, we're listening.</div>
-  </div>
-</section>
-
 <!-- CONTACT -->
-<section class="contact" id="contact" style="margin-top:40px">
-  <div class="wrap contact-grid">
-    <div>
-      <h3>Light the <em>fuse.</em></h3>
-      <p>For the free Snapshot, use the form above. For the Diagnosis, say so here and we'll send the intake link. Anything else, just write. We reply within two business days.</p>
-      <div class="direct"><div class="l">Direct line</div><a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></div>
-    </div>
-    <form class="form" id="contact-form" onsubmit="handleSubmit(event)">
-      <div class="field"><label for="name">Your name</label><input type="text" id="name" required autocomplete="name"></div>
-      <div class="field"><label for="email">Email</label><input type="email" id="email" required autocomplete="email"></div>
-      <div class="field"><label for="company">Business</label><input type="text" id="company" autocomplete="organization"></div>
-      <div class="field"><label for="message">What's not working?</label><textarea id="message" required placeholder="e.g. We'd like to start the Diagnosis."></textarea></div>
-      <button type="submit" class="submit">Send</button>
-      <div class="form-success" id="form-success"><h4>We've got it.</h4><p>Your message is in. We read every one and reply within two business days.</p></div>
-      <div class="form-error" id="form-error"><p class="msg">Something went wrong sending your message.</p><p style="margin-top:8px;font-size:14px">Email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color:var(--iris-bright)">lightmyfuse@two-fires.com</a>.</p></div>
-    </form>
+<section class="contact" id="contact">
+  <div class="wrap contact-line">
+    <h3>Anything else? <em>Just write.</em></h3>
+    <a class="mail" href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>
   </div>
   <div class="wrap">
     <div class="foot">
@@ -674,6 +597,7 @@
         <a href="#" onclick="event.preventDefault(); goHome()">Home</a>
         <a href="/blog.html">Blog</a>
         <a href="/podcast.html">Podcast</a>
+        <a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">For agents</a>
         <a href="#" onclick="event.preventDefault(); showLegal('privacy')">Privacy</a>
         <a href="#" onclick="event.preventDefault(); showLegal('terms')">Terms</a>
         <a href="/portal.html">Client Portal</a>
@@ -739,21 +663,6 @@
   function scrollToSection(id){ goHome(); setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },50); }
   function showLegal(name){ document.getElementById('main-content').classList.add('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); document.getElementById(name+'-page').classList.add('active'); window.scrollTo({top:0,behavior:'instant'}); }
   function goHome(){ document.getElementById('main-content').classList.remove('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); }
-  async function handleSubmit(e){
-    e.preventDefault();
-    const name=document.getElementById('name').value.trim(), email=document.getElementById('email').value.trim(), company=document.getElementById('company').value.trim(), message=document.getElementById('message').value.trim();
-    const errEl=document.getElementById('form-error'); errEl.classList.remove('active');
-    if(!name||!email||!message){ showFormError('Please fill in your name, email, and message.'); return false; }
-    if(!email.includes('@')){ showFormError('Please enter a valid email address.'); return false; }
-    const btn=document.querySelector('#contact-form .submit'); const original=btn.textContent; btn.disabled=true; btn.textContent='Sending...';
-    try{
-      const res=await fetch('https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_contact_enquiries',{method:'POST',headers:{'Content-Type':'application/json','apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc','Prefer':'return=minimal'},body:JSON.stringify({name,email,company:company||null,message})});
-      if(!res.ok) throw new Error('Request failed: '+res.status);
-      document.querySelectorAll('#contact-form .field, #contact-form .submit').forEach(el=>el.style.display='none');
-      document.getElementById('form-success').classList.add('active');
-    }catch(err){ btn.disabled=false; btn.textContent=original; showFormError('Something went wrong sending your message.'); }
-    return false;
-  }
   function showFormError(msg){ const errEl=document.getElementById('form-error'); errEl.querySelector('.msg').textContent=msg; errEl.classList.add('active'); }
   async function handleSnapshot(e){
     e.preventDefault();
