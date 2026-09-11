@@ -20,30 +20,42 @@
 
   <style>
     :root {
-      --bg: #050508;
-      --bg-soft: #0B0B14;
-      --surface: rgba(255, 255, 255, 0.04);
-      --surface-strong: rgba(255, 255, 255, 0.07);
-      --surface-card: #14091E;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-strong: rgba(255, 255, 255, 0.14);
-      --text: #FBFAFE;
-      --text-muted: #9F9AB0;
-      --text-faint: #5E5868;
-      --text-on-light: #0A0612;
-      --text-muted-on-light: #5B5267;
-      --light-surface: #F7F4FC;
+      /* VOID palette - matches index.html */
+      --void: #000000;
+      --bone: #ffffff;
+      --ash: #b8b8b8;
+      --mist: #d6d6d6;
+      --iris: #a855f7;
+      --iris-bright: #c4a8ff;
+      --glass-edge: rgba(196,168,255,0.22);
+      --glass-fill: rgba(196,168,255,0.035);
+      --hairline: rgba(255,255,255,0.16);
+
+      /* legacy token names remapped onto the void palette */
+      --bg: #000000;
+      --bg-soft: #000000;
+      --surface: rgba(196,168,255,0.035);
+      --surface-strong: rgba(196,168,255,0.06);
+      --surface-card: rgba(196,168,255,0.035);
+      --border: rgba(255,255,255,0.16);
+      --border-strong: rgba(255,255,255,0.16);
+      --text: #ffffff;
+      --text-muted: #d6d6d6;
+      --text-faint: #b8b8b8;
+      --text-on-light: #ffffff;
+      --text-muted-on-light: #d6d6d6;
+      --light-surface: rgba(196,168,255,0.035);
 
       --purple-deep: #6B21A8;
       --purple: #A855F7;
       --purple-bright: #C4A8FF;
-      --purple-glow: rgba(168, 85, 247, 0.55);
-      --purple-glow-soft: rgba(168, 85, 247, 0.25);
-      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+      --purple-glow: rgba(168, 85, 247, 0.25);
+      --purple-glow-soft: rgba(168, 85, 247, 0.12);
+      --purple-soft-fill: rgba(196, 168, 255, 0.04);
 
-      --font-display: 'DM Sans', sans-serif;
-      --font-body: 'DM Sans', sans-serif;
-      --font-mono: 'Geist Mono', monospace;
+      --font-display: 'DM Sans', 'Inter', system-ui, sans-serif;
+      --font-body: 'DM Sans', 'Inter', system-ui, sans-serif;
+      --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
 
       --max-w: 1140px;
     }
@@ -89,7 +101,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 0;
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
-      background: rgba(5, 5, 8, 0.7);
+      background: rgba(0, 0, 0, 0.72);
       border-bottom: 1px solid var(--border);
     }
     .header-inner {
@@ -632,6 +644,46 @@
       .post-fires, .post-close { padding: 60px 0; }
       .post-lede-para::first-letter { font-size: 3.6rem; padding-right: 10px; }
     }
+  
+    /* ==================== VOID OVERRIDES ==================== */
+    /* Pure black ground: no neon glow wash, no noise overlay. */
+    body { background: var(--void); font-weight: 300; }
+    body::before { display: none !important; }
+    body::after { display: none !important; }
+
+    /* Nav: transparent over black, blurred once scrolled. */
+    .header { background: transparent; border-bottom: 1px solid transparent; transition: background .3s, border-color .3s; }
+    .header.scrolled { background: rgba(0,0,0,0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--hairline); }
+    .nav a { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; color: var(--ash); }
+    .nav a:hover { color: var(--bone); }
+    .nav a.active { color: var(--iris-bright); }
+    .nav-cta { background: var(--iris); color: #fff; border: 0; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; padding: 13px 24px; }
+    .nav-cta:hover { background: var(--iris-bright); color: #0a0612; box-shadow: none; transform: translateY(-2px); }
+
+    /* Panels that used to be light bands are now glass on void. */
+    .section-light { box-shadow: inset 0 0 0 1px var(--glass-edge); border-radius: 16px; }
+    .section-light .section-label,
+    .section-light .timeline-week,
+    .section-light .post-num { color: var(--iris-bright); }
+    .section-light .section-label::before,
+    .section-light .post-num::after,
+    .section-light .timeline-item::before { background: var(--iris-bright); }
+    .section-light .timeline { border-left-color: var(--glass-edge); }
+
+    /* Reading text: 52ch, weight 300. */
+    .body-copy p, .post-excerpt, .blog-hero p { font-weight: 300; }
+    .body-copy { max-width: 52ch; }
+
+    /* Footer: mono, hairline, ash. */
+    .footer { border-top: 1px solid var(--hairline); background: transparent; }
+    .footer-text, .footer-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #8c8c8c; }
+    .footer-links a:hover { color: var(--ash); }
+
+    /* Violet used as TEXT must be the bright tone on void (contrast >= #8c8c8c). */
+    .section-light h2 em,
+    .cs-hero .eyebrow,
+    .eyebrow { color: var(--iris-bright); }
+    .work-list li::before { color: var(--iris-bright); }
   </style>
 </head>
 <body>
@@ -641,15 +693,16 @@
   <!-- Header -->
   <header class="header">
     <div class="header-inner">
-      <a class="brand nav-logo" href="/index.html">
+      <a class="brand nav-logo" href="https://www.two-fires.com/">
         <img src="/images/two-fires-logo-transparent.png" alt="Two Fires" style="height: 60px; width: auto; display: block;">
       </a>
       <nav class="nav">
-        <a href="/index.html#what">What we do</a>
-        <a href="/index.html#principals">Who we are</a>
-        <a href="/blog.html" class="active">Blog</a>
-        <a href="/podcast.html">Podcast</a>
-        <a class="nav-cta" href="/index.html#contact">Light the fuse</a>
+        <a href="https://www.two-fires.com/#diagnosis">Diagnosis</a>
+        <a href="https://www.two-fires.com/#principals">Who we are</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/portal.html">Portal</a>
+        <a href="https://www.two-fires.com/#agents">For agents</a>
+        <a class="nav-cta" href="https://www.two-fires.com/#snapshot">Free Snapshot</a>
       </nav>
     </div>
   </header>
@@ -769,9 +822,8 @@
       <div class="container">
         <div class="section-label" style="justify-content: center;">Work with us</div>
         <h2>Got a growth problem<br><em>that needs both fires?</em></h2>
-        <p>Every engagement starts with one conversation. Forty-five minutes of your time, a full day of ours in preparation.</p>
         <div class="cta-row">
-          <a class="pill pill-primary" href="/index.html#contact"><span>Book the conversation →</span></a>
+          <a class="pill pill-primary" href="https://www.two-fires.com/#snapshot"><span>Get your free Snapshot →</span></a>
           <a class="pill" href="mailto:lightmyfuse@two-fires.com"><span>lightmyfuse@two-fires.com</span></a>
         </div>
       </div>
@@ -821,10 +873,12 @@
         <span class="footer-text">Two Fires · Sydney · 2026</span>
       </div>
       <div class="footer-links">
-        <a href="/index.html">Home</a>
+        <a href="https://www.two-fires.com/">Home</a>
         <a href="/blog.html">Blog</a>
         <a href="/podcast.html">Podcast</a>
-        <a href="/index.html#contact">Contact</a>
+        <a href="https://www.two-fires.com/#agents">For agents</a>
+        <a href="https://www.two-fires.com/#privacy-page">Privacy</a>
+        <a href="https://www.two-fires.com/#terms-page">Terms</a>
         <a href="/portal.html">Client Portal</a>
       </div>
     </div>
@@ -853,5 +907,15 @@
     }
   </script>
 
+<script>
+  // Nav: blur once scrolled (matches index.html)
+  (function(){
+    var h = document.querySelector('.header');
+    if (!h) return;
+    var onScroll = function(){ h.classList.toggle('scrolled', window.scrollY > 40); };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
 </body>
 </html>

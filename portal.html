@@ -14,15 +14,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --charcoal: #05050A;
+  --charcoal: #000000;
   --purple: #A855F7;
   --purple-bright: #C4A8FF;
   --purple-deep: #6B21A8;
   --purple-glow: rgba(168,85,247,0.15);
-  --purple-border: rgba(168,85,247,0.25);
+  --purple-border: rgba(196,168,255,0.22);
   --white: #ffffff;
-  --white-60: rgba(255,255,255,0.6);
-  --white-20: rgba(255,255,255,0.2);
+  --white-60: rgba(255,255,255,0.84);
+  --white-20: rgba(255,255,255,0.16);
   --white-08: rgba(255,255,255,0.08);
   --white-04: rgba(255,255,255,0.04);
   --error: #f87171;
@@ -500,6 +500,24 @@ body::before {
 }
 
 .portal-footer nav a:hover { color: var(--purple-bright); }
+
+/* ==================== VOID OVERRIDES ==================== */
+html, body { background: #000000; color: #ffffff; font-weight: 300; }
+body::before { display: none !important; }
+.ambient { display: none !important; }
+.login-card { background: rgba(196,168,255,0.035); border: 0; box-shadow: inset 0 1px 1px rgba(216,236,248,0.2), inset 0 24px 48px rgba(168,85,247,0.06), 0 24px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(196,168,255,0.22); }
+.field input { background: rgba(0,0,0,0.5); border: 0; box-shadow: inset 0 0 0 1px rgba(196,168,255,0.22); color: #ffffff; }
+.field input:focus { outline: none; box-shadow: inset 0 0 0 1px #a855f7, 0 0 0 3px rgba(168,85,247,0.15); }
+.field label { color: #b8b8b8; }
+.field input::placeholder { color: #8c8c8c; }
+.login-sub { color: #d6d6d6; }
+.login-btn { background: #a855f7; color: #fff; border-radius: 999px; }
+.login-btn:hover { background: #c4a8ff; color: #0a0612; opacity: 1; }
+.login-footer { border-top: 1px solid rgba(255,255,255,0.16); }
+.login-footer nav a { color: #8c8c8c; }
+.login-footer nav a:hover, .login-footer nav a.current { color: #c4a8ff; }
+footer a { color: #8c8c8c; }
+footer a:hover { color: #b8b8b8; }
 </style>
 </head>
 <body>
@@ -542,11 +560,13 @@ body::before {
 
     <div class="login-footer">
       <nav>
-        <a href="https://two-fires.com">Home</a>
-        <a href="mailto:lightmyfuse@two-fires.com">Contact</a>
-        <a href="https://two-fires.com#privacy">Privacy</a>
-        <a href="https://two-fires.com#terms">Terms</a>
-        <a href="#" class="current">Portal login</a>
+        <a href="https://www.two-fires.com/">Home</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/podcast.html">Podcast</a>
+        <a href="https://www.two-fires.com/#agents">For agents</a>
+        <a href="https://www.two-fires.com/#privacy-page">Privacy</a>
+        <a href="https://www.two-fires.com/#terms-page">Terms</a>
+        <a href="#" class="current">Client Portal</a>
       </nav>
     </div>
 
