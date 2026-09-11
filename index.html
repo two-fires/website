@@ -6,1079 +6,686 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-  <meta name="description" content="World-class marketing. Supercharged with AI. Thirty years of brand work at McDonald's, Mars, Unilever and Burger King, applied to your business and multiplied by AI.">
-  <meta property="og:title" content="Two Fires · World-class marketing. Supercharged with AI.">
-  <meta property="og:description" content="World-class brand craft. AI execution. Two Fires is the marketing firm for businesses whose growth has plateaued.">
+  <meta property="og:title" content="Two Fires · World-class marketing. Supercharged by AI.">
+  <meta property="og:description" content="Thirty years of brand strategy from inside McDonald's, Mars, Unilever and Burger King, built into an Intelligence Suite you run yourself. Start with a free Snapshot.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.two-fires.com/">
-  <meta property="og:image" content="https://www.two-fires.com/images/flame-social.jpg">
-  <link rel="canonical" href="https://www.two-fires.com/">
-  <script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@graph": [
-  {
-   "@type": [
-    "Organization",
-    "ProfessionalService"
-   ],
-   "@id": "https://www.two-fires.com/#org",
-   "name": "Two Fires",
-   "url": "https://www.two-fires.com/",
-   "logo": {
-    "@type": "ImageObject",
-    "url": "https://www.two-fires.com/images/two-fires-logo-transparent.png"
-   },
-   "image": "https://www.two-fires.com/images/flame-social.jpg",
-   "slogan": "World-class marketing. Supercharged with AI.",
-   "description": "Two Fires is an embedded marketing firm that combines world-class brand strategy with AI-powered execution. Fire One is brand: positioning, customer insight and distinctive market assets. Fire Two is engine: an AI agent stack for research, drafting, distribution and reporting.",
-   "email": "james@two-fires.com",
-   "telephone": "+61 434 795 571",
-   "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Sydney",
-    "addressRegion": "NSW",
-    "addressCountry": "AU"
-   },
-   "areaServed": {
-    "@type": "Country",
-    "name": "Australia"
-   },
-   "sameAs": [
-    "https://www.linkedin.com/company/two-fires"
-   ],
-   "founder": [
-    {
-     "@type": "Person",
-     "name": "Paul Tredinnick",
-     "jobTitle": "Co-founder, Brand"
-    },
-    {
-     "@type": "Person",
-     "name": "James Whitehill",
-     "jobTitle": "Co-founder, Engine"
-    }
-   ]
-  },
-  {
-   "@type": "WebSite",
-   "@id": "https://www.two-fires.com/#website",
-   "url": "https://www.two-fires.com/",
-   "name": "Two Fires",
-   "publisher": {
-    "@id": "https://www.two-fires.com/#org"
-   }
-  }
- ]
-}
-  </script>
-  <title>Two Fires · World-class marketing. Supercharged with AI.</title>
-
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <title>Two Fires · World-class marketing. Supercharged by AI.</title>
+  <meta name="description" content="World-class marketing. Supercharged by AI. Thirty years of brand strategy from McDonald's, Mars, Unilever and Burger King, built into an Intelligence Suite you run yourself. Free Snapshot, then the $1,999 Marketing Diagnosis.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400;1,9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #000000;
+    --bone: #ffffff;
+    --ash: #b8b8b8;
+    --mist: #d6d6d6;
+    --iris: #a855f7;
+    --iris-deep: #6b21a8;
+    --iris-bright: #c4a8ff;
+    --glass-edge: rgba(196,168,255,0.22);
+    --glass-fill: rgba(196,168,255,0.035);
+    --font: 'DM Sans', 'Inter', system-ui, sans-serif;
+    --mono: 'Geist Mono', 'JetBrains Mono', monospace;
+    --max: 1280px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--void); color: var(--bone); font-family: var(--font); font-weight: 300; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 40px; }
 
-  <style>
-    :root {
-      /* Neon-leaning purple palette */
-      --bg: #050508;
-      --bg-soft: #0B0B14;
-      --surface: rgba(255, 255, 255, 0.04);
-      --surface-strong: rgba(255, 255, 255, 0.07);
-      --surface-card: #14091E;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-strong: rgba(255, 255, 255, 0.14);
-      --text: #FBFAFE;
-      --text-muted: #9F9AB0;
-      --text-faint: #5E5868;
-      --text-on-light: #0A0612;
-      --text-muted-on-light: #5B5267;
-      --light-surface: #F7F4FC;
+  /* NAV: transparent, no border */
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 26px 0; }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .nav img { height: 34px; width: auto; display: block; }
+  .nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+  .nav li a { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ash); transition: color .3s; }
+  .nav li a:hover { color: var(--bone); }
+  .pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 13px 24px; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; transition: transform .4s cubic-bezier(.52,.01,0,1), background .3s, color .3s; }
+  .pill-iris { background: var(--iris); color: #fff; }
+  .pill-iris:hover { background: var(--iris-bright); color: #0a0612; transform: translateY(-2px); }
+  .pill-ghost { color: var(--bone); box-shadow: inset 0 0 0 1px var(--glass-edge); background: rgba(196,168,255,0.04); }
+  .pill-ghost:hover { background: rgba(196,168,255,0.09); transform: translateY(-2px); }
 
-      --purple-deep: #6B21A8;
-      --purple: #A855F7;
-      --purple-bright: #C4A8FF;
-      --purple-glow: rgba(168, 85, 247, 0.55);
-      --purple-glow-soft: rgba(168, 85, 247, 0.25);
-      --purple-soft-fill: rgba(168, 85, 247, 0.1);
+  /* HERO */
+  .hero { position: relative; min-height: 100svh; display: grid; grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: 40px; max-width: var(--max); margin: 0 auto; padding: 140px 40px 80px; }
+  .hero-copy { position: relative; z-index: 2; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 36px; display: inline-flex; align-items: center; gap: 14px; }
+  .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--iris); }
+  h1 { font-weight: 400; font-size: clamp(3.2rem, 6.6vw, 6rem); line-height: 0.96; letter-spacing: -0.045em; text-wrap: balance; margin-bottom: 36px; }
+  h1 em { font-style: normal; color: var(--iris-bright); }
+  .lede { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 46ch; line-height: 1.55; margin-bottom: 44px; }
+  .lede strong { font-weight: 400; color: var(--bone); }
+  .actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .actions .pill { padding: 17px 30px; font-size: 13px; }
+  .hero-canvas { position: relative; height: min(78vh, 760px); width: 100%; }
+  .hero-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hero-caption { position: absolute; left: 0; bottom: -6px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8c8c; }
 
-      --font-display: 'DM Sans', sans-serif;
-      --font-body: 'DM Sans', sans-serif;
-      --font-mono: 'Geist Mono', monospace;
+  /* HERO (cathedral) */
+  .hero-c { padding: 130px 0 60px; }
+  .hero-c .head { margin-bottom: 40px; }
+  .hero-c h1 { margin: 0 auto 22px; max-width: 22ch; font-size: clamp(2.6rem, 5.4vw, 5rem); }
+  .hero-c .lead { margin: 0 auto 32px !important; max-width: 56ch; font-size: 18px; }
+  .hero-c .lead strong { font-weight: 400; color: var(--bone); }
+  .hero-c .actions { justify-content: center; }
+  .hero-c .cta-row { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); margin-top: 48px; }
+  .glass .tag a { color: var(--bone); }
+  .glass .tag a:hover { color: var(--iris-bright); }
+  @media (max-width: 960px) { .cathedral.hero-c { padding: 140px 0 50px; } .hero-c .head { margin-bottom: 36px; } .hero-c .eyebrow-c { font-size: 10px; } .hero-c .eyebrow-c::before, .hero-c .eyebrow-c::after { width: 20px; } }
 
-      --max-w: 1140px;
-    }
+  /* BRANDS: text only, floating on void */
+  .brands { max-width: var(--max); margin: 0 auto; padding: 20px 40px 0; display: flex; flex-wrap: wrap; gap: 20px 56px; align-items: baseline; }
+  .brands .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ash); }
+  .brands span:not(.lbl) { font-size: 22px; font-weight: 300; color: var(--mist); letter-spacing: -0.02em; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+  /* SECTIONS */
+  section.block { padding: 96px 0; }
+  .block h2, .cathedral h2, .diag h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; text-wrap: balance; margin-bottom: 28px; }
+  .block h2 em, .cathedral h2 em, .diag h2 em { font-style: normal; color: var(--iris-bright); }
+  .block .lead, .cathedral .lead, .diag .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
+  .zig { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+  .zig.flip > :first-child { order: 2; }
+  .big-stat { font-weight: 400; font-size: clamp(6rem, 16vw, 15rem); line-height: 0.9; letter-spacing: -0.06em; color: var(--bone); }
+  .big-stat small { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ash); margin-top: 22px; }
+  .big-stat em { font-style: normal; color: var(--iris-bright); }
 
-    body {
-      font-family: var(--font-body);
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.55;
-      min-height: 100vh;
-      overflow-x: hidden;
-      font-weight: 400;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+  /* CATHEDRAL: glass section with blueprint grid + spotlight */
+  .cathedral { position: relative; padding: 110px 0; isolation: isolate; }
+  .cathedral::before { content: ""; position: absolute; inset: 0; z-index: -2;
+    background-image: linear-gradient(rgba(196,168,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(196,168,255,0.06) 1px, transparent 1px);
+    background-size: 88px 88px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 30%, transparent 75%); }
+  .cathedral::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: conic-gradient(at 50% -8%, transparent 44%, rgba(168,85,247,0.14) 48.5%, rgba(196,168,255,0.28) 50%, rgba(168,85,247,0.14) 51.5%, transparent 56%);
+    -webkit-mask-image: linear-gradient(#000 0%, #000 35%, transparent 75%); mask-image: linear-gradient(#000 0%, #000 35%, transparent 75%); }
+  .cathedral .head { text-align: center; margin: 0 auto 80px; }
+  .cathedral .head h2 { margin: 0 auto 22px; max-width: 16ch; }
+  .cathedral .head .lead { margin: 0 auto; }
+  .eyebrow-c { justify-content: center; display: flex; gap: 16px; align-items: center; margin-bottom: 30px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); }
+  .eyebrow-c::before, .eyebrow-c::after { content: ""; width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--glass-edge), transparent); }
 
-    /* Background atmosphere with neon glow */
-    body::before {
-      content: ""; position: fixed; inset: 0;
-      background:
-        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.25), transparent 60%),
-        radial-gradient(ellipse 60% 60% at 100% 90%, rgba(168, 85, 247, 0.15), transparent 60%),
-        radial-gradient(ellipse 60% 60% at 0% 70%, rgba(168, 85, 247, 0.08), transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
+  .fan { position: relative; height: 520px; max-width: 1080px; margin: 0 auto; }
+  .glass { position: absolute; width: 400px; border-radius: 16px; padding: 28px; background: var(--glass-fill);
+    box-shadow: inset 0 1px 1px rgba(216,236,248,0.2), inset 0 24px 48px rgba(168,85,247,0.06), 0 24px 40px rgba(0,0,0,0.6), inset 0 0 0 1px var(--glass-edge);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    transition: transform .6s cubic-bezier(.52,.01,0,1); }
+  .glass:hover { transform: translateY(-10px) rotate(0deg) !important; z-index: 5; }
+  .g1 { left: 0; top: 60px; transform: rotate(-4deg); }
+  .g2 { left: 50%; top: 0; margin-left: -210px; width: 420px; z-index: 3; }
+  .g3 { right: 0; top: 70px; transform: rotate(4deg); }
+  .glass .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); display: flex; justify-content: space-between; margin-bottom: 18px; }
+  .glass .tag span:last-child { color: var(--ash); }
+  .glass h3 { font-weight: 400; font-size: 24px; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 14px; }
+  .glass p { font-size: 14px; color: var(--mist); line-height: 1.5; }
+  .glass .rows { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .glass .row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-top: 1px solid var(--glass-edge); }
+  .glass .row b { font-weight: 400; color: var(--bone); }
+  .glass .row i { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .glass .row i.hi { color: var(--iris-bright); }
+  .glass .row i.mid { color: #ffb829; }
+  .glass .score { font-weight: 400; font-size: 72px; letter-spacing: -0.05em; line-height: 1; margin: 10px 0 6px; }
+  .glass .score span { font-size: 26px; color: var(--ash); letter-spacing: -0.02em; }
+  .glass .bar { height: 3px; background: rgba(255,255,255,0.14); border-radius: 2px; margin: 12px 0 18px; overflow: hidden; }
+  .glass .bar i { display: block; height: 100%; width: 40%; background: var(--iris); }
+  .cta-row { text-align: center; margin-top: 40px; }
 
-    body::after {
-      content: ""; position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.4;
-      mix-blend-mode: overlay;
-      pointer-events: none;
-      z-index: 1;
-    }
+  /* DIAGNOSIS: one violet moment */
+  .diag { padding: 96px 0; }
+  .diag .zig, .snap .zig, .agents .zig { align-items: start; }
+  .diag .zig > :last-child, .snap .zig > :last-child, .agents .zig > :last-child { position: sticky; top: 110px; }
+  @media (max-width: 960px) { .diag .zig > :last-child, .snap .zig > :last-child, .agents .zig > :last-child { position: static; } }
+  .diag .price { font-weight: 400; font-size: clamp(4.5rem, 9vw, 8rem); letter-spacing: -0.06em; line-height: 0.9; color: var(--iris-bright); }
+  .diag .price small { font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ash); display: block; margin-top: 18px; }
+  .incl { list-style: none; margin-top: 28px; max-width: 34ch; }
+  .incl li { font-size: 15px; font-weight: 300; color: var(--mist); padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.16); }
+  .incl li:last-child { border-bottom: 1px solid rgba(255,255,255,0.16); }
+  .stages { list-style: none; display: flex; flex-direction: column; margin-top: 40px; }
+  .stages li { display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: baseline; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.14); }
+  .stages li:last-child { border-bottom: 1px solid rgba(255,255,255,0.14); }
+  .stages .n { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--iris-bright); }
+  .stages .t { font-size: 22px; font-weight: 400; letter-spacing: -0.02em; }
+  .stages .t span { display: block; font-size: 14px; font-weight: 300; color: var(--ash); margin-top: 4px; }
+  .stages .s { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ash); white-space: nowrap; }
+  .stages .s:hover { color: var(--bone); }
 
-    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+  /* CLOSE */
+  .close { padding: 120px 0 80px; text-align: center; }
+  .close h2 { font-weight: 400; font-size: clamp(3.6rem, 10vw, 9.5rem); letter-spacing: -0.05em; line-height: 0.92; margin: 0 auto 40px; max-width: 100%; }
+  .close h2 em { font-style: normal; color: var(--iris-bright); }
+  .close .lead { margin: 0 auto 44px; text-align: center; }
+  .foot { padding: 60px 0 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #8c8c8c; }
+  .foot a:hover { color: var(--ash); }
+  .foot nav { display: flex; gap: 22px; }
 
-    /* Header */
-    .header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 10px 0;
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      background: rgba(5, 5, 8, 0.7);
-      border-bottom: 1px solid var(--border);
-    }
-    .header-inner {
-      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); cursor: pointer; }
-    .brand-name {
-      /* Match portal.html nav logo: DM Sans, weight 400, no tracking, title case. */
-      font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 400;
-      letter-spacing: normal; text-transform: none;
-    }
-    .nav { display: flex; gap: 28px; align-items: center; }
-    .nav a {
-      font-family: var(--font-body); font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--text-muted); text-decoration: none; cursor: pointer; transition: color 0.25s ease;
-    }
-    .nav a:hover { color: var(--text); }
-    /* a.nav-cta keeps its pill styling and wins over `.nav a` via the type+class selector. */
-    a.nav-cta {
-      font-family: var(--font-body); font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 10px 20px; border-radius: 999px; border: 1px solid var(--purple);
-      color: var(--purple-bright); cursor: pointer;
-      background: var(--purple-soft-fill);
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-    a.nav-cta:hover {
-      background: var(--purple); color: white;
-      box-shadow: 0 0 24px var(--purple-glow);
-    }
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; min-height: auto; }
+    .hero-canvas { height: 380px; order: -1; }
+    .zig, .zig.flip { grid-template-columns: 1fr; gap: 40px; }
+    .zig.flip > :first-child { order: 0; }
+    .wrap { padding: 0 24px; }
+    .nav ul li:not(:last-child) { display: none; }
+    .fan { height: auto; display: flex; flex-direction: column; gap: 20px; }
+    .glass { position: static; width: 100%; transform: none !important; margin: 0; }
+    section.block, .cathedral, .diag { padding: 64px 0; }
+    .stages li { grid-template-columns: 40px 1fr; }
+    .stages .s { grid-column: 2; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pill, .glass { transition: none; } }
 
-    main { padding-top: 185px; position: relative; z-index: 2; }
+  /* ===== additions for the full page ===== */
+  .nav.scrolled { background: rgba(0,0,0,0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .nav .site-logo { height: 46px; width: auto; display: block; }
+  .quote { margin-top: 44px; padding-left: 28px; border-left: 1px solid var(--iris); max-width: 60ch; }
+  .quote p { font-size: 22px; font-weight: 300; line-height: 1.4; letter-spacing: -0.01em; color: var(--bone); margin-bottom: 14px; }
+  .quote cite { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); }
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  /* two fires: no cards, two columns of text on void */
+  .fires { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 44px; }
+  .fire .n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 18px; display: inline-flex; align-items: center; gap: 12px; }
+  .fire .n::before { content: ""; width: 24px; height: 1px; background: var(--iris); }
+  .fire h3 { font-weight: 400; font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: -0.04em; line-height: 1; margin-bottom: 18px; }
+  .fire p { font-size: 17px; font-weight: 300; color: var(--mist); line-height: 1.55; max-width: 44ch; }
+  .fire .meta { margin-top: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
 
-    /* ============================ HERO ============================ */
-    .hero {
-      text-align: center; padding: 64px 0 96px;
-      position: relative;
-    }
+  /* pillars: hairline rows, not cards */
+  .pillars { margin-top: 44px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .pillar { display: grid; grid-template-columns: 90px 1.1fr 1fr; gap: 40px; padding: 44px 0; border-bottom: 1px solid rgba(255,255,255,0.16); align-items: start; }
+  .pillar .num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em; color: var(--iris-bright); padding-top: 10px; }
+  .pillar h3 { font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -0.035em; line-height: 1.05; }
+  .pillar h3 em { font-style: normal; color: var(--iris-bright); }
+  .pillar p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.55; margin-bottom: 16px; }
+  .pillar ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .pillar li { font-size: 15px; color: var(--bone); padding-left: 20px; position: relative; line-height: 1.45; }
+  .pillar li::before { content: ""; position: absolute; left: 0; top: 0.7em; width: 10px; height: 1px; background: var(--iris); }
+  .pillar li span { color: var(--ash); }
+  .pillar a.more { display: inline-flex; gap: 8px; align-items: center; margin-top: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone); transition: gap .3s, color .3s; }
+  .pillar a.more:hover { color: var(--iris-bright); gap: 14px; }
+  .measure { margin-top: 36px; font-size: 16px; font-weight: 300; color: var(--mist); max-width: 70ch; line-height: 1.6; }
+  .measure strong { font-weight: 400; color: var(--iris-bright); }
 
-    .hero-eyebrow {
-      font-family: var(--font-mono); font-size: 11px;
-      letter-spacing: 0.24em; text-transform: uppercase;
-      color: var(--purple-bright); margin-bottom: 32px;
-      opacity: 0; animation: fadeUp 0.8s ease 0.1s forwards;
-    }
+  /* study */
+  .study-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 32px; }
+  .stat .v { font-weight: 400; font-size: clamp(3rem, 6vw, 5.4rem); letter-spacing: -0.05em; line-height: 0.95; }
+  .stat .v em { font-style: normal; color: var(--iris-bright); }
+  .stat .l { margin-top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.6; max-width: 26ch; }
 
-    .hero h1 {
-      font-family: var(--font-display); font-weight: 500;
-      font-size: clamp(2.4rem, 6vw, 4.8rem); line-height: 1.0;
-      letter-spacing: -0.025em; margin-bottom: 28px;
-      opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
-    }
-    .hero h1 em {
-      font-style: italic; letter-spacing: -0.01em;
-      color: var(--purple-bright); /* fallback for browsers without background-clip: text */
-      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+  /* doors */
+  .doors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 44px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .door.soon h3, .door.soon .price { color: var(--ash); }
+  .door.soon .price { color: var(--mist); }
+  .door { padding: 40px 32px 40px 0; border-right: 1px solid rgba(255,255,255,0.16); display: flex; flex-direction: column; }
+  .door + .door { padding-left: 32px; }
+  .door:last-child { border-right: none; padding-right: 0; }
+  .door .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 20px; }
+  .door h3 { font-weight: 400; font-size: 26px; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 6px; }
+  .door .price { font-size: 17px; color: var(--iris-bright); margin-bottom: 16px; }
+  .door p { font-size: 15px; font-weight: 300; color: var(--mist); line-height: 1.55; margin-bottom: 22px; }
+  .door p strong { font-weight: 400; color: var(--bone); }
+  .door .ft { margin-top: auto; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
+  .door .ft a { color: var(--bone); display: inline-flex; gap: 8px; align-items: center; transition: gap .3s, color .3s; }
+  .door .ft a:hover { color: var(--iris-bright); gap: 14px; }
 
-    .hero-lede {
-      color: var(--text-muted); max-width: 56ch;
-      margin: 0 auto 44px; font-size: clamp(1.05rem, 1.4vw, 1.2rem);
-      line-height: 1.6;
-      opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
-    }
+  /* podcast strip */
+  .podcast { display: grid; grid-template-columns: auto 1fr auto; gap: 48px; align-items: center; padding: 56px 0; border-top: 1px solid rgba(255,255,255,0.16); border-bottom: 1px solid rgba(255,255,255,0.16); }
+  .podcast .mark { width: 128px; height: 128px; border-radius: 16px; background: var(--glass-fill); box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 1px rgba(216,236,248,0.2); display: flex; flex-direction: column; justify-content: center; padding: 18px; font-size: 20px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.05; }
+  .podcast .mark span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 10px; }
+  .podcast h3 { font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -0.035em; line-height: 1.05; margin-bottom: 10px; }
+  .podcast h3 em { font-style: normal; color: var(--iris-bright); }
+  .podcast p { font-size: 16px; font-weight: 300; color: var(--mist); max-width: 58ch; line-height: 1.55; }
 
-    .hero-actions {
-      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-      opacity: 0; animation: fadeUp 0.8s ease 0.7s forwards;
-    }
+  /* principals: Dala team style, no cards */
+  .people { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 44px; }
+  .person .role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 14px; }
+  .person h3 { font-weight: 400; font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: -0.04em; line-height: 1; margin-bottom: 18px; }
+  .person p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.55; max-width: 46ch; }
+  .person p em { color: var(--bone); font-style: italic; }
 
-    /* Pill buttons */
-    .pill {
-      font-family: var(--font-body); font-size: 15px; font-weight: 500;
-      letter-spacing: 0.01em;
-      padding: 17px 34px; border-radius: 999px; cursor: pointer;
-      border: 1px solid var(--border-strong); background: var(--surface);
-      color: var(--text);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative; overflow: hidden;
-      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
-    }
-    .pill::before {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(135deg, var(--purple-soft-fill) 0%, transparent 60%);
-      opacity: 0; transition: opacity 0.4s ease;
-    }
-    .pill::after {
-      content: ""; position: absolute; top: 50%; left: 50%;
-      width: 0; height: 0; border-radius: 50%;
-      background: radial-gradient(circle, var(--purple-glow-soft) 0%, transparent 60%);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s ease, height 0.6s ease;
-    }
-    .pill:hover {
-      border-color: var(--purple); transform: translateY(-2px);
-      box-shadow: 0 8px 32px var(--purple-glow);
-    }
-    .pill:hover::before { opacity: 1; }
-    .pill:hover::after { width: 300px; height: 300px; }
-    .pill span { position: relative; z-index: 1; }
+  /* fit */
+  .fit { text-align: center; }
+  .fit h2 { margin: 0 auto 22px; max-width: 100%; }
+  .fit .lead { margin: 0 auto 36px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 760px; margin: 0 auto 36px; }
+  .tags span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--glass-edge); color: var(--iris-bright); background: var(--glass-fill); }
+  .fit { padding-bottom: 60px !important; } .fit .closer { font-size: 22px; font-weight: 300; color: var(--iris-bright); letter-spacing: -0.01em; }
 
-    .pill-primary {
-      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
-      border-color: transparent;
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 6px 28px var(--purple-glow);
-      font-weight: 600;
-    }
-    .pill-primary:hover {
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 10px 40px var(--purple-glow);
-      transform: translateY(-2px);
-    }
+  /* contact */
+  .contact { padding: 64px 0 40px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .contact-line { display: flex; justify-content: space-between; align-items: baseline; gap: 32px; flex-wrap: wrap; margin-bottom: 56px; }
+  .contact-line h3 { margin-bottom: 0; }
+  .contact-line .mail { font-size: clamp(1.3rem, 2.4vw, 2rem); font-weight: 300; letter-spacing: -0.02em; color: var(--iris-bright); }
+  .contact-line .mail:hover { color: var(--bone); }
+  .contact h3 { font-weight: 400; font-size: clamp(2rem, 3.6vw, 3rem); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 18px; }
+  .contact h3 em { font-style: normal; color: var(--iris-bright); }
+  .contact p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.55; margin-bottom: 28px; max-width: 46ch; }
+  .direct .l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); margin-bottom: 8px; }
+  .direct a { font-size: 24px; font-weight: 300; letter-spacing: -0.02em; color: var(--iris-bright); }
+  .direct a:hover { color: var(--bone); }
+  .form { border-radius: 16px; padding: 32px; background: var(--glass-fill); box-shadow: inset 0 1px 1px rgba(216,236,248,0.2), inset 0 24px 48px rgba(168,85,247,0.05), 0 24px 40px rgba(0,0,0,0.5), inset 0 0 0 1px var(--glass-edge); }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); margin-bottom: 8px; }
+  .field input, .field textarea { width: 100%; background: rgba(0,0,0,0.5); border: 0; box-shadow: inset 0 0 0 1px var(--glass-edge); border-radius: 6px; padding: 13px 14px; font-family: var(--font); font-size: 15px; font-weight: 300; color: var(--bone); transition: box-shadow .3s; }
+  .field input:focus, .field textarea:focus { outline: none; box-shadow: inset 0 0 0 1px var(--iris), 0 0 0 3px rgba(168,85,247,0.15); }
+  .field textarea { resize: vertical; min-height: 100px; }
+  .submit { width: 100%; padding: 15px; border: 0; border-radius: 999px; background: var(--iris); color: #fff; font-family: var(--font); font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; transition: background .3s, color .3s; }
+  .submit:hover { background: var(--iris-bright); color: #0a0612; }
+  .form-success { display: none; text-align: center; padding: 28px 16px; }
+  .form-success.active { display: block; }
+  .form-success h4 { font-weight: 400; font-size: 24px; color: var(--iris-bright); margin-bottom: 10px; letter-spacing: -0.02em; }
+  .form-success p, .form-error p { color: var(--mist); font-size: 15px; margin: 0; }
+  .form-error { display: none; text-align: center; padding: 20px 8px 0; }
+  .form-error.active { display: block; }
+  .form-error .msg { color: #f87171; }
 
-    .pill-quiet {
-      background: transparent; border: 1px solid var(--border);
-      color: var(--text-muted); padding: 16px 28px;
-    }
-    .pill-quiet:hover { color: var(--text); border-color: var(--border-strong); }
+  /* legal */
+  .legal-page { display: none; padding: 140px 0 80px; }
+  .legal-page.active { display: block; }
+  .legal-page h1 { font-weight: 400; font-size: clamp(2.4rem, 5vw, 4rem); letter-spacing: -0.04em; margin-bottom: 32px; }
+  .legal-page h1 em { font-style: normal; color: var(--iris-bright); }
+  .legal-content { max-width: 680px; }
+  .legal-content p { color: var(--mist); margin-bottom: 18px; font-size: 16px; font-weight: 300; line-height: 1.65; }
+  .legal-content p.muted { color: var(--ash); }
+  .legal-content h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); margin: 32px 0 12px; font-weight: 400; }
+  .legal-content a { color: var(--iris-bright); border-bottom: 1px solid rgba(196,168,255,0.3); }
+  .main-content.hidden { display: none; }
 
-    /* ============================ PROOF BAND ============================ */
-    .proof {
-      padding: 36px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--bg-soft);
-    }
-    .proof-inner {
-      display: flex; flex-wrap: wrap;
-      gap: 32px 56px; align-items: center; justify-content: center;
-      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
-    }
-    .proof-label {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .proof-brands {
-      display: flex; gap: 36px; flex-wrap: wrap;
-      align-items: center; justify-content: center;
-    }
-    .proof-brand {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 1.5rem; color: var(--text);
-      letter-spacing: 0.01em;
-      opacity: 0.85;
-    }
+  @media (max-width: 960px) {
+    .fires, .people, .contact-grid, .study-stats { grid-template-columns: 1fr; gap: 40px; }
+    .pillar { grid-template-columns: 1fr; gap: 14px; }
+    .doors { grid-template-columns: 1fr; }
+    .door { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.16); padding: 32px 0; }
+    .door + .door { padding-left: 0; }
+    .snap { padding: 64px 0; }
+    .snap .zig { gap: 48px; }
+    .podcast { grid-template-columns: 1fr; gap: 24px; }
+  }
 
-    /* ============================ SECTIONS ============================ */
-    .section { padding: 96px 0; position: relative; z-index: 2; }
-    .section-light {
-      background: var(--light-surface);
-      color: var(--text-on-light);
-    }
+  /* ===== SNAPSHOT (free door) ===== */
+  .snap { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.16); }
+  .snap h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; text-wrap: balance; margin-bottom: 28px; }
+  .snap h2 em { font-style: normal; color: var(--iris-bright); }
+  .snap .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
+  .snap-list { list-style: none; margin-top: 40px; }
+  .snap-list li { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: baseline; padding: 18px 0; border-top: 1px solid rgba(255,255,255,0.14); }
+  .snap-list li:last-child { border-bottom: 1px solid rgba(255,255,255,0.14); }
+  .snap-list .t { font-size: 19px; font-weight: 400; letter-spacing: -0.02em; }
+  .snap-list .t span { display: block; font-size: 14px; font-weight: 300; color: var(--ash); margin-top: 4px; }
+  .snap-list .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; color: var(--iris-bright); }
+  .snap-list .k.lock { color: var(--ash); }
+  .snap-list li.locked .t { color: var(--mist); }
+  .snap .fine { margin-top: 28px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.8; }
+  .snap .fine em { font-style: normal; color: var(--iris-bright); }
+  .snap .form-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 22px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .field input::placeholder { color: var(--coal); }
+  @media (max-width: 960px) { .field-row { grid-template-columns: 1fr; gap: 0; } }
 
-    .section-label {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--purple-bright); margin-bottom: 28px;
-      display: inline-flex; align-items: center; gap: 12px;
-    }
-    .section-label::before {
-      content: ""; width: 24px; height: 1px; background: var(--purple);
-    }
-    .section-light .section-label { color: var(--purple-deep); }
-    .section-light .section-label::before { background: var(--purple-deep); }
-
-    .section h2 {
-      font-family: var(--font-display); font-weight: 500;
-      font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 1.05;
-      letter-spacing: -0.02em; margin-bottom: 32px;
-    }
-    .section h2 em {
-      font-style: italic; color: var(--purple-bright);
-      text-shadow: 0 0 30px var(--purple-glow-soft);
-    }
-    .section-light h2 em {
-      color: var(--purple-deep);
-      text-shadow: none;
-    }
-
-    /* ============================ PROBLEM ============================ */
-    .problem-body {
-      font-size: 1.1rem; line-height: 1.65;
-      max-width: 60ch; color: var(--text);
-      margin-bottom: 40px;
-    }
-
-    .pullquote {
-      background: var(--surface-card);
-      border-left: 3px solid var(--purple);
-      padding: 28px 32px;
-      border-radius: 4px;
-      max-width: 80ch;
-      box-shadow: 0 0 60px rgba(168, 85, 247, 0.08);
-    }
-    .pullquote .quote {
-      font-family: var(--font-display); font-style: italic;
-      font-size: clamp(1.15rem, 1.7vw, 1.4rem);
-      line-height: 1.45; color: var(--text);
-      margin-bottom: 14px;
-    }
-    .pullquote .citation {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--purple-bright); font-weight: 600;
-    }
-
-    /* ============================ TWO FIRES ============================ */
-    .fires-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
-      margin-top: 8px;
-    }
-    @media (max-width: 800px) { .fires-grid { grid-template-columns: 1fr; gap: 36px; } }
-
-    .fire {
-      padding-top: 8px;
-    }
-    .fire-rule {
-      width: 40px; height: 2px;
-      background: var(--purple);
-      box-shadow: 0 0 12px var(--purple-glow);
-      margin-bottom: 16px;
-    }
-    .fire-label {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--purple-bright); font-weight: 600;
-      margin-bottom: 12px;
-    }
-    .fire-name {
-      font-family: var(--font-display); font-style: italic;
-      font-size: clamp(2rem, 3.5vw, 2.6rem);
-      margin-bottom: 20px; line-height: 1;
-    }
-    .fire-desc {
-      font-size: 1.02rem; line-height: 1.6; color: var(--text);
-      margin-bottom: 0;
-    }
-
-    /* ============================ PRINCIPALS ============================ */
-    .principals-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-      margin-top: 16px;
-    }
-    @media (max-width: 800px) { .principals-grid { grid-template-columns: 1fr; } }
-
-    .principal {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--purple);
-      padding: 32px 28px;
-      border-radius: 6px;
-      box-shadow: 0 0 40px rgba(168, 85, 247, 0.04);
-    }
-    .principal-row {
-      display: flex; align-items: baseline; gap: 18px;
-      margin-bottom: 16px;
-    }
-    .principal-initials {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 2.4rem; line-height: 1;
-      color: var(--purple-bright);
-      text-shadow: 0 0 20px var(--purple-glow-soft);
-    }
-    .principal-name {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 1.5rem; line-height: 1;
-    }
-    .principal-role {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--purple-bright); font-weight: 600;
-      margin-bottom: 16px;
-    }
-    .principal-bio {
-      font-size: 0.95rem; line-height: 1.6;
-      color: var(--text-muted);
-    }
-    .principal-bio em { color: var(--text); font-style: italic; }
-
-    /* ============================ NOT FOR EVERYONE ============================ */
-    .filter-strip {
-      text-align: center;
-    }
-    .filter-strip h2 {
-      margin: 0 auto 24px;
-    }
-    .filter-strip-lede {
-      font-size: 1.05rem; color: var(--text-muted);
-      max-width: 56ch; margin: 0 auto 36px;
-      line-height: 1.6;
-    }
-    .filter-tags {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      justify-content: center; max-width: 760px; margin: 0 auto 36px;
-    }
-    .filter-tag {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      padding: 9px 16px; border-radius: 999px;
-      border: 1px solid var(--border-strong);
-      color: var(--purple-bright); font-weight: 600;
-      background: var(--surface-card);
-    }
-    .filter-closer {
-      font-family: var(--font-display); font-style: italic;
-      font-size: clamp(1.3rem, 2.2vw, 1.6rem);
-      color: var(--purple-bright);
-      text-shadow: 0 0 24px var(--purple-glow-soft);
-    }
-
-    /* ============================ LADDER ============================ */
-    .ladder-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-      margin-top: 8px;
-    }
-    @media (max-width: 900px) { .ladder-grid { grid-template-columns: 1fr; } }
-
-    .ladder-card {
-      background: var(--surface);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 32px 28px;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      position: relative; overflow: hidden;
-      text-decoration: none; color: inherit;
-      display: block;
-    }
-    .ladder-card::before {
-      content: ""; position: absolute;
-      top: 0; left: 0; width: 100%; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--purple), transparent);
-      opacity: 0; transition: opacity 0.4s ease;
-    }
-    .ladder-card:hover {
-      border-color: var(--purple);
-      transform: translateY(-3px);
-      background: var(--surface-strong);
-      box-shadow: 0 12px 40px var(--purple-glow-soft);
-    }
-    .ladder-card:hover::before { opacity: 1; }
-
-    .ladder-label {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      color: var(--purple-bright); font-weight: 600;
-      margin-bottom: 18px;
-    }
-    .ladder-title {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 1.5rem; margin-bottom: 12px; line-height: 1.2;
-    }
-    .ladder-desc {
-      color: var(--text-muted); font-size: 0.95rem; line-height: 1.55;
-      margin-bottom: 22px;
-    }
-    .ladder-arrow {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--text); font-weight: 600;
-      display: inline-flex; align-items: center; gap: 6px;
-      transition: gap 0.3s ease;
-    }
-    .ladder-card:hover .ladder-arrow {
-      gap: 14px; color: var(--purple-bright);
-    }
-
-    /* ============================ FINAL CTA ============================ */
-    .final-cta {
-      text-align: center;
-      padding: 96px 0 64px;
-    }
-    .final-cta h2 {
-      font-family: var(--font-display); font-weight: 500;
-      font-size: clamp(2.4rem, 6vw, 4.6rem);
-      line-height: 1.0; letter-spacing: -0.025em;
-      margin: 0 auto 28px;
-    }
-    .final-cta h2 em {
-      font-style: italic; color: var(--purple-bright);
-      text-shadow: 0 0 40px var(--purple-glow);
-    }
-    .risk-reversal {
-      max-width: 64ch; margin: 0 auto 40px;
-      font-size: 1.05rem; line-height: 1.65;
-      color: var(--text);
-    }
-    .risk-reversal em { color: var(--purple-bright); font-style: normal; font-weight: 500; }
-
-    /* ============================ CONTACT MODAL / SECTION ============================ */
-    .contact-section {
-      background: var(--bg-soft);
-      padding: 80px 0;
-      border-top: 1px solid var(--border);
-    }
-    .contact-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 56px;
-      align-items: start;
-    }
-    @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; gap: 36px; } }
-
-    .contact-side h3 {
-      font-family: var(--font-display); font-weight: 500;
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      letter-spacing: -0.01em; line-height: 1.15;
-      margin-bottom: 20px;
-    }
-    .contact-side h3 em { color: var(--purple-bright); font-style: italic; }
-    .contact-side p { color: var(--text-muted); margin-bottom: 28px; line-height: 1.65; }
-
-    .contact-direct {
-      padding: 22px;
-      background: var(--surface-card);
-      border: 1px solid var(--border-strong);
-      border-radius: 12px;
-    }
-    .contact-direct .label {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--text-muted); margin-bottom: 8px;
-    }
-    .contact-direct .email {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 1.4rem; color: var(--purple-bright);
-      text-decoration: none; display: inline-block;
-      text-shadow: 0 0 16px var(--purple-glow-soft);
-    }
-    .contact-direct .email:hover { color: white; }
-
-    .contact-form {
-      background: var(--surface-card);
-      border: 1px solid var(--border-strong);
-      border-radius: 16px; padding: 32px 28px;
-      position: relative; overflow: hidden;
-    }
-    .contact-form::before {
-      content: ""; position: absolute;
-      top: -1px; left: -1px; right: -1px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--purple), transparent);
-    }
-    .field { margin-bottom: 20px; }
-    .field label {
-      display: block; font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--text-muted); margin-bottom: 8px;
-    }
-    .field input, .field textarea {
-      width: 100%; background: rgba(0,0,0,0.4);
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 13px 14px;
-      font-family: var(--font-body); font-size: 14px; color: var(--text);
-      transition: all 0.3s ease;
-    }
-    .field input:focus, .field textarea:focus {
-      outline: none; border-color: var(--purple);
-      background: rgba(0,0,0,0.5);
-      box-shadow: 0 0 0 3px var(--purple-soft-fill);
-    }
-    .field textarea { resize: vertical; min-height: 100px; font-family: var(--font-body); }
-    .submit-btn {
-      width: 100%; padding: 14px;
-      background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple) 100%);
-      color: white; border: none; border-radius: 8px;
-      font-family: var(--font-body); font-size: 14px; font-weight: 600;
-      cursor: pointer; transition: all 0.3s ease;
-      box-shadow: 0 4px 24px var(--purple-glow-soft);
-    }
-    .submit-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 32px var(--purple-glow);
-    }
-
-    .form-success { display: none; text-align: center; padding: 28px 16px; }
-    .form-success.active { display: block; animation: fadeUp 0.5s ease; }
-    .form-success h4 {
-      font-family: var(--font-display); font-style: italic;
-      font-size: 1.5rem; color: var(--purple-bright); margin-bottom: 12px;
-    }
-    .form-success p { color: var(--text-muted); }
-    .form-error { display: none; text-align: center; padding: 24px 16px; margin-top: 8px; }
-    .form-error.active { display: block; animation: fadeUp 0.5s ease; }
-    .form-error p { color: var(--text-muted); }
-    .form-error .msg { color: #F87171; font-weight: 500; margin-bottom: 4px; }
-
-    /* ============================ FOOTER ============================ */
-    .footer {
-      border-top: 1px solid var(--border);
-      padding: 44px 0 28px;
-      position: relative; z-index: 2;
-      background: var(--bg);
-    }
-    .footer-inner {
-      max-width: var(--max-w); margin: 0 auto; padding: 0 32px;
-      display: flex; flex-wrap: wrap; gap: 24px;
-      align-items: center; justify-content: space-between;
-    }
-    .footer-brand { display: flex; align-items: center; gap: 12px; }
-    .footer-text {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.16em; text-transform: uppercase;
-      color: var(--text-faint);
-    }
-    .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
-    .footer-links a {
-      font-family: var(--font-mono); font-size: 10px;
-      letter-spacing: 0.16em; text-transform: uppercase;
-      color: var(--text-muted); text-decoration: none; cursor: pointer;
-      transition: color 0.3s ease;
-    }
-    .footer-links a:hover { color: var(--text); }
-
-    /* ============================ LEGAL PAGES (modal-style hidden by default) ============================ */
-    .legal-page {
-      display: none;
-      padding: 80px 0;
-    }
-    .legal-page.active { display: block; }
-    .legal-page h1 {
-      font-family: var(--font-display); font-weight: 500;
-      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-      letter-spacing: -0.02em; margin-bottom: 32px;
-    }
-    .legal-page h1 em { font-style: italic; color: var(--purple-bright); }
-    .legal-content { max-width: 700px; }
-    .legal-content p {
-      color: var(--text); margin-bottom: 18px;
-      font-size: 1rem; line-height: 1.65;
-    }
-    .legal-content p.muted { color: var(--text-muted); }
-    .legal-content h3 {
-      font-family: var(--font-mono); font-size: 11px;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--purple-bright); margin: 32px 0 12px;
-    }
-    .legal-content a {
-      color: var(--purple-bright); text-decoration: none;
-      border-bottom: 1px solid rgba(196, 168, 255, 0.3);
-    }
-
-    /* Page state */
-    .main-content { display: block; }
-    .main-content.hidden { display: none; }
-
-    /* Mobile */
-    @media (max-width: 720px) {
-      .nav { gap: 12px; }
-      .nav a:not(.nav-cta) { display: none; }
-      .header-inner { padding: 0 20px; }
-      .container { padding: 0 20px; }
-      .hero-actions { flex-direction: column; padding: 0 24px; }
-      .pill { width: 100%; }
-      .section { padding: 64px 0; }
-      .footer-inner { padding: 0 20px; flex-direction: column; text-align: center; }
-      .proof-inner { gap: 20px 32px; padding: 0 20px; }
-      .proof-brands { gap: 24px; }
-      .proof-brand { font-size: 1.25rem; }
-    }
-  </style>
+  /* ===== FOR AGENTS ===== */
+  .agents { padding: 96px 0; border-top: 1px solid rgba(255,255,255,0.16); }
+  .agents h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; margin-bottom: 28px; }
+  .agents h2 em { font-style: normal; color: var(--iris-bright); }
+  .agents .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
+  .tools { list-style: none; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .tools li { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.16); }
+  .tools .t { font-size: 20px; font-weight: 400; letter-spacing: -0.02em; }
+  .tools .t span { display: block; font-size: 14px; font-weight: 300; color: var(--ash); margin-top: 4px; }
+  .tools code { font-family: var(--mono); font-size: 12px; color: var(--iris-bright); white-space: nowrap; }
+  .snippet { margin-top: 8px; border: 1px solid rgba(255,255,255,0.16); border-radius: 4px; overflow: hidden; }
+  .snippet .bar { display: flex; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.16); font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); }
+  .snippet .bar b { color: var(--iris-bright); font-weight: 500; }
+  .snippet pre { margin: 0; padding: 22px 18px; font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--mist); overflow-x: auto; }
+  .snippet pre .k { color: var(--bone); }
+  .snippet pre .v { color: var(--iris-bright); }
+  .snippet pre .c { color: #8c8c8c; }
+  .agents .who { margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .agents .who div { padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .agents .who b { display: block; font-weight: 400; font-size: 17px; margin-bottom: 6px; }
+  .agents .who p { font-size: 14px; color: var(--ash); line-height: 1.5; }
+  .agents .note { margin-top: 32px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.8; }
+  .agents .note em { font-style: normal; color: var(--iris-bright); }
+  @media (max-width: 960px) { .agents { padding: 64px 0; } .agents .who { grid-template-columns: 1fr; } .tools li { grid-template-columns: 1fr; gap: 6px; } }
+</style>
 </head>
 <body>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#" onclick="event.preventDefault(); goHome()"><img class="site-logo" src="/images/two-fires-logo-transparent.png" alt="Two Fires"></a>
+    <ul>
+      <li><a href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">Diagnosis</a></li>
+      <li><a href="#principals" onclick="event.preventDefault(); scrollToSection('principals')">Who we are</a></li>
+      <li><a href="/blog.html">Blog</a></li>
+      <li><a href="/portal.html">Portal</a></li>
+      <li><a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">For agents</a></li>
+      <li><a href="#snapshot" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('snapshot')">Free Snapshot</a></li>
+    </ul>
+  </div>
+</header>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="header-inner">
-      <a class="brand nav-logo" href="#" onclick="event.preventDefault(); goHome()">
-        <img src="/images/two-fires-logo-transparent.png" alt="Two Fires" style="height: 60px; width: auto; display: block;">
-      </a>
-      <nav class="nav">
-        <a href="#what" onclick="event.preventDefault(); scrollToSection('what')">What we do</a>
-        <a href="#principals" onclick="event.preventDefault(); scrollToSection('principals')">Who we are</a>
-        <a href="/blog.html">Blog</a>
-        <a href="/podcast.html">Podcast</a>
-        <a class="nav-cta" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Light the fuse</a>
-      </nav>
+<div class="main-content" id="main-content">
+
+<!-- HERO: cathedral -->
+<section class="cathedral hero-c" id="top">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow-c">Brand craft + AI engine · Sydney</div>
+      <h1>World-class marketing. <em>Supercharged by AI.</em></h1>
+      <p class="lead">Thirty years of brand strategy from inside McDonald's, Mars, Unilever and Burger King, built into an Intelligence Suite you run yourself. Below, real output on a fictional Dee Why physio. <strong>Two fires, one firm.</strong></p>
+      <div class="actions"><a href="#snapshot" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('snapshot')">Get your free Snapshot</a><a href="#diagnosis" class="pill pill-ghost" onclick="event.preventDefault(); scrollToSection('diagnosis')">See the Diagnosis</a></div>
     </div>
-  </header>
-
-  <main>
-
-    <!-- ============================ MAIN CONTENT ============================ -->
-    <div class="main-content" id="main-content">
-
-      <!-- HERO -->
-      <section class="hero container">
-        <h1>World-class marketing.<br><em>Supercharged with AI.</em></h1>
-        <p class="hero-lede">A lot of businesses are experts at what they do, but when it comes to growth, their marketing isn't doing its job. We apply proven marketing strategy to the business, supercharged by AI, so the expertise they've built turns into real, scalable growth.</p>
-        <div class="hero-actions">
-          <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')"><span>Book the conversation →</span></a>
-          <a class="pill pill-quiet" href="#what" onclick="event.preventDefault(); scrollToSection('what')"><span>How we work</span></a>
+    <div class="fan">
+      <div class="glass g1">
+        <div class="tag"><span>Stage 1 · Customer Insight</span><a href="/samples/diagnosis-stage-1-customer-insight.pdf">Sample →</a></div>
+        <h3>Northern Beaches physio customers want to get back to a named activity, not just be pain-free.</h3>
+        <div class="rows">
+          <div class="row"><b>Return to surf, run, sport</b><i class="hi">High</i></div>
+          <div class="row"><b>"Explained what was wrong"</b><i class="hi">High</i></div>
+          <div class="row"><b>Referral and cost friction</b><i class="hi">High</i></div>
+          <div class="row"><b>Clinical Pilates confusion</b><i class="mid">Medium</i></div>
         </div>
-      </section>
-
-      <!-- PROOF BAND -->
-      <section class="proof">
-        <div class="proof-inner">
-          <div class="proof-label">Thirty years of brand work at</div>
-          <div class="proof-brands">
-            <span class="proof-brand">McDonald's</span>
-            <span class="proof-brand">Mars</span>
-            <span class="proof-brand">Unilever</span>
-            <span class="proof-brand">Burger King</span>
-            <span class="proof-brand">Scotts Lawn &amp; Garden</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROBLEM -->
-      <section class="section" id="problem">
-        <div class="container">
-          <div class="section-label">The problem we solve</div>
-          <h2>Most marketing isn't working<br><em>because the foundation is weak.</em></h2>
-          <p class="problem-body">Great businesses don't hit growth ceilings because their product isn't good enough. They hit them because they've never had the calibre of marketing required at this altitude. Agencies that execute tactics without strategic depth. Marketers still developing fundamentals. AI tools that generate output without the foundation to make it meaningful.</p>
-
-          <div class="pullquote">
-            <div class="quote">"If your foundation is weak, AI will amplify that weakness at scale. If your foundation is strong, AI becomes the most powerful multiplier you've ever encountered."</div>
-            <div class="citation">Paul Tredinnick · Marketing Executive's AI Authority</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TWO FIRES -->
-      <section class="section" id="what">
-        <div class="container">
-          <div class="section-label">What we bring</div>
-          <h2>Two fires.<br><em>One outcome.</em></h2>
-
-          <div class="fires-grid">
-            <div class="fire">
-              <div class="fire-rule"></div>
-              <div class="fire-label">Fire One · Brand</div>
-              <div class="fire-name">Brand.</div>
-              <p class="fire-desc">Thirty years of global brand work at the world's most competitive companies. Sharp positioning, deep customer insight, distinctive assets. Every framework tested against real consumer behaviour. Every dollar measured against commercial outcome.</p>
-            </div>
-
-            <div class="fire">
-              <div class="fire-rule"></div>
-              <div class="fire-label">Fire Two · Engine</div>
-              <div class="fire-name">Engine.</div>
-              <p class="fire-desc">An AI agent stack we operate every day inside our own firm. Agents handle the production work: research, drafting, distribution, reporting. We handle judgment, strategy, the calls that matter. Built from craft, not from gimmick.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PRINCIPALS -->
-      <section class="section" id="principals">
-        <div class="container">
-          <div class="section-label">Who we are</div>
-          <h2>Two principals. Both fires.<br><em>Same firm.</em></h2>
-
-          <div class="principals-grid">
-            <div class="principal">
-              <div class="principal-row">
-                <div class="principal-initials">PT</div>
-                <div class="principal-name">Paul Tredinnick</div>
-              </div>
-              <div class="principal-role">Brand Fire</div>
-              <p class="principal-bio">Thirty years of marketing leadership at McDonald's, Mars, Unilever, Burger King and Scotts Lawn &amp; Garden. Brand strategy, positioning, customer insight and integrated marketing across the world's most competitive categories. Author of <em>Marketing Executive's AI Authority</em>.</p>
-            </div>
-            <div class="principal">
-              <div class="principal-row">
-                <div class="principal-initials">JW</div>
-                <div class="principal-name">James Whitehill</div>
-              </div>
-              <div class="principal-role">Engine Fire</div>
-              <p class="principal-bio">Fifteen years in advertising production for international multi-million-dollar businesses. Four years deploying AI tools and execution systems across SMEs in operation, and now leading our agent architecture. Moved from traditional to digital advertising before the market caught up. Same instinct, applied to the AI shift.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- NOT FOR EVERYONE -->
-      <section class="section">
-        <div class="container">
-          <div class="filter-strip">
-            <div class="section-label" style="margin: 0 auto 28px; justify-content: center;">A note on fit</div>
-            <h2>We're not for everyone.<br><em>And that's on purpose.</em></h2>
-            <p class="filter-strip-lede">We work with no more than six client engagements at any time. Some businesses are an automatic no for us, no matter the fee. Easier for everyone to know up front.</p>
-            <div class="filter-tags">
-              <span class="filter-tag">No gambling</span>
-              <span class="filter-tag">No adult content</span>
-              <span class="filter-tag">No predatory lending</span>
-              <span class="filter-tag">No MLM or pyramid</span>
-              <span class="filter-tag">No "wealth coaching"</span>
-              <span class="filter-tag">No speculative crypto</span>
-              <span class="filter-tag">No tobacco or vape</span>
-            </div>
-            <div class="filter-closer">Everyone else, we're listening.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- LADDER -->
-      <section class="section">
-        <div class="container">
-          <div class="section-label">Ways in</div>
-          <h2>Three doors.<br><em>Pick whichever fits.</em></h2>
-
-          <div class="ladder-grid">
-            <a class="ladder-card" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">
-              <div class="ladder-label">The Conversation</div>
-              <div class="ladder-title">A 45-minute call</div>
-              <div class="ladder-desc">One conversation with both of us. No deck. No pitch. No obligation. You leave with a clearer view of what's actually broken, whether you work with us or not.</div>
-              <div class="ladder-arrow">Book it →</div>
-            </a>
-            <a class="ladder-card" href="mailto:lightmyfuse@two-fires.com?subject=Curious">
-              <div class="ladder-label">A Direct Line</div>
-              <div class="ladder-title">Write to us</div>
-              <div class="ladder-desc">Faster than a form. One of us reads every message. If your situation needs a human reply, that's where it starts. lightmyfuse@two-fires.com.</div>
-              <div class="ladder-arrow">Send a note →</div>
-            </a>
-            <a class="ladder-card" href="#what" onclick="event.preventDefault(); scrollToSection('what')">
-              <div class="ladder-label">Read First</div>
-              <div class="ladder-title">Browse and decide</div>
-              <div class="ladder-desc">Not ready to talk yet? Look at how we work, who we are, who we're not for. The rest of this page exists to help you decide on your terms.</div>
-              <div class="ladder-arrow">Keep reading →</div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- FINAL CTA -->
-      <section class="final-cta container">
-        <h2>Two fires.<br><em>Your business.</em><br>Let's begin.</h2>
-        <p class="risk-reversal">Every engagement starts with one conversation. <em>Forty-five minutes of your time, a full day of ours in preparation.</em> You leave with a clearer view of what's actually broken, whether you work with us or not.</p>
-        <a class="pill pill-primary" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')"><span>Bring us your hardest growth problem →</span></a>
-      </section>
-
-      <!-- CONTACT -->
-      <section class="contact-section" id="contact">
-        <div class="container">
-          <div class="contact-grid">
-            <div class="contact-side">
-              <h3>Light the <em>fuse.</em></h3>
-              <p>Tell us what's not working. A sentence or two is enough. We read every message and reply within two business days.</p>
-
-              <div class="contact-direct">
-                <div class="label">Direct line</div>
-                <a class="email" href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>
-              </div>
-            </div>
-
-            <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)">
-              <div class="field">
-                <label for="name">Your name</label>
-                <input type="text" id="name" required autocomplete="name">
-              </div>
-              <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" required autocomplete="email">
-              </div>
-              <div class="field">
-                <label for="company">Company</label>
-                <input type="text" id="company" autocomplete="organization">
-              </div>
-              <div class="field">
-                <label for="message">What's not working?</label>
-                <textarea id="message" required placeholder="A sentence or two is enough."></textarea>
-              </div>
-              <button type="submit" class="submit-btn">Send →</button>
-
-              <div class="form-success" id="form-success">
-                <h4>We've got it.</h4>
-                <p>Your message is in. We read every one and reply within two business days. A confirmation is on its way to your inbox.</p>
-              </div>
-
-              <div class="form-error" id="form-error">
-                <p class="msg">Something went wrong sending your message.</p>
-                <p style="margin-top: 10px; font-size: 0.88rem;">If this didn't work, email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color: var(--purple-bright);">lightmyfuse@two-fires.com</a>.</p>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-
-    </div>
-
-    <!-- LEGAL PAGES (inline, toggled) -->
-    <div class="legal-page" id="privacy-page">
-      <div class="container">
-        <h1>Privacy <em>Policy.</em></h1>
-        <div class="legal-content">
-          <p class="muted">Last updated: May 2026.</p>
-          <p>Two Fires (the "firm," "we," or "us") respects your privacy. This page explains what we collect, why, and how we treat it. We've kept it short on purpose. If anything isn't clear, write to us at <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
-          <h3>What we collect</h3>
-          <p>When you submit our contact form or email us directly, we collect your name, email address, company name (if provided), and the message you send. That's it. We do not use third-party tracking pixels or sell data to anyone.</p>
-          <h3>How we use it</h3>
-          <p>We use this information solely to respond to your enquiry and continue any conversation you start with us. If we work together, we'll keep your contact details on file for the duration of our engagement and a reasonable period afterwards.</p>
-          <h3>Analytics and cookies</h3>
-          <p>This website uses minimal first-party analytics to understand which pages are read. No personal data is shared with third parties. We do not use advertising cookies or cross-site tracking.</p>
-          <h3>Your rights</h3>
-          <p>You can ask us at any time what we hold about you, request a copy, or ask us to delete it. Email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a> and we'll act within 30 days.</p>
-          <h3>Changes to this policy</h3>
-          <p>If we update this policy, the change will appear here with a new "last updated" date. Material changes will be communicated to active clients directly.</p>
-          <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()" style="cursor: pointer;">← Back to home</a></p>
+      </div>
+      <div class="glass g2">
+        <div class="tag"><span>Stage 4 · Marketing Diagnosis</span><a href="/samples/diagnosis-stage-4-marketing-diagnosis.pdf">Sample →</a></div>
+        <div class="score">6<span>/10</span></div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <h3>Invisible at the moment a new patient decides where to book.</h3>
+        <p>Says nothing a competitor doesn't also say. Answers none of the questions that stop people booking. Speaks to no specific person doing any specific thing. Scores start at six: every business we see has something to build on.</p>
+      </div>
+      <div class="glass g3">
+        <div class="tag"><span>Stage 2 · Messaging Audit</span><a href="/samples/diagnosis-stage-2-messaging-audit.pdf">Sample →</a></div>
+        <h3>"Inclusive to the point of being directionless."</h3>
+        <div class="rows">
+          <div class="row"><b>Value prop clarity</b><i class="mid">Weak</i></div>
+          <div class="row"><b>Customer language</b><i class="mid">Absent</i></div>
+          <div class="row"><b>Proof on homepage</b><i class="mid">None</i></div>
+          <div class="row"><b>Priority fix</b><i class="hi">Named</i></div>
         </div>
       </div>
     </div>
+    <div class="cta-row">The Intelligence Suite · Eight tools in your client portal · Every finding labelled evidence or inference</div>
+  </div>
+</section>
 
-    <div class="legal-page" id="terms-page">
-      <div class="container">
-        <h1>Terms of <em>use.</em></h1>
-        <div class="legal-content">
-          <p class="muted">Last updated: May 2026.</p>
-          <p>These terms govern your use of the Two Fires website. By visiting two-fires.com, you accept them. They are deliberately brief.</p>
-          <h3>Information on this site</h3>
-          <p>Content on this website is provided for general information about Two Fires. It is not professional advice. Specific marketing, brand, or commercial recommendations are made under engagement agreements, not via website content.</p>
-          <h3>Intellectual property</h3>
-          <p>The Two Fires brand, name, mark, and original content are the property of Two Fires Pty Ltd. You may quote short passages with attribution. You may not reproduce, modify, or commercially redistribute substantial portions without written permission.</p>
-          <h3>Limitation of liability</h3>
-          <p>Use of this website is at your own risk. To the extent permitted by Australian law, Two Fires excludes liability for any loss arising from the use of the site or reliance on its content.</p>
-          <h3>Governing law</h3>
-          <p>These terms are governed by the laws of New South Wales, Australia.</p>
-          <h3>Contact</h3>
-          <p>Questions? <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></p>
-          <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()" style="cursor: pointer;">← Back to home</a></p>
-        </div>
+
+<div class="brands">
+  <span class="lbl">Thirty years of brand work at</span>
+  <span>McDonald's</span><span>Mars</span><span>Unilever</span><span>Burger King</span><span>Scotts</span>
+</div>
+
+<!-- PROBLEM -->
+<section class="block" id="problem">
+  <div class="wrap zig">
+    <div>
+      <div class="eyebrow">The problem we solve</div>
+      <h2>Most marketing isn't working <em>because the foundation is weak.</em></h2>
+      <p class="lead">Good businesses don't hit a growth ceiling because the product isn't good enough. They hit it because they've never had marketing built at this calibre. Agencies that run tactics without strategic depth. AI tools spitting out content with no foundation under it. And now the ground has shifted again: before your next customer calls anyone, they ask an AI.</p>
+      <div class="quote">
+        <p>"If your foundation is weak, AI will amplify that weakness at scale. If your foundation is strong, AI becomes the most powerful multiplier you've ever encountered."</p>
+        <cite>Paul Tredinnick · Marketing Executive's AI Authority</cite>
       </div>
     </div>
+    <div class="big-stat"><em>0</em>/92<small>Answers naming one 130-year-old, five-star firm in our AI field study · <a href="/blog/we-asked-the-ai-to-find-a-lawyer.html" style="color:var(--iris-bright)">Read it →</a></small></div>
+  </div>
+</section>
 
-  </main>
+<!-- SNAPSHOT: the free door -->
+<section class="snap" id="snapshot">
+  <div class="wrap zig">
+    <div>
+      <div class="eyebrow">The Snapshot · Free</div>
+      <h2>Before you spend a dollar, <em>see the reading.</em></h2>
+      <p class="lead">Tell us who you are and where you work. The engine runs a stripped-back pass of the Diagnosis on your business and sends you one page. Not the plan. The reading. If it stings, you'll know exactly what the full Diagnosis is for.</p>
+      <ul class="snap-list">
+        <li><span class="t">Three things your buyers actually say<span>Verbatim, from the forums and groups where they complain. Pulled for your category and patch.</span></span><span class="k">Included</span></li>
+        <li><span class="t">Flint's four scores on your homepage<span>Clarity, customer language, proof, direction. One sentence on the biggest gap.</span></span><span class="k">Included</span></li>
+        <li><span class="t">The sameness check<span>How many of your competitors say the same thing you do. Usually most of them.</span></span><span class="k">Included</span></li>
+        <li><span class="t">Named or not named<span>We ask the AI tools your customers use who to call for your work. You see the count.</span></span><span class="k">Included</span></li>
+        <li class="locked"><span class="t">The full map<span>The pain-point map, the language bank, the whitespace, the primary diagnosis and three priority actions. Table of contents only.</span></span><span class="k lock">Diagnosis · $1,999</span></li>
+      </ul>
+      <p class="fine">One Snapshot per business · Delivered by email within two business days · <em>No call, no pitch</em></p>
+    </div>
+    <div>
+      <form class="form" id="snapshot-form" onsubmit="handleSnapshot(event)">
+        <div class="form-title">Request your Snapshot</div>
+        <div class="field-row">
+          <div class="field"><label for="s-name">Your name</label><input type="text" id="s-name" required autocomplete="name"></div>
+          <div class="field"><label for="s-email">Email</label><input type="email" id="s-email" required autocomplete="email"></div>
+        </div>
+        <div class="field"><label for="s-business">Business name</label><input type="text" id="s-business" required autocomplete="organization"></div>
+        <div class="field-row">
+          <div class="field"><label for="s-industry">Industry</label><input type="text" id="s-industry" required placeholder="e.g. Physiotherapy"></div>
+          <div class="field"><label for="s-region">Suburb or region</label><input type="text" id="s-region" required placeholder="e.g. Northern Beaches"></div>
+        </div>
+        <div class="field"><label for="s-website">Website</label><input type="url" id="s-website" required placeholder="https://" autocomplete="url"></div>
+        <button type="submit" class="submit">Send me the Snapshot</button>
+        <div class="form-success" id="snap-success"><h4>It's in the queue.</h4><p>Your Snapshot lands in your inbox within two business days. Watch for a note from lightmyfuse@two-fires.com.</p></div>
+        <div class="form-error" id="snap-error"><p class="msg">Something went wrong sending your request.</p><p style="margin-top:8px;font-size:14px">Email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color:var(--iris-bright)">lightmyfuse@two-fires.com</a>.</p></div>
+      </form>
+    </div>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="footer-text">Two Fires · Sydney · 2026</span>
+<!-- DIAGNOSIS -->
+<section class="diag" id="diagnosis">
+  <div class="wrap zig">
+    <div>
+      <div class="eyebrow">The Marketing Diagnosis · Module 1</div>
+      <h2>Know what's actually broken. <em>Four reports. One priority.</em></h2>
+      <p class="lead">Most businesses describe symptoms. The Diagnosis finds the cause, ranks what to fix first, and tells you what we're sure of and what we're not. Module 1 of five. Built on thirty years of brand strategy, run by the engine, yours in under an hour.</p>
+      <ul class="stages">
+        <li><span class="n">01</span><span class="t">Customer Insight<span>Pain-point map, question map, language bank, insight summary</span></span><a class="s" href="/samples/diagnosis-stage-1-customer-insight.pdf">Sample →</a></li>
+        <li><span class="n">02</span><span class="t">Messaging Audit<span>Your words against what they care about. Flint finds the gap.</span></span><a class="s" href="/samples/diagnosis-stage-2-messaging-audit.pdf">Sample →</a></li>
+        <li><span class="n">03</span><span class="t">Competitor and Category<span>Where everyone sounds the same. Your whitespace.</span></span><a class="s" href="/samples/diagnosis-stage-3-competitor-category.pdf">Sample →</a></li>
+        <li><span class="n">04</span><span class="t">Marketing Diagnosis Report<span>One primary diagnosis. Three priority actions. Confidence notes.</span></span><a class="s" href="/samples/diagnosis-stage-4-marketing-diagnosis.pdf">Sample →</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="price">$1,999<small>+ GST · One-off · Self-serve in the portal</small></div>
+      <ul class="incl"><li>Four stages, four PDF reports</li><li>One primary diagnosis, three priority actions</li><li>Every finding labelled evidence or inference</li><li>Run it again any time. Your portal, your history.</li></ul>
+      <div class="actions" style="margin-top:32px"><a href="mailto:lightmyfuse@two-fires.com?subject=Start%20the%20Diagnosis" class="pill pill-iris">Start the Diagnosis</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- WAYS IN -->
+<section class="block" id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Ways in</div>
+    <h2>Four doors. <em>Start with the free one.</em></h2>
+    <div class="doors">
+      <div class="door">
+        <div class="num">01 · The door</div>
+        <h3>The Snapshot</h3>
+        <div class="price">Free. One page. Your business.</div>
+        <p>Three buyer quotes, Flint's four scores, the sameness check, and whether the AI names you. <strong>If the answer stings, it's fixable.</strong></p>
+        <div class="ft"><a href="#snapshot" onclick="event.preventDefault(); scrollToSection('snapshot')">Request yours →</a></div>
       </div>
-      <div class="footer-links">
+      <div class="door">
+        <div class="num">02 · Module 1</div>
+        <h3>Marketing Diagnosis</h3>
+        <div class="price">$1,999 + GST</div>
+        <p>Four stages, four PDF reports, one primary diagnosis and three priority actions. Run it yourself in the portal. The full map behind the Snapshot.</p>
+        <div class="ft"><a href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">What's in it →</a></div>
+      </div>
+      <div class="door soon">
+        <div class="num">03 · Modules 2 to 5</div>
+        <h3>Coming</h3>
+        <div class="price">Priced per module</div>
+        <p>Positioning, messaging, content and visibility, each built on the Diagnosis. Each one a product, not a retainer. Diagnosis clients hear first.</p>
+        <div class="ft">In build · 2026</div>
+      </div>
+      <div class="door">
+        <div class="num">04 · For agents</div>
+        <h3>Two Fires Engine</h3>
+        <div class="price">Per run. Credit packs.</div>
+        <p>The same agents behind the Diagnosis, as an API and MCP server your own AI can call. Keys come with a paid credit pack. No free tier.</p>
+        <div class="ft"><a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">How it works →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR AGENTS -->
+<section class="agents" id="agents">
+  <div class="wrap zig">
+    <div>
+      <div class="eyebrow">For agents · Two Fires Engine</div>
+      <h2>Your agents can write copy. <em>They can't tell you if it's wrong.</em></h2>
+      <p class="lead">The same four agents that run inside our client portal, available to yours. One MCP URL, one API key, paid per run, no contract. Customer evidence, a message audit, a category scan, an AI visibility check: the strategist your AI calls before it writes a word.</p>
+      <ul class="tools">
+        <li><span class="t">Customer Insight<span>Real pains, questions and language for any category and region</span></span><code>customer_insight</code></li>
+        <li><span class="t">Messaging Audit<span>Flint reads any URL against what the customer actually cares about</span></span><code>messaging_audit</code></li>
+        <li><span class="t">Competitor and Category<span>Where everyone sounds the same. The whitespace nobody has taken.</span></span><code>competitor_category</code></li>
+        <li><span class="t">AI Visibility Check<span>Who the AI names for your work on your patch, and whether it's you</span></span><code>ai_visibility_check</code></li>
+      </ul>
+      <div class="who">
+        <div><b>Marketing departments</b><p>A strategist's read every week, without the strategist.</p></div>
+        <div><b>Founders</b><p>Before the agency. Before the rebrand. Know what's actually wrong.</p></div>
+        <div><b>Agent builders</b><p>Wire "audit this page" into your own SDR, content or CRM stack.</p></div>
+      </div>
+    </div>
+    <div>
+      <div class="snippet">
+        <div class="bar"><span><b>MCP</b> · claude, cursor, openclaw, anything</span><span>engine.two-fires.com</span></div>
+        <pre><span class="c">// paste into your agent's MCP config</span>
+<span class="k">"two-fires"</span>: {
+  <span class="k">"url"</span>: <span class="v">"https://engine.two-fires.com/mcp"</span>,
+  <span class="k">"headers"</span>: { <span class="k">"Authorization"</span>: <span class="v">"Bearer tfe_live_…"</span> }
+}</pre>
+      </div>
+      <div class="snippet" style="margin-top:16px">
+        <div class="bar"><span><b>REST</b> · async, poll or callback</span><span>v1</span></div>
+        <pre><span class="c">POST</span> /v1/audit
+{ <span class="k">"site_url"</span>: <span class="v">"https://yourclinic.com.au"</span> }
+
+<span class="c">202</span> { <span class="k">"run_id"</span>: <span class="v">"run_8f2…"</span> }
+<span class="c">GET</span>  /v1/runs/run_8f2…  <span class="c">→ structured result + pdf_url</span></pre>
+      </div>
+      <div class="note">Per run · Paid credit packs, no free tier · Every report ends with the human option<br><em>Early access</em> · <a href="mailto:lightmyfuse@two-fires.com?subject=Two%20Fires%20Engine%20early%20access" style="color:var(--bone)">lightmyfuse@two-fires.com</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPALS -->
+<section class="block" id="principals" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Who we are</div>
+    <h2>Two principals. <em>Both fires, same firm.</em></h2>
+    <div class="people">
+      <div class="person">
+        <div class="role">Brand fire</div>
+        <h3>Paul Tredinnick</h3>
+        <p>Thirty years of marketing leadership at McDonald's, Mars, Unilever, Burger King and Scotts Lawn &amp; Garden. Brand strategy, positioning, customer insight and integrated marketing across the world's most competitive categories. Author of <em>Marketing Executive's AI Authority</em>.</p>
+      </div>
+      <div class="person">
+        <div class="role">Engine fire</div>
+        <h3>James Whitehill</h3>
+        <p>Fifteen years in advertising production for international multi-million-dollar businesses. Four years deploying AI tools and execution systems across SMEs, and now leading our agent architecture. Moved from traditional to digital advertising before the market caught up. Same instinct, applied to the AI shift.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap contact-line">
+    <h3>Anything else? <em>Just write.</em></h3>
+    <a class="mail" href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>
+  </div>
+  <div class="wrap">
+    <div class="foot">
+      <span>Two Fires · Sydney · 2026</span>
+      <nav>
         <a href="#" onclick="event.preventDefault(); goHome()">Home</a>
         <a href="/blog.html">Blog</a>
         <a href="/podcast.html">Podcast</a>
-        <a href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Contact</a>
+        <a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">For agents</a>
         <a href="#" onclick="event.preventDefault(); showLegal('privacy')">Privacy</a>
         <a href="#" onclick="event.preventDefault(); showLegal('terms')">Terms</a>
         <a href="/portal.html">Client Portal</a>
-      </div>
+      </nav>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    // Inject flame SVGs
-    document.querySelectorAll('[data-flame], .brand-mark').forEach(el => {
-      const tmpl = document.getElementById('flame-template');
-      el.appendChild(tmpl.content.cloneNode(true));
-    });
+</div><!-- /main-content -->
 
-    function scrollToSection(id) {
-      goHome();
-      setTimeout(() => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
-    }
+<div class="legal-page" id="privacy-page">
+  <div class="wrap">
+    <h1>Privacy <em>Policy.</em></h1>
+    <div class="legal-content">
+      <p class="muted">Last updated: May 2026.</p>
+      <p>Two Fires (the "firm," "we," or "us") respects your privacy. This page explains what we collect, why, and how we treat it. We've kept it short on purpose. If anything isn't clear, write to us at <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
+      <h3>What we collect</h3>
+      <p>When you submit our contact form or email us directly, we collect your name, email address, company name (if provided), and the message you send. That's it. We do not use third-party tracking pixels or sell data to anyone.</p>
+      <h3>How we use it</h3>
+      <p>We use this information solely to respond to your enquiry and continue any conversation you start with us. If we work together, we'll keep your contact details on file for the duration of our engagement and a reasonable period afterwards.</p>
+      <h3>Analytics and cookies</h3>
+      <p>This website uses minimal first-party analytics to understand which pages are read. No personal data is shared with third parties. We do not use advertising cookies or cross-site tracking.</p>
+      <h3>Your rights</h3>
+      <p>You can ask us at any time what we hold about you, request a copy, or ask us to delete it. Email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a> and we'll act within 30 days.</p>
+      <h3>Changes to this policy</h3>
+      <p>If we update this policy, the change will appear here with a new "last updated" date. Material changes will be communicated to active clients directly.</p>
+      <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()">← Back to home</a></p>
+    </div>
+  </div>
+</div>
 
-    function showLegal(name) {
-      document.getElementById('main-content').classList.add('hidden');
-      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
-      document.getElementById(name + '-page').classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    }
+<div class="legal-page" id="terms-page">
+  <div class="wrap">
+    <h1>Terms of <em>use.</em></h1>
+    <div class="legal-content">
+      <p class="muted">Last updated: May 2026.</p>
+      <p>These terms govern your use of the Two Fires website. By visiting two-fires.com, you accept them. They are deliberately brief.</p>
+      <h3>Information on this site</h3>
+      <p>Content on this website is provided for general information about Two Fires. It is not professional advice. Specific marketing, brand, or commercial recommendations are made under engagement agreements, not via website content.</p>
+      <h3>Intellectual property</h3>
+      <p>The Two Fires brand, name, mark, and original content are the property of Two Fires Pty Ltd. You may quote short passages with attribution. You may not reproduce, modify, or commercially redistribute substantial portions without written permission.</p>
+      <h3>Limitation of liability</h3>
+      <p>Use of this website is at your own risk. To the extent permitted by Australian law, Two Fires excludes liability for any loss arising from the use of the site or reliance on its content.</p>
+      <h3>Governing law</h3>
+      <p>These terms are governed by the laws of New South Wales, Australia.</p>
+      <h3>Contact</h3>
+      <p>Questions? <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></p>
+      <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()">← Back to home</a></p>
+    </div>
+  </div>
+</div>
 
-    function goHome() {
-      document.getElementById('main-content').classList.remove('hidden');
-      document.querySelectorAll('.legal-page').forEach(p => p.classList.remove('active'));
-    }
 
-    async function handleSubmit(e) {
-      e.preventDefault();
 
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const company = document.getElementById('company').value.trim();
-      const message = document.getElementById('message').value.trim();
 
-      const errEl = document.getElementById('form-error');
-      errEl.classList.remove('active');
 
-      if (!name || !email || !message) { showFormError('Please fill in your name, email, and message.'); return false; }
-      if (!email.includes('@')) { showFormError('Please enter a valid email address.'); return false; }
-
-      const btn = document.querySelector('#contact-form .submit-btn');
-      const original = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = 'Sending...';
-
-      try {
-        const res = await fetch(
-          'https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_contact_enquiries',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
-              'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({ name, email, company: company || null, message })
-          }
-        );
-        if (!res.ok) throw new Error('Request failed: ' + res.status);
-
-        document.querySelectorAll('#contact-form .field, #contact-form .submit-btn').forEach(el => el.style.display = 'none');
-        document.getElementById('form-success').classList.add('active');
-      } catch (err) {
-        btn.disabled = false;
-        btn.textContent = original;
-        showFormError('Something went wrong sending your message.');
-      }
-
-      return false;
-    }
-
-    function showFormError(msg) {
-      const errEl = document.getElementById('form-error');
-      errEl.querySelector('.msg').textContent = msg;
-      errEl.classList.add('active');
-    }
-  </script>
-
+<script>
+  const SUPA_URL='https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_contact_enquiries';
+  const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc';
+  const navEl=document.getElementById('nav');
+  addEventListener('scroll',()=>{navEl.classList.toggle('scrolled',scrollY>40)},{passive:true});
+  function scrollToSection(id){ goHome(); setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },50); }
+  function showLegal(name){ document.getElementById('main-content').classList.add('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); document.getElementById(name+'-page').classList.add('active'); window.scrollTo({top:0,behavior:'instant'}); }
+  function goHome(){ document.getElementById('main-content').classList.remove('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); }
+  function showFormError(msg){ const errEl=document.getElementById('form-error'); errEl.querySelector('.msg').textContent=msg; errEl.classList.add('active'); }
+  async function handleSnapshot(e){
+    e.preventDefault();
+    const v=id=>document.getElementById(id).value.trim();
+    const name=v('s-name'), email=v('s-email'), business=v('s-business'), industry=v('s-industry'), region=v('s-region'), website=v('s-website');
+    const errEl=document.getElementById('snap-error'); errEl.classList.remove('active');
+    const fail=m=>{ errEl.querySelector('.msg').textContent=m; errEl.classList.add('active'); };
+    if(!name||!email||!business||!industry||!region||!website){ fail('Please fill in every field so the engine has enough to run.'); return false; }
+    if(!email.includes('@')){ fail('Please enter a valid email address.'); return false; }
+    const btn=document.querySelector('#snapshot-form .submit'); const original=btn.textContent; btn.disabled=true; btn.textContent='Sending...';
+    const message='snapshot_request | industry: '+industry+' | region: '+region+' | website: '+website;
+    try{
+      const res=await fetch(SUPA_URL,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},body:JSON.stringify({name,email,company:business,message})});
+      if(!res.ok) throw new Error('Request failed: '+res.status);
+      document.querySelectorAll('#snapshot-form .field, #snapshot-form .field-row, #snapshot-form .submit, #snapshot-form .form-title').forEach(el=>el.style.display='none');
+      document.getElementById('snap-success').classList.add('active');
+    }catch(err){ btn.disabled=false; btn.textContent=original; fail('Something went wrong sending your request.'); }
+    return false;
+  }
+</script>
 </body>
 </html>
