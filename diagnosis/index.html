@@ -78,6 +78,8 @@ body::before {
 .btn:active { transform: scale(0.99); }
 .btn:disabled { opacity: 0.45; cursor: default; }
 .btn.secondary { background: var(--white-08); border: 0.5px solid var(--white-20); }
+/* The stage buttons sit in a row, so they opt out of .btn's full width. */
+.btn.ss-one { width: auto; flex: 1 1 auto; min-width: 150px; height: 40px; font-size: 13px; margin-top: 0; }
 
 .form-error { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--error); margin-top: 12px; display: none; }
 .form-error.visible { display: block; }
@@ -229,6 +231,35 @@ body::before {
 
   <!-- What this synthesis has to work with. -->
   <div id="depNote"></div>
+
+  <!-- SELF SERVE. Shown only when the tf_portal cookie carries a client_id, which
+       is what a Diagnosis purchase mints. James's and Paul's shared password
+       login carries no client_id, so this panel never appears for them and the
+       page below behaves exactly as it always has. -->
+  <div class="card" id="selfServe" style="display:none;">
+    <div class="eyebrow" style="margin-bottom:10px;">Your Marketing Diagnosis</div>
+    <p class="sub" style="margin-bottom:1rem;">Four stages, run in order, each one reading the last. Press the button and
+    they chain. When Stage 4 finishes, all four PDFs land in your inbox and stay in your portal.</p>
+    <div id="ssBriefState"></div>
+    <div class="progress-stages" style="margin-top:1rem;">
+      <div class="stage-chip" id="ss-chip-insight">1 · Customer Insight</div>
+      <div class="stage-chip" id="ss-chip-audit">2 · Messaging Audit</div>
+      <div class="stage-chip" id="ss-chip-category">3 · Competitor and Category</div>
+      <div class="stage-chip" id="ss-chip-diagnosis">4 · Marketing Diagnosis</div>
+    </div>
+    <div style="margin-top:1rem;">
+      <button class="btn" id="ssRunAll" onclick="ssRun(null)">Run all four</button>
+      <span class="hint" style="margin-left:12px;">About fifteen minutes end to end. You can close this page; the run keeps going.</span>
+    </div>
+    <div style="margin-top:0.9rem;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn secondary ss-one" onclick="ssRun('insight')">Stage 1 only</button>
+      <button class="btn secondary ss-one" onclick="ssRun('audit')">Stage 2 only</button>
+      <button class="btn secondary ss-one" onclick="ssRun('category')">Stage 3 only</button>
+      <button class="btn secondary ss-one" onclick="ssRun('diagnosis')">Stage 4 only</button>
+    </div>
+    <div class="progress-log" id="ssLog" style="display:none;margin-top:1rem;"></div>
+    <div class="form-error" id="ssError"></div>
+  </div>
 
   <div class="head">
     <div class="eyebrow">Two Fires · Intelligence Suite</div>
@@ -942,6 +973,151 @@ async function checkInputs() {
       '</span></div>';
   } catch (e) { /* ignore */ }
 }
+
+// ===========================================================================
+// Self-serve Diagnosis.
+//
+// A buyer arrives here from the link the Engine emailed after checkout. Their
+// tf_portal cookie is already set, scoped to their own client_id, so the panel
+// is shown to them and to nobody else: the shared-password login has no
+// client_id and never sees it.
+//
+// The chaining itself runs server side in the Engine. This page starts a job and
+// watches it, so closing the tab does not stop the run.
+// ===========================================================================
+const ENGINE_BASE = 'https://engine.two-fires.com';
+let ssJobId = null;
+let ssPollTimer = null;
+
+function ssSeedFromQuery() {
+  const q = new URLSearchParams(location.search);
+  const email = (q.get('email') || '').trim().toLowerCase();
+  const website = (q.get('website') || '').trim();
+  if (email && window.TFIdentity) TFIdentity.set({ email: email });
+  if (website && window.TFBrief) {
+    const b = TFBrief.get();
+    if (!b.website_url) TFBrief.patch({ website_url: website });
+  }
+  return { email: email, self: q.get('self') === '1' };
+}
+
+function ssSetChip(key, cls) {
+  const el = document.getElementById('ss-chip-' + key);
+  if (!el) return;
+  el.className = 'stage-chip' + (cls ? ' ' + cls : '');
+}
+
+function ssLog(msg) {
+  const el = document.getElementById('ssLog');
+  if (!el) return;
+  el.style.display = '';
+  el.textContent = msg;
+}
+
+function ssBriefMissing() {
+  if (!window.TFBrief) return ['the brief'];
+  const b = TFBrief.get();
+  const need = [
+    ['product_service', 'what you sell'],
+    ['market_category', 'your market or category'],
+    ['region', 'your region'],
+    ['customer_description', 'who your customer is'],
+    ['website_url', 'your website'],
+    ['primary_goal', 'what you want your marketing to achieve'],
+    ['current_channels', 'where you market today'],
+  ];
+  return need.filter(function (n) { return !String(b[n[0]] || '').trim(); }).map(function (n) { return n[1]; });
+}
+
+function ssRenderBriefState() {
+  const el = document.getElementById('ssBriefState');
+  if (!el) return true;
+  const missing = ssBriefMissing();
+  if (!missing.length) {
+    el.innerHTML = '<div class="dep-note"><span class="dn-i">\u2713</span><span class="dn-t">'
+      + '<strong>Your brief is complete.</strong> Every stage reads it, so nothing asks you twice.</span></div>';
+    return true;
+  }
+  el.innerHTML = '<div class="dep-note warn"><span class="dn-i">\u2691</span><span class="dn-t">'
+    + '<strong>Your brief still needs ' + missing.join(', ') + '.</strong> '
+    + '<a href="/module1.html" style="color:var(--purple-bright);">Fill it in once</a> and every stage uses it.</span></div>';
+  return false;
+}
+
+async function ssRun(stage) {
+  document.getElementById('ssError').textContent = '';
+  if (!ssRenderBriefState()) {
+    document.getElementById('ssError').textContent = 'Finish your brief first. It takes two minutes and no stage asks again.';
+    return;
+  }
+  const id = window.TFIdentity ? TFIdentity.get() : {};
+  const brief = window.TFBrief ? TFBrief.get() : {};
+  brief.name = id.name || '';
+  brief.company = id.company || '';
+  document.getElementById('ssRunAll').disabled = true;
+  ssLog('Starting...');
+  try {
+    const res = await fetch(ENGINE_BASE + '/v1/diagnosis/run', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: id.email, brief: brief, stage: stage || undefined }),
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error((json.error && json.error.message) || 'Could not start the run.');
+    ssJobId = json.job_id;
+    ssPoll();
+  } catch (e) {
+    document.getElementById('ssRunAll').disabled = false;
+    document.getElementById('ssError').textContent = e.message;
+  }
+}
+
+async function ssPoll() {
+  if (!ssJobId) return;
+  try {
+    const res = await fetch(ENGINE_BASE + '/v1/diagnosis/run/' + encodeURIComponent(ssJobId), { credentials: 'include' });
+    if (res.ok) {
+      const j = await res.json();
+      ssLog(j.message || j.status);
+      Object.keys(j.stages || {}).forEach(function (k) {
+        const st = j.stages[k].status;
+        ssSetChip(k, st === 'done' ? 'done' : (st === 'running' ? 'active' : ''));
+      });
+      if (j.status === 'done') {
+        document.getElementById('ssRunAll').disabled = false;
+        ssLog(j.message);
+        if (typeof rehydrate === 'function') rehydrate();
+        if (typeof checkInputs === 'function') checkInputs();
+        return;
+      }
+      if (j.status === 'failed') {
+        document.getElementById('ssRunAll').disabled = false;
+        document.getElementById('ssError').textContent = j.error || 'The run did not finish.';
+        return;
+      }
+    }
+  } catch (e) { /* keep polling; a dropped poll is not a failed run */ }
+  ssPollTimer = setTimeout(ssPoll, 5000);
+}
+
+(async function initSelfServe() {
+  const seeded = ssSeedFromQuery();
+  const id = window.TFIdentity ? TFIdentity.get() : {};
+  if (!id.email) return;
+  try {
+    const res = await fetch(ENGINE_BASE + '/v1/diagnosis/session?email=' + encodeURIComponent(id.email), { credentials: 'include' });
+    if (!res.ok) return;
+    const j = await res.json();
+    if (!j.self_serve) return;               // shared-password login: leave the page alone
+    document.getElementById('selfServe').style.display = '';
+    ssRenderBriefState();
+    Object.keys(j.stages_done || {}).forEach(function (k) {
+      const map = { insight: 'insight', audit: 'audit', competitor: 'category', diagnosis: 'diagnosis' };
+      if (j.stages_done[k] && map[k]) ssSetChip(map[k], 'done');
+    });
+  } catch (e) { /* the panel simply stays hidden */ }
+})();
 </script>
 </body>
 </html>
