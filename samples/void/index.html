@@ -192,7 +192,9 @@
   .stat .l { margin-top: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.6; max-width: 26ch; }
 
   /* doors */
-  .doors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 64px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .doors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 64px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .door.soon h3, .door.soon .price { color: var(--ash); }
+  .door.soon .price { color: var(--mist); }
   .door { padding: 40px 32px 40px 0; border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
   .door + .door { padding-left: 32px; }
   .door:last-child { border-right: none; padding-right: 0; }
@@ -272,8 +274,31 @@
     .doors { grid-template-columns: 1fr; }
     .door { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 32px 0; }
     .door + .door { padding-left: 0; }
+    .snap { padding: 100px 0; }
+    .snap .zig { gap: 48px; }
     .podcast { grid-template-columns: 1fr; gap: 24px; }
   }
+
+  /* ===== SNAPSHOT (free door) ===== */
+  .snap { padding: 160px 0; border-top: 1px solid rgba(255,255,255,0.1); }
+  .snap .zig { align-items: start; }
+  .snap h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; text-wrap: balance; margin-bottom: 28px; }
+  .snap h2 em { font-style: normal; color: var(--iris-bright); }
+  .snap .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
+  .snap-list { list-style: none; margin-top: 40px; }
+  .snap-list li { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: baseline; padding: 18px 0; border-top: 1px solid rgba(255,255,255,0.08); }
+  .snap-list li:last-child { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .snap-list .t { font-size: 19px; font-weight: 400; letter-spacing: -0.02em; }
+  .snap-list .t span { display: block; font-size: 14px; font-weight: 300; color: var(--ash); margin-top: 4px; }
+  .snap-list .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; color: var(--iris-bright); }
+  .snap-list .k.lock { color: var(--ash); }
+  .snap-list li.locked .t { color: var(--mist); }
+  .snap .fine { margin-top: 28px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); line-height: 1.8; }
+  .snap .fine em { font-style: normal; color: var(--iris-bright); }
+  .snap .form-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 22px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .field input::placeholder { color: var(--coal); }
+  @media (max-width: 960px) { .field-row { grid-template-columns: 1fr; gap: 0; } }
 
   /* ===== FOR AGENTS ===== */
   .agents { padding: 160px 0; border-top: 1px solid rgba(255,255,255,0.1); }
@@ -327,7 +352,7 @@
     <h1>Great business. Marketing that <em>isn't keeping up.</em></h1>
     <p class="lede">Thirty years of brand strategy at McDonald's, Mars, Unilever and Burger King, applied to your business and run on an AI engine we built ourselves. <strong>Two fires, one firm.</strong></p>
     <div class="actions">
-      <a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Get your free visibility report</a>
+      <a href="#snapshot" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('snapshot')">Get your free Snapshot</a>
       <a href="#diagnosis" class="pill pill-ghost" onclick="event.preventDefault(); scrollToSection('diagnosis')">See the Diagnosis</a>
     </div>
   </div>
@@ -425,16 +450,52 @@
         <div>
           <p>When someone asks ChatGPT or Google's AI Mode who to call, we make sure it's you. Every signal the machines read, rebuilt and measured day 0 against day 90.</p>
           <ul>
-            <li>Free one-page visibility patch report <span>· the door</span></li>
+            <li>Free Snapshot <span>· the door. Who the AI names for your work, and whether it's you</span></li>
             <li>90-day visibility sprint <span>· $7,500, or 3 x $2,750 ($8,250 total)</span></li>
             <li>Keep It Visible <span>· $999/mo</span></li>
-            <li>Full Concierge <span>· from $1,500/mo, the ongoing marketing work too</span></li>
           </ul>
-          <a class="more" href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Request your free report →</a>
+          <a class="more" href="#snapshot" onclick="event.preventDefault(); scrollToSection('snapshot')">Get your free Snapshot →</a>
         </div>
       </div>
     </div>
     <p class="measure"><strong>Measured, not promised.</strong> We don't control the AI or the market, so we never guarantee a ranking. We build every signal, show you the before and after, and log every number.</p>
+  </div>
+</section>
+
+<!-- SNAPSHOT: the free door -->
+<section class="snap" id="snapshot">
+  <div class="wrap zig">
+    <div>
+      <div class="eyebrow">The Snapshot · Free</div>
+      <h2>Before you spend a dollar, <em>see the reading.</em></h2>
+      <p class="lead">Tell us who you are and where you work. The engine runs a stripped-back pass of the Diagnosis on your business and sends you one page. Not the plan. The reading. If it stings, you'll know exactly what the full Diagnosis is for.</p>
+      <ul class="snap-list">
+        <li><span class="t">Three things your buyers actually say<span>Verbatim, from the forums and groups where they complain. Pulled for your category and patch.</span></span><span class="k">Included</span></li>
+        <li><span class="t">Flint's four scores on your homepage<span>Clarity, customer language, proof, direction. One sentence on the biggest gap.</span></span><span class="k">Included</span></li>
+        <li><span class="t">The sameness check<span>How many of your competitors say the same thing you do. Usually most of them.</span></span><span class="k">Included</span></li>
+        <li><span class="t">Named or not named<span>We ask the AI tools your customers use who to call for your work. You see the count.</span></span><span class="k">Included</span></li>
+        <li class="locked"><span class="t">The full map<span>The pain-point map, the language bank, the whitespace, the primary diagnosis and three priority actions. Table of contents only.</span></span><span class="k lock">Diagnosis · $1,999</span></li>
+      </ul>
+      <p class="fine">One Snapshot per business · Delivered by email within two business days · <em>No call, no pitch</em></p>
+    </div>
+    <div>
+      <form class="form" id="snapshot-form" onsubmit="handleSnapshot(event)">
+        <div class="form-title">Request your Snapshot</div>
+        <div class="field-row">
+          <div class="field"><label for="s-name">Your name</label><input type="text" id="s-name" required autocomplete="name"></div>
+          <div class="field"><label for="s-email">Email</label><input type="email" id="s-email" required autocomplete="email"></div>
+        </div>
+        <div class="field"><label for="s-business">Business name</label><input type="text" id="s-business" required autocomplete="organization"></div>
+        <div class="field-row">
+          <div class="field"><label for="s-industry">Industry</label><input type="text" id="s-industry" required placeholder="e.g. Physiotherapy"></div>
+          <div class="field"><label for="s-region">Suburb or region</label><input type="text" id="s-region" required placeholder="e.g. Northern Beaches"></div>
+        </div>
+        <div class="field"><label for="s-website">Website</label><input type="url" id="s-website" required placeholder="https://" autocomplete="url"></div>
+        <button type="submit" class="submit">Send me the Snapshot</button>
+        <div class="form-success" id="snap-success"><h4>It's in the queue.</h4><p>Your Snapshot lands in your inbox within two business days. Watch for a note from lightmyfuse@two-fires.com.</p></div>
+        <div class="form-error" id="snap-error"><p class="msg">Something went wrong sending your request.</p><p style="margin-top:8px;font-size:14px">Email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color:var(--iris-bright)">lightmyfuse@two-fires.com</a>.</p></div>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -459,10 +520,10 @@
       </div>
       <div class="glass g2">
         <div class="tag"><span>Stage 4 · Marketing Diagnosis</span><span>6 pp</span></div>
-        <div class="score">4<span>/10</span></div>
-        <div class="bar"><i></i></div>
+        <div class="score">6<span>/10</span></div>
+        <div class="bar"><i style="width:60%"></i></div>
         <h3>Invisible at the moment a new patient decides where to book.</h3>
-        <p>Says nothing a competitor doesn't also say. Answers none of the questions that stop people booking. Speaks to no specific person doing any specific thing.</p>
+        <p>Says nothing a competitor doesn't also say. Answers none of the questions that stop people booking. Speaks to no specific person doing any specific thing. Scores start at six: every business we see has something to build on.</p>
       </div>
       <div class="glass g3">
         <div class="tag"><span>Stage 2 · Messaging Audit</span><span>Flint</span></div>
@@ -485,7 +546,7 @@
     <div>
       <div class="eyebrow">The Marketing Diagnosis · Module 1</div>
       <h2>Know what's actually broken. <em>Four reports. One priority.</em></h2>
-      <p class="lead">Most businesses describe symptoms. The Diagnosis finds the cause, ranks what to fix first, and tells you what we're sure of and what we're not. Reviewed by Paul before it reaches you.</p>
+      <p class="lead">Most businesses describe symptoms. The Diagnosis finds the cause, ranks what to fix first, and tells you what we're sure of and what we're not. Reviewed by Paul before it reaches you. Module 1 of five.</p>
       <ul class="stages">
         <li><span class="n">01</span><span class="t">Customer Insight<span>Pain-point map, question map, language bank, insight summary</span></span><a class="s" href="/samples/diagnosis-stage-1-customer-insight.pdf">Sample →</a></li>
         <li><span class="n">02</span><span class="t">Messaging Audit<span>Your words against what they care about. Flint finds the gap.</span></span><a class="s" href="/samples/diagnosis-stage-2-messaging-audit.pdf">Sample →</a></li>
@@ -494,26 +555,8 @@
       </ul>
     </div>
     <div>
-      <div class="price">$1,999<small>+ GST · One-off · Credited against your engagement</small></div>
+      <div class="price">$1,999<small>+ GST · One-off · Reviewed by Paul before it reaches you</small></div>
       <div class="actions" style="margin-top:40px"><a href="#contact" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('contact')">Start the Diagnosis</a></div>
-    </div>
-  </div>
-</section>
-
-<!-- STUDY -->
-<section class="block" id="study" style="padding-top:0">
-  <div class="wrap zig">
-    <div>
-      <div class="eyebrow">Field research · Case study</div>
-      <h2>We asked the AI to find a lawyer. <em>92 times.</em></h2>
-      <p class="lead">We ran 92 real client questions through Google's AI Mode, ChatGPT, Perplexity, Claude and Gemini, across thirteen areas of Sydney, the Central Coast and the Hunter, and logged every firm every answer named. The firms getting named aren't the best. They're the best-documented.</p>
-      <div class="actions" style="margin-top:32px"><a href="/blog/we-asked-the-ai-to-find-a-lawyer.html" class="pill pill-ghost">Read the full study</a></div>
-    </div>
-    <div class="study-stats">
-      <div class="stat"><div class="v">92</div><div class="l">Real questions · 5 AI tools</div></div>
-      <div class="stat"><div class="v">239</div><div class="l">Different firms named across 88 answers</div></div>
-      <div class="stat"><div class="v">52<em>/52</em></div><div class="l">Google AI Mode answers that named specific firms</div></div>
-      <div class="stat"><div class="v"><em>130</em> yrs</div><div class="l">One firm's history. Five stars. Named in zero of 92 answers.</div></div>
     </div>
   </div>
 </section>
@@ -522,29 +565,54 @@
 <section class="block" id="how" style="padding-top:0">
   <div class="wrap">
     <div class="eyebrow">Ways in</div>
-    <h2>Three doors. <em>Pick whichever fits.</em></h2>
+    <h2>Four doors. <em>Start with the free one.</em></h2>
     <div class="doors">
       <div class="door">
         <div class="num">01 · The door</div>
-        <h3>Free AI visibility report</h3>
-        <div class="price">Free. One page. Your patch.</div>
-        <p>Tell us what you do and where. We run your patch through the tools your customers use and show you who gets named for your work, and whether it's you. <strong>If the answer stings, it's fixable.</strong></p>
-        <div class="ft"><a href="#contact" onclick="event.preventDefault(); scrollToSection('contact')">Request yours →</a></div>
+        <h3>The Snapshot</h3>
+        <div class="price">Free. One page. Your business.</div>
+        <p>Three buyer quotes, Flint's four scores, the sameness check, and whether the AI names you. <strong>If the answer stings, it's fixable.</strong></p>
+        <div class="ft"><a href="#snapshot" onclick="event.preventDefault(); scrollToSection('snapshot')">Request yours →</a></div>
       </div>
       <div class="door">
-        <div class="num">02 · The Diagnosis</div>
+        <div class="num">02 · Module 1</div>
         <h3>Marketing Diagnosis</h3>
         <div class="price">$1,999 + GST</div>
-        <p>Four stages, four PDF reports, one primary diagnosis and three priority actions. Reviewed by Paul. Credited against your engagement if you go on with us.</p>
+        <p>Four stages, four PDF reports, one primary diagnosis and three priority actions. Reviewed by Paul. The full map behind the Snapshot.</p>
         <div class="ft"><a href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">What's in it →</a></div>
       </div>
-      <div class="door">
-        <div class="num">03 · The engagement</div>
-        <h3>Both fires, on retainer</h3>
-        <div class="price">Scoped from the Diagnosis</div>
-        <p>Strategy from Paul, the Intelligence Suite in your portal, execution from the engine, and a monthly read on what moved. Six client engagements at a time, never more, because we do the work ourselves.</p>
-        <div class="ft">Measured monthly · Reported in the open</div>
+      <div class="door soon">
+        <div class="num">03 · Modules 2 to 5</div>
+        <h3>Coming</h3>
+        <div class="price">Priced per module</div>
+        <p>Positioning, messaging, content and visibility, each built on the Diagnosis. Each one a product, not a retainer. Diagnosis clients hear first.</p>
+        <div class="ft">In build · 2026</div>
       </div>
+      <div class="door">
+        <div class="num">04 · For agents</div>
+        <h3>Two Fires Engine</h3>
+        <div class="price">Per run. Credit packs.</div>
+        <p>The same agents behind the Diagnosis, as an API and MCP server your own AI can call. Keys come with a paid credit pack. No free tier.</p>
+        <div class="ft"><a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">How it works →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STUDY -->
+<section class="block" id="study" style="padding-top:0">
+  <div class="wrap zig">
+    <div>
+      <div class="eyebrow">Proof · Field research</div>
+      <h2>We asked the AI to find a lawyer. <em>92 times.</em></h2>
+      <p class="lead">We ran 92 real client questions through Google's AI Mode, ChatGPT, Perplexity, Claude and Gemini, across thirteen areas of Sydney, the Central Coast and the Hunter, and logged every firm every answer named. The firms getting named aren't the best. They're the best-documented.</p>
+      <div class="actions" style="margin-top:32px"><a href="#snapshot" class="pill pill-iris" onclick="event.preventDefault(); scrollToSection('snapshot')">Check your own patch, free</a><a href="/blog/we-asked-the-ai-to-find-a-lawyer.html" class="pill pill-ghost">Read the full study</a></div>
+    </div>
+    <div class="study-stats">
+      <div class="stat"><div class="v">92</div><div class="l">Real questions · 5 AI tools</div></div>
+      <div class="stat"><div class="v">239</div><div class="l">Different firms named across 88 answers</div></div>
+      <div class="stat"><div class="v">52<em>/52</em></div><div class="l">Google AI Mode answers that named specific firms</div></div>
+      <div class="stat"><div class="v"><em>130</em> yrs</div><div class="l">One firm's history. Five stars. Named in zero of 92 answers.</div></div>
     </div>
   </div>
 </section>
@@ -585,7 +653,7 @@
 <span class="c">202</span> { <span class="k">"run_id"</span>: <span class="v">"run_8f2…"</span> }
 <span class="c">GET</span>  /v1/runs/run_8f2…  <span class="c">→ structured result + pdf_url</span></pre>
       </div>
-      <div class="note">Per run · No contracts · Every report ends with the human option<br><em>Early access</em> · <a href="mailto:lightmyfuse@two-fires.com?subject=Two%20Fires%20Engine%20early%20access" style="color:var(--bone)">lightmyfuse@two-fires.com</a></div>
+      <div class="note">Per run · Paid credit packs, no free tier · Every report ends with the human option<br><em>Early access</em> · <a href="mailto:lightmyfuse@two-fires.com?subject=Two%20Fires%20Engine%20early%20access" style="color:var(--bone)">lightmyfuse@two-fires.com</a></div>
     </div>
   </div>
 </section>
@@ -629,7 +697,7 @@
   <div class="wrap">
     <div class="eyebrow-c">A note on fit</div>
     <h2>We're not for everyone. <em>And that's on purpose.</em></h2>
-    <p class="lead">We work with no more than six client engagements at any time, because we do the work ourselves. Some businesses are an automatic no for us, no matter the fee. Easier for everyone to know up front.</p>
+    <p class="lead">Some businesses are an automatic no for us, no matter the fee. Easier for everyone to know up front.</p>
     <div class="tags">
       <span>No gambling</span><span>No adult content</span><span>No predatory lending</span><span>No MLM or pyramid</span><span>No "wealth coaching"</span><span>No speculative crypto</span><span>No tobacco or vape</span>
     </div>
@@ -641,8 +709,8 @@
 <section class="close" style="padding-bottom:0">
   <div class="wrap">
     <h2>Two fires.<br><em>Your business.</em><br>Let's begin.</h2>
-    <p class="lead">Start with the free visibility report. If it stings, the Diagnosis tells you exactly why, and what to fix first.</p>
-    <a href="#contact" class="pill pill-iris" style="padding:18px 34px" onclick="event.preventDefault(); scrollToSection('contact')">Get the free report</a>
+    <p class="lead">Start with the free Snapshot. If it stings, the Diagnosis tells you exactly why, and what to fix first.</p>
+    <a href="#snapshot" class="pill pill-iris" style="padding:18px 34px" onclick="event.preventDefault(); scrollToSection('snapshot')">Get the free Snapshot</a>
   </div>
 </section>
 
@@ -651,14 +719,14 @@
   <div class="wrap contact-grid">
     <div>
       <h3>Light the <em>fuse.</em></h3>
-      <p>For the free report, just tell us what you do and where. For the Diagnosis, say so and we'll send the intake link. We reply within two business days.</p>
+      <p>For the free Snapshot, use the form above. For the Diagnosis, say so here and we'll send the intake link. Anything else, just write. We reply within two business days.</p>
       <div class="direct"><div class="l">Direct line</div><a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></div>
     </div>
     <form class="form" id="contact-form" onsubmit="handleSubmit(event)">
       <div class="field"><label for="name">Your name</label><input type="text" id="name" required autocomplete="name"></div>
       <div class="field"><label for="email">Email</label><input type="email" id="email" required autocomplete="email"></div>
       <div class="field"><label for="company">Business</label><input type="text" id="company" autocomplete="organization"></div>
-      <div class="field"><label for="message">What's not working?</label><textarea id="message" required placeholder="e.g. Family law, Sutherland Shire. Free report please."></textarea></div>
+      <div class="field"><label for="message">What's not working?</label><textarea id="message" required placeholder="e.g. We'd like to start the Diagnosis."></textarea></div>
       <button type="submit" class="submit">Send</button>
       <div class="form-success" id="form-success"><h4>We've got it.</h4><p>Your message is in. We read every one and reply within two business days.</p></div>
       <div class="form-error" id="form-error"><p class="msg">Something went wrong sending your message.</p><p style="margin-top:8px;font-size:14px">Email us directly at <a href="mailto:lightmyfuse@two-fires.com" style="color:var(--iris-bright)">lightmyfuse@two-fires.com</a>.</p></div>
@@ -781,6 +849,8 @@
 
 
 <script>
+  const SUPA_URL='https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_contact_enquiries';
+  const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc';
   const navEl=document.getElementById('nav');
   addEventListener('scroll',()=>{navEl.classList.toggle('scrolled',scrollY>40)},{passive:true});
   function scrollToSection(id){ goHome(); setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },50); }
@@ -802,6 +872,24 @@
     return false;
   }
   function showFormError(msg){ const errEl=document.getElementById('form-error'); errEl.querySelector('.msg').textContent=msg; errEl.classList.add('active'); }
+  async function handleSnapshot(e){
+    e.preventDefault();
+    const v=id=>document.getElementById(id).value.trim();
+    const name=v('s-name'), email=v('s-email'), business=v('s-business'), industry=v('s-industry'), region=v('s-region'), website=v('s-website');
+    const errEl=document.getElementById('snap-error'); errEl.classList.remove('active');
+    const fail=m=>{ errEl.querySelector('.msg').textContent=m; errEl.classList.add('active'); };
+    if(!name||!email||!business||!industry||!region||!website){ fail('Please fill in every field so the engine has enough to run.'); return false; }
+    if(!email.includes('@')){ fail('Please enter a valid email address.'); return false; }
+    const btn=document.querySelector('#snapshot-form .submit'); const original=btn.textContent; btn.disabled=true; btn.textContent='Sending...';
+    const message='snapshot_request | industry: '+industry+' | region: '+region+' | website: '+website;
+    try{
+      const res=await fetch(SUPA_URL,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=minimal'},body:JSON.stringify({name,email,company:business,message})});
+      if(!res.ok) throw new Error('Request failed: '+res.status);
+      document.querySelectorAll('#snapshot-form .field, #snapshot-form .field-row, #snapshot-form .submit, #snapshot-form .form-title').forEach(el=>el.style.display='none');
+      document.getElementById('snap-success').classList.add('active');
+    }catch(err){ btn.disabled=false; btn.textContent=original; fail('Something went wrong sending your request.'); }
+    return false;
+  }
 </script>
 </body>
 </html>
