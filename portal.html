@@ -551,9 +551,14 @@ footer a:hover { color: #b8b8b8; }
     <p class="login-sub">Sign in to access your marketing intelligence tools.</p>
 
     <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="you@two-fires.com" autocomplete="username">
+    </div>
+
+    <div class="field">
       <label for="password">Password</label>
       <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
-      <div class="error-msg" id="error-msg">Incorrect username or password.</div>
+      <div class="error-msg" id="error-msg">Incorrect email or password.</div>
     </div>
 
     <button class="login-btn" id="login-btn" onclick="handleLogin()">Sign in</button>
@@ -707,6 +712,7 @@ footer a:hover { color: #b8b8b8; }
 // that cookie — there are no credentials in this page and no sessionStorage gate.
 
 async function handleLogin() {
+  const e = document.getElementById('email').value.trim();
   const p = document.getElementById('password').value;
   const errMsg = document.getElementById('error-msg');
   const pInput = document.getElementById('password');
@@ -715,8 +721,8 @@ async function handleLogin() {
   errMsg.classList.remove('visible');
   pInput.classList.remove('error');
 
-  if (!p) {
-    errMsg.textContent = 'Please enter your password.';
+  if (!e || !p) {
+    errMsg.textContent = !e ? 'Please enter your email.' : 'Please enter your password.';
     errMsg.classList.add('visible');
     pInput.classList.add('error');
     return;
@@ -730,16 +736,21 @@ async function handleLogin() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ password: p }),
+      body: JSON.stringify({ email: e, password: p }),
     });
 
     if (res.ok) {
       // Cookie is set. Show the portal dashboard; tool links are now authorized.
       showPortal();
     } else {
+      // 403 is the server saying who may sign in here (email not on the staff
+      // list, or staff sign-in not configured); it carries the reason.
+      const data = await res.json().catch(() => ({}));
       const msg = res.status === 500
         ? 'Portal sign-in is temporarily unavailable.'
-        : 'Incorrect password.';
+        : res.status === 403
+          ? (data.error || 'That email cannot sign in here.')
+          : 'Incorrect email or password.';
       errMsg.textContent = msg;
       errMsg.classList.add('visible');
       pInput.classList.add('error');

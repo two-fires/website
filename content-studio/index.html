@@ -453,7 +453,9 @@ async function sendEmail() {
   const btn = $('send-btn'); btn.disabled = true; btn.textContent = 'Sending…';
   try {
     const subject = 'Draft: ' + (state.lastTopic || 'Your Content Studio post');
-    const { ok, data } = await api('/kindling/email', { email_to: to, subject, markdown: state.lastMarkdown || '' });
+    // Staff only, and only to the client the draft belongs to: the API checks
+    // the recipient against that client's record before anything is sent.
+    const { ok, data } = await api('/kindling/email', { client_email: state.email, email_to: to, subject, markdown: state.lastMarkdown || '' });
     if (ok && data.sent) { el.textContent = '✓ Sent to ' + to + (data.id ? ' (id ' + data.id + ')' : ''); el.classList.add('visible', 'ok'); }
     else if (ok && data.configured === false) { el.textContent = (data.message || 'Email is not configured for this service.') + (data.needed ? ' - ' + data.needed : ''); el.classList.add('visible', 'warn'); }
     else { el.textContent = (data && data.error) || 'The email could not be sent. Please try again.'; el.classList.add('visible', 'err'); }
