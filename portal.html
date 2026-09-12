@@ -548,20 +548,32 @@ footer a:hover { color: #b8b8b8; }
     <div class="login-heading">
       <h2>Welcome<span>.</span></h2>
     </div>
-    <p class="login-sub">Sign in to access your marketing intelligence tools.</p>
 
-    <div class="field">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="you@two-fires.com" autocomplete="username">
+    <!-- Ask state: an address, and nothing else. There is no password here any
+         more; the link that lands in the mailbox is the whole credential. -->
+    <div id="ask-state">
+      <p class="login-sub">Enter your Two Fires address and we'll send a sign-in link.</p>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@two-fires.com" autocomplete="username">
+        <div class="error-msg" id="error-msg">Please enter your email.</div>
+      </div>
+
+      <button class="login-btn" id="login-btn" onclick="handleLogin()">Send me a link</button>
     </div>
 
-    <div class="field">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
-      <div class="error-msg" id="error-msg">Incorrect email or password.</div>
+    <!-- Sent state. Deliberately says the same thing for every address: the
+         server does too, so the page must not be the thing that reveals who is
+         on the staff list. -->
+    <div id="sent-state" style="display:none">
+      <p class="login-sub">Check your email.</p>
+      <p class="login-sub" style="margin-top:12px">
+        If <strong id="sent-address"></strong> can sign in here, a link is on its way.
+        It works once and expires in 15 minutes.
+      </p>
+      <button class="login-btn" id="again-btn" onclick="showAsk()">Use a different address</button>
     </div>
-
-    <button class="login-btn" id="login-btn" onclick="handleLogin()">Sign in</button>
 
     <div class="login-footer">
       <nav>
@@ -706,64 +718,75 @@ footer a:hover { color: #b8b8b8; }
 </div>
 
 <script>
-// Auth is server-side. We POST the password to /api/portal-auth, which validates
-// it and (on success) sets a signed httpOnly session cookie. The tool pages
-// (/insight, /agent.html, /ladder) are gated by Edge middleware that checks
-// that cookie — there are no credentials in this page and no sessionStorage gate.
+// Auth is server-side and passwordless. We POST the address to /portal-auth,
+// which emails a single-use link to it if, and only if, it is a Two Fires staff
+// address. The link sets a signed httpOnly session cookie; the tool pages
+// (/insight, /agent.html, /ladder) are gated on that cookie. There is no
+// credential in this page and nothing in sessionStorage.
+//
+// The server answers 200 { sent: true } for every well-formed address, on the
+// list or not, so this page shows the same "check your email" either way. Any
+// other behaviour here would publish the staff list.
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function showAsk() {
+  document.getElementById('sent-state').style.display = 'none';
+  document.getElementById('ask-state').style.display = 'block';
+  const btn = document.getElementById('login-btn');
+  btn.disabled = false;
+  btn.textContent = 'Send me a link';
+  document.getElementById('error-msg').classList.remove('visible');
+  document.getElementById('email').classList.remove('error');
+  document.getElementById('email').focus();
+}
+
+function showSent(address) {
+  document.getElementById('sent-address').textContent = address;
+  document.getElementById('ask-state').style.display = 'none';
+  document.getElementById('sent-state').style.display = 'block';
+}
 
 async function handleLogin() {
-  const e = document.getElementById('email').value.trim();
-  const p = document.getElementById('password').value;
+  const email = document.getElementById('email').value.trim();
   const errMsg = document.getElementById('error-msg');
-  const pInput = document.getElementById('password');
+  const input = document.getElementById('email');
   const btn = document.getElementById('login-btn');
 
   errMsg.classList.remove('visible');
-  pInput.classList.remove('error');
+  input.classList.remove('error');
 
-  if (!e || !p) {
-    errMsg.textContent = !e ? 'Please enter your email.' : 'Please enter your password.';
+  if (!EMAIL_RE.test(email)) {
+    errMsg.textContent = email ? 'That does not look like an email address.' : 'Please enter your email.';
     errMsg.classList.add('visible');
-    pInput.classList.add('error');
+    input.classList.add('error');
+    input.focus();
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = 'Signing in…';
+  btn.textContent = 'Sending…';
 
   try {
     const res = await fetch('https://insight.two-fires.com/portal-auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ email: e, password: p }),
+      body: JSON.stringify({ email }),
     });
-
     if (res.ok) {
-      // Cookie is set. Show the portal dashboard; tool links are now authorized.
-      showPortal();
+      showSent(email);
     } else {
-      // 403 is the server saying who may sign in here (email not on the staff
-      // list, or staff sign-in not configured); it carries the reason.
-      const data = await res.json().catch(() => ({}));
-      const msg = res.status === 500
-        ? 'Portal sign-in is temporarily unavailable.'
-        : res.status === 403
-          ? (data.error || 'That email cannot sign in here.')
-          : 'Incorrect email or password.';
-      errMsg.textContent = msg;
+      errMsg.textContent = 'Sign-in is temporarily unavailable. Try again shortly.';
       errMsg.classList.add('visible');
-      pInput.classList.add('error');
       btn.disabled = false;
-      btn.textContent = 'Sign in';
-      pInput.value = '';
-      pInput.focus();
+      btn.textContent = 'Send me a link';
     }
   } catch (e) {
     errMsg.textContent = 'Network error. Please try again.';
     errMsg.classList.add('visible');
     btn.disabled = false;
-    btn.textContent = 'Sign in';
+    btn.textContent = 'Send me a link';
   }
 }
 
@@ -798,22 +821,19 @@ async function verifySession() {
 window.addEventListener('pageshow', () => { verifySession(); });
 
 function handleLogout() {
-  // Clear the session cookie server-side, then return to the login screen.
+  // Clear the session cookie server-side, then return to the sign-in screen.
   fetch('https://insight.two-fires.com/portal-logout', { method: 'POST', credentials: 'include' }).finally(() => {
     document.getElementById('portal-screen').classList.remove('active');
     document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('password').value = '';
-    document.getElementById('error-msg').classList.remove('visible');
-    document.getElementById('password').classList.remove('error');
-    document.getElementById('login-btn').disabled = false;
-    document.getElementById('login-btn').textContent = 'Sign in';
+    document.getElementById('email').value = '';
+    showAsk();
   });
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') {
-    handleLogin();
-  }
+  const onLogin = document.getElementById('login-screen').style.display !== 'none';
+  const asking = document.getElementById('ask-state').style.display !== 'none';
+  if (e.key === 'Enter' && onLogin && asking) handleLogin();
 });
 </script>
 </body>
