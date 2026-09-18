@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <title>Two Fires · The evidence layer</title>
+  <meta name="description" content="The layer of customer truth under every marketing decision. Concept preview.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ===== tokens and shell: lifted from index.html ===== */
+  :root {
+    --void: #000000;
+    --bone: #ffffff;
+    --ash: #b8b8b8;
+    --mist: #d6d6d6;
+    --iris: #a855f7;
+    --iris-deep: #6b21a8;
+    --iris-bright: #c4a8ff;
+    --glass-edge: rgba(196,168,255,0.22);
+    --glass-fill: rgba(196,168,255,0.035);
+    --font: 'DM Sans', 'Inter', system-ui, sans-serif;
+    --mono: 'Geist Mono', 'JetBrains Mono', monospace;
+    --max: 1280px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--void); color: var(--bone); font-family: var(--font); font-weight: 300; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 40px; }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 26px 0; }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+  .nav li a { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ash); transition: color .3s; }
+  .nav li a:hover { color: var(--bone); }
+  .nav.scrolled { background: rgba(0,0,0,0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .nav .site-logo { height: 60px; width: auto; display: block; }
+  @media (max-width: 960px) { .nav .site-logo { height: 48px; } }
+
+  .pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 13px 24px; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; transition: transform .4s cubic-bezier(.52,.01,0,1), background .3s, color .3s; }
+  .pill-iris { background: var(--iris); color: #fff; }
+  .pill-iris:hover { background: var(--iris-bright); color: #0a0612; transform: translateY(-2px); }
+  .pill-ghost { color: var(--bone); box-shadow: inset 0 0 0 1px var(--glass-edge); background: rgba(196,168,255,0.04); }
+  .pill-ghost:hover { background: rgba(196,168,255,0.09); transform: translateY(-2px); }
+
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 36px; display: inline-flex; align-items: center; gap: 14px; }
+  .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--iris); }
+  .eyebrow-c { justify-content: center; display: flex; gap: 16px; align-items: center; margin-bottom: 30px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); }
+  .eyebrow-c::before, .eyebrow-c::after { content: ""; width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--glass-edge), transparent); }
+
+  h1 { font-weight: 400; font-size: clamp(3.2rem, 6.6vw, 6rem); line-height: 0.96; letter-spacing: -0.045em; text-wrap: balance; margin-bottom: 36px; }
+  h1 em { font-style: normal; color: var(--iris-bright); }
+  section.block { padding: 96px 0; }
+  .block h2, .cathedral h2 { font-weight: 400; font-size: clamp(2.4rem, 5.4vw, 4.9rem); line-height: 1.0; letter-spacing: -0.04em; max-width: 18ch; text-wrap: balance; margin-bottom: 28px; }
+  .block h2 em, .cathedral h2 em { font-style: normal; color: var(--iris-bright); }
+  .block .lead, .cathedral .lead { font-size: 19px; font-weight: 300; color: var(--mist); max-width: 52ch; line-height: 1.55; }
+  .zig { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+
+  .cathedral { position: relative; padding: 110px 0; isolation: isolate; }
+  .cathedral::before { content: ""; position: absolute; inset: 0; z-index: -2;
+    background-image: linear-gradient(rgba(196,168,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(196,168,255,0.06) 1px, transparent 1px);
+    background-size: 88px 88px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 50% 30%, #000 30%, transparent 75%); }
+  .cathedral::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: conic-gradient(at 50% -8%, transparent 44%, rgba(168,85,247,0.14) 48.5%, rgba(196,168,255,0.28) 50%, rgba(168,85,247,0.14) 51.5%, transparent 56%);
+    -webkit-mask-image: linear-gradient(#000 0%, #000 35%, transparent 75%); mask-image: linear-gradient(#000 0%, #000 35%, transparent 75%); }
+  .cathedral .head { text-align: center; margin: 0 auto 80px; }
+  .cathedral .head h2 { margin: 0 auto 22px; max-width: 16ch; }
+  .cathedral .head .lead { margin: 0 auto; }
+
+  .hero-c { padding: 130px 0 60px; }
+  .hero-c .head { margin-bottom: 40px; }
+  .hero-c h1 { margin: 0 auto 22px; max-width: 22ch; font-size: clamp(2.6rem, 5.4vw, 5rem); }
+  .hero-c .lead { margin: 0 auto 32px !important; max-width: 56ch; font-size: 18px; }
+  .hero-c .lead strong { font-weight: 400; color: var(--bone); }
+  .hero-c .actions { justify-content: center; }
+  .hero-c .cta-row { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); margin-top: 48px; }
+  .actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .actions .pill { padding: 17px 30px; font-size: 13px; }
+  .cta-row { text-align: center; margin-top: 40px; }
+
+  .close { padding: 120px 0 80px; text-align: center; }
+  .close h2 { font-weight: 400; font-size: clamp(3rem, 8vw, 7.4rem); letter-spacing: -0.05em; line-height: 0.94; margin: 0 auto 40px; max-width: 100%; }
+  .close h2 em { font-style: normal; color: var(--iris-bright); }
+  .close .lead { margin: 0 auto 44px; text-align: center; }
+  .foot { padding: 60px 0 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #8c8c8c; }
+  .foot a:hover { color: var(--ash); }
+  .foot nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  .contact { padding: 64px 0 40px; border-top: 1px solid rgba(255,255,255,0.16); }
+
+  .snippet { margin-top: 20px; border: 1px solid rgba(255,255,255,0.16); border-radius: 4px; overflow: hidden; }
+  .snippet .bar { display: flex; justify-content: space-between; gap: 12px; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.16); font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); }
+  .snippet .bar b { color: var(--iris-bright); font-weight: 500; }
+  .snippet pre { margin: 0; padding: 22px 18px; font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--mist); overflow-x: auto; }
+  .snippet pre .v { color: var(--iris-bright); }
+
+  @media (max-width: 960px) {
+    .wrap { padding: 0 24px; }
+    .zig { grid-template-columns: 1fr; gap: 40px; }
+    section.block, .cathedral { padding: 64px 0; }
+    .nav ul li:not(:last-child) { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pill { transition: none; } }
+
+  /* ===== new for this page only ===== */
+  .nav-mark { display: flex; align-items: center; gap: 16px; }
+  .nav-mark .desc { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ash); padding-left: 16px; border-left: 1px solid var(--glass-edge); }
+  .nav-flag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--iris-bright); padding: 7px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--glass-edge); background: var(--glass-fill); white-space: nowrap; }
+  @media (max-width: 960px) { .nav ul li.flag { display: list-item; } }
+  @media (max-width: 620px) { .nav-mark .desc { display: none; } .nav ul li.cta { display: none; } .nav ul { gap: 14px; } }
+
+  /* decision room */
+  .room { border-radius: 16px; background: var(--glass-fill); box-shadow: inset 0 1px 1px rgba(216,236,248,0.2), inset 0 24px 48px rgba(168,85,247,0.05), 0 24px 40px rgba(0,0,0,0.5), inset 0 0 0 1px var(--glass-edge); overflow: hidden; }
+  .room-top { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; padding: 20px 28px; border-bottom: 1px solid var(--glass-edge); }
+  .room-top .src { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
+  .room-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .room-tabs button { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 9px 16px; border: 0; border-radius: 999px; cursor: pointer; background: transparent; color: var(--ash); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); transition: color .3s, background .3s, box-shadow .3s; }
+  .room-tabs button:hover { color: var(--bone); }
+  .room-tabs button:focus-visible { outline: none; box-shadow: inset 0 0 0 1px var(--iris), 0 0 0 3px rgba(168,85,247,0.25); }
+  .room-tabs button[aria-selected="true"] { background: var(--iris); color: #fff; box-shadow: none; }
+  .room-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .room-col { padding: 34px 28px 38px; border-right: 1px solid rgba(255,255,255,0.12); }
+  .room-col:last-child { border-right: none; background: rgba(168,85,247,0.05); }
+  .room-col .badge { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 18px; display: block; }
+  .room-col .badge.grey { color: var(--ash); }
+  .room-col .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); margin-bottom: 12px; }
+  .room-col .said { font-size: 21px; font-weight: 300; letter-spacing: -0.02em; line-height: 1.3; color: var(--bone); margin-bottom: 16px; }
+  .room-col .said.call { color: var(--iris-bright); }
+  .room-col .note { font-size: 14px; color: var(--ash); line-height: 1.6; }
+  .room-cap { margin-top: 22px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); text-align: center; }
+  @media (max-width: 960px) { .room-cols { grid-template-columns: 1fr; } .room-col { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); } .room-col:last-child { border-bottom: none; } }
+
+  /* wedge */
+  .wedge { padding: 110px 0; text-align: center; }
+  .wedge p.big { font-weight: 400; font-size: clamp(2.2rem, 5vw, 4.4rem); line-height: 1.02; letter-spacing: -0.04em; max-width: 24ch; margin: 0 auto 30px; text-wrap: balance; }
+  .wedge p.big em { font-style: normal; color: var(--iris-bright); }
+  .wedge .lead { font-size: 18px; font-weight: 300; color: var(--mist); max-width: 54ch; margin: 0 auto; line-height: 1.6; }
+  @media (max-width: 960px) { .wedge { padding: 72px 0; } }
+
+  /* seven decisions */
+  .sevens { list-style: none; border-top: 1px solid rgba(255,255,255,0.16); }
+  .sevens li { display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.16); }
+  .sevens .n { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--iris-bright); }
+  .sevens .t { font-size: 19px; font-weight: 400; letter-spacing: -0.02em; }
+  .sevens .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); white-space: nowrap; }
+  .downstream { margin-top: 32px; padding: 22px 26px; border-radius: 12px; background: var(--glass-fill); box-shadow: inset 0 0 0 1px var(--glass-edge); font-size: 15px; font-weight: 300; color: var(--mist); line-height: 1.6; }
+  @media (max-width: 620px) { .sevens li { grid-template-columns: 40px 1fr; } .sevens .k { grid-column: 2; } }
+
+  /* marketer cards */
+  .marks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 44px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .mark-card { padding: 36px 32px 36px 0; border-right: 1px solid rgba(255,255,255,0.16); display: flex; flex-direction: column; }
+  .mark-card + .mark-card { padding-left: 32px; }
+  .mark-card:last-child { border-right: none; padding-right: 0; }
+  .mark-card .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 20px; }
+  .mark-card h3 { font-weight: 400; font-size: 24px; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 14px; }
+  .mark-card p { font-size: 15px; font-weight: 300; color: var(--mist); line-height: 1.6; }
+  @media (max-width: 960px) { .marks { grid-template-columns: 1fr; } .mark-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.16); padding: 30px 0; } .mark-card + .mark-card { padding-left: 0; } .mark-card:last-child { border-bottom: none; } }
+
+  .multiplier { margin-top: 52px; padding: 44px; border-radius: 16px; background: var(--glass-fill); box-shadow: inset 0 1px 1px rgba(216,236,248,0.2), inset 0 24px 48px rgba(168,85,247,0.06), inset 0 0 0 1px var(--glass-edge); }
+  .multiplier .big { font-weight: 400; font-size: clamp(1.9rem, 4vw, 3.2rem); letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 18px; text-wrap: balance; }
+  .multiplier .big em { font-style: normal; color: var(--iris-bright); }
+  .multiplier p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.6; max-width: 62ch; }
+  @media (max-width: 620px) { .multiplier { padding: 28px 22px; } }
+
+  /* doors */
+  .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 44px; border-top: 1px solid rgba(255,255,255,0.16); }
+  .door { padding: 40px 40px 40px 0; border-right: 1px solid rgba(255,255,255,0.16); display: flex; flex-direction: column; }
+  .door + .door { padding-left: 40px; }
+  .door:last-child { border-right: none; padding-right: 0; }
+  .door .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 20px; }
+  .door h3 { font-weight: 400; font-size: 26px; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 14px; }
+  .door p { font-size: 15px; font-weight: 300; color: var(--mist); line-height: 1.6; margin-bottom: 22px; }
+  .incl { list-style: none; margin-top: auto; }
+  .incl li { font-size: 15px; font-weight: 300; color: var(--mist); padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.16); }
+  .incl li:last-child { border-bottom: 1px solid rgba(255,255,255,0.16); }
+  @media (max-width: 960px) { .doors { grid-template-columns: 1fr; } .door { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.16); padding: 32px 0; } .door + .door { padding-left: 0; } .door:last-child { border-bottom: none; } }
+
+  /* closer glow */
+  .closer { position: relative; isolation: isolate; }
+  .closer::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(168,85,247,0.22), rgba(168,85,247,0.06) 45%, transparent 72%); }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <div class="nav-mark">
+      <a href="/"><img class="site-logo" src="/images/two-fires-logo-transparent.png" alt="Two Fires"></a>
+      <span class="desc">The evidence layer</span>
+    </div>
+    <ul>
+      <li class="flag"><span class="nav-flag">Void · concept</span></li>
+      <li><a href="/#diagnosis">Diagnosis</a></li>
+      <li><a href="/blog.html">Blog</a></li>
+      <li><a href="/portal.html">Portal</a></li>
+      <li class="cta"><a href="#doors" class="pill pill-iris">Two ways to run it</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="cathedral hero-c" id="top">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow-c">The evidence layer · for marketers</div>
+      <h1>You make the call. <em>We bring the evidence.</em></h1>
+      <p class="lead">The layer of customer truth under every marketing decision. Run it before the campaign, the rebrand, the website or the agency brief. Built for the people who make the call, and the agents that assist them.</p>
+      <div class="actions">
+        <a href="#mismatch" class="pill pill-iris">See a live mismatch</a>
+        <a href="#doors" class="pill pill-ghost">Run Module 1</a>
+      </div>
+    </div>
+    <div class="cta-row">Brand craft + AI engine · Sydney</div>
+  </div>
+</section>
+
+<!-- LIVE DECISION ROOM -->
+<section class="block" id="mismatch">
+  <div class="wrap">
+    <div class="eyebrow">Live decision room</div>
+    <h2>The money leaks in the gap between <em>what customers say and what brands say.</em></h2>
+    <p class="lead">Same evidence, four decisions. Pick the call you are about to make and see what the customer already told you.</p>
+
+    <div class="room" style="margin-top:44px">
+      <div class="room-top">
+        <span class="src">Fictional example · Dee Why physio</span>
+        <div class="room-tabs" role="tablist" aria-label="Marketing decision">
+          <button type="button" role="tab" id="tab-campaign" aria-controls="room-panel" aria-selected="true" data-key="campaign">Campaign</button>
+          <button type="button" role="tab" id="tab-website" aria-controls="room-panel" aria-selected="false" data-key="website">Website</button>
+          <button type="button" role="tab" id="tab-rebrand" aria-controls="room-panel" aria-selected="false" data-key="rebrand">Rebrand</button>
+          <button type="button" role="tab" id="tab-brief" aria-controls="room-panel" aria-selected="false" data-key="brief">Agency brief</button>
+        </div>
+      </div>
+      <div class="room-cols" id="room-panel" role="tabpanel" aria-labelledby="tab-campaign">
+        <div class="room-col">
+          <span class="badge">Evidence</span>
+          <div class="lbl">What the customer says</div>
+          <p class="said" id="r-customer"></p>
+          <p class="note" id="r-customer-note"></p>
+        </div>
+        <div class="room-col">
+          <span class="badge grey">Gap</span>
+          <div class="lbl">What the brand says</div>
+          <p class="said" id="r-brand"></p>
+          <p class="note" id="r-brand-note"></p>
+        </div>
+        <div class="room-col">
+          <span class="badge">Priority 01</span>
+          <div class="lbl" id="r-dir"></div>
+          <p class="said call" id="r-call"></p>
+          <p class="note" id="r-call-note"></p>
+        </div>
+      </div>
+    </div>
+    <div class="room-cap">Illustrative. A real Module 1 report reads the same way, in the client's own words.</div>
+  </div>
+</section>
+
+<!-- WEDGE -->
+<section class="wedge">
+  <div class="wrap">
+    <p class="big">Your AI can draft the campaign. <em>What customer evidence is it working from?</em></p>
+    <p class="lead">Execution dropped to near zero. Evidence is the constraint now. Two Fires is where the evidence comes from, before a dollar is spent.</p>
+  </div>
+</section>
+
+<!-- SEVEN DECISIONS -->
+<section class="block" id="decisions">
+  <div class="wrap">
+    <div class="zig">
+      <div>
+        <div class="eyebrow">The decisions beneath every channel</div>
+        <h2>Own the foundation. <em>Direct the execution.</em></h2>
+        <p class="lead">Seven decisions sit under every campaign a marketer runs. Get them right and the channels take care of themselves. Get them wrong and no amount of spend saves the work.</p>
+        <div class="downstream">SEO, advertising, social, email, content and websites are delivery. This is the strategic layer they all depend on. Module 1 turns four reports into one ranked call.</div>
+      </div>
+      <div>
+        <ol class="sevens">
+          <li><span class="n">01</span><span class="t">Customer insight</span><span class="k">Evidence</span></li>
+          <li><span class="n">02</span><span class="t">Category and competitor read</span><span class="k">Evidence</span></li>
+          <li><span class="n">03</span><span class="t">Positioning and value proposition</span><span class="k">Decision</span></li>
+          <li><span class="n">04</span><span class="t">Offer design</span><span class="k">Decision</span></li>
+          <li><span class="n">05</span><span class="t">Messaging architecture</span><span class="k">Decision</span></li>
+          <li><span class="n">06</span><span class="t">Buyer journey and conversion diagnosis</span><span class="k">Diagnosis</span></li>
+          <li><span class="n">07</span><span class="t">Marketing priorities and execution briefs</span><span class="k">Direction</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR MARKETERS -->
+<section class="block" id="marketers">
+  <div class="wrap">
+    <div class="eyebrow">Who it's built for</div>
+    <h2>Not another tool that makes <em>more marketing.</em></h2>
+    <p class="lead">Two Fires helps the person making the call decide what to say, who it should matter to, and which problem earns the budget first.</p>
+    <div class="marks">
+      <div class="mark-card">
+        <div class="num">01 · Fractional CMO</div>
+        <h3>Walk in with the evidence, not an opinion.</h3>
+        <p>Turn a new client's assumptions into a defensible diagnosis, then lead the work with confidence in the first week.</p>
+      </div>
+      <div class="mark-card">
+        <div class="num">02 · Agency principal</div>
+        <h3>One customer truth behind every brief.</h3>
+        <p>Give strategy, creative, media and web the same evidence to work from, instead of four different interpretations.</p>
+      </div>
+      <div class="mark-card">
+        <div class="num">03 · In-house lead</div>
+        <h3>Make the budget easy to defend.</h3>
+        <p>Show leadership what is evidence, what is inference, and why one priority comes before the rest.</p>
+      </div>
+    </div>
+    <div class="multiplier">
+      <div class="big">One marketer. <em>Every client they hold.</em></div>
+      <p>We do not chase businesses one at a time. We equip the people who already run the work, and each of them brings a book of clients through the engine. That is the model.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TWO DOORS -->
+<section class="block" id="doors">
+  <div class="wrap">
+    <div class="eyebrow">Two ways to run it</div>
+    <h2>One client at a time. <em>Or inside every client workflow.</em></h2>
+    <div class="doors">
+      <div class="door">
+        <div class="num">Client portal · Module 1</div>
+        <h3>Run the full diagnosis for one business.</h3>
+        <p>Four reports, one primary diagnosis, three priority actions. A defensible foundation for the work that follows.</p>
+        <ul class="incl">
+          <li>Customer evidence and language bank</li>
+          <li>Message gaps and category whitespace</li>
+          <li>Every finding labelled evidence or inference</li>
+          <li>$1,999 + GST, one-off</li>
+        </ul>
+      </div>
+      <div class="door">
+        <div class="num">Two Fires Engine · MCP + API</div>
+        <h3>Put the evidence layer inside your own agent.</h3>
+        <p>Your AI can draft the work. Two Fires gives it the customer truth and the strategic checks to work from first.</p>
+        <div class="snippet">
+          <div class="bar"><span><b>MCP</b> · tool calls</span><span>v1</span></div>
+          <pre>your agent → <span class="v">customer_insight</span>
+your agent → <span class="v">messaging_audit</span>
+your agent → <span class="v">competitor_category</span>
+your agent → <span class="v">ai_visibility_check</span></pre>
+        </div>
+        <ul class="incl" style="margin-top:24px">
+          <li>Paid per run with credit packs</li>
+          <li>One marketer, many clients, one key</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSER -->
+<section class="close closer" id="closer">
+  <div class="wrap">
+    <div class="eyebrow-c">Before the next decision</div>
+    <h2>Before the spend. <em>Get the reading.</em></h2>
+    <p class="lead">Bring one client, one website and one marketing decision. We will show you what the customer evidence changes.</p>
+    <div class="actions" style="justify-content:center">
+      <a href="mailto:lightmyfuse@two-fires.com" class="pill pill-iris">Bring a client</a>
+      <a href="/#agents" class="pill pill-ghost">Explore the engine</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section class="contact">
+  <div class="wrap">
+    <div class="foot">
+      <span>Two Fires · Sydney · 2026</span>
+      <span>Void preview · not live</span>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/podcast.html">Podcast</a>
+        <a href="/#agents">For agents</a>
+        <a href="/#privacy">Privacy</a>
+        <a href="/#terms">Terms</a>
+        <a href="/portal.html">Client Portal</a>
+      </nav>
+    </div>
+  </div>
+</section>
+
+<script>
+  const navEl = document.getElementById('nav');
+  addEventListener('scroll', () => { navEl.classList.toggle('scrolled', scrollY > 40); }, { passive: true });
+
+  const SCENARIOS = {
+    campaign: {
+      customer: "I just need to know if I'll be able to run again.",
+      customerNote: "Repeated language across local patient reviews.",
+      brand: "Comprehensive, patient-centred physiotherapy.",
+      brandNote: "Current homepage proposition.",
+      dir: "Campaign direction",
+      call: "Lead with return to activity, not service breadth.",
+      callNote: "Show the rehab pathway and the proof behind it. Drop the generic care line every competitor already owns."
+    },
+    website: {
+      customer: "Will an actual person call me back today?",
+      customerNote: "Top unspoken worry in enquiry drop-off.",
+      brand: "Excellence in allied health, delivered with care.",
+      brandNote: "Hero line, above the fold.",
+      dir: "Website direction",
+      call: "Put a real response time and a named person above the fold.",
+      callNote: "Answer the fear before the credential. The award badges can wait until they trust you will pick up."
+    },
+    rebrand: {
+      customer: "They all say they are the experts. How would I know?",
+      customerNote: "Recurring theme when buyers compare three clinics.",
+      brand: "Trusted experts in movement and recovery.",
+      brandNote: "Proposed new tagline.",
+      dir: "Rebrand direction",
+      call: "Claim the one outcome no competitor will put in writing.",
+      callNote: "Name a measured return-to-sport window and stand behind it. Specific and provable beats trusted and expert."
+    },
+    brief: {
+      customer: "I waited three weeks and still did not know the plan.",
+      customerNote: "Most common one-star reason across the category.",
+      brand: "A holistic, personalised treatment journey.",
+      brandNote: "What the brief tells the agency to sell.",
+      dir: "Agency brief direction",
+      call: "Brief the work around clarity and speed, not warmth.",
+      callNote: "The market is not short on care language. It is short on a clinic that tells you the plan on day one."
+    }
+  };
+
+  const tabs = Array.from(document.querySelectorAll('.room-tabs button'));
+  const panel = document.getElementById('room-panel');
+  const fields = {
+    customer: document.getElementById('r-customer'),
+    customerNote: document.getElementById('r-customer-note'),
+    brand: document.getElementById('r-brand'),
+    brandNote: document.getElementById('r-brand-note'),
+    dir: document.getElementById('r-dir'),
+    call: document.getElementById('r-call'),
+    callNote: document.getElementById('r-call-note')
+  };
+
+  function render(key) {
+    const s = SCENARIOS[key];
+    if (!s) return;
+    fields.customer.textContent = s.customer;
+    fields.customerNote.textContent = s.customerNote;
+    fields.brand.textContent = s.brand;
+    fields.brandNote.textContent = s.brandNote;
+    fields.dir.textContent = s.dir;
+    fields.call.textContent = s.call;
+    fields.callNote.textContent = s.callNote;
+  }
+
+  function select(tab, focus) {
+    tabs.forEach(t => t.setAttribute('aria-selected', String(t === tab)));
+    panel.setAttribute('aria-labelledby', tab.id);
+    render(tab.dataset.key);
+    if (focus) tab.focus();
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(tab, false));
+    tab.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
+      e.preventDefault();
+      let next = i;
+      if (e.key === 'ArrowRight') next = (i + 1) % tabs.length;
+      if (e.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
+      if (e.key === 'Home') next = 0;
+      if (e.key === 'End') next = tabs.length - 1;
+      select(tabs[next], true);
+    });
+  });
+
+  render('campaign');
+</script>
+</body>
+</html>
