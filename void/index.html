@@ -158,11 +158,12 @@
   .sevens { list-style: none; border-top: 1px solid rgba(255,255,255,0.16); }
   .sevens li { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px 20px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.16); }
   .sevens .scope { justify-self: end; font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; white-space: nowrap; }
-  .sevens .scope.live { color: var(--iris-bright); background: rgba(168,85,247,0.14); box-shadow: inset 0 0 0 1px var(--glass-edge); }
-  .sevens .scope.next { color: var(--ash); background: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
+  .sevens .scope.diagnosed { color: var(--iris-bright); background: rgba(168,85,247,0.14); box-shadow: inset 0 0 0 1px var(--glass-edge); }
+  .sevens .scope.build { color: var(--ash); background: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
   .sevens-note { margin-top: 20px; font-size: 15px; font-weight: 300; color: var(--mist); line-height: 1.6; }
   .sevens .n { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--iris-bright); }
   .sevens .t { font-size: 19px; font-weight: 400; letter-spacing: -0.02em; }
+  .sevens .t span { display: block; font-size: 15px; font-weight: 300; color: var(--ash); margin-top: 6px; line-height: 1.5; letter-spacing: 0; }
   .sevens .k { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); white-space: nowrap; }
   .downstream { margin-top: 32px; padding: 22px 26px; border-radius: 12px; background: var(--glass-fill); box-shadow: inset 0 0 0 1px var(--glass-edge); font-size: 15px; font-weight: 300; color: var(--mist); line-height: 1.6; }
   @media (max-width: 620px) { .sevens li { grid-template-columns: 40px 1fr; } .sevens .k, .sevens .scope { grid-column: 2; justify-self: start; } }
@@ -329,15 +330,15 @@
       </div>
       <div>
         <ol class="sevens">
-          <li><span class="n">01</span><span class="t">Customer insight</span><span class="scope live">Module 1</span></li>
-          <li><span class="n">02</span><span class="t">Category and competitor read</span><span class="scope live">Module 1</span></li>
-          <li><span class="n">03</span><span class="t">Positioning and value proposition</span><span class="scope live">Module 1</span></li>
-          <li><span class="n">04</span><span class="t">Offer design</span><span class="scope next">Next</span></li>
-          <li><span class="n">05</span><span class="t">Messaging architecture</span><span class="scope live">Module 1</span></li>
-          <li><span class="n">06</span><span class="t">Buyer journey and conversion diagnosis</span><span class="scope next">Next</span></li>
-          <li><span class="n">07</span><span class="t">Marketing priorities and execution briefs</span><span class="scope live">Module 1</span></li>
+          <li><span class="n">01</span><span class="t">Customer insight</span><span class="scope diagnosed">Diagnosed in Module 1</span></li>
+          <li><span class="n">02</span><span class="t">Category and competitor read</span><span class="scope diagnosed">Diagnosed in Module 1</span></li>
+          <li><span class="n">03</span><span class="t">Positioning and value proposition<span>Module 1 diagnoses the gap. The finished positioning is yours to set.</span></span><span class="scope build">Direct the build</span></li>
+          <li><span class="n">04</span><span class="t">Offer design</span><span class="scope build">Direct the build</span></li>
+          <li><span class="n">05</span><span class="t">Messaging architecture<span>Module 1 names the message gaps and the whitespace. The architecture is built from them.</span></span><span class="scope build">Direct the build</span></li>
+          <li><span class="n">06</span><span class="t">Buyer journey and conversion diagnosis</span><span class="scope diagnosed">Diagnosed in Module 1</span></li>
+          <li><span class="n">07</span><span class="t">Marketing priorities<span>Ranked in Module 1. The execution briefs are written from them.</span></span><span class="scope diagnosed">Diagnosed in Module 1</span></li>
         </ol>
-        <p class="sevens-note">Module 1 delivers five of these today. The rest are where the modules go next.</p>
+        <p class="sevens-note">Module 1 reads the evidence and diagnoses the gaps. The build calls stay with you and the people who execute the work.</p>
       </div>
     </div>
   </div>
@@ -367,8 +368,8 @@
       </div>
     </div>
     <div class="multiplier">
-      <div class="big">One login. <em>Every client you advise.</em></div>
-      <p>Run each client through the same engine and carry the findings straight back into the work you already do for them. New client, new diagnosis, the same evidence standard every time.</p>
+      <div class="big">One account. <em>Separate client workspaces.</em></div>
+      <p>Use the same evidence standard across every client. Each business has its own workspace and entitlement.</p>
     </div>
   </div>
 </section>
@@ -385,7 +386,7 @@
       <li><span class="t">The sameness check<span>How many of your competitors say the same thing you do. Usually most of them.</span></span><span class="k">Included</span></li>
       <li><span class="t">Named or not named<span>We ask the AI tools your customers use who to call for your work. You see the count.</span></span><span class="k">Included</span></li>
     </ul>
-    <p class="snap-fine">One Snapshot per business · Delivered by email within two business days · <em>No call, no pitch</em></p>
+    <p class="snap-fine">One free Snapshot per marketer or agency · Delivered by email within two business days · <em>No call, no pitch</em></p>
     <div class="actions" style="margin-top:32px"><a href="/#snapshot" class="pill pill-iris">Run a free Snapshot</a></div>
   </div>
 </section>
@@ -399,12 +400,12 @@
       <div class="door">
         <div class="num">Client portal · Module 1</div>
         <h3>Run the full diagnosis for one business.</h3>
-        <p>Four reports, one primary diagnosis, three priority actions. A defensible foundation for the work that follows.</p>
+        <p>Four reports, one primary diagnosis, three priority actions. A defensible foundation for the work that follows. Licensed per named business workspace, not per marketer.</p>
         <ul class="incl">
           <li>Customer evidence and language bank</li>
           <li>Message gaps and category whitespace</li>
           <li>Every finding labelled evidence or inference</li>
-          <li>$1,999 + GST, one-off</li>
+          <li>$1,999 + GST per business, one-off.</li>
         </ul>
       </div>
       <div class="door">
@@ -420,7 +421,7 @@ your agent → <span class="v">ai_visibility_check</span></pre>
         </div>
         <ul class="incl" style="margin-top:24px">
           <li>Paid per run with credit packs</li>
-          <li>One marketer, many clients, one key</li>
+          <li>One key. Many clients. Every successful run uses credits.</li>
         </ul>
       </div>
     </div>
