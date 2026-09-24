@@ -230,6 +230,19 @@
   .door .ft { margin-top: auto; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
   .door .ft a { color: var(--bone); display: inline-flex; gap: 8px; align-items: center; transition: gap .3s, color .3s; }
   .door .ft a:hover { color: var(--iris-bright); gap: 14px; }
+  /* Refresh sits under the Diagnosis in the same column, so the grid stays four doors wide. */
+  .doors > .door { grid-row: span 2; }
+  .doors > .door.door-diag { grid-row: 1; grid-column: 2; }
+  .doors > .door.door-refresh { grid-row: 2; grid-column: 2; border-top: 1px solid rgba(255,255,255,0.16); }
+  /* FAQ */
+  .faq { margin-top: 44px; border-top: 1px solid rgba(255,255,255,0.16); max-width: 880px; }
+  .faq details { border-bottom: 1px solid rgba(255,255,255,0.16); }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 26px 0; font-size: 22px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.25; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-family: var(--mono); font-size: 18px; color: var(--iris-bright); transition: transform .3s; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq summary:focus-visible { outline: 2px solid var(--iris-bright); outline-offset: 4px; }
+  .faq details p { font-size: 16px; font-weight: 300; color: var(--mist); line-height: 1.65; max-width: 62ch; padding: 0 0 28px; }
 
   /* podcast strip */
   .podcast { display: grid; grid-template-columns: auto 1fr auto; gap: 48px; align-items: center; padding: 56px 0; border-top: 1px solid rgba(255,255,255,0.16); border-bottom: 1px solid rgba(255,255,255,0.16); }
@@ -300,6 +313,8 @@
     .doors { grid-template-columns: 1fr; }
     .door { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.16); padding: 32px 0; }
     .door + .door { padding-left: 0; }
+    .doors > .door, .doors > .door.door-diag, .doors > .door.door-refresh { grid-row: auto; grid-column: auto; }
+    .faq summary { font-size: 19px; }
     .snap { padding: 64px 0; }
     .snap .zig { gap: 48px; }
     .podcast { grid-template-columns: 1fr; gap: 24px; }
@@ -484,8 +499,8 @@
       </ul>
     </div>
     <div>
-      <div class="price">$1,999<small>+ GST · One-off · Self-serve in the portal</small></div>
-      <ul class="incl"><li>Four stages, four PDF reports</li><li>One primary diagnosis, three priority actions</li><li>Every finding labelled evidence or inference</li><li>Run it again any time. Your portal, your history.</li></ul>
+      <div class="price">$1,999<small>+ GST · One-off · One business, one market</small></div>
+      <ul class="incl"><li>Four stages, four PDF reports</li><li>One primary diagnosis, three priority actions</li><li>Every finding labelled evidence or inference</li><li>Refresh it each quarter. Your portal, your history.</li></ul>
       <div class="actions" style="margin-top:32px"><a href="https://engine.two-fires.com/v1/checkout/diagnosis" class="pill pill-iris">Start the Diagnosis</a></div>
     </div>
   </div>
@@ -504,12 +519,19 @@
         <p>Three buyer quotes, Flint's four scores, the sameness check, and whether the AI names you. <strong>If the answer stings, it's fixable.</strong></p>
         <div class="ft"><a href="#snapshot" onclick="event.preventDefault(); scrollToSection('snapshot')">Request yours →</a></div>
       </div>
-      <div class="door">
+      <div class="door door-diag">
         <div class="num">02 · Module 1</div>
         <h3>Marketing Diagnosis</h3>
-        <div class="price">$1,999 + GST</div>
+        <div class="price">$1,999 + GST · One-off · One business, one market</div>
         <p>Four stages, four PDF reports, one primary diagnosis and three priority actions. Pay, log in, run it yourself. The full map behind the Snapshot.</p>
         <div class="ft"><a href="#diagnosis" onclick="event.preventDefault(); scrollToSection('diagnosis')">What's in it →</a></div>
+      </div>
+      <div class="door door-refresh">
+        <div class="num">02 · After Module 1</div>
+        <h3>Diagnosis Refresh</h3>
+        <div class="price">$749 + GST</div>
+        <p>Re-run all four reports on the same business and market, 90 days or more after your Diagnosis. See what moved, what didn't, and what changed in how AI describes you.</p>
+        <div class="ft"><a href="/portal.html">Request it from your portal →</a></div>
       </div>
       <div class="door soon">
         <div class="num">03 · Modules 2 to 5</div>
@@ -590,6 +612,28 @@
   </div>
 </section>
 
+<!-- FAQ -->
+<section class="block" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Questions</div>
+    <h2>Straight answers. <em>Before you pay.</em></h2>
+    <div class="faq">
+      <details>
+        <summary>Is the $1,999 a subscription?</summary>
+        <p>No. It's a one-off payment for one Diagnosis: four reports on one business website and one nominated service area. Nothing recurs and there's nothing to cancel.</p>
+      </details>
+      <details>
+        <summary>What if I have more than one business?</summary>
+        <p>Each business needs its own Diagnosis. The reports are built on one website and one local market, so a second brand or a materially different location is a separate piece of work.</p>
+      </details>
+      <details>
+        <summary>Can I run it again later?</summary>
+        <p>Yes. A Refresh re-runs all four reports on the same business and market for $749 + GST, available 90 days after your Diagnosis. AI visibility moves, so a quarterly reading is the point. Request it from your <a href="/portal.html" style="color:var(--iris-bright)">portal</a>.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section class="contact" id="contact">
   <div class="wrap contact-line">
@@ -604,8 +648,8 @@
         <a href="/blog.html">Blog</a>
         <a href="/podcast.html">Podcast</a>
         <a href="#agents" onclick="event.preventDefault(); scrollToSection('agents')">For agents</a>
-        <a href="#" onclick="event.preventDefault(); showLegal('privacy')">Privacy</a>
-        <a href="#" onclick="event.preventDefault(); showLegal('terms')">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
         <a href="/portal.html">Client Portal</a>
       </nav>
     </div>
@@ -614,47 +658,6 @@
 
 </div><!-- /main-content -->
 
-<div class="legal-page" id="privacy-page">
-  <div class="wrap">
-    <h1>Privacy <em>Policy.</em></h1>
-    <div class="legal-content">
-      <p class="muted">Last updated: May 2026.</p>
-      <p>Two Fires (the "firm," "we," or "us") respects your privacy. This page explains what we collect, why, and how we treat it. We've kept it short on purpose. If anything isn't clear, write to us at <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
-      <h3>What we collect</h3>
-      <p>When you submit our contact form or email us directly, we collect your name, email address, company name (if provided), and the message you send. That's it. We do not use third-party tracking pixels or sell data to anyone.</p>
-      <h3>How we use it</h3>
-      <p>We use this information solely to respond to your enquiry and continue any conversation you start with us. If we work together, we'll keep your contact details on file for the duration of our engagement and a reasonable period afterwards.</p>
-      <h3>Analytics and cookies</h3>
-      <p>This website uses minimal first-party analytics to understand which pages are read. No personal data is shared with third parties. We do not use advertising cookies or cross-site tracking.</p>
-      <h3>Your rights</h3>
-      <p>You can ask us at any time what we hold about you, request a copy, or ask us to delete it. Email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a> and we'll act within 30 days.</p>
-      <h3>Changes to this policy</h3>
-      <p>If we update this policy, the change will appear here with a new "last updated" date. Material changes will be communicated to active clients directly.</p>
-      <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()">← Back to home</a></p>
-    </div>
-  </div>
-</div>
-
-<div class="legal-page" id="terms-page">
-  <div class="wrap">
-    <h1>Terms of <em>use.</em></h1>
-    <div class="legal-content">
-      <p class="muted">Last updated: May 2026.</p>
-      <p>These terms govern your use of the Two Fires website. By visiting two-fires.com, you accept them. They are deliberately brief.</p>
-      <h3>Information on this site</h3>
-      <p>Content on this website is provided for general information about Two Fires. It is not professional advice. Specific marketing, brand, or commercial recommendations are made under engagement agreements, not via website content.</p>
-      <h3>Intellectual property</h3>
-      <p>The Two Fires brand, name, mark, and original content are the property of Two Fires Pty Ltd. You may quote short passages with attribution. You may not reproduce, modify, or commercially redistribute substantial portions without written permission.</p>
-      <h3>Limitation of liability</h3>
-      <p>Use of this website is at your own risk. To the extent permitted by Australian law, Two Fires excludes liability for any loss arising from the use of the site or reliance on its content.</p>
-      <h3>Governing law</h3>
-      <p>These terms are governed by the laws of New South Wales, Australia.</p>
-      <h3>Contact</h3>
-      <p>Questions? <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a></p>
-      <p style="margin-top: 40px;"><a href="#" onclick="event.preventDefault(); goHome()">← Back to home</a></p>
-    </div>
-  </div>
-</div>
 
 
 
@@ -666,9 +669,8 @@
   const navEl=document.getElementById('nav');
   addEventListener('scroll',()=>{navEl.classList.toggle('scrolled',scrollY>40)},{passive:true});
   function scrollToSection(id){ goHome(); setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); },50); }
-  function showLegal(name){ document.getElementById('main-content').classList.add('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); document.getElementById(name+'-page').classList.add('active'); window.scrollTo({top:0,behavior:'instant'}); }
   function goHome(){ document.getElementById('main-content').classList.remove('hidden'); document.querySelectorAll('.legal-page').forEach(p=>p.classList.remove('active')); }
-  (function(){ const h=location.hash.replace('#',''); if(h==='privacy-page'||h==='privacy') showLegal('privacy'); else if(h==='terms-page'||h==='terms') showLegal('terms'); else if(h){ setTimeout(()=>{ const el=document.getElementById(h); if(el) el.scrollIntoView({behavior:'instant',block:'start'}); },50); } })();
+  (function(){ const h=location.hash.replace('#',''); if(h==='privacy-page'||h==='privacy') location.replace('/privacy'); else if(h==='terms-page'||h==='terms') location.replace('/terms'); else if(h){ setTimeout(()=>{ const el=document.getElementById(h); if(el) el.scrollIntoView({behavior:'instant',block:'start'}); },50); } })();
   function showFormError(msg){ const errEl=document.getElementById('form-error'); errEl.querySelector('.msg').textContent=msg; errEl.classList.add('active'); }
   async function handleSnapshot(e){
     e.preventDefault();
