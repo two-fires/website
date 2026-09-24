@@ -6,11 +6,12 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-  <meta name="description" content="Insights and intelligence from Two Fires: brand strategy, AI, customer intelligence and growth, grounded in real customer research.">
-  <meta property="og:title" content="Two Fires · Blog: Insights & Intelligence">
-  <meta property="og:description" content="Every post grounded in real customer research: the questions they're asking, the problems they can't solve, and the language they use when no one's watching.">
+  <meta name="description" content="What Two Fires collects, why, who else touches it, and how to have it deleted.">
+  <meta property="og:title" content="Two Fires · Privacy">
+  <meta property="og:description" content="What Two Fires collects, why, who else touches it, and how to have it deleted.">
   <meta property="og:type" content="website">
-  <title>Two Fires · Blog: Insights & Intelligence</title>
+  <title>Two Fires · Privacy</title>
+  <link rel="canonical" href="https://www.two-fires.com/privacy">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -359,6 +360,27 @@
     .cs-hero .eyebrow,
     .eyebrow { color: var(--iris-bright); }
     .work-list li::before { color: var(--iris-bright); }
+
+    /* Legal pages */
+    .legal { padding-top: 170px; padding-bottom: 96px; }
+    .legal .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--iris-bright); margin-bottom: 28px; display: inline-flex; align-items: center; gap: 14px; }
+    .legal .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--iris); }
+    .legal h1 { font-weight: 400; font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1.0; letter-spacing: -0.045em; margin-bottom: 20px; }
+    .legal h1 em { font-style: normal; color: var(--iris-bright); }
+    .legal .updated { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); margin-bottom: 48px; }
+    .legal-body { max-width: 720px; }
+    .legal-body h2 { font-family: var(--font-mono); font-size: 12px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--iris-bright); margin: 44px 0 14px; }
+    .legal-body p, .legal-body li { color: var(--mist); font-size: 17px; font-weight: 300; line-height: 1.65; }
+    .legal-body p { margin-bottom: 16px; }
+    .legal-body ul { margin: 0 0 18px 20px; }
+    .legal-body li { margin-bottom: 8px; }
+    .legal-body strong { color: var(--bone); font-weight: 400; }
+    .legal-body a { color: var(--iris-bright); border-bottom: 1px solid rgba(196,168,255,0.3); }
+    .legal-body a:hover { color: var(--bone); }
+    .legal-body .callout { border: 1px solid var(--glass-edge); background: var(--glass-fill); border-radius: 14px; padding: 24px 26px; margin: 8px 0 24px; }
+    .legal-body .callout p:last-child { margin-bottom: 0; }
+    .legal-body .todo { color: #fbbf24; font-family: var(--font-mono); font-size: 13px; }
+    @media (max-width: 760px) { .legal { padding-top: 130px; padding-bottom: 72px; } .legal-body p, .legal-body li { font-size: 16px; } }
   </style>
 </head>
 <body>
@@ -372,7 +394,7 @@
       <nav class="nav">
         <a href="https://www.two-fires.com/#diagnosis">Diagnosis</a>
         <a href="https://www.two-fires.com/#principals">Who we are</a>
-        <a href="/blog.html" class="active">Blog</a>
+        <a href="/blog.html">Blog</a>
         <a href="/portal.html">Portal</a>
         <a href="https://www.two-fires.com/#agents">For agents</a>
         <a class="nav-cta" href="https://www.two-fires.com/#snapshot">Free Snapshot</a>
@@ -381,124 +403,68 @@
   </header>
 
   <main>
+    <section class="legal container">
+      <div class="eyebrow">Privacy</div>
+      <h1>Privacy <em>policy.</em></h1>
+      <p class="updated">Last updated: 24 September 2026</p>
+      <div class="legal-body">
+        <p>This page explains what Two Fires collects, why, where it goes, and how to get it back or deleted. It describes what our systems actually do today, not what we'd like them to do.</p>
 
-    <!-- HERO -->
-    <section class="blog-hero container">
-      <div class="eyebrow">Insights &amp; Intelligence</div>
-      <h1>What your customers<br><em>are actually thinking.</em></h1>
-      <p>Every post here is grounded in real customer research: the questions they're asking, the problems they can't solve, and the language they use when no one's watching.</p>
-    </section>
+        <h2>Who we are</h2>
+        <p>Two Fires is a business of NB Performance Pty Ltd, ABN <span class="todo">[TODO: ABN to be confirmed before publication]</span>, based in Sydney, Australia. Questions about privacy go to <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
 
-    <!-- FILTER BAR -->
-    <div class="container">
-      <div class="filter-bar" id="filter-bar">
-        <button class="filter-pill active" data-filter="all">All</button>
-        <button class="filter-pill" data-filter="brand-strategy">Brand Strategy</button>
-        <button class="filter-pill" data-filter="ai-marketing">AI &amp; Marketing</button>
-        <button class="filter-pill" data-filter="customer-intelligence">Customer Intelligence</button>
-        <button class="filter-pill" data-filter="growth">Growth</button>
-        <button class="filter-pill" data-filter="case-studies">Case Studies</button>
-      </div>
-    </div>
+        <h2>What you give us</h2>
+        <ul>
+          <li><strong>The free Snapshot form:</strong> your name, email, business name, industry, suburb or region, and website.</li>
+          <li><strong>Newsletter sign-up</strong> on the blog and podcast pages: your email.</li>
+          <li><strong>Buying a Diagnosis:</strong> your email and website. Stripe collects your card and billing details directly; we never see or store your card number.</li>
+          <li><strong>Running a Diagnosis or a portal tool:</strong> the brief you fill in. That can include your product or service, market, region, website, customer description, competitors, testimonials, your offer, goals and channels, plus anything you paste in, such as website copy or writing samples.</li>
+          <li><strong>Engine API accounts:</strong> your email and your run inputs.</li>
+          <li><strong>Emails you send us.</strong></li>
+        </ul>
 
-    <!-- BLOG GRID -->
-    <section class="container">
-      <div class="blog-grid" id="blog-grid">
+        <h2>What we collect automatically</h2>
+        <ul>
+          <li><strong>No analytics.</strong> There is no analytics, advertising or tracking tag on this site. No Google Analytics, no pixels, no heatmaps.</li>
+          <li><strong>One cookie, only if you log in.</strong> The portal sets a login cookie called <code>tf_portal</code>. It keeps you signed in for up to seven days and does nothing else.</li>
+          <li><strong>Browser storage.</strong> The portal tools save your name, email, company and brief in your own browser (local storage) so you don't have to type them twice. It stays on your device. Clearing your browser data removes it.</li>
+          <li><strong>Server logs.</strong> Our hosting provider (Vercel) and our servers record standard request logs, such as IP address, browser type and the page requested, to keep the service running and secure.</li>
+          <li><strong>Fonts.</strong> Pages load fonts from Google Fonts, so Google receives your IP address when a page loads. Some portal tools also load a PDF library from cdnjs (Cloudflare).</li>
+        </ul>
 
-        <a class="post-card" href="/blog/we-asked-the-ai-to-find-a-lawyer.html" data-category="case-studies">
-          <span class="post-cat">Case Study</span>
-          <div class="post-title">We Asked the AI to Find a Lawyer. 92 Times.</div>
-          <p class="post-excerpt">A field study across Sydney, the Central Coast and the Hunter: who the AI answer engines recommend, and the century-old firms they've never heard of. Every answer logged.</p>
-          <div class="post-meta">
-            <span class="post-date">1 Sep 2026</span>
-            <span class="post-readmore">Read the case study →</span>
-          </div>
-        </a>
+        <h2>Why we collect it</h2>
+        <p>We collect only what we need to do the job you asked for: produce your Snapshot or Diagnosis, run your portal and API account, take payment, reply to you, and send the newsletter you signed up for. We handle personal information in line with the Australian Privacy Principles in the <em>Privacy Act 1988</em> (Cth). When you submit a form or buy something, you consent to us using what you give us for that purpose.</p>
+        <p>We use your email to send you what you asked for, and occasionally to tell you about Two Fires products. Tell us you'd rather not hear from us and we'll stop.</p>
 
-        <a class="post-card" href="/blog/a-customer-youve-never-studied.html" data-category="customer-intelligence">
-          <span class="post-cat">Customer Intelligence</span>
-          <div class="post-title">You're Marketing to a Customer You've Never Actually Studied.</div>
-          <p class="post-excerpt">Most marketing fails because it's aimed at an assumption. Real customer insight is the foundation everything else stands on.</p>
-          <div class="post-meta">
-            <span class="post-date">14 Jul 2026</span>
-            <span class="post-readmore">Read more →</span>
-          </div>
-        </a>
+        <h2>Who else touches it</h2>
+        <p>We use a small number of service providers. Each one gets only what it needs.</p>
+        <ul>
+          <li><strong>Anthropic</strong> (AI models, United States). Your business details, website address, website text and brief are sent to Anthropic's Claude models to produce your reports, including web searches run on your behalf. We also fetch your public website directly.</li>
+          <li><strong>Supabase</strong> (database). Everything you submit is stored here.</li>
+          <li><strong>Stripe</strong> (payments, United States). Receives your email and website with your purchase, and handles your card details.</li>
+          <li><strong>Resend</strong> (email delivery). Sends your Snapshot, reports, login links and confirmations, which means it handles your email address and the report contents.</li>
+          <li><strong>Telegram.</strong> We send ourselves internal notifications when someone signs up, requests work or buys, so we can keep an eye on the service. These can include your name, email, business name and website.</li>
+          <li><strong>Vercel</strong> hosts this website. <strong>Google</strong> serves the fonts.</li>
+        </ul>
+        <p><strong>We do not sell personal information.</strong> We don't rent it, trade it or share it for anyone else's marketing.</p>
 
-        <a class="post-card" href="/blog/everyone-has-the-same-ai.html" data-category="ai-marketing">
-          <span class="post-cat">AI &amp; Marketing</span>
-          <div class="post-title">Everyone Has the Same AI. That's the Opportunity.</div>
-          <p class="post-excerpt">AI has made average content free and infinite. Which is exactly why craft and distinctiveness matter more than they ever have.</p>
-          <div class="post-meta">
-            <span class="post-date">13 Jul 2026</span>
-            <span class="post-readmore">Read more →</span>
-          </div>
-        </a>
+        <h2>Data leaves Australia</h2>
+        <p>Yes, it does. Our database is hosted by Supabase in Seoul, South Korea. Anthropic and Stripe process data in the United States. Resend delivers email from infrastructure outside Australia. By using the Snapshot, the portal or the Engine, you consent to that overseas processing. We choose established providers with their own security and privacy commitments, but overseas providers are not bound by the Australian Privacy Act in the same way we are.</p>
 
-        <a class="post-card" href="/blog/busy-is-not-the-same-as-growing.html" data-category="growth">
-          <span class="post-cat">Growth</span>
-          <div class="post-title">Busy Is Not the Same as Growing.</div>
-          <p class="post-excerpt">Agencies that execute tactics without strategic depth keep you busy and stall your growth. The difference between motion and progress.</p>
-          <div class="post-meta">
-            <span class="post-date">12 Jul 2026</span>
-            <span class="post-readmore">Read more →</span>
-          </div>
-        </a>
+        <h2>How long we keep it</h2>
+        <p>Plainly: we don't currently delete anything on a schedule. Enquiries, briefs, reports and account records are kept until you ask us to remove them, because your portal history depends on them. Login links expire after an hour.</p>
+        <p>To see what we hold, get a copy, correct it or have it deleted, email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>. We'll respond within 30 days. Records we're required to keep for tax or payment reasons (such as purchase records) may need to stay for the period the law requires.</p>
 
-        <a class="post-card" href="/blog/theyre-already-buying-just-not-from-you.html" data-category="brand-strategy">
-          <span class="post-cat">Brand Strategy</span>
-          <div class="post-title">They're Already Buying. Just Not From You.</div>
-          <p class="post-excerpt">Chasing visibility when the real problem is positioning is money into a hole. Why getting found is the wrong goal.</p>
-          <div class="post-meta">
-            <span class="post-date">11 Jul 2026</span>
-            <span class="post-readmore">Read more →</span>
-          </div>
-        </a>
+        <h2>Security</h2>
+        <p>Data travels over encrypted connections. Portal access is by emailed login link and each customer sees only their own work. No system is perfect; if something goes wrong that's likely to cause you serious harm, we'll tell you and the regulator as the law requires.</p>
 
-        <a class="post-card" href="/blog/your-product-isnt-the-problem.html" data-category="growth">
-          <span class="post-cat">Growth</span>
-          <div class="post-title">Your Product Isn't the Problem. Your Altitude Is.</div>
-          <p class="post-excerpt">Great businesses don't plateau because the product got worse. They plateau because their marketing never scaled to the level the business reached.</p>
-          <div class="post-meta">
-            <span class="post-date">10 Jul 2026</span>
-            <span class="post-readmore">Read more →</span>
-          </div>
-        </a>
+        <h2>Complaints</h2>
+        <p>If you're unhappy with how we've handled your information, email <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a> first and we'll respond within 30 days. If that doesn't resolve it, you can complain to the Office of the Australian Information Commissioner (OAIC) at <a href="https://www.oaic.gov.au">oaic.gov.au</a> or on 1300 363 992.</p>
 
-        <a class="post-card" href="/blog/ai-amplifies-what-you-already-are.html" data-category="ai-marketing">
-          <span class="post-cat">AI &amp; Marketing</span>
-          <div class="post-title">AI Will Amplify Exactly What You Already Are</div>
-          <p class="post-excerpt">If your marketing foundation is weak, AI scales the weakness. Why strong positioning has to come before the engine.</p>
-          <div class="post-meta">
-            <span class="post-date">9 Jul 2026</span>
-            <span class="post-readmore">Read more →</span>
-          </div>
-        </a>
-
-        <a class="post-card" href="/case-study-wellness.html" data-category="case-studies">
-          <span class="post-cat">Case Study</span>
-          <div class="post-title">Eight locations. Zero clarity. One brand fixed both.</div>
-          <p class="post-excerpt">A premium wellness group was growing fast: eight studios, one fractured brand. Here's how Two Fires unified their positioning, built an AI content engine, and cut cost-per-acquisition by 34% in 12 weeks.</p>
-          <div class="post-meta">
-            <span class="post-date">13 Jun 2026</span>
-            <span class="post-readmore">Read the case study →</span>
-          </div>
-        </a>
-
-      </div>
-
-      <!-- COMING SOON BANNER -->
-      <div class="coming-soon">
-        <div class="eyebrow">Powered by AI research</div>
-        <h2>New posts every week, grounded in real customer data.</h2>
-        <p>Our blog is generated from live customer intelligence research. Every post answers a question your ideal customer is already asking online.</p>
-        <form class="notify-form" onsubmit="return false;">
-          <input type="email" id="email-blog" placeholder="your@email.com" required aria-label="Email address">
-          <button type="button" id="btn-blog" class="notify-btn" onclick="subscribeEmail('blog')">Notify me</button>
-        </form>
+        <h2>Changes</h2>
+        <p>If this policy changes, the new version goes here with a new date. If the change is material, we'll tell active customers directly.</p>
       </div>
     </section>
-
   </main>
 
   <!-- Footer -->
@@ -518,67 +484,6 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    // Inject flame SVGs
-    document.querySelectorAll('[data-flame], .brand-mark').forEach(el => {
-      const tmpl = document.getElementById('flame-template');
-      el.appendChild(tmpl.content.cloneNode(true));
-    });
-
-    // Filter posts by category
-    const filterBar = document.getElementById('filter-bar');
-    const cards = Array.from(document.querySelectorAll('.post-card'));
-    filterBar.addEventListener('click', (e) => {
-      const btn = e.target.closest('.filter-pill');
-      if (!btn) return;
-      const filter = btn.dataset.filter;
-      filterBar.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      cards.forEach(card => {
-        const show = filter === 'all' || card.dataset.category === filter;
-        card.classList.toggle('hidden', !show);
-      });
-    });
-
-    async function subscribeEmail(source) {
-      const input = document.getElementById('email-' + source);
-      const email = input.value.trim();
-      if (!email || !email.includes('@')) {
-        input.style.borderColor = '#f87171';
-        return;
-      }
-      const btn = document.getElementById('btn-' + source);
-      btn.textContent = 'Saving...';
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(
-          'https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_email_subscribers',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
-              'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({ email, source })
-          }
-        );
-        if (res.ok) {
-          btn.textContent = "You're on the list ✓";
-          input.value = '';
-          input.style.borderColor = '';
-        } else {
-          throw new Error('Failed');
-        }
-      } catch {
-        btn.textContent = 'Try again';
-        btn.disabled = false;
-      }
-    }
-  </script>
 
 <script>
   // Nav: blur once scrolled (matches index.html)

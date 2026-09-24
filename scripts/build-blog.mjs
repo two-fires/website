@@ -570,6 +570,8 @@ ${relatedCards(all, post)}
         <a href="/blog.html">Blog</a>
         <a href="/podcast.html">Podcast</a>
         <a href="/index.html#contact">Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
         <a href="/portal.html">Client Portal</a>
       </div>
     </div>
