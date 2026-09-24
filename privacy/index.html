@@ -379,7 +379,6 @@
     .legal-body a:hover { color: var(--bone); }
     .legal-body .callout { border: 1px solid var(--glass-edge); background: var(--glass-fill); border-radius: 14px; padding: 24px 26px; margin: 8px 0 24px; }
     .legal-body .callout p:last-child { margin-bottom: 0; }
-    .legal-body .todo { color: #fbbf24; font-family: var(--font-mono); font-size: 13px; }
     @media (max-width: 760px) { .legal { padding-top: 130px; padding-bottom: 72px; } .legal-body p, .legal-body li { font-size: 16px; } }
   </style>
 </head>
@@ -408,10 +407,10 @@
       <h1>Privacy <em>policy.</em></h1>
       <p class="updated">Last updated: 24 September 2026</p>
       <div class="legal-body">
-        <p>This page explains what Two Fires collects, why, where it goes, and how to get it back or deleted. It describes what our systems actually do today, not what we'd like them to do.</p>
+        <p>Two Fires is a business of NB Performance Pty Ltd, ABN 25 675 763 050. This page explains what Two Fires collects, why, where it goes, and how to get it back or deleted. It describes what our systems actually do today, not what we'd like them to do.</p>
 
         <h2>Who we are</h2>
-        <p>Two Fires is a business of NB Performance Pty Ltd, ABN <span class="todo">[TODO: ABN to be confirmed before publication]</span>, based in Sydney, Australia. Questions about privacy go to <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
+        <p>Two Fires is based in Sydney, Australia. Questions about privacy go to <a href="mailto:lightmyfuse@two-fires.com">lightmyfuse@two-fires.com</a>.</p>
 
         <h2>What you give us</h2>
         <ul>
@@ -448,8 +447,16 @@
         </ul>
         <p><strong>We do not sell personal information.</strong> We don't rent it, trade it or share it for anyone else's marketing.</p>
 
-        <h2>Data leaves Australia</h2>
-        <p>Yes, it does. Our database is hosted by Supabase in Seoul, South Korea. Anthropic and Stripe process data in the United States. Resend delivers email from infrastructure outside Australia. By using the Snapshot, the portal or the Engine, you consent to that overseas processing. We choose established providers with their own security and privacy commitments, but overseas providers are not bound by the Australian Privacy Act in the same way we are.</p>
+        <h2>Your data leaves Australia</h2>
+        <p>Plainly, most of it is stored and processed overseas:</p>
+        <ul>
+          <li><strong>Storage:</strong> everything you submit is stored in Supabase's Seoul region, in South Korea.</li>
+          <li><strong>AI processing:</strong> your business details, website content and brief are processed by Anthropic outside Australia, in the United States, to produce your reports.</li>
+          <li><strong>Payments:</strong> Stripe is offshore and processes your purchase outside Australia.</li>
+          <li><strong>Email:</strong> Resend is offshore and delivers our emails from outside Australia.</li>
+          <li><strong>Alerts:</strong> our internal operational alerts, which can include your name, email address and company name, are sent through Telegram, which is also offshore.</li>
+        </ul>
+        <p>Each of these is a cross-border disclosure of personal information under Australian Privacy Principle 8. These providers are not bound by the Australian Privacy Act, and we have no separate contract with them beyond their standard terms. If you'd rather your information didn't go offshore, don't submit it, and email us to have anything already held deleted.</p>
 
         <h2>How long we keep it</h2>
         <p>Plainly: we don't currently delete anything on a schedule. Enquiries, briefs, reports and account records are kept until you ask us to remove them, because your portal history depends on them. Login links expire after an hour.</p>
