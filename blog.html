@@ -551,19 +551,13 @@
       btn.disabled = true;
 
       try {
-        const res = await fetch(
-          'https://ssgjsktotbmpyylgegur.supabase.co/rest/v1/tf_email_subscribers',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNzZ2pza3RvdGJtcHl5bGdlZ3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzI3NzcsImV4cCI6MjA4ODE0ODc3N30.QW3I75Bwi84hctnODYBK_I_xfMgnyPZmthytixv5eHc',
-              'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({ email, source })
-          }
-        );
+        // Posts to the Insight API, which validates, rate-limits and inserts
+        // with the service role. No Supabase key in this page.
+        const res = await fetch('https://insight.two-fires.com/submit/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source })
+        });
         if (res.ok) {
           btn.textContent = "You're on the list ✓";
           input.value = '';
